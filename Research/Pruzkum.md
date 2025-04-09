@@ -113,3 +113,41 @@ Bylo by také dobré vytvořit nějaký systém, který by umožnil jiným firm�
 
 Podle dohody ohledně projektu, začnu hledat knihovny, které se budou hodit pro moje funkce pro nástroj.
 
+Zatím jsem si našel:
+
+Front End:
+
+- React
+- Vue.js
+
+Backend:
+V backend části by se řešilo propojováná hráčů, vytváření dočasných linků a herní prvky.
+
+- Node.js + Typescript
+Správce knihoven:
+- npn
+- yarn
+
+nebo
+
+- C# + ASP.NET Core
+Knihovna SignalR, která by zajistilo real time připojení několika studentů.
+
+Nejlépe bych šel do C# z důvodu, že se budou využívat herní prvky, vytváření šablon a na to bude vhodnější použít C#.
+
+Databáze:
+- MongoDB
+Databáze by běžela na MongoDB kvůli možnosti si ukládat data jako JSON dokument. Bylo by to výborné pro ukládání statistiky hráčů nebo jejich profilů.
+
+Nasazení:
+- Docker
+- YAML s docker
+
+Z důvodu přenositelnosti
+
+Offline verze:
+- PWA
+Offline verze procvičování cvičení. Fungovalo by to pro předem vytvořené stránky, které by se chovali, jako samostatná aplikace. Něco podobnému her, které si uživatel může nakoupit a spustit si ji.
+
+Další knihovny zatím budu hledat
+
