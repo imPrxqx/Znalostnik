@@ -70,7 +70,7 @@ Nevýhody:
 
 Tento nástroj se hlavně soustředí na propojení několika studentů, aby navzájem soutěžili. Tím bychom se mohli inspirovat pro vytvoření našeho nástroje, zkusit vymyslet nějaký způsob propojení několika studentů. Libí se mi, jakým způsobem řeší propojování studentů.
 
-![Ukazka](Images/kahoot!.png)
+![Ukazka](Images/Kahoot!.png)
 <center>Ukázka připojování studentů k danému kvízu pomocí číselného kódu</center><br> 
 
 ### Anki
