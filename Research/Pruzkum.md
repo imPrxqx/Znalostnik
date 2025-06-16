@@ -70,7 +70,7 @@ Nevýhody:
 
 Tento nástroj se hlavně soustředí na propojení několika studentů, aby navzájem soutěžili. Tím bychom se mohli inspirovat pro vytvoření našeho nástroje, zkusit vymyslet nějaký způsob propojení několika studentů. Libí se mi, jakým způsobem řeší propojování studentů.
 
-![Ukazka](Images/kahoot!.png)
+![Ukazka](Images/Kahoot!.png)
 <center>Ukázka připojování studentů k danému kvízu pomocí číselného kódu</center><br> 
 
 ### Anki
@@ -255,40 +255,6 @@ Další knihovny zatím budu hledat
 ### Tvorba cvičení za pomocí šablony
 
 Jako učitel chci mít možnost vytvářet cvičení pomocí předdefinovaných šablon, abych mohl snadno připravovat cvičení pro studenty.
-
-Scénář:
-
-Actors:
-Učitel
-
-Předpoklady:
-1. Učitel má přístup k aplikaci
-2. Učitel je v režimu vytváření cvičení
-3. Aplikace obsahuje alespoň jednu šablonu pro vytvoření cvičení
-
-Základní průběh
-1. Učitel zapne aplikaci
-2. Učitel zapne možnost vytváření cvičení
-3. Aplikace zobrazí typy cvičení
-4. Učitel zvolí typ cvičení - jedno cvičení
-5. Aplikace zobrazí šablony pro vytvoření cvičení
-6. Učitel vybere jednu šablonu pro vytvoření typu cvičení - kvíz
-7. Aplikace zobrází obsah úloh dle vybrané šablony
-8. Učitel vyplní obsah do vybrané šablony
-9. Učitel potvrdí vytvoření cvičení
-10. Aplikace uloží vytvořené cvičení
-11. Aplikace zobrazí možnosti po vytvoření cvičení, co se má dělat - sdílení, export, link
-
-Alternativní průběh:
-
-8A. Učitel nezadá obsah do vybrané šablony
-8A1. Aplikace ukončí vytváření cvičení
-
-Následné podmínky:
-1. Vytvořené cvičení je uloženo v databázi aplikace
-2. Cvičení je připraveno ke sdílení
-3. Cvičení je připraveno k exportu
-4. Cvičení je připraveno k možným úpravám
 
 ### Sdílení cvičení
 
