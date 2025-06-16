@@ -1,0 +1,59 @@
+services:
+   
+  frontend:
+    build:      
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    networks:
+      - webnet
+    depends_on:
+      - backend
+  
+  backend:
+    build:      
+      context: ./backend
+      dockerfile: ./backend/Dockerfile
+    ports:
+        - "5000:8080"
+    environment:
+      - DATABASE_SERVER=${DATABASE_SERVER}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASS=${DATABASE_PASS}
+      - DATABASE_PORT=${DATABASE_PORT}
+    networks:
+      - webnet
+    depends_on:
+      - database
+
+  database:
+    build:      
+      context: ./database
+      dockerfile: Dockerfile
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASS}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - webnet
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "10100:8080"
+    networks:
+      - webnet
+
+networks:
+  webnet:
+    driver: bridge
+
+volumes:
+  postgres_data:
