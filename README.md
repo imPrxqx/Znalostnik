@@ -2,12 +2,13 @@
 Ročníková a bakalářská práce na téma: Nástroj pro procvičování učiva
 
 # Požadavky 
+Verze nebo novější
 - Docker 27.1.1 
 - .NET 8
 - Angular CLI: 20.0.2
 - Node: 22.16.0
 - Package Manager: npm 10.9.2
-Verze nebo novější
+
 
 # Zapnutí Structurizr:
 ```
