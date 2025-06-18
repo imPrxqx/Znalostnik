@@ -1,33 +1,45 @@
 services:
    
+  reverse_proxy:
+    build:      
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "${REVERSE_PROXY_PORT}:80"
+    networks:
+      - proxynet
+      
   frontend:
     build:      
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "4200:4200"
-    networks:
-      - webnet
+      - "${FRONTEND_HOST_PORT}:80"
     depends_on:
       - backend
-  
+    networks:
+      - frontend
+      - proxynet
+      
   backend:
     build:      
       context: ./backend
       dockerfile: ./backend/Dockerfile
     ports:
-        - "5000:8080"
+      - "${BACKEND_HOST_PORT}:8080"
     environment:
       - DATABASE_SERVER=${DATABASE_SERVER}
       - DATABASE_NAME=${DATABASE_NAME}
       - DATABASE_USER=${DATABASE_USER}
       - DATABASE_PASS=${DATABASE_PASS}
-      - DATABASE_PORT=${DATABASE_PORT}
-    networks:
-      - webnet
+      - DATABASE_PORT=${DATABASE_HOST_PORT}
     depends_on:
       - database
-
+    networks:
+      - frontend
+      - backnet
+      - proxynet
+      
   database:
     build:      
       context: ./database
@@ -41,19 +53,23 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - webnet
+      - backnet
 
   adminer:
     image: adminer
     restart: always
     ports:
-      - "10100:8080"
+      - "${ADMINER_HOST_PORT}:8080"
     networks:
-      - webnet
+      - backnet
 
 networks:
-  webnet:
+  proxynet:
     driver: bridge
-
+  frontend:
+    driver: bridge
+  backnet:
+    driver: bridge
+  
 volumes:
   postgres_data:

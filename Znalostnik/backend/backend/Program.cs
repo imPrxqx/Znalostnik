@@ -1,5 +1,6 @@
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace backend
 {
@@ -37,8 +38,20 @@ namespace backend
             // Configure the HTTP request pipeline.
             //if (app.Environment.IsDevelopment())
             //{
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                //app.UseSwagger();
+                //app.UseSwaggerUI();
+
+                app.UseSwagger(options =>
+                {
+                    options.RouteTemplate = "api/swagger/{documentName}/swagger.json";
+                });
+
+                app.UseSwaggerUI(options =>
+                {
+                    options.SwaggerEndpoint("/api/swagger/v1/swagger.json", "My API V1");
+                    options.RoutePrefix = "api/swagger";
+                });
+
             //}
 
             app.UseHttpsRedirection();

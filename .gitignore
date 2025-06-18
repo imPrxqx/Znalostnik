@@ -9,6 +9,9 @@ Logs/
 project.lock.json
 .vs/
 
+# Enviroments
+.env
+
 # mstest test results
 TestResults
 
