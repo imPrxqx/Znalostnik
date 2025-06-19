@@ -2,6 +2,11 @@
 
 # Tato fáze se používá při spuštění z VS v rychlém režimu (výchozí pro konfiguraci ladění).
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+
+USER root
+RUN apt-get update
+RUN apt-get install -y iputils-ping
+
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
@@ -16,6 +21,7 @@ RUN dotnet restore "./backend/backend.csproj"
 COPY . .
 WORKDIR "/src/backend"
 RUN dotnet build "./backend.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN apt-get update && apt-get install -y iputils-ping
 
 # Tato fáze slouží k publikování projektu služby, který se má zkopírovat do konečné fáze.
 FROM build AS publish
