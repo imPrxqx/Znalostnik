@@ -16,10 +16,17 @@ namespace backend
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            
+
             // Database
+            string server = Environment.GetEnvironmentVariable("DATABASE_SERVER")!;
+            string database = Environment.GetEnvironmentVariable("DATABASE_NAME")!;
+            string username = Environment.GetEnvironmentVariable("DATABASE_USER")!;
+            string password = Environment.GetEnvironmentVariable("DATABASE_PASS")!;
+
+            string connectionString = $"Server={server};Username={username};Database={database};Password={password}";
+
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+                options.UseNpgsql(connectionString)
             );
 
             // Cors
