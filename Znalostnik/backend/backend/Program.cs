@@ -1,4 +1,6 @@
+using backend.Managers;
 using backend.Models;
+using backend.Monitors;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -16,6 +18,19 @@ namespace backend
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // Logger
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
+
+
+
+            // Background
+            builder.Services.AddSignalR();
+
+            builder.Services.AddHostedService<RoomMonitor>();
+            builder.Services.AddSingleton<RoomManager>();
+
 
             // Database
             string server = Environment.GetEnvironmentVariable("DATABASE_SERVER")!;
@@ -45,19 +60,19 @@ namespace backend
             // Configure the HTTP request pipeline.
             //if (app.Environment.IsDevelopment())
             //{
-                //app.UseSwagger();
-                //app.UseSwaggerUI();
+            //app.UseSwagger();
+            //app.UseSwaggerUI();
 
-                app.UseSwagger(options =>
-                {
-                    options.RouteTemplate = "api/swagger/{documentName}/swagger.json";
-                });
+            app.UseSwagger(options =>
+            {
+                options.RouteTemplate = "api/swagger/{documentName}/swagger.json";
+            });
 
-                app.UseSwaggerUI(options =>
-                {
-                    options.SwaggerEndpoint("/api/swagger/v1/swagger.json", "My API V1");
-                    options.RoutePrefix = "api/swagger";
-                });
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/api/swagger/v1/swagger.json", "My API V1");
+                options.RoutePrefix = "api/swagger";
+            });
 
             //}
 
