@@ -26,7 +26,6 @@ namespace backend.Managers
         {
             return _rooms.Keys;
         }
-        public int RoomCount => _rooms.Count;
     }
 
 }

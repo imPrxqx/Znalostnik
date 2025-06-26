@@ -3,6 +3,7 @@ using backend.Models;
 using backend.Monitors;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using backend.Hubs;
 
 namespace backend
 {
@@ -23,6 +24,8 @@ namespace backend
             builder.Logging.ClearProviders();
             builder.Logging.AddConsole();
 
+            // SignalR
+            builder.Services.AddSignalR();
 
 
             // Background
@@ -51,7 +54,7 @@ namespace backend
             {
                 options.AddDefaultPolicy(policy =>
                 {
-                    policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod();
+                    policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
                 });
             });
 
@@ -78,7 +81,15 @@ namespace backend
 
             app.UseHttpsRedirection();
 
+            // Cors
             app.UseCors();
+
+            // SignalR
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
+            // SignalR - Hubs
+            app.MapHub<RoomHub>("/api/hub");
 
             app.UseAuthorization();
 
