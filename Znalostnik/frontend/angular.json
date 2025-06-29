@@ -6,13 +6,20 @@
     "frontend": {
       "projectType": "application",
       "schematics": {},
+      "i18n": {
+        "sourceLocale": "cs",
+        "locales": {
+          "en": "src/locale/messages.en.xlf"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular/build:application",
-          "options": {
+          "options": {                      
+            "localize": true,
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
@@ -28,9 +35,15 @@
             "outputMode": "server",
             "ssr": {
               "entry": "src/server.ts"
-            }
+            },
+            "polyfills": [
+              "@angular/localize/init"
+            ]
           },
           "configurations": {
+            "en": {
+              "localize": ["en"]
+            },
             "production": {
               "budgets": [
                 {
@@ -63,6 +76,9 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "configurations": {
+            "en": {
+              "buildTarget": "frontend:build:development,en"
+            },
             "production": {
               "buildTarget": "frontend:build:production"
             },
@@ -87,6 +103,9 @@
             ],
             "styles": [
               "src/styles.css"
+            ],
+            "polyfills": [
+              "@angular/localize/init"
             ]
           }
         }

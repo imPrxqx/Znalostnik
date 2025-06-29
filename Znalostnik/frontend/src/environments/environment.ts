@@ -1,3 +1,3 @@
 export const environment = {
-    apiURL: 'https://localhost:32781'
+    apiURL: 'https://proxynet/api'
 };
