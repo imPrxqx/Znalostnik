@@ -10,5 +10,7 @@ RUN apt-get install -y iputils-ping
 
 FROM nginx:1.28.0
 COPY --from=build /src/dist/frontend/browser /usr/share/nginx/html
+COPY default.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
