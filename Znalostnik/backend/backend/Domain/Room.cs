@@ -5,10 +5,10 @@ namespace backend.Domain
 {
     public class Room
     {
-        public string RoomId { get; }
+        public long RoomId { get; }
         public DateTime LastActivity { get; private set; }
 
-        public Room(string roomId)
+        public Room(long roomId)
         {
             RoomId = roomId;
         }

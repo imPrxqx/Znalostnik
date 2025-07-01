@@ -33,7 +33,7 @@ namespace backend.Monitors
 
                 toRemove.ForEach(id =>
                 {
-                    _roomManager.RemoveRoom(id);
+                    _roomManager.DeleteRoom(id);
                     _logger.LogInformation("[RoomCleanup] Removed room {id} with timeout {timeout}", id, _roomTimeout);
                 });
 
