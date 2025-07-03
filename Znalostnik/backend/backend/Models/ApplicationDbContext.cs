@@ -8,6 +8,6 @@ namespace backend.Models
             : base(options) { }
 
 
-        public DbSet<test> test { get; set; }
+        public DbSet<Test> test { get; set; }
     }
 }

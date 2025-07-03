@@ -9,15 +9,13 @@ namespace backend.Hubs
 {
     public class RoomHub : Hub
     {
-        private readonly ILogger _logger;
-        private readonly RoomManager _roomManager;
-
-        private static readonly ConcurrentDictionary<string, ConcurrentDictionary<string, string>> _players = new();
-
+        public ILogger Logger { get; set; }
+        public RoomManager RoomManager { get; set; }
+        public ConcurrentDictionary<string, ConcurrentDictionary<string, string>> _players { get; set; } = new();
         public RoomHub(ILogger<RoomMonitor> logger, RoomManager roomManager)
         {
-            _logger = logger;
-            _roomManager = roomManager;
+            Logger = logger;
+            RoomManager = roomManager;
         }
 
         public override async Task OnConnectedAsync()
@@ -46,8 +44,8 @@ namespace backend.Hubs
 
             await Clients.Group(roomId).SendAsync("UpdatePlayers", snapshot);
 
-            _logger.LogInformation("[User] {username} joined room {room}", username, roomId);
-            _logger.LogInformation("[Room {roomId}] Player list updated: {count} players", roomId, snapshot.Count);
+            Logger.LogInformation("[User] {username} joined room {room}", username, roomId);
+            Logger.LogInformation("[Room {roomId}] Player list updated: {count} players", roomId, snapshot.Count);
 
             await base.OnConnectedAsync();
         }
@@ -63,8 +61,8 @@ namespace backend.Hubs
 
                     await Clients.Group(roomId).SendAsync("UpdatePlayers", snapshot);
 
-                    _logger.LogInformation("[User] {username} left room {room}", username, roomId);
-                    _logger.LogInformation("[Room {roomId}] Player list updated: {count} players", roomId, snapshot.Count);
+                    Logger.LogInformation("[User] {username} left room {room}", username, roomId);
+                    Logger.LogInformation("[Room {roomId}] Player list updated: {count} players", roomId, snapshot.Count);
 
                     break;
                 }

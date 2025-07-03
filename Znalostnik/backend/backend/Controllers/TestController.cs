@@ -18,7 +18,7 @@ namespace backend.Controllers
 
         // GET: Tests
         [HttpGet]
-        public async Task<IEnumerable<test>> GetTests()
+        public async Task<IEnumerable<Test>> GetTests()
         {
             return await _context.test.ToListAsync();
         }

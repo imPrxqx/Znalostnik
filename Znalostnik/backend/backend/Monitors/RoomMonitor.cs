@@ -6,38 +6,38 @@ namespace backend.Monitors
     public class RoomMonitor : BackgroundService
     {
 
-        private readonly ILogger _logger;
-        private readonly RoomManager _roomManager;
-        private readonly TimeSpan _interval = TimeSpan.FromMinutes(Double.Parse(Environment.GetEnvironmentVariable("ROOM_MONITOR_INTERVAL")!));
-        private readonly TimeSpan _roomTimeout = TimeSpan.FromMinutes(Double.Parse(Environment.GetEnvironmentVariable("ROOM_TIME_OUT")!));
+        public RoomManager RoomManager { get; set; }
+        public ILogger Logger { get; set; }
+        public TimeSpan Interval { get; set; } = TimeSpan.FromMinutes(Double.Parse(Environment.GetEnvironmentVariable("ROOM_MONITORInterval")!));
+        public TimeSpan RoomTimeOut { get; set; } = TimeSpan.FromMinutes(Double.Parse(Environment.GetEnvironmentVariable("ROOM_TIME_OUT")!));
 
 
         public RoomMonitor(ILogger<RoomMonitor> logger, RoomManager roomManager)
         {
-            _logger = logger;
-            _roomManager = roomManager;
+            Logger = logger;
+            RoomManager = roomManager;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("[RoomCleanup] Running at {time} with interval {interval}", DateTime.UtcNow, _interval);
+                Logger.LogInformation("[RoomCleanup] Running at {time} with interval {interval}", DateTime.UtcNow, Interval);
 
                 var now = DateTime.UtcNow;
 
-                var toRemove = _roomManager
-                    .GetAllRoomIds()
-                    .Where(id => _roomManager.TryGetRoom(id, out var room) && now - room.LastActivity > _roomTimeout)
+                var toRemove = RoomManager
+                    .Rooms.Values
+                    .Where(room => RoomManager.TryGetRoom(room.RoomId, out var outRom) && now - outRom!.LastActivity > RoomTimeOut)
                     .ToList();
 
-                toRemove.ForEach(id =>
+                toRemove.ForEach(room =>
                 {
-                    _roomManager.DeleteRoom(id);
-                    _logger.LogInformation("[RoomCleanup] Removed room {id} with timeout {timeout}", id, _roomTimeout);
+                    RoomManager.TryDeleteRoom(room.RoomId);
+                    Logger.LogInformation("[RoomCleanup] Removed room {id} with timeout {timeout}", room.RoomId, RoomTimeOut);
                 });
 
-                await Task.Delay(_interval, stoppingToken);
+                await Task.Delay(Interval, stoppingToken);
             }
         }
 
