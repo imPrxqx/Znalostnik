@@ -8,7 +8,7 @@ namespace backend.Monitors
 
         public RoomManager RoomManager { get; set; }
         public ILogger Logger { get; set; }
-        public TimeSpan Interval { get; set; } = TimeSpan.FromMinutes(Double.Parse(Environment.GetEnvironmentVariable("ROOM_MONITORInterval")!));
+        public TimeSpan Interval { get; set; } = TimeSpan.FromMinutes(Double.Parse(Environment.GetEnvironmentVariable("ROOM_MONITOR_INTERVAL")!));
         public TimeSpan RoomTimeOut { get; set; } = TimeSpan.FromMinutes(Double.Parse(Environment.GetEnvironmentVariable("ROOM_TIME_OUT")!));
 
 

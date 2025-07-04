@@ -1,9 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+
 using backend.Managers;
 using backend.Models;
 using backend.Monitors;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using backend.Hubs;
+using backend.Domain;
 
 namespace backend
 {
@@ -19,6 +21,13 @@ namespace backend
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddIdentityCore<User>();
+
+            // Login
+            builder.Services.AddAuthorization();
+            builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
+            builder.Services.AddIdentityCore<User>().AddEntityFrameworkStores<ApplicationDbContext>().AddApiEndpoints(); 
 
             // Logger
             builder.Logging.ClearProviders();
@@ -90,6 +99,9 @@ namespace backend
 
             // SignalR - Hubs
             app.MapHub<RoomHub>("/api/hub");
+
+            // Login
+            app.MapIdentityApi<User>();
 
             app.UseAuthorization();
 
