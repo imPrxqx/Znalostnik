@@ -39,9 +39,12 @@ services:
       - DATABASE_PORT=${DATABASE_HOST_PORT}
       - ROOM_MONITOR_INTERVAL=${ROOM_MONITOR_INTERVAL}      
       - ROOM_TIME_OUT=${ROOM_TIME_OUT}
-
+      - X509_CERTIFICATE_2_PASSWORD=${X509_CERTIFICATE_2_PASSWORD}
     ports:
       - "${BACKEND_HOST_PORT}:8080"
+    volumes:
+      - ./certificates:/certificates:ro
+      - protection_keys:/app/keys
     depends_on:
       - database
     networks:
@@ -83,3 +86,4 @@ networks:
   
 volumes:
   postgres_data:
+  protection_keys:
