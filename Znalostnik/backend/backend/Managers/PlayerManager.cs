@@ -4,18 +4,18 @@ using System.Text.Json;
 
 namespace backend.Managers
 {
-    public class UserManager
+    public class PlayerManager
     {
 
         private ConcurrentDictionary<string, User> Players { get; set; } = new();
 
-        public bool AddPlayer(User user)
+        public bool AddPlayer(Player user)
         {
-            return Players.TryAdd(user.Id, user);
+            return true;
         }
-        public bool RemovePlayer(User user)
+        public bool RemovePlayer(Player user)
         {
-            return Players.TryRemove(user.Id, out _);
+            return true;
         }
         public List<string> GetPlayerUsernames()
         {

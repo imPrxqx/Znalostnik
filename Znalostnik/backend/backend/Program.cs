@@ -3,9 +3,12 @@ using backend.Hubs;
 using backend.Managers;
 using backend.Models;
 using backend.Monitors;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 
 namespace backend
@@ -25,10 +28,22 @@ namespace backend
 
 
             // Login
-            builder.Services.AddIdentityCore<User>();
             builder.Services.AddAuthorization();
-            builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme).AddBearerToken(IdentityConstants.BearerScheme);
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = IdentityConstants.ApplicationScheme;
+                options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+            }).AddCookie(IdentityConstants.ApplicationScheme).AddBearerToken(IdentityConstants.BearerScheme);
             builder.Services.AddIdentityCore<User>().AddEntityFrameworkStores<ApplicationDbContext>().AddApiEndpoints();
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.Events.OnRedirectToLogin = context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    return Task.CompletedTask;
+                };
+            });
+
 
             // Data Protection
             var isDesignTime = AppDomain.CurrentDomain.GetAssemblies().Any(a => a.FullName!.StartsWith("Microsoft.EntityFrameworkCore.Design"));
@@ -74,10 +89,10 @@ namespace backend
             // Configure the HTTP request pipeline.
             //if (app.Environment.IsDevelopment())
             //{
-                //app.UseSwagger();
-                //app.UseSwaggerUI();
+            //app.UseSwagger();
+            //app.UseSwaggerUI();
 
-                app.UseSwagger(options =>
+            app.UseSwagger(options =>
                 {
                     options.RouteTemplate = "api/swagger/{documentName}/swagger.json";
                 });
@@ -90,18 +105,29 @@ namespace backend
 
             //}
 
-            app.UseHttpsRedirection();
-
             // Cors
             app.UseCors();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseHttpsRedirection();
 
             // SignalR - Hubs
             app.MapGroup("/api").MapHub<RoomHub>("/hub");
 
             // Login
             app.MapGroup("/api").MapIdentityApi<User>();
+            app.MapGroup("/api").MapGet("account/me", async (ClaimsPrincipal claims, ApplicationDbContext context) =>
+            {
+                string userId = claims.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                return await context.Users.FindAsync(userId); 
+            }).RequireAuthorization();
+            app.MapGroup("/api").MapPost("/logout", async (SignInManager<User> signInManager) =>
+            {
+                await signInManager.SignOutAsync().ConfigureAwait(false);
+            });
 
-            app.UseAuthorization();
 
             app.MapControllers();
 

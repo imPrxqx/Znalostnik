@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Header } from './layout/header/header';
 import { Footer } from './layout/footer/footer';
+import { Authentication } from './layout/main/authentication/authentication';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +10,14 @@ import { Footer } from './layout/footer/footer';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
+export class App implements OnInit  {
   protected title = 'frontend';
+  isLoggedIn = false;
+  
+  constructor(private authService: Authentication) {}
+
+  ngOnInit() {
+    this.authService.loadUser();
+    this.authService.isLoggedIn$.subscribe(status => this.isLoggedIn = status);
+  }
 }

@@ -14,7 +14,7 @@ namespace backend.Domain
 		public DateTime LastActivity { get; set; }
         public JsonElement RoomStateHost { get; set; }
         public JsonElement RoomStateUsers { get; set; }
-        public UserManager UserManager { get; set; }
+        public PlayerManager PlayerManager { get; set; }
 
 
         public Room(string roomId, string password, User user, JsonElement roomStateHost, JsonElement roomStateUsers)
@@ -25,7 +25,7 @@ namespace backend.Domain
             RoomStateHost = roomStateHost;
             RoomStateUsers = roomStateUsers;
             LastActivity = DateTime.Now;
-            UserManager = new UserManager();
+            PlayerManager = new PlayerManager();
         }
 	}
 

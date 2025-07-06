@@ -1,1 +1,13 @@
-<p>create-room works!</p>
+<form (ngSubmit)="createRoom()" #createRoomForm="ngForm">
+  <div class="form-group">
+    <label for="password">Heslo</label>
+    <input type="text" [(ngModel)]="password" name="password" required />
+  </div>
+  <button type="submit" i18n>Vytvořit místnost</button>
+
+  @if (createRoomFailed) {
+    <div class="error-message" i18n>
+      Nelze vytvořit místnost
+    </div>
+  }
+</form>
