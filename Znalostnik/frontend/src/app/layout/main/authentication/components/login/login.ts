@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common'; 
-import { Authentication } from '../authentication';
+import { Authentication } from '../../services/authentication';
 
 @Component({
   selector: 'app-login',
@@ -10,13 +10,16 @@ import { Authentication } from '../authentication';
   styleUrl: './login.css'
 })
 export class Login {
-  constructor(authService: Authentication) {
-    this.authService = authService
-  }
 
   authService: Authentication;
   email: string = '';
   password: string = '';
+
+  constructor(authService: Authentication) {
+    this.authService = authService
+  }
+
+
 
   login() {
 
@@ -25,6 +28,6 @@ export class Login {
       password: this.password
     };
 
-    this.authService.login(data);
+    this.authService.login(data).subscribe();
   }
 }

@@ -1,7 +1,6 @@
 import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
-import { Footer } from './layout/footer/footer';
 
 describe('App', () => {
   beforeEach(async () => {

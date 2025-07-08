@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Authentication } from '../authentication';
+import { Authentication } from '../../services/authentication';
 import { Router } from '@angular/router';
 
 @Component({
@@ -19,7 +19,7 @@ export class Logout {
   authService: Authentication;
   
   ngOnInit() {
-    this.authService.logout();
+    this.authService.logout().subscribe();
     this.router.navigateByUrl('/');
   }
 }
