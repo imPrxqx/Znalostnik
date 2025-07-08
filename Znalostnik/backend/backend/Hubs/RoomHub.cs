@@ -3,6 +3,7 @@ using backend.Managers;
 using backend.Monitors;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using System.Collections.Concurrent;
 
 namespace backend.Hubs
@@ -11,7 +12,7 @@ namespace backend.Hubs
     {
         public ILogger Logger { get; set; }
         public RoomManager RoomManager { get; set; }
-        public ConcurrentDictionary<string, ConcurrentDictionary<string, string>> _players { get; set; } = new();
+
         public RoomHub(ILogger<RoomMonitor> logger, RoomManager roomManager)
         {
             Logger = logger;
@@ -21,53 +22,85 @@ namespace backend.Hubs
         public override async Task OnConnectedAsync()
         {
             HttpContext? httpContext = Context.GetHttpContext();
-            string roomId = httpContext!.Request.Query["roomId"].ToString();
-            string username = httpContext!.Request.Query["username"].ToString();
-            string password = httpContext!.Request.Query["password"].ToString();
 
-            if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(username))
+            if (httpContext == null)
             {
+                await Clients.Caller.SendAsync("ConnectionRejected");
                 Context.Abort();
                 return;
             }
 
-            username = username + " " + Context.ConnectionId;
-           
-            var room = _players.GetOrAdd(roomId, _ => new ConcurrentDictionary<string, string>());
-            string sessionId = Context.ConnectionId;
+            IQueryCollection queryCollection = httpContext.Request.Query;
 
-            room[sessionId] = username;
+            if (queryCollection == null)
+            {
+                await Clients.Caller.SendAsync("ConnectionRejected");
+                Context.Abort();
+                return;
+            }
 
-            await Groups.AddToGroupAsync(sessionId, roomId);
+            if (!queryCollection.TryGetValue("roomId", out StringValues roomId) ||
+                !queryCollection.TryGetValue("username", out StringValues username) ||
+                !queryCollection.TryGetValue("password", out StringValues password))
+            {
 
-            List<string> snapshot = _players[roomId].Values.ToList();
+                await Clients.Caller.SendAsync("ConnectionRejected");
+                Context.Abort();
+                return;
+            }
 
-            await Clients.Group(roomId).SendAsync("UpdatePlayers", snapshot);
+            if(!RoomManager.TryGetRoom(roomId!, out Room? room) || room!.Password != password)
+            {
+                await Clients.Caller.SendAsync("ConnectionRejected");
+                Context.Abort();
+                return;
+            }
 
-            Logger.LogInformation("[User] {username} joined room {room}", username, roomId);
-            Logger.LogInformation("[Room {roomId}] Player list updated: {count} players", roomId, snapshot.Count);
+            string userId;
 
+            if (Context.User?.Identity?.IsAuthenticated == true)
+            {
+                userId = Context.User.Identity.Name!;
+            }
+            else
+            {
+                userId = "temp-" + Guid.NewGuid();
+            }
+
+            room!.PlayerManager.AddPlayer(Context.ConnectionId, new Player(userId, username!));
+            Context.Items["roomId"] = roomId.ToString();
+            List<string> snapshot = room!.PlayerManager.GetPlayerUsernames();
+
+            await Groups.AddToGroupAsync(Context.ConnectionId, roomId!);
+            await Clients.Group(roomId!).SendAsync("UpdatePlayers", snapshot);
+            await Clients.Caller.SendAsync("ConnectionAccepted");
             await base.OnConnectedAsync();
+
+            Logger.LogInformation("[User] {username} joined room {room} with user id {usedId}", username, roomId, userId);
+            Logger.LogInformation("[Room] {roomId}] Player list updated: {count} players", roomId, snapshot.Count);
         }
 
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            foreach (var (roomId, players) in _players)
+            if (Context.Items.TryGetValue("roomId", out var roomIdObj))
             {
-                if (players.TryRemove(Context.ConnectionId, out var username))
+                string roomId = (string)roomIdObj!;
+
+                if (RoomManager.Rooms.TryGetValue(roomId, out var room))
                 {
-                    List<string> snapshot = _players[roomId].Values.ToList();
+                    string username = room.PlayerManager.GetPlayerUsername(Context.ConnectionId);
+                    room.PlayerManager.RemovePlayer(Context.ConnectionId);
+                    List<string> snapshot = room.PlayerManager.GetPlayerUsernames();
 
                     await Clients.Group(roomId).SendAsync("UpdatePlayers", snapshot);
 
                     Logger.LogInformation("[User] {username} left room {room}", username, roomId);
                     Logger.LogInformation("[Room {roomId}] Player list updated: {count} players", roomId, snapshot.Count);
-
-                    break;
                 }
-            }
 
+            }
+       
             await base.OnDisconnectedAsync(exception);
         }
     }

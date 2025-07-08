@@ -7,19 +7,25 @@ namespace backend.Managers
     public class PlayerManager
     {
 
-        private ConcurrentDictionary<string, User> Players { get; set; } = new();
+        private ConcurrentDictionary<string, Player> Players { get; set; } = new();
 
-        public bool AddPlayer(Player user)
+        public void AddPlayer(string connectionId, Player player)
         {
-            return true;
+            Players.TryAdd(connectionId, player);
         }
-        public bool RemovePlayer(Player user)
+        public void RemovePlayer(string connectionId)
         {
-            return true;
+            Players.TryRemove(connectionId, out var _);
+        }
+
+        public string GetPlayerUsername(string connectionId)
+        {
+            Players.TryGetValue(connectionId, out var player);
+            return player!.Username;
         }
         public List<string> GetPlayerUsernames()
         {
-            return Players.Values.Select(user => user.UserName!).ToList();
+            return Players.Values.Select(player => player.Username).ToList();
         }
     }
 }

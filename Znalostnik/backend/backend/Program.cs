@@ -62,7 +62,6 @@ namespace backend
             builder.Services.AddSignalR();
 
             // Background
-            builder.Services.AddSignalR();
             builder.Services.AddHostedService<RoomMonitor>();
             builder.Services.AddSingleton<RoomManager>();
 
