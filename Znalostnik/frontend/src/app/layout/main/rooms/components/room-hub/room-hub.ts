@@ -1,4 +1,4 @@
-import { Component, OnInit  } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Room } from '../../services/room';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-room-hub',
   imports: [CommonModule],
   templateUrl: './room-hub.html',
-  styleUrl: './room-hub.css'
+  styleUrl: './room-hub.css',
 })
 export class RoomHub {
   roomId: string | null = null;

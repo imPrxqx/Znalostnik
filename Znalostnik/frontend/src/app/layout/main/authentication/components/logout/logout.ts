@@ -6,18 +6,17 @@ import { Router } from '@angular/router';
   selector: 'app-logout',
   imports: [],
   templateUrl: './logout.html',
-  styleUrl: './logout.css'
+  styleUrl: './logout.css',
 })
 export class Logout {
   constructor(authService: Authentication, router: Router) {
-    this.authService = authService
-    this.router = router
-
+    this.authService = authService;
+    this.router = router;
   }
-  
+
   router: Router;
   authService: Authentication;
-  
+
   ngOnInit() {
     this.authService.logout().subscribe();
     this.router.navigateByUrl('/');

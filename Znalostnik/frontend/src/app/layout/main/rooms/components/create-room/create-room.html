@@ -1,19 +1,12 @@
 <form (ngSubmit)="createRoom()" #createRoomForm="ngForm">
-
   <button type="submit" i18n>Vytvořit místnost</button>
 
-  @if (createRoomFailed) {
-    <div i18n>
-      Nelze vytvořit místnost
-    </div>
-  }
-
-  @if (createRoomSuccess) {
-    <div i18n>
-      Vytvořena místnost
-    </div>
-    <p i18n>Místnost: {{roomId}}</p>
-    <p i18n>Heslo: {{password}}</p>
+  @if (createRoomFailed()) {
+  <div i18n>Nelze vytvořit místnost</div>
+  } @if (createRoomSuccess()) {
+  <div i18n>Vytvořena místnost</div>
+  <p i18n>Místnost: {{roomId}}</p>
+  <p i18n>Heslo: {{password}}</p>
 
   }
 </form>

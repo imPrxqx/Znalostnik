@@ -7,15 +7,12 @@ import { CommonModule } from '@angular/common';
   selector: 'app-header',
   imports: [RouterLink, CommonModule],
   templateUrl: './header.html',
-  styleUrl: './header.css'
+  styleUrl: './header.css',
 })
 export class Header {
-
   authService: Authentication;
 
   constructor(authService: Authentication) {
     this.authService = authService;
   }
-
-  
 }

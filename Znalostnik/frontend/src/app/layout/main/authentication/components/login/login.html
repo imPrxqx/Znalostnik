@@ -3,11 +3,18 @@
     <label for="email" i18n>Email</label>
     <input type="text" [(ngModel)]="email" name="email" required />
   </div>
-  
+
   <div class="form-group">
     <label for="password" i18n>Heslo</label>
     <input type="password" [(ngModel)]="password" name="password" required />
   </div>
-  
+
   <button type="submit" i18n>Přihlásit se</button>
 </form>
+@if (errorMessage()) {
+<div i18n>Neplatný email nebo heslo</div>
+}
+
+<ul>
+  <li><a i18n routerLink="/forgot-password">Zapomněl heslo?</a></li>
+</ul>

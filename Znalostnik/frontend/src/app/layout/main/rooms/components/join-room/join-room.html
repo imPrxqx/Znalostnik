@@ -13,9 +13,7 @@
   </div>
   <button type="submit" i18n>Připojit se</button>
 
-  <!-- @if (joinRoomFailed) {
-    <div class="error-message" i18n>
-      Neplatná místnost
-    </div>
-  } -->
+  @if (errorMessage()) {
+  <div i18n>Neplatná místnost</div>
+  }
 </form>

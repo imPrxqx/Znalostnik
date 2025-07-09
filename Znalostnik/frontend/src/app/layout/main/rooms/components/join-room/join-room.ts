@@ -1,6 +1,6 @@
-import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common'; 
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Room } from '../../services/room';
 
@@ -10,24 +10,29 @@ import { Room } from '../../services/room';
   templateUrl: './join-room.html',
   styleUrl: './join-room.css',
 })
-
-export class JoinRoom implements OnInit {  
+export class JoinRoom implements OnInit {
   roomId: string = '';
   password: string = '';
   username: string = '';
+  errorTimeoutId: any;
+  constructor(
+    private roomService: Room,
+    private router: Router,
+  ) {}
 
-  constructor( private roomService: Room, private router: Router) {}
+  errorMessage = signal<boolean>(false);
 
-  joinRoomFailed: boolean = false;
-
-  joinRoom() {
+  async joinRoom() {
     this.roomService.joinRoom(this.roomId, this.password, this.username).subscribe({
-      next: data => {
+      next: (data) => {
         console.log('Join success:', data);
+        this.errorMessage.set(false);
         this.router.navigate(['/room-hub']);
       },
-      error: async err => {
+      error: async (err) => {
+        this.errorMessage.set(true);
         console.error('Join failed:', err);
+        this.errorMessage.set(false);
       },
     });
   }
@@ -38,12 +43,17 @@ export class JoinRoom implements OnInit {
     });
 
     this.roomService.connectionRejected$.subscribe((msg) => {
-        console.log('Join failed:', msg);
+      this.errorMessage.set(true);
+      console.log('Join failed:');
+
+      if (this.errorTimeoutId) {
+        clearTimeout(this.errorTimeoutId);
+      }
+
+      this.errorTimeoutId = setTimeout(() => {
+        this.errorMessage.set(false);
+        this.errorTimeoutId = null;
+      }, 3000);
     });
   }
-
-}
-
-function delay(ms: number) {
-    return new Promise( resolve => setTimeout(resolve, ms) );
 }

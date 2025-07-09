@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-editor',
   imports: [],
   templateUrl: './editor.html',
-  styleUrl: './editor.css'
+  styleUrl: './editor.css',
 })
-export class Editor {
-
-}
+export class Editor {}

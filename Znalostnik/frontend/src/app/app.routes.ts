@@ -36,23 +36,23 @@ export const routes: Routes = [
   {
     path: 'account',
     component: Account,
-  },  
+  },
   {
     path: 'login',
     component: Login,
-  },  
+  },
   {
     path: 'logout',
     component: Logout,
-  },  
+  },
   {
     path: 'register',
     component: Register,
-  },  
+  },
   {
     path: 'reset-password',
     component: ResetPassword,
-  },  
+  },
   {
     path: 'forgot-password',
     component: ForgotPassword,

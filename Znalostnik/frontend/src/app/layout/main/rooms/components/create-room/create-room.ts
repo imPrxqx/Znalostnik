@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common'; 
+import { CommonModule } from '@angular/common';
 import { Room } from '../../services/room';
+import { signal } from '@angular/core';
 
 @Component({
   selector: 'app-create-room',
   imports: [FormsModule, CommonModule],
   templateUrl: './create-room.html',
-  styleUrl: './create-room.css'
+  styleUrl: './create-room.css',
 })
 export class CreateRoom {
-
-  createRoomFailed: boolean = false;
-  createRoomSuccess: boolean = false;
+  createRoomFailed = signal<boolean>(false);
+  createRoomSuccess = signal<boolean>(false);
   roomId: string | null = null;
   password: string | null = null;
   roomService: Room;
@@ -21,22 +21,20 @@ export class CreateRoom {
     this.roomService = roomService;
   }
 
-
-  createRoom() { 
-    this.createRoomSuccess = false;
-    this.createRoomFailed = false;
+  createRoom() {
+    this.createRoomSuccess.set(false);
+    this.createRoomFailed.set(false);
 
     this.roomService.createRoom().subscribe({
-
-      next: data => {
+      next: (data) => {
         console.log('Create room success:', data);
-        this.createRoomSuccess = true;
         this.roomId = data.roomId;
         this.password = data.password;
+        this.createRoomSuccess.set(true);
       },
-      error: async err => {
+      error: async (err) => {
         console.error('Create room failed:', err);
-        this.createRoomFailed = true;
+        this.createRoomFailed.set(true);
       },
     });
   }

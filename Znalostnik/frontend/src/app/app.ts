@@ -9,7 +9,7 @@ import { error } from 'console';
   selector: 'app-root',
   imports: [RouterOutlet, Footer, Header],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
 export class App implements OnInit {
   protected title = 'frontend';
@@ -22,8 +22,8 @@ export class App implements OnInit {
 
   ngOnInit(): void {
     this.authService.loadUser().subscribe({
-      error: () => console.log('Loading user not success')
-    }  
-    );
+      error: () => console.log('Loading user not success'),
+      next: () => console.log('Loading user success'),
+    });
   }
 }
