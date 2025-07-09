@@ -1,16 +1,22 @@
-﻿using backend.Domain;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text.Json;
+using backend.Domain;
 
 namespace backend.Managers
 {
     public class RoomManager
     {
-
         public ConcurrentDictionary<string, Room> Rooms { get; set; } = new();
 
-        public bool TryCreateRoom(string roomId, string password, User user, out Room? room, JsonElement hostState, JsonElement usersState)
+        public bool TryCreateRoom(
+            string roomId,
+            string password,
+            User user,
+            out Room? room,
+            JsonElement hostState,
+            JsonElement usersState
+        )
         {
             Room newRoom = new Room(roomId, password, user, hostState, usersState);
 
@@ -33,5 +39,4 @@ namespace backend.Managers
             return Rooms.TryRemove(roomId, out _);
         }
     }
-
 }

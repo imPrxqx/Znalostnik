@@ -1,6 +1,6 @@
-﻿using backend.Managers;
+﻿using System.Collections.Concurrent;
+using backend.Managers;
 using Microsoft.AspNetCore.Identity;
-using System.Collections.Concurrent;
 
 namespace backend.Domain
 {
@@ -15,5 +15,4 @@ namespace backend.Domain
             Username = username;
         }
     }
-
 }

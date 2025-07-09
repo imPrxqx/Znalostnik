@@ -1,10 +1,10 @@
-﻿using backend.Domain;
+﻿using System.Collections.Concurrent;
+using backend.Domain;
 using backend.Managers;
 using backend.Monitors;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
-using System.Collections.Concurrent;
 
 namespace backend.Hubs
 {
@@ -39,17 +39,18 @@ namespace backend.Hubs
                 return;
             }
 
-            if (!queryCollection.TryGetValue("roomId", out StringValues roomId) ||
-                !queryCollection.TryGetValue("username", out StringValues username) ||
-                !queryCollection.TryGetValue("password", out StringValues password))
+            if (
+                !queryCollection.TryGetValue("roomId", out StringValues roomId)
+                || !queryCollection.TryGetValue("username", out StringValues username)
+                || !queryCollection.TryGetValue("password", out StringValues password)
+            )
             {
-
                 await Clients.Caller.SendAsync("ConnectionRejected");
                 Context.Abort();
                 return;
             }
 
-            if(!RoomManager.TryGetRoom(roomId!, out Room? room) || room!.Password != password)
+            if (!RoomManager.TryGetRoom(roomId!, out Room? room) || room!.Password != password)
             {
                 await Clients.Caller.SendAsync("ConnectionRejected");
                 Context.Abort();
@@ -76,10 +77,18 @@ namespace backend.Hubs
             await Clients.Caller.SendAsync("ConnectionAccepted");
             await base.OnConnectedAsync();
 
-            Logger.LogInformation("[User] {username} joined room {room} with user id {usedId}", username, roomId, userId);
-            Logger.LogInformation("[Room] {roomId}] Player list updated: {count} players", roomId, snapshot.Count);
+            Logger.LogInformation(
+                "[User] {username} joined room {room} with user id {usedId}",
+                username,
+                roomId,
+                userId
+            );
+            Logger.LogInformation(
+                "[Room] {roomId}] Player list updated: {count} players",
+                roomId,
+                snapshot.Count
+            );
         }
-
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
@@ -96,11 +105,14 @@ namespace backend.Hubs
                     await Clients.Group(roomId).SendAsync("UpdatePlayers", snapshot);
 
                     Logger.LogInformation("[User] {username} left room {room}", username, roomId);
-                    Logger.LogInformation("[Room {roomId}] Player list updated: {count} players", roomId, snapshot.Count);
+                    Logger.LogInformation(
+                        "[Room {roomId}] Player list updated: {count} players",
+                        roomId,
+                        snapshot.Count
+                    );
                 }
-
             }
-       
+
             await base.OnDisconnectedAsync(exception);
         }
     }

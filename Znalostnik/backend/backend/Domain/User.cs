@@ -1,11 +1,8 @@
-﻿using backend.Managers;
+﻿using System.Collections.Concurrent;
+using backend.Managers;
 using Microsoft.AspNetCore.Identity;
-using System.Collections.Concurrent;
 
 namespace backend.Domain
 {
-    public class User : IdentityUser
-    {
-	}
-
+    public class User : IdentityUser { }
 }

@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 using backend.Domain;
 using backend.Hubs;
 using backend.Managers;
@@ -8,8 +10,6 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
 
 namespace backend
 {
@@ -26,15 +26,20 @@ namespace backend
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-
             // Login
             builder.Services.AddAuthorization();
-            builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = IdentityConstants.ApplicationScheme;
-                options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
-            }).AddCookie(IdentityConstants.ApplicationScheme).AddBearerToken(IdentityConstants.BearerScheme);
-            builder.Services.AddIdentityCore<User>().AddEntityFrameworkStores<ApplicationDbContext>().AddApiEndpoints();
+            builder
+                .Services.AddAuthentication(options =>
+                {
+                    options.DefaultScheme = IdentityConstants.ApplicationScheme;
+                    options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+                })
+                .AddCookie(IdentityConstants.ApplicationScheme)
+                .AddBearerToken(IdentityConstants.BearerScheme);
+            builder
+                .Services.AddIdentityCore<User>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddApiEndpoints();
             builder.Services.ConfigureApplicationCookie(options =>
             {
                 options.Events.OnRedirectToLogin = context =>
@@ -44,14 +49,25 @@ namespace backend
                 };
             });
 
-
             // Data Protection
-            var isDesignTime = AppDomain.CurrentDomain.GetAssemblies().Any(a => a.FullName!.StartsWith("Microsoft.EntityFrameworkCore.Design"));
+            var isDesignTime = AppDomain
+                .CurrentDomain.GetAssemblies()
+                .Any(a => a.FullName!.StartsWith("Microsoft.EntityFrameworkCore.Design"));
 
             if (!isDesignTime)
             {
-                string X509CertificatePassword = Environment.GetEnvironmentVariable("X509_CERTIFICATE_2_PASSWORD")!;
-                builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo("/app/keys")).ProtectKeysWithCertificate(new X509Certificate2("/certificates/certificate.pfx", X509CertificatePassword));
+                string X509CertificatePassword = Environment.GetEnvironmentVariable(
+                    "X509_CERTIFICATE_2_PASSWORD"
+                )!;
+                builder
+                    .Services.AddDataProtection()
+                    .PersistKeysToFileSystem(new DirectoryInfo("/app/keys"))
+                    .ProtectKeysWithCertificate(
+                        new X509Certificate2(
+                            "/certificates/certificate.pfx",
+                            X509CertificatePassword
+                        )
+                    );
             }
 
             // Logger
@@ -70,16 +86,25 @@ namespace backend
             string database = Environment.GetEnvironmentVariable("DATABASE_NAME")!;
             string username = Environment.GetEnvironmentVariable("DATABASE_USER")!;
             string password = Environment.GetEnvironmentVariable("DATABASE_PASS")!;
-            string connectionString = $"Server={server};Username={username};Database={database};Password={password}";
-            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
+            string connectionString =
+                $"Server={server};Username={username};Database={database};Password={password}";
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseNpgsql(connectionString)
+            );
 
             // Cors
-            var allowedOrigins = builder.Configuration.GetValue<string>("allowedOrigins")!.Split(",");
+            var allowedOrigins = builder
+                .Configuration.GetValue<string>("allowedOrigins")!
+                .Split(",");
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policy =>
                 {
-                    policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                    policy
+                        .WithOrigins(allowedOrigins)
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
                 });
             });
 
@@ -92,15 +117,15 @@ namespace backend
             //app.UseSwaggerUI();
 
             app.UseSwagger(options =>
-                {
-                    options.RouteTemplate = "api/swagger/{documentName}/swagger.json";
-                });
+            {
+                options.RouteTemplate = "api/swagger/{documentName}/swagger.json";
+            });
 
-                app.UseSwaggerUI(options =>
-                {
-                    options.SwaggerEndpoint("/api/swagger/v1/swagger.json", "My API V1");
-                    options.RoutePrefix = "api/swagger";
-                });
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/api/swagger/v1/swagger.json", "My API V1");
+                options.RoutePrefix = "api/swagger";
+            });
 
             //}
 
@@ -117,16 +142,26 @@ namespace backend
 
             // Login
             app.MapGroup("/api").MapIdentityApi<User>();
-            app.MapGroup("/api").MapGet("account/me", async (ClaimsPrincipal claims, ApplicationDbContext context) =>
-            {
-                string userId = claims.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-                return await context.Users.FindAsync(userId); 
-            }).RequireAuthorization();
-            app.MapGroup("/api").MapPost("/logout", async (SignInManager<User> signInManager) =>
-            {
-                await signInManager.SignOutAsync().ConfigureAwait(false);
-            });
-
+            app.MapGroup("/api")
+                .MapGet(
+                    "account/me",
+                    async (ClaimsPrincipal claims, ApplicationDbContext context) =>
+                    {
+                        string userId = claims
+                            .Claims.First(c => c.Type == ClaimTypes.NameIdentifier)
+                            .Value;
+                        return await context.Users.FindAsync(userId);
+                    }
+                )
+                .RequireAuthorization();
+            app.MapGroup("/api")
+                .MapPost(
+                    "/logout",
+                    async (SignInManager<User> signInManager) =>
+                    {
+                        await signInManager.SignOutAsync().ConfigureAwait(false);
+                    }
+                );
 
             app.MapControllers();
 
