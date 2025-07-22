@@ -1,1 +1,6 @@
 <p>editor works!</p>
+
+<input type="file" accept=".json" (change)="onFileSelected($event)" />
+<button (click)="saveJson()" i18n>Uložit jako JSON</button>
+
+<app-renderer [blocks]="blocks()"></app-renderer>
