@@ -2,7 +2,9 @@ import {
   Component,
   Input,
   ViewContainerRef,
-  AfterViewInit, OnChanges,SimpleChanges
+  AfterViewInit,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { BlockRegistry } from '../../editor/components/block-registry';
 
@@ -10,30 +12,28 @@ import { BlockRegistry } from '../../editor/components/block-registry';
   selector: 'app-renderer',
   imports: [],
   templateUrl: './renderer.html',
-  styleUrl: './renderer.css'
+  styleUrl: './renderer.css',
 })
-export class Renderer  implements OnChanges  {
+export class Renderer implements OnChanges {
   private viewContainer: ViewContainerRef;
   @Input() blocks: any[] = [];
-
 
   constructor(viewContainer: ViewContainerRef) {
     this.viewContainer = viewContainer;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-        console.log("loading");
+    console.log('loading');
 
     if (changes['blocks']) {
       this.renderBlocks();
     }
-        console.log("loaded");
 
+    console.log('loaded');
   }
 
   renderBlocks(): void {
-    console.log("START");
-
+    console.log('START');
 
     this.viewContainer.clear();
 
@@ -52,6 +52,6 @@ export class Renderer  implements OnChanges  {
       }
     }
 
-    console.log("END");
+    console.log('END');
   }
 }

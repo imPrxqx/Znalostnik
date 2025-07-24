@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TextBlock } from './text-block';
+import { MultipleChoiceBlock } from './multiple-choice-block';
 
-describe('TextBlock', () => {
-  let component: TextBlock;
-  let fixture: ComponentFixture<TextBlock>;
+describe('MultipleChoiceBlock', () => {
+  let component: MultipleChoiceBlock;
+  let fixture: ComponentFixture<MultipleChoiceBlock>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TextBlock],
+      imports: [MultipleChoiceBlock],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TextBlock);
+    fixture = TestBed.createComponent(MultipleChoiceBlock);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

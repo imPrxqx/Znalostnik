@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-text-block',
   imports: [],
   templateUrl: './text-block.html',
-  styleUrl: './text-block.css'
+  styleUrl: './text-block.css',
 })
-export class TextBlock {
-
-}
+export class TextBlock {}

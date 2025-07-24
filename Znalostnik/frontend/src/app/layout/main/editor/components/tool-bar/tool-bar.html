@@ -1,0 +1,18 @@
+<p>tool-bar works!</p>
+
+<div>
+  @for (document of allDocumentGroups; track document) {
+  <h2>{{ document.alias }}</h2>
+  @for (group of document.body; track group) {
+  <div>
+    <h3>{{ group.alias }}</h3>
+    @for (type of group.types; track type) {
+    <div>
+      <span>{{ type.alias }}</span>
+      <button>Přidat</button>
+      <button>Odebrat</button>
+    </div>
+    }
+  </div>
+  } }
+</div>

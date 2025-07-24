@@ -2,5 +2,5 @@
 
 <input type="file" accept=".json" (change)="onFileSelected($event)" />
 <button (click)="saveJson()" i18n>Uložit jako JSON</button>
-
+<app-tool-bar />
 <app-renderer [blocks]="blocks()"></app-renderer>
