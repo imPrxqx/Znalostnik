@@ -1,5 +1,5 @@
-import { Component, Inject, Input, Output, LOCALE_ID } from '@angular/core';
-import { BlockRegistry, DocumentSchemas } from '../block-registry';
+import { Component, Inject, LOCALE_ID } from '@angular/core';
+import { DocumentSchemas } from '../block-registry';
 
 @Component({
   selector: 'app-tool-bar',
@@ -23,8 +23,4 @@ export class ToolBar {
       })),
     }));
   }
-
-  onAdd(template: string, type: string) {}
-
-  onRemove(template: string, type: string) {}
 }

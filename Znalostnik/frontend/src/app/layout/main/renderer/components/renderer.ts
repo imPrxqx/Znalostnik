@@ -1,12 +1,14 @@
 import {
   Component,
   Input,
+  effect,
   ViewContainerRef,
   AfterViewInit,
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import { BlockRegistry } from '../../editor/components/block-registry';
+import { BlockRegistry, DocumentSchemas } from '../../editor/components/block-registry';
+import { CentralEditor } from '../../editor/components/central-editor';
 
 @Component({
   selector: 'app-renderer',
@@ -14,22 +16,22 @@ import { BlockRegistry } from '../../editor/components/block-registry';
   templateUrl: './renderer.html',
   styleUrl: './renderer.css',
 })
-export class Renderer implements OnChanges {
+export class Renderer {
   private viewContainer: ViewContainerRef;
-  @Input() blocks: any[] = [];
+  @Input() interactive: boolean = false;
 
-  constructor(viewContainer: ViewContainerRef) {
+  constructor(
+    viewContainer: ViewContainerRef,
+    private centralEditorService: CentralEditor,
+  ) {
     this.viewContainer = viewContainer;
-  }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log('loading');
-
-    if (changes['blocks']) {
-      this.renderBlocks();
-    }
-
-    console.log('loaded');
+    effect(() => {
+      const exercises = this.centralEditorService.document()['exercises'];
+      if (exercises) {
+        this.renderBlocks();
+      }
+    });
   }
 
   renderBlocks(): void {
@@ -37,19 +39,36 @@ export class Renderer implements OnChanges {
 
     this.viewContainer.clear();
 
-    for (const block of this.blocks) {
-      const componentType = BlockRegistry[block.type];
+    console.log(this.centralEditorService.selectedExercise()['blocks'] || []);
+
+    const exerciseSchema = this.centralEditorService.selectedExercise()['documentSchema'];
+    const blocks = this.centralEditorService.selectedExercise()['blocks'];
+
+    console.log('exercise schema', exerciseSchema);
+    console.log('blocks', blocks);
+
+    const renderOrder = DocumentSchemas[exerciseSchema]?.renderOrder || [];
+
+    for (const order of renderOrder) {
+      const block = blocks.find((b: any) => b.blockSchema === order);
+
+      if (!block) {
+        console.warn(`Block of type ${order} not found in exercise`);
+        continue;
+      }
+
+      console.log('Rendering block:', block);
+      const componentType = BlockRegistry[block.blockTemplate];
 
       if (!componentType) {
-        console.warn(`unknown block: ${block.type}`);
+        console.warn(`Unknown block type: ${block.type}`);
         continue;
       }
 
       const componentRef = this.viewContainer.createComponent(componentType);
 
-      if (block.data && componentRef.instance) {
-        Object.assign(componentRef.instance, block.data);
-      }
+      componentRef.setInput('data', block.data);
+      componentRef.setInput('interactive', this.interactive);
     }
 
     console.log('END');

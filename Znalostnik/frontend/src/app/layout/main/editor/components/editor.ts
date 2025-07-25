@@ -1,16 +1,24 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, HostListener } from '@angular/core';
 import { Renderer } from '../../renderer/components/renderer';
 import { ToolBar } from './tool-bar/tool-bar';
 import { DocumentSchemas } from './block-registry';
+import { ListExercises } from './list-exercises/list-exercises';
+import { CentralEditor } from './central-editor';
+import { History } from './history';
 
 @Component({
   selector: 'app-editor',
-  imports: [Renderer, ToolBar],
+  imports: [Renderer, ToolBar, ListExercises],
   templateUrl: './editor.html',
   styleUrl: './editor.css',
 })
 export class Editor {
-  blocks = signal<any[]>([]);
+  isEditingMode = true;
+
+  constructor(
+    private historyService: History,
+    private centralEditorService: CentralEditor,
+  ) {}
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -24,13 +32,7 @@ export class Editor {
 
     reader.onload = () => {
       try {
-        const json = JSON.parse(reader.result as string);
-
-        if (Array.isArray(json)) {
-          this.blocks.set(json);
-        } else {
-          console.error('Json is not array');
-        }
+        this.centralEditorService.loadFromJson(reader.result as string);
       } catch (e) {
         console.error('Json Parser error');
       }
@@ -39,17 +41,8 @@ export class Editor {
     reader.readAsText(file);
   }
 
-  validateDocumentType(documentType: string): boolean {
-    return true;
-  }
-
   saveJson() {
-    if (this.blocks().length === 0) {
-      console.warn('No blocks to save');
-      return;
-    }
-
-    const json = JSON.stringify(this.blocks());
+    const json = this.centralEditorService.getJson();
     const blob = new Blob([json], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
 
@@ -59,9 +52,14 @@ export class Editor {
     a.click();
   }
 
-  addBlock(type: string) {}
-
-  updateBlock(id: string, data: any) {}
-
-  removeBlock(id: string) {}
+  @HostListener('window:keydown', ['$event'])
+  handleKey(event: KeyboardEvent): void {
+    if (event.ctrlKey && event.key.toLowerCase() === 'z') {
+      event.preventDefault();
+      this.historyService.undo();
+    } else if (event.ctrlKey && event.key.toLowerCase() === 'y') {
+      event.preventDefault();
+      this.historyService.redo();
+    }
+  }
 }
