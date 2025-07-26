@@ -4,7 +4,6 @@ import { ToolBar } from './tool-bar/tool-bar';
 import { DocumentSchemas } from './block-registry';
 import { ListExercises } from './list-exercises/list-exercises';
 import { CentralEditor } from './central-editor';
-import { History } from './history';
 
 @Component({
   selector: 'app-editor',
@@ -15,10 +14,7 @@ import { History } from './history';
 export class Editor {
   isEditingMode = true;
 
-  constructor(
-    private historyService: History,
-    private centralEditorService: CentralEditor,
-  ) {}
+  constructor(private centralEditorService: CentralEditor) {}
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -56,10 +52,10 @@ export class Editor {
   handleKey(event: KeyboardEvent): void {
     if (event.ctrlKey && event.key.toLowerCase() === 'z') {
       event.preventDefault();
-      this.historyService.undo();
+      this.centralEditorService.undo();
     } else if (event.ctrlKey && event.key.toLowerCase() === 'y') {
       event.preventDefault();
-      this.historyService.redo();
+      this.centralEditorService.redo();
     }
   }
 }
