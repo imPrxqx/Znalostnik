@@ -1,4 +1,4 @@
-import { Input, Type, Directive } from '@angular/core';
+import { Input, Output, EventEmitter, Type, Directive } from '@angular/core';
 import { TextBlock } from './blocks/text-block/text-block';
 import { MultipleChoiceBlock } from './blocks/multiple-choice-block/multiple-choice-block';
 
@@ -6,6 +6,7 @@ import { MultipleChoiceBlock } from './blocks/multiple-choice-block/multiple-cho
 export abstract class BaseBlockComponent<T = any> {
   @Input() data!: T;
   @Input() interactive: boolean = true;
+  @Output() changed?: EventEmitter<void>;
 }
 
 export const BlockRegistry: Record<string, Type<BaseBlockComponent>> = {

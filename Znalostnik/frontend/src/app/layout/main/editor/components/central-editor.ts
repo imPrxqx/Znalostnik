@@ -7,41 +7,63 @@ export class CentralEditor {
   document = signal<Record<string, any>>({});
   selectedExercise = signal<any>({});
   private history: any[] = [];
-  private currentIndex = 0;
+  private currentIndex = -1;
 
   constructor() {}
 
-  setSnapshot(state: any): void {
-    console.log('History: setSnapshot', history);
+  setSnapshot(): void {
+    console.log('History before slice', this.history);
+
     this.history = this.history.slice(0, this.currentIndex + 1);
-    this.history.push(state);
-    this.currentIndex++;
+    console.log('History after slice', this.history);
+
+    const snapshotCopy = structuredClone([this.selectedExercise()['id'], this.document()]);
+    this.history.push(snapshotCopy);
+
+    console.log('Index before loading:', this.currentIndex);
+    if (this.currentIndex < 0) {
+      this.currentIndex = 0;
+    } else {
+      this.currentIndex++;
+    }
+
+    console.log('History: setSnapshot', this.history);
+  }
+
+  selectExercise(id: string): void {
+    const exercise = this.document()['exercises']?.find((e: any) => e.id === id);
+    if (exercise) {
+      this.selectedExercise.set(exercise);
+    } else {
+      console.warn(`Exercise with id ${id} not found`);
+    }
   }
 
   undo() {
-    console.log('History: Undo', this.history);
-
+    console.log('Index before undo:', this.currentIndex);
     if (this.currentIndex > 0) {
       this.currentIndex--;
 
-      console.log('Redo to index:', this.history[this.currentIndex][1]);
-      console.log('Redo to index:', this.history[this.currentIndex][0]);
+      console.log('Undo to index:', this.history[this.currentIndex][1], this.currentIndex);
+      console.log('Undo to index:', this.history[this.currentIndex][0], this.currentIndex);
 
-      this.document.set(this.history[this.currentIndex][1] || {});
-      this.selectedExercise.set(this.history[this.currentIndex][0] || {});
+      const snapshot = this.history[this.currentIndex];
+      this.document.set(structuredClone(snapshot[1]));
+      this.selectExercise(snapshot[0]);
     }
   }
 
   redo() {
-    console.log('History: Redo', this.history);
+    console.log('Index before redo:', this.currentIndex);
 
     if (this.currentIndex < this.history.length - 1) {
       this.currentIndex++;
-      console.log('Redo to index:', this.history[this.currentIndex][1]);
-      console.log('Redo to index:', this.history[this.currentIndex][0]);
+      console.log('Redo to index:', this.history[this.currentIndex][1], this.currentIndex);
+      console.log('Redo to index:', this.history[this.currentIndex][0], this.currentIndex);
 
-      this.document.set(this.history[this.currentIndex][1] || {});
-      this.selectedExercise.set(this.history[this.currentIndex][0] || {});
+      const snapshot = this.history[this.currentIndex];
+      this.document.set(structuredClone(snapshot[1]));
+      this.selectExercise(snapshot[0]);
     }
   }
 
@@ -58,7 +80,7 @@ export class CentralEditor {
       [id]: block,
     }));
 
-    this.setSnapshot([this.selectedExercise(), this.document()]);
+    this.setSnapshot();
   }
 
   removeExerciseBlock(id: string) {
@@ -68,7 +90,7 @@ export class CentralEditor {
       return updated;
     });
 
-    this.setSnapshot([this.selectedExercise(), this.document()]);
+    this.setSnapshot();
   }
 
   getJson(): string {
@@ -80,8 +102,9 @@ export class CentralEditor {
       const parsed = JSON.parse(json);
       this.document.set(parsed || {});
       this.selectedExercise.set(this.document()['exercises'][0] || []);
-      this.setSnapshot([this.selectedExercise(), this.document()]);
-      this.currentIndex = this.history.length - 1;
+      this.setSnapshot();
+
+      console.log('History after loading:', this.history);
     } catch {
       console.error('Invalid JSON');
     }

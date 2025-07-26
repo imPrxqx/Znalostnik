@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BaseBlockComponent } from '../../block-registry';
@@ -12,6 +12,7 @@ import { BaseBlockComponent } from '../../block-registry';
 export class TextBlock implements BaseBlockComponent<{ content: string }> {
   @Input() data: { content: string } = { content: '' };
   @Input() interactive: boolean = false;
+  @Output() changed = new EventEmitter<void>();
 
   isEditing = false;
 
@@ -29,6 +30,7 @@ export class TextBlock implements BaseBlockComponent<{ content: string }> {
     if (event.key === 'Enter') {
       event.preventDefault();
       this.stopEditing();
+      this.changed.emit();
     }
   }
 

@@ -1,12 +1,4 @@
-import {
-  Component,
-  Input,
-  effect,
-  ViewContainerRef,
-  AfterViewInit,
-  OnChanges,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, effect, ViewContainerRef, EventEmitter, Output } from '@angular/core';
 import { BlockRegistry, DocumentSchemas } from '../../editor/components/block-registry';
 import { CentralEditor } from '../../editor/components/central-editor';
 
@@ -19,6 +11,7 @@ import { CentralEditor } from '../../editor/components/central-editor';
 export class Renderer {
   private viewContainer: ViewContainerRef;
   @Input() interactive: boolean = false;
+  @Output() dataChanged = new EventEmitter<void>();
 
   constructor(
     viewContainer: ViewContainerRef,
@@ -69,6 +62,12 @@ export class Renderer {
 
       componentRef.setInput('data', block.data);
       componentRef.setInput('interactive', this.interactive);
+
+      if ('changed' in componentRef.instance && componentRef.instance.changed?.subscribe) {
+        componentRef.instance.changed.subscribe(() => {
+          this.dataChanged.emit();
+        });
+      }
     }
 
     console.log('END');

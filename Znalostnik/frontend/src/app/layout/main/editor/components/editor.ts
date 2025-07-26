@@ -48,6 +48,11 @@ export class Editor {
     a.click();
   }
 
+  onBlockChanged() {
+    console.log('Catched emit ');
+    this.centralEditorService.setSnapshot();
+  }
+
   @HostListener('window:keydown', ['$event'])
   handleKey(event: KeyboardEvent): void {
     if (event.ctrlKey && event.key.toLowerCase() === 'z') {

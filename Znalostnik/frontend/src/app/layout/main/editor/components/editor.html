@@ -4,4 +4,4 @@
 <button (click)="saveJson()" i18n>Uložit jako JSON</button>
 <app-tool-bar />
 <app-list-exercises />
-<app-renderer [interactive]="isEditingMode"></app-renderer>
+<app-renderer (dataChanged)="onBlockChanged()" [interactive]="isEditingMode"></app-renderer>
