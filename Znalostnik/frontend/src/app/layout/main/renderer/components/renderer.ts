@@ -42,6 +42,15 @@ export class Renderer {
 
     const renderOrder = DocumentSchemas[exerciseSchema]?.renderOrder || [];
 
+    const missingBlocks = renderOrder.filter(
+      (order) => !blocks.find((b: any) => b.blockSchema === order),
+    );
+
+    if (missingBlocks.length > 0) {
+      console.error(`Missing required blocks in exercise`);
+      return;
+    }
+
     for (const order of renderOrder) {
       const block = blocks.find((b: any) => b.blockSchema === order);
 

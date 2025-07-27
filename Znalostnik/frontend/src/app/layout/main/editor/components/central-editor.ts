@@ -1,10 +1,11 @@
 import { Injectable, signal } from '@angular/core';
+import { DocumentSchemas } from './block-registry';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CentralEditor {
-  document = signal<Record<string, any>>({});
+  document = signal<Record<string, any>>({ exercises: [], solutions: [] });
   selectedExercise = signal<any>({});
   private history: any[] = [];
   private currentIndex = -1;
@@ -74,10 +75,33 @@ export class CentralEditor {
     this.selectedExercise.set({});
   }
 
-  setExerciseBlock(id: string, block: any) {
+  setExerciseBlock(schema: string, blockGroup: string, template: string) {
+    if (this.selectedExercise()['id'] === undefined) {
+      console.error('Exercise is not initialized');
+
+      const newId = 'exercise-' + Math.random().toString(36).substring(2, 7);
+      const blocks = DocumentSchemas[schema].requiredBody.map((type: string) => ({
+        blockSchema: type,
+        blockTemplate: template, // TODO: get default template from schema
+      }));
+
+      const newExercise = {
+        id: newId,
+        documentSchema: schema,
+        blocks,
+      };
+
+      this.document.update((document) => ({
+        ...document,
+        exercises: [...(document['exercises'] || []), newExercise],
+      }));
+
+      this.selectedExercise.set(newExercise);
+    }
+
     this.document.update((document) => ({
       ...document,
-      [id]: block,
+      [this.selectedExercise()['id']]: template,
     }));
 
     this.setSnapshot();

@@ -24,6 +24,7 @@ export const DocumentSchemas: Record<
       {
         types: { key: string; alias: { cs: string; en: string } }[];
         alias: { cs: string; en: string };
+        defaultTemplate: string;
       }
     >;
     renderOrder: string[];
@@ -50,6 +51,7 @@ export const DocumentSchemas: Record<
           cs: 'Otázka',
           en: 'Question',
         },
+        defaultTemplate: 'text',
       },
       quizOption: {
         types: [
@@ -72,6 +74,7 @@ export const DocumentSchemas: Record<
           cs: 'Možnosti odpovědí',
           en: 'Answer options',
         },
+        defaultTemplate: 'multipleChoice',
       },
     },
     renderOrder: ['quizText', 'quizOption'],
@@ -97,6 +100,7 @@ export const DocumentSchemas: Record<
           cs: 'Puzzle obsah',
           en: 'Puzzle content',
         },
+        defaultTemplate: 'puzzleContent',
       },
     },
     renderOrder: ['puzzleContent'],
