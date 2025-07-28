@@ -12,9 +12,9 @@ import { CentralEditor } from './central-editor';
   styleUrl: './editor.css',
 })
 export class Editor {
-  isEditingMode = true;
+  isEditingMode = signal<boolean>(false);
 
-  constructor(private centralEditorService: CentralEditor) {}
+  constructor(public centralEditorService: CentralEditor) {}
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -62,5 +62,9 @@ export class Editor {
       event.preventDefault();
       this.centralEditorService.redo();
     }
+  }
+
+  toggleEditingMode() {
+    this.isEditingMode.set(!this.isEditingMode());
   }
 }

@@ -1,7 +1,16 @@
 <p>editor works!</p>
 
+<div>
+  <button (click)="toggleEditingMode()" i18n>{{ isEditingMode() }}</button>
+</div>
 <input type="file" accept=".json" (change)="onFileSelected($event)" />
 <button (click)="saveJson()" i18n>Uložit jako JSON</button>
 <app-tool-bar />
 <app-list-exercises />
-<app-renderer (dataChanged)="onBlockChanged()" [interactive]="isEditingMode"></app-renderer>
+<app-renderer
+  [document]="centralEditorService.document()"
+  [selectedExercise]="centralEditorService.selectedExercise()"
+  [solutions]="centralEditorService.solutions()"
+  [interactive]="isEditingMode()"
+  (dataChanged)="onBlockChanged()"
+></app-renderer>

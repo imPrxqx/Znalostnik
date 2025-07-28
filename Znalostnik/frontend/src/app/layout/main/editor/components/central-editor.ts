@@ -7,6 +7,8 @@ import { DocumentSchemas } from './block-registry';
 export class CentralEditor {
   document = signal<Record<string, any>>({ exercises: [], solutions: [] });
   selectedExercise = signal<any>({});
+  solutions = signal<any>({});
+
   private history: any[] = [];
   private currentIndex = -1;
 
@@ -31,12 +33,22 @@ export class CentralEditor {
     console.log('History: setSnapshot', this.history);
   }
 
-  selectExercise(id: string): void {
-    const exercise = this.document()['exercises']?.find((e: any) => e.id === id);
+  selectExercise(id: string | null): void {
+    const exercises = this.document()['exercises'] || [];
+
+    if (id === null) {
+      this.selectedExercise.set({});
+      return;
+    }
+
+    const exercise = exercises.find((e: any) => e.id === id);
+
     if (exercise) {
       this.selectedExercise.set(exercise);
+    } else if (exercises.length > 0) {
+      this.selectedExercise.set(exercises[0]);
     } else {
-      console.warn(`Exercise with id ${id} not found`);
+      this.selectedExercise.set({});
     }
   }
 
@@ -76,14 +88,25 @@ export class CentralEditor {
   }
 
   setExerciseBlock(schema: string, blockGroup: string, template: string) {
-    if (this.selectedExercise()['id'] === undefined) {
-      console.error('Exercise is not initialized');
+    const currentExercise = this.selectedExercise();
+    const currentExerciseId = currentExercise?.id;
+    const currentSchema = currentExercise?.documentSchema;
 
+    if (!currentExerciseId || currentSchema !== schema) {
       const newId = 'exercise-' + Math.random().toString(36).substring(2, 7);
-      const blocks = DocumentSchemas[schema].requiredBody.map((type: string) => ({
-        blockSchema: type,
-        blockTemplate: template, // TODO: get default template from schema
-      }));
+
+      const blocks = DocumentSchemas[schema].requiredBody.map((groupKey: string) => {
+        const section = DocumentSchemas[schema].bodyMeta[groupKey];
+        const defaultTemplate = section.defaultTemplate;
+
+        const localTemplate = groupKey === blockGroup ? template : defaultTemplate;
+
+        return {
+          blockSchema: groupKey,
+          blockTemplate: localTemplate,
+          data: {},
+        };
+      });
 
       const newExercise = {
         id: newId,
@@ -97,24 +120,57 @@ export class CentralEditor {
       }));
 
       this.selectedExercise.set(newExercise);
+      this.setSnapshot();
+      return;
     }
 
-    this.document.update((document) => ({
-      ...document,
-      [this.selectedExercise()['id']]: template,
-    }));
+    this.document.update((doc) => {
+      const updatedExercises = doc['exercises'].map((exercise: any) => {
+        if (exercise.id !== currentExerciseId) {
+          return exercise;
+        }
 
+        const targetBlock = exercise.blocks.find((block: any) => block.blockSchema === blockGroup);
+
+        if (!targetBlock || targetBlock.blockTemplate === template) {
+          return exercise;
+        }
+
+        const updatedBlocks = exercise.blocks.map((block: any) => {
+          if (block.blockSchema === blockGroup) {
+            return {
+              ...block,
+              blockTemplate: template,
+              data: {},
+            };
+          }
+          return block;
+        });
+
+        return {
+          ...exercise,
+          blocks: updatedBlocks,
+        };
+      });
+
+      return {
+        ...doc,
+        exercises: updatedExercises,
+      };
+    });
+
+    this.selectExercise(currentExerciseId);
     this.setSnapshot();
   }
 
-  removeExerciseBlock(id: string) {
+  removeExercise(id: string) {
     this.document.update((document) => {
       const updated = { ...document };
-      delete updated[id];
+      updated['exercises'] = updated['exercises'].filter((exercise: any) => exercise.id !== id);
       return updated;
     });
 
-    this.setSnapshot();
+    this.selectExercise(this.document()['exercises'][0]?.id || null);
   }
 
   getJson(): string {

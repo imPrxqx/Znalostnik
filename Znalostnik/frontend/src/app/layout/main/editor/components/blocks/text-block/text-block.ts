@@ -9,8 +9,15 @@ import { BaseBlockComponent } from '../../block-registry';
   templateUrl: './text-block.html',
   styleUrl: './text-block.css',
 })
-export class TextBlock implements BaseBlockComponent<{ content: string }> {
-  @Input() data: { content: string } = { content: '' };
+export class TextBlock implements BaseBlockComponent {
+  @Input() data: any;
+
+  ngOnInit() {
+    if (!this.data.hasOwnProperty('content')) {
+      (this.data as any).content = 'Default Text';
+    }
+  }
+
   @Input() interactive: boolean = false;
   @Output() changed = new EventEmitter<void>();
 
@@ -32,13 +39,5 @@ export class TextBlock implements BaseBlockComponent<{ content: string }> {
       this.stopEditing();
       this.changed.emit();
     }
-  }
-
-  toJSON() {
-    return {
-      blockSchema: 'quizText',
-      blockTemplate: 'text',
-      data: { ...this.data },
-    };
   }
 }

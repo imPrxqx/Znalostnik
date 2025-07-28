@@ -1,4 +1,12 @@
-import { Component, Input, effect, ViewContainerRef, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  Input,
+  effect,
+  ViewContainerRef,
+  EventEmitter,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { BlockRegistry, DocumentSchemas } from '../../editor/components/block-registry';
 import { CentralEditor } from '../../editor/components/central-editor';
 
@@ -10,21 +18,26 @@ import { CentralEditor } from '../../editor/components/central-editor';
 })
 export class Renderer {
   private viewContainer: ViewContainerRef;
+
+  @Input() document: any = null;
+  @Input() selectedExercise: any = null;
+  @Input() solutions: any = null;
   @Input() interactive: boolean = false;
   @Output() dataChanged = new EventEmitter<void>();
 
-  constructor(
-    viewContainer: ViewContainerRef,
-    private centralEditorService: CentralEditor,
-  ) {
+  constructor(viewContainer: ViewContainerRef) {
     this.viewContainer = viewContainer;
+  }
 
-    effect(() => {
-      const exercises = this.centralEditorService.document()['exercises'];
-      if (exercises) {
-        this.renderBlocks();
-      }
-    });
+  ngOnChanges(changes: SimpleChanges) {
+    if (
+      changes['document'] ||
+      changes['selectedExercise'] ||
+      changes['solutions'] ||
+      changes['interactive']
+    ) {
+      this.renderBlocks();
+    }
   }
 
   renderBlocks(): void {
@@ -32,10 +45,10 @@ export class Renderer {
 
     this.viewContainer.clear();
 
-    console.log(this.centralEditorService.selectedExercise()['blocks'] || []);
+    console.log(this.selectedExercise['blocks'] || []);
 
-    const exerciseSchema = this.centralEditorService.selectedExercise()['documentSchema'];
-    const blocks = this.centralEditorService.selectedExercise()['blocks'];
+    const exerciseSchema = this.selectedExercise['documentSchema'];
+    const blocks = this.selectedExercise['blocks'];
 
     console.log('exercise schema', exerciseSchema);
     console.log('blocks', blocks);
@@ -71,6 +84,10 @@ export class Renderer {
 
       componentRef.setInput('data', block.data);
       componentRef.setInput('interactive', this.interactive);
+
+      if ('solutions' in componentRef.instance && this.solutions != null) {
+        componentRef.setInput('solutions', this.solutions);
+      }
 
       if ('changed' in componentRef.instance && componentRef.instance.changed?.subscribe) {
         componentRef.instance.changed.subscribe(() => {

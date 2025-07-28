@@ -1,1 +1,21 @@
 <p>multiple-choice-block works!</p>
+
+@if (interactive) {
+<button (click)="addOption()">Přidat</button>
+<button (click)="removeOption()">Odebrat</button>
+
+@for(option of data.options; track option) {
+<div>
+  <label>
+    <input type="checkbox" />
+    {{ option.text }}
+  </label>
+</div>
+} } @else { @for(option of data.options; track option) {
+<div>
+  <label>
+    <input type="checkbox" />
+    {{ option.text }}
+  </label>
+</div>
+} }

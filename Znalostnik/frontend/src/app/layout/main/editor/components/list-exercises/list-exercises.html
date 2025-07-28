@@ -2,6 +2,12 @@
 
 <div>
   @for (exercise of exercises; track exercise.id) {
-  <h2>{{ exercise.documentSchema }}</h2>
+  <button (click)="openExercise(exercise.id)" i18n>
+    Otevřít cvičení {{ exercise.documentSchema }}
+  </button>
+  <button (click)="removeExercise(exercise.id)" i18n>
+    Smazat cvičení {{ exercise.documentSchema }}
+  </button>
+
   }
 </div>

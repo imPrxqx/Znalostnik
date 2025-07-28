@@ -31,14 +31,7 @@ export class ToolBar {
     }));
   }
 
-  addBlock(schema: string, block: string, type: string) {
+  useBlock(schema: string, block: string, type: string) {
     this.centralEditorService.setExerciseBlock(schema, block, type);
-  }
-
-  removeBlock(type: any) {
-    const id = type.id || type.alias;
-    if (id) {
-      this.centralEditorService.removeExerciseBlock(id);
-    }
   }
 }

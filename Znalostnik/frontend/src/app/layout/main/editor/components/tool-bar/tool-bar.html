@@ -9,8 +9,7 @@
     @for (type of group.types; track type) {
     <div>
       <span>{{ type.alias }}</span>
-      <button (click)="addBlock(document.key, group.key, type.key)">Přidat</button>
-      <button (click)="removeBlock(type.key)">Odebrat</button>
+      <button (click)="useBlock(document.key, group.key, type.key)">Použít</button>
     </div>
     }
   </div>
