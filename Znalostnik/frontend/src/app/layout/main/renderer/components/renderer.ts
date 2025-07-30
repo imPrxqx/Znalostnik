@@ -21,9 +21,9 @@ export class Renderer {
 
   @Input() document: any = null;
   @Input() selectedExercise: any = null;
-  @Input() solutions: any = null;
-  @Input() interactive: boolean = false;
+  @Input() editable: boolean = false;
   @Output() dataChanged = new EventEmitter<void>();
+  @Output() answer = new EventEmitter<any>();
 
   constructor(viewContainer: ViewContainerRef) {
     this.viewContainer = viewContainer;
@@ -34,7 +34,7 @@ export class Renderer {
       changes['document'] ||
       changes['selectedExercise'] ||
       changes['solutions'] ||
-      changes['interactive']
+      changes['editable']
     ) {
       this.renderBlocks();
     }
@@ -81,17 +81,21 @@ export class Renderer {
       }
 
       const componentRef = this.viewContainer.createComponent(componentType);
-
-      componentRef.setInput('data', block.data);
-      componentRef.setInput('interactive', this.interactive);
-
-      if ('solutions' in componentRef.instance && this.solutions != null) {
-        componentRef.setInput('solutions', this.solutions);
-      }
+      console.log(this.editable);
+      componentRef.setInput('metadata', block.metadata);
+      componentRef.setInput('editable', this.editable);
+      componentRef.setInput('exerciseId', this.selectedExercise.id);
 
       if ('changed' in componentRef.instance && componentRef.instance.changed?.subscribe) {
         componentRef.instance.changed.subscribe(() => {
           this.dataChanged.emit();
+        });
+      }
+
+      if ('answer' in componentRef.instance && componentRef.instance.answer?.subscribe) {
+        componentRef.instance.answer.subscribe((data: any) => {
+          console.log('Answer', data);
+          this.answer.emit(data);
         });
       }
     }

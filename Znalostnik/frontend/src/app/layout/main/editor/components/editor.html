@@ -10,7 +10,6 @@
 <app-renderer
   [document]="centralEditorService.document()"
   [selectedExercise]="centralEditorService.selectedExercise()"
-  [solutions]="centralEditorService.solutions()"
-  [interactive]="isEditingMode()"
+  [editable]="isEditingMode()"
   (dataChanged)="onBlockChanged()"
 ></app-renderer>

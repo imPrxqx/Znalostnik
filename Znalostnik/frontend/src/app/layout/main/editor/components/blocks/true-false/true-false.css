@@ -1,0 +1,14 @@
+.correct {
+  border: 2px solid green;
+  background-color: #e6ffe6;
+}
+
+.incorrect {
+  border: 2px solid red;
+  background-color: #ffe6e6;
+}
+
+.missed-correct {
+  border: 2px dashed green;
+  background-color: #f0fff0;
+}

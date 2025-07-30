@@ -10,16 +10,20 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './multiple-choice-block.css',
 })
 export class MultipleChoiceBlock implements BaseBlockComponent {
-  @Input() solution: any;
-  @Input() data: any;
-  @Input() interactive: boolean = false;
+  static readonly blockTemplate: string = 'multipleChoice';
+  @Input() exerciseId: string = '';
+  @Input() metadata: any;
+  @Input() editable: boolean = false;
   @Output() changed = new EventEmitter<void>();
+  @Output() answered = new EventEmitter<{ blockTemplate: string; answer: any }>();
 
   isEditing = false;
 
   ngOnInit() {
-    if (!this.data.hasOwnProperty('options')) {
-      (this.data as any).options = [
+    if (!this.metadata.hasOwnProperty('data')) {
+      (this.metadata as any).data = {};
+
+      (this.metadata as any).data.options = [
         { text: 'Odpoved 1' },
         { text: 'Odpoved 2' },
         { text: 'Odpoved 3' },
@@ -29,14 +33,14 @@ export class MultipleChoiceBlock implements BaseBlockComponent {
   }
 
   addOption() {
-    if (this.data.options.length >= 8) {
+    if (this.metadata.data.options.length >= 8) {
       return;
     }
 
-    this.data.options.push({ text: 'Default odpoved' });
+    this.metadata.data.options.push({ text: 'Default odpoved' });
   }
 
   removeOption() {
-    this.data.options.pop();
+    this.metadata.data.options.pop();
   }
 }

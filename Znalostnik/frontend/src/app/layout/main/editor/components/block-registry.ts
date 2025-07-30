@@ -5,15 +5,17 @@ import { TrueFalse } from './blocks/true-false/true-false';
 
 @Directive()
 export abstract class BaseBlockComponent<T = any> {
-  @Input() data!: T;
-  @Input() interactive: boolean = true;
+  @Input() exerciseId!: string;
+  @Input() metadata!: T;
+  @Input() editable: boolean = true;
   @Output() changed?: EventEmitter<void>;
+  @Output() answer?: EventEmitter<any>;
 }
 
 export const BlockRegistry: Record<string, Type<BaseBlockComponent>> = {
-  text: TextBlock,
-  multipleChoice: MultipleChoiceBlock,
-  trueFalse: TrueFalse,
+  [TextBlock.blockTemplate]: TextBlock,
+  [MultipleChoiceBlock.blockTemplate]: MultipleChoiceBlock,
+  [TrueFalse.blockTemplate]: TrueFalse,
 };
 
 export const DocumentSchemas: Record<

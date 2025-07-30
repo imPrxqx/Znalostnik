@@ -12,7 +12,7 @@ import { CentralEditor } from './central-editor';
   styleUrl: './editor.css',
 })
 export class Editor {
-  isEditingMode = signal<boolean>(false);
+  isEditingMode = signal<boolean>(true);
 
   constructor(public centralEditorService: CentralEditor) {}
 

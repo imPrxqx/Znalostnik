@@ -5,9 +5,8 @@ import { DocumentSchemas } from './block-registry';
   providedIn: 'root',
 })
 export class CentralEditor {
-  document = signal<Record<string, any>>({ exercises: [], solutions: [] });
+  document = signal<Record<string, any>>({ exercises: [] });
   selectedExercise = signal<any>({});
-  solutions = signal<any>({});
 
   private history: any[] = [];
   private currentIndex = -1;
@@ -104,7 +103,7 @@ export class CentralEditor {
         return {
           blockSchema: groupKey,
           blockTemplate: localTemplate,
-          data: {},
+          metadata: {},
         };
       });
 
@@ -141,7 +140,7 @@ export class CentralEditor {
             return {
               ...block,
               blockTemplate: template,
-              data: {},
+              metadata: {},
             };
           }
           return block;

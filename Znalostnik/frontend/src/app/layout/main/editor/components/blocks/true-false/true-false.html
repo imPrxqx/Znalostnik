@@ -1,25 +1,36 @@
 <p>true-false works!</p>
-@if (interactive) {
-
+@if (editable) {
 <div>
   <label>
-    <input type="checkbox" />
-    True
+    <input
+      type="radio"
+      name="solution-{{exerciseId}}"
+      [checked]="metadata.solution.answer === true"
+      (change)="setSolution(true)"
+    />
+    {{ metadata.data.options.true }}
   </label>
+
   <label>
-    <input type="checkbox" />
-    False
+    <input
+      type="radio"
+      name="solution-{{exerciseId}}"
+      [checked]="metadata.solution.answer === false"
+      (change)="setSolution(false)"
+    />
+    {{ metadata.data.options.false }}
   </label>
 </div>
 } @else {
 <div>
-  <label>
-    <input type="checkbox" />
-    True
+  <label [ngClass]="getFeedbackClass(true)">
+    <input type="radio" [checked]="selectedAnswer === true" (change)="setAnswer(true)" />
+    {{ metadata.data.options.true }}
   </label>
-  <label>
-    <input type="checkbox" />
-    False
+
+  <label [ngClass]="getFeedbackClass(false)">
+    <input type="radio" [checked]="selectedAnswer === false" (change)="setAnswer(false)" />
+    {{ metadata.data.options.false }}
   </label>
 </div>
 }

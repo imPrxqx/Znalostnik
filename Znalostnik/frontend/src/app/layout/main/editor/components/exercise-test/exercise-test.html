@@ -1,0 +1,11 @@
+<p>exercise-test works!</p>
+
+<input type="file" accept=".json" (change)="onFileSelected($event)" />
+
+<app-renderer
+  [document]="document()"
+  [selectedExercise]="selectedExercise()"
+  (answer)="onAnswerChanged($event)"
+/>
+
+<button (click)="sendAnswers()" i18n>Odeslat řešení</button>

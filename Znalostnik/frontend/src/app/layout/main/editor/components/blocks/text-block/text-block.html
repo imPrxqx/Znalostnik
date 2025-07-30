@@ -2,12 +2,12 @@
 
 @if (isEditing) {
 <textarea
-  [(ngModel)]="data.content"
+  [(ngModel)]="metadata.data.content"
   (blur)="stopEditing()"
   (keydown)="handleKeyDown($event)"
   rows="5"
   autofocus
 ></textarea>
 } @else {
-<div class="text-preview" (dblclick)="startEditing()">{{ data.content }}</div>
+<div class="text-preview" (dblclick)="startEditing()">{{ metadata.data.content }}</div>
 }

@@ -11,11 +11,15 @@ import { ResetPassword } from './layout/main/authentication/components/reset-pas
 import { ForgotPassword } from './layout/main/authentication/components/forgot-password/forgot-password';
 
 import { Editor } from './layout/main/editor/components/editor';
-
+import { ExerciseTest } from './layout/main/editor/components/exercise-test/exercise-test';
 export const routes: Routes = [
   {
     path: '',
     component: Home,
+  },
+  {
+    path: 'exercise-test',
+    component: ExerciseTest,
   },
   {
     path: 'create-room',

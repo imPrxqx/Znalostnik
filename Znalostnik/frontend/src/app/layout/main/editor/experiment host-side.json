@@ -8,21 +8,30 @@
                 {
                     "blockSchema": "quizText",
                     "blockTemplate": "text",
-                    "data": {
-                        "content": "Jaký je hlavní město ČR?"
+                    "metadata": {
+                        "data": {
+                            "content": "Jaký je hlavní město ČR?"
+                        }
                     }
                 },
                 {
                     "blockSchema": "quizOption",
                     "blockTemplate": "multipleChoice",
-                    "data": {
-                        "options": [
-                            { "text": "Praha" },
-                            { "text": "Brno" },
-                            { "text": "Ostrava" },
-                            { "text": "Jan Růžička" }
-                        ]
+                    "metadata": {
+                        "data": {
+                            "options": [
+                                { "text": "Praha" },
+                                { "text": "Brno" },
+                                { "text": "Ostrava" },
+                                { "text": "Jan Růžička" }
+                            ]
+                        },
+                        "solution": {
+                            "id": "0",
+                            "correctAnswers": [0]
+                        }
                     }
+
                 }
             ]
         },
@@ -33,43 +42,30 @@
                 {
                     "blockSchema": "quizText",
                     "blockTemplate": "text",
-                    "data": {
-                    "content": "Jaké je jméno studenta, který toto vytváří?"
-                    }
+                    "metadata": {
+                        "data": {
+                        "content": "Jaké je jméno studenta, který toto vytváří?"
+                        }
+                }
                 },
                 {
                     "blockSchema": "quizOption",
                     "blockTemplate": "multipleChoice",
-                    "data": {
-                        "options": [
-                            { "text": "Kočka Růžička" },
-                            { "text": "Bobr Růžička" },
-                            { "text": "Pepa Růžička" },
-                            { "text": "Jan Růžička" }
-                        ]
+                    "metadata": {
+                        "data": {
+                            "options": [
+                                { "text": "Kočka Růžička" },
+                                { "text": "Bobr Růžička" },
+                                { "text": "Pepa Růžička" },
+                                { "text": "Jan Růžička" }
+                            ]
+                        },
+                        "solution": {
+                            "id": "1",
+                            "correctAnswers": [3]
+                        }
                     }
                 }  
-            ]
-        }
-    ],
-    "solutions": [
-        {
-            "id": "0",
-            "correctAnswers": [
-                0
-            ]
-        },
-        {
-            "id": "1",
-            "correctAnswers": [
-                0
-            ]
-        },
-        {
-            "id": "2",
-            "correctSolutions": [
-                { "pairIndexLeft": 0, "pairIndexRight": 1 },
-                { "pairIndexLeft": 2, "pairIndexRight": 3 }
             ]
         }
     ]

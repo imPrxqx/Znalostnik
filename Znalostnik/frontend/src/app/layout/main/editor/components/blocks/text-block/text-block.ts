@@ -10,21 +10,23 @@ import { BaseBlockComponent } from '../../block-registry';
   styleUrl: './text-block.css',
 })
 export class TextBlock implements BaseBlockComponent {
-  @Input() data: any;
+  static readonly blockTemplate: string = 'text';
+  @Input() exerciseId: string = '';
+
+  @Input() metadata: any;
+  @Input() editable: boolean = false;
+  @Output() changed = new EventEmitter<void>();
+  isEditing = false;
 
   ngOnInit() {
-    if (!this.data.hasOwnProperty('content')) {
-      (this.data as any).content = 'Default Text';
+    if (!this.metadata.hasOwnProperty('data')) {
+      (this.metadata as any).data = {};
+      (this.metadata as any).data.content = 'Default Text';
     }
   }
 
-  @Input() interactive: boolean = false;
-  @Output() changed = new EventEmitter<void>();
-
-  isEditing = false;
-
   startEditing() {
-    if (this.interactive) {
+    if (this.editable) {
       this.isEditing = true;
     }
   }
