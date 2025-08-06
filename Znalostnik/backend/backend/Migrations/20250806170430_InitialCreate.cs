@@ -81,6 +81,19 @@ namespace backend.Migrations
             );
 
             migrationBuilder.CreateTable(
+                name: "Exercises",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    Content = table.Column<string>(type: "jsonb", nullable: false),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Exercises", x => x.Id);
+                }
+            );
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -273,6 +286,8 @@ namespace backend.Migrations
             migrationBuilder.DropTable(name: "AspNetUserRoles");
 
             migrationBuilder.DropTable(name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(name: "Exercises");
 
             migrationBuilder.DropTable(name: "AspNetRoles");
 

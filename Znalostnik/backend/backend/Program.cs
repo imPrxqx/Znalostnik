@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using backend.Domain;
+using backend.Graders;
 using backend.Hubs;
 using backend.Managers;
 using backend.Models;
@@ -53,6 +54,9 @@ namespace backend
             var isDesignTime = AppDomain
                 .CurrentDomain.GetAssemblies()
                 .Any(a => a.FullName!.StartsWith("Microsoft.EntityFrameworkCore.Design"));
+
+            // Grader
+            builder.Services.AddSingleton<Grader>();
 
             if (!isDesignTime)
             {
