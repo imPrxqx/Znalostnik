@@ -27,7 +27,6 @@
                             ]
                         },
                         "solution": {
-                            "id": "0",
                             "correctAnswers": [0]
                         }
                     }
@@ -61,7 +60,6 @@
                             ]
                         },
                         "solution": {
-                            "id": "1",
                             "correctAnswers": [3]
                         }
                     }

@@ -1,14 +1,18 @@
 import { Component, signal } from '@angular/core';
 import { Renderer } from '../../../renderer/components/renderer';
+import { environment } from '../../../../../../environments/environment.development';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-exercise-test',
-  imports: [Renderer],
+  imports: [Renderer, FormsModule, CommonModule],
   templateUrl: './exercise-test.html',
   styleUrl: './exercise-test.css',
 })
 export class ExerciseTest {
   answers: any[] = [];
+  exerciseId: string = '';
   document = signal<Record<string, any>>({ exercises: [] });
   selectedExercise = signal<any>({});
 
@@ -49,6 +53,49 @@ export class ExerciseTest {
       this.answers[existingIndex].answer = data.answer;
     } else {
       this.answers.push(data);
+    }
+  }
+
+  async sendDocument() {
+    try {
+      console.log('document', JSON.stringify(JSON.stringify(this.document())));
+      const documentData = this.document();
+      const stringifiedDocument = JSON.stringify(documentData);
+
+      const response = await fetch(environment.apiURL + '/Exercise', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          exerciseDocument: stringifiedDocument,
+        }),
+      });
+
+      const result = await response.json();
+      console.log('id', result);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async onLoadServer() {
+    try {
+      console.log('load exercise:' + environment.apiURL + '/Exercise/' + this.exerciseId);
+      const response = await fetch(environment.apiURL + '/Exercise/' + this.exerciseId, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      const exercises = await response.json();
+      const parsedContent = JSON.parse(exercises['content']);
+      this.document.set(parsedContent);
+      this.selectedExercise.set(parsedContent.exercises[0]);
+    } catch (error) {
+      console.error(error);
     }
   }
 }

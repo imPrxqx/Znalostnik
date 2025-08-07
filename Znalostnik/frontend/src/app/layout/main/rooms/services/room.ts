@@ -3,12 +3,12 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import * as signalR from '@microsoft/signalr';
 import { Router } from '@angular/router';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
-
+import { environment } from '../../../../../environments/environment.development';
 @Injectable({
   providedIn: 'root',
 })
 export class Room {
-  private apiUrl = 'http://localhost:8000/api/room';
+  private apiUrl = environment.apiURL + 'room';
   public connectionHub: signalR.HubConnection | null = null;
   public connectionRejected$ = new Subject<string>();
   public connectionAccepted$ = new Subject<void>();
@@ -19,11 +19,10 @@ export class Room {
   constructor(private http: HttpClient) {}
 
   joinRoom(roomId: string, password: string, username: string): Observable<boolean> {
+    const url = this.apiUrl + `hub?roomId=${roomId}&username=${username}&password=${password}`;
     return new Observable<boolean>((observer) => {
       this.connectionHub = new signalR.HubConnectionBuilder()
-        .withUrl(
-          `http://localhost:8000/api/hub?roomId=${roomId}&username=${username}&password=${password}`,
-        )
+        .withUrl(url)
         .withAutomaticReconnect()
         .build();
 

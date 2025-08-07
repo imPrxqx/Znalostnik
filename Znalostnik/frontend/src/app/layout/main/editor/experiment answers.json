@@ -1,8 +1,8 @@
 {
   "answers": [
     { "id": "0", "selectedAnswers": [0] },
-    { "exerciseIndex": "1", "selectedAnswers": [3] },
-    { "exerciseIndex": "2", "selectedSolutions": [
+    { "id": "1", "selectedAnswers": [3] },
+    { "id": "2", "selectedSolutions": [
       { "pairIndexLeft": 0, "pairIndexRight": 1 },
       { "pairIndexLeft": 2, "pairIndexRight": 3 }
     ]}

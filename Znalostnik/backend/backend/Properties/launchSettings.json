@@ -34,7 +34,11 @@
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "environmentVariables": {
         "ASPNETCORE_HTTPS_PORTS": "8081",
-        "ASPNETCORE_HTTP_PORTS": "8080"
+        "ASPNETCORE_HTTP_PORTS": "8080",
+        "ROOM_MONITOR_INTERVAL": "3",
+        "ROOM_TIME_OUT": "3",
+        "X509_CERTIFICATE_2_PASSWORD": "admin"
+
       },
       "publishAllPorts": true,
       "useSSL": true

@@ -2,10 +2,18 @@
 
 <input type="file" accept=".json" (change)="onFileSelected($event)" />
 
+<form (ngSubmit)="onLoadServer()" #onLoadServerForm="ngForm">
+  <div class="form-group">
+    <label for="exerciseId" i18n>ID Cvičení</label>
+    <input type="text" [(ngModel)]="exerciseId" name="exerciseId" required />
+  </div>
+  <button type="submit" i18n>Načíst cvičení</button>
+</form>
+<button (click)="sendDocument()" i18n>Uložit cvičení na server</button>
+
 <app-renderer
   [document]="document()"
   [selectedExercise]="selectedExercise()"
   (answer)="onAnswerChanged($event)"
 />
-
 <button (click)="sendAnswers()" i18n>Odeslat řešení</button>
