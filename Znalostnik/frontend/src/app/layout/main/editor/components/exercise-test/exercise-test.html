@@ -1,6 +1,7 @@
 <p>exercise-test works!</p>
 
 <input type="file" accept=".json" (change)="onFileSelected($event)" />
+<button (click)="sendDocument()" i18n>Uložit cvičení na server</button>
 
 <form (ngSubmit)="onLoadServer()" #onLoadServerForm="ngForm">
   <div class="form-group">
@@ -9,7 +10,6 @@
   </div>
   <button type="submit" i18n>Načíst cvičení</button>
 </form>
-<button (click)="sendDocument()" i18n>Uložit cvičení na server</button>
 
 <app-renderer
   [document]="document()"

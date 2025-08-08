@@ -8,7 +8,13 @@ namespace backend.Graders
 
         public JsonElement Grade(JsonElement solution, JsonElement answer)
         {
-            throw new NotImplementedException();
+            bool correctAnswer = solution.GetProperty("answer").GetBoolean();
+            bool selectedAnswer = answer.GetProperty("answer").GetBoolean();
+
+            var feedback = new { correct = correctAnswer, answer = selectedAnswer };
+
+            string json = JsonSerializer.Serialize(feedback);
+            return JsonSerializer.Deserialize<JsonElement>(json);
         }
     }
 }

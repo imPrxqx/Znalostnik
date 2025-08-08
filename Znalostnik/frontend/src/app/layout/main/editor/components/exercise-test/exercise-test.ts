@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './exercise-test.css',
 })
 export class ExerciseTest {
-  answers: any[] = [];
+  answers = { answers: [] };
   exerciseId: string = '';
   document = signal<Record<string, any>>({ exercises: [] });
   selectedExercise = signal<any>({});
@@ -28,7 +28,7 @@ export class ExerciseTest {
 
     reader.onload = () => {
       try {
-        this.answers = [];
+        (this.answers as any) = { answers: [] };
         const parsed = JSON.parse(reader.result as string);
         this.document.set(parsed || {});
         this.selectedExercise.set(this.document()['exercises'][0] || []);
@@ -40,19 +40,46 @@ export class ExerciseTest {
     reader.readAsText(file);
   }
 
-  sendAnswers() {
+  async sendAnswers() {
     console.log('Sending answers:', this.answers);
+    console.log('id', this.exerciseId);
+
+    try {
+      const answerData = this.answers;
+      const stringifiedAnswer = JSON.stringify(answerData);
+      console.log('Answer', stringifiedAnswer);
+      const response = await fetch(environment.apiURL + '/Exercise/' + this.exerciseId, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          exerciseAnswer: stringifiedAnswer,
+        }),
+      });
+
+      const exercises = await response.json();
+      this.document.set(exercises);
+      this.selectedExercise.set(exercises.exercises[0]);
+
+      (this.answers as any) = { answers: [] };
+      console.log('FEEEDBACAAAK', this.document());
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   onAnswerChanged(data: any) {
-    const existingIndex = this.answers.findIndex(
-      (a) => a.exerciseId === data.exerciseId && a.blockTemplate === data.blockTemplate,
+    console.log(data);
+    const existingIndex = (this.answers as any).answers.findIndex(
+      (a: any) => a.exerciseId === data.exerciseId && a.blockTemplate === data.blockTemplate,
     );
 
     if (existingIndex !== -1) {
-      this.answers[existingIndex].answer = data.answer;
+      (this.answers as any).answers[existingIndex].answer = data.answer;
     } else {
-      this.answers.push(data);
+      (this.answers as any).answers.push(data);
     }
   }
 
@@ -94,6 +121,7 @@ export class ExerciseTest {
       const parsedContent = JSON.parse(exercises['content']);
       this.document.set(parsedContent);
       this.selectedExercise.set(parsedContent.exercises[0]);
+      this.exerciseId = parsedContent.exercise[0]['id'];
     } catch (error) {
       console.error(error);
     }

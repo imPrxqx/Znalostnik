@@ -14,36 +14,44 @@ namespace backend.Graders
 
         public JsonElement GradeExercise(JsonElement documentWithSolution, JsonElement answers)
         {
-            var editableDocument = JsonNode.Parse(documentWithSolution.GetRawText())![
-                "exercise"
-            ]!.AsArray();
+            if (!documentWithSolution.TryGetProperty("exercises", out var exercisesElement))
+            {
+                throw new Exception();
+            }
+
+            var editableDocument = JsonNode.Parse(exercisesElement.GetRawText())!.AsArray();
             var answersArray = answers.GetProperty("answers");
 
             foreach (var exercise in editableDocument)
             {
-                var exerciseId = exercise!.AsObject()["id"]!.ToString();
-                var blocks = exercise!.AsObject()["blocks"]!.AsArray();
+                var exerciseId = exercise!["id"]!.ToString();
+                var blocks = exercise!["blocks"]!.AsArray();
 
                 foreach (var block in blocks)
                 {
-                    var metadata = block!.AsObject()["metadata"]!.AsObject();
+                    var metadata = block!["metadata"]!.AsObject();
 
                     if (!metadata.TryGetPropertyValue("solution", out var solution))
                     {
                         continue;
                     }
 
+                    var type = block["blockTemplate"]?.GetValue<string>();
+
                     var answer = answersArray
                         .EnumerateArray()
-                        .FirstOrDefault(a => a.GetProperty("id").GetString() == exerciseId);
+                        .FirstOrDefault(a =>
+                            a.GetProperty("exerciseId").GetString() == exerciseId
+                            && a.GetProperty("blockTemplate").GetString() == type
+                        );
 
-                    var type = block["blockTemplate"]?.GetValue<string>();
                     var grader = Graders.FirstOrDefault(g => g.Type == type)!;
 
                     var feedbackElement = grader.Grade(
                         JsonDocument.Parse(solution!.ToJsonString()).RootElement,
                         answer
                     );
+
                     var feedbackNode = JsonNode.Parse(feedbackElement.GetRawText())!;
                     metadata["feedback"] = feedbackNode;
 
@@ -51,7 +59,9 @@ namespace backend.Graders
                 }
             }
 
-            return JsonSerializer.Deserialize<JsonElement>(editableDocument.ToJsonString())!;
+            var resultJson = new JsonObject { ["exercises"] = editableDocument };
+
+            return JsonSerializer.Deserialize<JsonElement>(resultJson.ToJsonString())!;
         }
     }
 }

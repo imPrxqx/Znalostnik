@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
+using backend.Graders;
 using backend.Models;
 using Humanizer;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +17,12 @@ namespace backend.Controllers
     public class ExerciseController : ControllerBase
     {
         private ApplicationDbContext _context;
+        private Grader _grader;
 
-        public ExerciseController(ApplicationDbContext context)
+        public ExerciseController(ApplicationDbContext context, Grader grader)
         {
             _context = context;
+            _grader = grader;
         }
 
         // GET: Exercises
@@ -61,6 +65,43 @@ namespace backend.Controllers
             _context.SaveChanges();
 
             return Ok(new { ExerciseId = exercise.Id });
+        }
+
+        // POST: Exercises/GradeExercise
+        [HttpPost("{exerciseId}")]
+        public async Task<IActionResult> GradeExercise(
+            string exerciseId,
+            [FromBody] Dictionary<string, string> exerciseData
+        )
+        {
+            if (
+                exerciseData == null
+                || !exerciseData.TryGetValue("exerciseAnswer", out var exerciseAnswer)
+            )
+            {
+                return BadRequest("exerciseAnswer is required.");
+            }
+
+            var exercise = await _context.Exercises.FindAsync(exerciseId);
+
+            if (exercise == null)
+            {
+                return NotFound("Exercise not found.");
+            }
+
+            try
+            {
+                var exerciseJson = JsonDocument.Parse(exercise.Content).RootElement;
+                var answerJson = JsonDocument.Parse(exerciseAnswer).RootElement;
+
+                var feedback = _grader.GradeExercise(exerciseJson, answerJson);
+
+                return Ok(feedback);
+            }
+            catch (JsonException)
+            {
+                return BadRequest("Invalid JSON format.");
+            }
         }
     }
 }
