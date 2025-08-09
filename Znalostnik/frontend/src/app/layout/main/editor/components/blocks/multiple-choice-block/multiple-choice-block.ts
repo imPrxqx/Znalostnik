@@ -1,4 +1,13 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  HostListener,
+  ElementRef,
+  ViewChildren,
+  QueryList,
+} from '@angular/core';
 import { BaseBlockComponent } from '../../block-registry';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -18,6 +27,7 @@ export class MultipleChoiceBlock implements BaseBlockComponent {
   @Output() answered = new EventEmitter<{ blockTemplate: string; answer: any }>();
 
   isEditing = false;
+  @ViewChildren('editable') editableRefs!: QueryList<ElementRef>;
 
   ngOnInit() {
     if (!this.metadata.hasOwnProperty('data')) {
@@ -32,6 +42,16 @@ export class MultipleChoiceBlock implements BaseBlockComponent {
     }
   }
 
+  stopEditing() {
+    this.isEditing = false;
+  }
+
+  startEditing() {
+    if (this.editable) {
+      this.isEditing = true;
+    }
+  }
+
   addOption() {
     if (this.metadata.data.options.length >= 8) {
       return;
@@ -42,5 +62,19 @@ export class MultipleChoiceBlock implements BaseBlockComponent {
 
   removeOption() {
     this.metadata.data.options.pop();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (this.isEditing && this.editableRefs) {
+      const clickedInsideAny = this.editableRefs.some((ref) =>
+        ref.nativeElement.contains(event.target),
+      );
+
+      if (!clickedInsideAny) {
+        this.stopEditing();
+        this.changed.emit();
+      }
+    }
   }
 }

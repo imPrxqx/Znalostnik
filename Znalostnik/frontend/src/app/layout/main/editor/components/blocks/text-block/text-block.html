@@ -1,13 +1,7 @@
 <p>text-block works!</p>
 
 @if (isEditing) {
-<textarea
-  [(ngModel)]="metadata.data.content"
-  (blur)="stopEditing()"
-  (keydown)="handleKeyDown($event)"
-  rows="5"
-  autofocus
-></textarea>
+<textarea #editable [(ngModel)]="metadata.data.content" rows="5"></textarea>
 } @else {
-<div class="text-preview" (dblclick)="startEditing()">{{ metadata.data.content }}</div>
+<div (dblclick)="startEditing()">{{ metadata.data.content }}</div>
 }

@@ -34,4 +34,9 @@ export class ToolBar {
   useBlock(schema: string, block: string, type: string) {
     this.centralEditorService.setExerciseBlock(schema, block, type);
   }
+
+  createDefaultExercise(schema: string) {
+    console.log('creating default exercise');
+    this.centralEditorService.createDefaultExercise(schema);
+  }
 }

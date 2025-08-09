@@ -1,4 +1,12 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  Input,
+  EventEmitter,
+  Output,
+  HostListener,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BaseBlockComponent } from '../../block-registry';
@@ -18,6 +26,8 @@ export class TextBlock implements BaseBlockComponent {
   @Output() changed = new EventEmitter<void>();
   isEditing = false;
 
+  @ViewChild('editable') editableRef!: ElementRef;
+
   ngOnInit() {
     if (!this.metadata.hasOwnProperty('data')) {
       (this.metadata as any).data = {};
@@ -35,11 +45,15 @@ export class TextBlock implements BaseBlockComponent {
     this.isEditing = false;
   }
 
-  handleKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      this.stopEditing();
-      this.changed.emit();
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    console.log('klik');
+    if (this.isEditing && this.editableRef) {
+      const clickedInside = this.editableRef.nativeElement.contains(event.target);
+      if (!clickedInside) {
+        this.stopEditing();
+        this.changed.emit();
+      }
     }
   }
 }

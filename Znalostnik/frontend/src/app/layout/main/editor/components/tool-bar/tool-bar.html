@@ -3,13 +3,14 @@
 <div>
   @for (document of allDocumentGroups; track document) {
   <h2>{{ document.alias }}</h2>
+  <button (click)="createDefaultExercise(document.key)" i18n>Vytvořit</button>
   @for (group of document.body; track group) {
   <div>
     <h3>{{ group.alias }}</h3>
     @for (type of group.types; track type) {
     <div>
       <span>{{ type.alias }}</span>
-      <button (click)="useBlock(document.key, group.key, type.key)">Použít</button>
+      <button (click)="useBlock(document.key, group.key, type.key)" i18n>Použít</button>
     </div>
     }
   </div>

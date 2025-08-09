@@ -188,4 +188,33 @@ export class CentralEditor {
       console.error('Invalid JSON');
     }
   }
+
+  createDefaultExercise(schema: string) {
+    const newId = 'exercise-' + Math.random().toString(36).substring(2, 7);
+
+    const blocks = DocumentSchemas[schema].requiredBody.map((groupKey: string) => {
+      const section = DocumentSchemas[schema].bodyMeta[groupKey];
+      const defaultTemplate = section.defaultTemplate;
+
+      return {
+        blockSchema: groupKey,
+        blockTemplate: defaultTemplate,
+        metadata: {},
+      };
+    });
+
+    const newExercise = {
+      id: newId,
+      documentSchema: schema,
+      blocks,
+    };
+
+    this.document.update((document) => ({
+      ...document,
+      exercises: [...(document['exercises'] || []), newExercise],
+    }));
+
+    this.selectedExercise.set(newExercise);
+    this.setSnapshot();
+  }
 }
