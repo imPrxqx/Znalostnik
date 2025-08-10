@@ -47,10 +47,22 @@ namespace backend.Graders
 
                     var grader = Graders.FirstOrDefault(g => g.Type == type)!;
 
-                    var feedbackElement = grader.Grade(
-                        JsonDocument.Parse(solution!.ToJsonString()).RootElement,
-                        answer
-                    );
+                    JsonElement feedbackElement;
+
+                    if (answer.ValueKind != JsonValueKind.Undefined)
+                    {
+                        feedbackElement = grader.Grade(
+                            JsonDocument.Parse(solution!.ToJsonString()).RootElement,
+                            answer
+                        );
+                    }
+                    else
+                    {
+                        feedbackElement = grader.Grade(
+                            JsonDocument.Parse(solution!.ToJsonString()).RootElement,
+                            null
+                        );
+                    }
 
                     var feedbackNode = JsonNode.Parse(feedbackElement.GetRawText())!;
                     metadata["feedback"] = feedbackNode;

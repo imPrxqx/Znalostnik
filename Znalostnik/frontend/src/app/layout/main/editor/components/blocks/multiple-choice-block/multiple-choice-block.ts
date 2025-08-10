@@ -7,6 +7,7 @@ import {
   ElementRef,
   ViewChildren,
   QueryList,
+  signal,
 } from '@angular/core';
 import { BaseBlockComponent } from '../../block-registry';
 import { CommonModule } from '@angular/common';
@@ -24,22 +25,83 @@ export class MultipleChoiceBlock implements BaseBlockComponent {
   @Input() metadata: any;
   @Input() editable: boolean = false;
   @Output() changed = new EventEmitter<void>();
-  @Output() answered = new EventEmitter<{ blockTemplate: string; answer: any }>();
+  @Output() answer = new EventEmitter<{ exerciseId: string; blockTemplate: string; answer: any }>();
 
   isEditing = false;
   @ViewChildren('editable') editableRefs!: QueryList<ElementRef>;
+  selectedAnswers = signal<string[]>([]);
 
   ngOnInit() {
     if (!this.metadata.hasOwnProperty('data')) {
       (this.metadata as any).data = {};
 
       (this.metadata as any).data.options = [
-        { text: 'Odpoved 1' },
-        { text: 'Odpoved 2' },
-        { text: 'Odpoved 3' },
-        { text: 'Odpoved 4' },
+        { id: Math.random().toString(36).substring(2, 9), text: 'Odpoved 1' },
+        { id: Math.random().toString(36).substring(2, 9), text: 'Odpoved 2' },
+        { id: Math.random().toString(36).substring(2, 9), text: 'Odpoved 3' },
+        { id: Math.random().toString(36).substring(2, 9), text: 'Odpoved 4' },
       ];
     }
+
+    if (this.editable && !this.metadata.hasOwnProperty('solution')) {
+      (this.metadata as any).solution = {};
+      (this.metadata as any).solution.answer = [];
+    }
+  }
+
+  setAnswer(optionId: string) {
+    const current = [...this.selectedAnswers()];
+    const index = current.indexOf(optionId);
+
+    if (index === -1) {
+      current.push(optionId);
+    } else {
+      current.splice(index, 1);
+    }
+
+    this.selectedAnswers.set(current);
+
+    this.answer.emit({
+      exerciseId: this.exerciseId,
+      blockTemplate: MultipleChoiceBlock.blockTemplate,
+      answer: this.selectedAnswers(),
+    });
+  }
+
+  getFeedbackClass(option: string): string {
+    if (this.editable || !this.metadata?.feedback) {
+      return '';
+    }
+
+    const correct: string[] = this.metadata.feedback.correct ?? [];
+    const incorrect: string[] = this.metadata.feedback.incorrect ?? [];
+
+    if (correct.includes(option)) {
+      return 'correct';
+    }
+
+    if (incorrect.includes(option)) {
+      return 'incorrect';
+    }
+
+    return '';
+  }
+
+  isOptionCorrect(optionId: string): boolean {
+    return this.metadata.solution.answer.includes(optionId);
+  }
+
+  toggleCorrect(optionId: string) {
+    const answers = this.metadata.solution.answer;
+    const pos = answers.indexOf(optionId);
+
+    if (pos === -1) {
+      answers.push(optionId);
+    } else {
+      answers.splice(pos, 1);
+    }
+
+    this.changed.emit();
   }
 
   stopEditing() {

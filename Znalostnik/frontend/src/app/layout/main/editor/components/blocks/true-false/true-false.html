@@ -1,36 +1,34 @@
 <p>true-false works!</p>
 @if (editable) {
 <div>
-  <label>
+  <label i18n>
     <input
       type="radio"
-      name="solution-{{exerciseId}}"
       [checked]="metadata.solution.answer === true"
       (change)="setSolution(true)"
     />
-    {{ metadata.data.options.true }}
+    Pravda
   </label>
 
-  <label>
+  <label i18n>
     <input
       type="radio"
-      name="solution-{{exerciseId}}"
       [checked]="metadata.solution.answer === false"
       (change)="setSolution(false)"
     />
-    {{ metadata.data.options.false }}
+    Lež
   </label>
 </div>
 } @else {
 <div>
-  <label [ngClass]="getFeedbackClass(true)">
-    <input type="radio" [checked]="selectedAnswer === true" (change)="setAnswer(true)" />
-    {{ metadata.data.options.true }}
+  <label [ngClass]="getFeedbackClass(true)" i18n>
+    <input type="radio" [checked]="selectedAnswer() === true" (change)="setAnswer(true)" />
+    Pravda
   </label>
 
-  <label [ngClass]="getFeedbackClass(false)">
-    <input type="radio" [checked]="selectedAnswer === false" (change)="setAnswer(false)" />
-    {{ metadata.data.options.false }}
+  <label [ngClass]="getFeedbackClass(false)" i18n>
+    <input type="radio" [checked]="selectedAnswer() === false" (change)="setAnswer(false)" />
+    Lež
   </label>
 </div>
 }

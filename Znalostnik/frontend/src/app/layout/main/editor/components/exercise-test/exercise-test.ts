@@ -119,9 +119,10 @@ export class ExerciseTest {
 
       const exercises = await response.json();
       const parsedContent = JSON.parse(exercises['content']);
+      console.log(parsedContent);
       this.document.set(parsedContent);
       this.selectedExercise.set(parsedContent.exercises[0]);
-      this.exerciseId = parsedContent.exercise[0]['id'];
+      this.exerciseId = exercises['id'];
     } catch (error) {
       console.error(error);
     }

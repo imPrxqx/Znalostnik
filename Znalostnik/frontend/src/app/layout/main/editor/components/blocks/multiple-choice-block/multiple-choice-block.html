@@ -3,15 +3,25 @@
 @if (editable) {
 <button (click)="addOption()">Přidat</button>
 <button (click)="removeOption()">Odebrat</button>
-@for(option of metadata.data.options; track option) { @if (isEditing) {
-<textarea #editable [(ngModel)]="option.text" rows="5"></textarea>
+@for(option of metadata.data.options; track option.id) {
 
-} @else {
-<div (dblclick)="startEditing()">{{ option.text }}</div>
-} } } @else { @for(option of metadata.data.options; track option) {
 <div>
-  <label>
-    <input type="checkbox" />
+  <input
+    type="checkbox"
+    [checked]="isOptionCorrect(option.id)"
+    (change)="toggleCorrect(option.id)"
+  />
+  @if (isEditing) {
+  <textarea #editable [(ngModel)]="option.text" rows="5"></textarea>
+
+  } @else {
+  <label (dblclick)="startEditing()">{{ option.text }}</label>
+  }
+</div>
+} } @else { @for(option of metadata.data.options; track option.id) {
+<div>
+  <label [ngClass]="getFeedbackClass(option.id)">
+    <input type="checkbox" (change)="setAnswer(option.id)" />
     {{ option.text }}
   </label>
 </div>

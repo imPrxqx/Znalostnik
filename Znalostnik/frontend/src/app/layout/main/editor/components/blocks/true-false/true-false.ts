@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, signal } from '@angular/core';
 import { BaseBlockComponent } from '../../block-registry';
 import { CommonModule } from '@angular/common';
 
@@ -17,7 +17,7 @@ export class TrueFalse implements BaseBlockComponent {
   @Output() changed = new EventEmitter<void>();
   @Output() answer = new EventEmitter<{ exerciseId: string; blockTemplate: string; answer: any }>();
 
-  selectedAnswer: boolean | null = null;
+  selectedAnswer = signal<boolean | null>(null);
 
   ngOnInit() {
     if (!this.metadata.hasOwnProperty('data')) {
@@ -29,34 +29,21 @@ export class TrueFalse implements BaseBlockComponent {
       (this.metadata as any).solution = {};
       (this.metadata as any).solution.answer = null;
     }
-
-    if (!this.editable) {
-      this.answer.emit({
-        exerciseId: this.exerciseId,
-        blockTemplate: TrueFalse.blockTemplate,
-        answer: this.selectedAnswer,
-      });
-    }
   }
 
   getFeedbackClass(option: boolean): string {
-    console.log('called');
-
-    if (this.editable || !this.metadata.hasOwnProperty('feedback')) {
+    if (this.editable || !this.metadata?.feedback) {
       return '';
     }
 
-    console.log('has feedback and is not editable');
+    const correct: boolean[] = this.metadata.feedback.correct ?? [];
+    const incorrect: boolean[] = this.metadata.feedback.incorrect ?? [];
 
-    this.selectedAnswer = this.metadata.feedback.answer;
-    const correct = this.metadata.feedback.correct;
-    const selected = this.metadata.feedback.answer;
-
-    if (correct === option) {
+    if (correct.includes(option)) {
       return 'correct';
     }
 
-    if (correct !== selected && option === selected) {
+    if (incorrect.includes(option)) {
       return 'incorrect';
     }
 
@@ -64,12 +51,12 @@ export class TrueFalse implements BaseBlockComponent {
   }
 
   setAnswer(answer: boolean) {
-    this.selectedAnswer = answer;
+    this.selectedAnswer.set(answer);
 
     this.answer.emit({
       exerciseId: this.exerciseId,
       blockTemplate: TrueFalse.blockTemplate,
-      answer: this.selectedAnswer,
+      answer: this.selectedAnswer(),
     });
   }
 
