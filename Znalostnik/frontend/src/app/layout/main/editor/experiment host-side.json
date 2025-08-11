@@ -1,71 +1,80 @@
 {
-
-    "exercises": [
+  "exercises": [
+    {
+      "id": "exercise-2wpsz",
+      "documentSchema": "quiz",
+      "blocks": [
         {
-            "id" : "0",
-            "documentSchema": "quiz",
-            "blocks": [
-                {
-                    "blockSchema": "quizText",
-                    "blockTemplate": "text",
-                    "metadata": {
-                        "data": {
-                            "content": "Jaký je hlavní město ČR?"
-                        }
-                    }
-                },
-                {
-                    "blockSchema": "quizOption",
-                    "blockTemplate": "multipleChoice",
-                    "metadata": {
-                        "data": {
-                            "options": [
-                                { "text": "Praha" },
-                                { "text": "Brno" },
-                                { "text": "Ostrava" },
-                                { "text": "Jan Růžička" }
-                            ]
-                        },
-                        "solution": {
-                            "correctAnswers": [0]
-                        }
-                    }
-
-                }
-            ]
+          "blockSchema": "quizText",
+          "blockTemplate": "text",
+          "metadata": { "data": { "content": "Jaké je jméno studenta, který toto vytváří?" } }
         },
         {
-            "id" : "1",
-            "documentSchema": "quiz",
-            "blocks": [
+          "blockSchema": "quizOption",
+          "blockTemplate": "multipleChoice",
+          "metadata": {
+            "data": {
+              "options": [
                 {
-                    "blockSchema": "quizText",
-                    "blockTemplate": "text",
-                    "metadata": {
-                        "data": {
-                        "content": "Jaké je jméno studenta, který toto vytváří?"
-                        }
-                }
+                  "id": "fasku64",
+                  "text": "Kočka Růžička"
                 },
                 {
-                    "blockSchema": "quizOption",
-                    "blockTemplate": "multipleChoice",
-                    "metadata": {
-                        "data": {
-                            "options": [
-                                { "text": "Kočka Růžička" },
-                                { "text": "Bobr Růžička" },
-                                { "text": "Pepa Růžička" },
-                                { "text": "Jan Růžička" }
-                            ]
-                        },
-                        "solution": {
-                            "correctAnswers": [3]
-                        }
-                    }
-                }  
-            ]
+                  "id": "0444wq9",
+                  "text": "Bobr Růžička"
+                },
+                {
+                  "id": "eu1qu63",
+                  "text": "Pepa Růžička"
+                },
+                {
+                  "id": "9o0vr39",
+                  "text": "Jan Růžička"
+                }
+              ]
+            },
+            "solution": { "answer": [ "9o0vr39" ] }
+          }
         }
-    ]
+      ]
+    },
+    {
+      "id": "exercise-gw4wl",
+      "documentSchema": "quiz",
+      "blocks": [
+        {
+          "blockSchema": "quizText",
+          "blockTemplate": "text",
+          "metadata": { "data": { "content": "Jaký je hlavní město ČR?" } }
+        },
+        {
+          "blockSchema": "quizOption",
+          "blockTemplate": "multipleChoice",
+          "metadata": {
+            "data": {
+              "options": [
+                {
+                  "id": "iz61cn9",
+                  "text": "Praha"
+                },
+                {
+                  "id": "3k8lfiq",
+                  "text": "Brno"
+                },
+                {
+                  "id": "k4gddag",
+                  "text": "Ostrava"
+                },
+                {
+                  "id": "7pxcz8k",
+                  "text": "Jan Růžička"
+                }
+              ]
+            },
+            "solution": { "answer": [ "iz61cn9" ] }
+          }
+        }
+      ]
+    }
+  ]
 }
-

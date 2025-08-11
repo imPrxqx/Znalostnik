@@ -3,12 +3,12 @@ import { BaseBlockComponent } from '../../block-registry';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-true-false',
+  selector: 'app-true-false-block',
   imports: [CommonModule],
-  templateUrl: './true-false.html',
-  styleUrl: './true-false.css',
+  templateUrl: './true-false-block.html',
+  styleUrl: './true-false-block.css',
 })
-export class TrueFalse implements BaseBlockComponent {
+export class TrueFalseBlock implements BaseBlockComponent {
   static readonly blockTemplate: string = 'trueFalse';
   @Input() exerciseId: string = '';
   @Input() editable: boolean = false;
@@ -55,7 +55,7 @@ export class TrueFalse implements BaseBlockComponent {
 
     this.answer.emit({
       exerciseId: this.exerciseId,
-      blockTemplate: TrueFalse.blockTemplate,
+      blockTemplate: TrueFalseBlock.blockTemplate,
       answer: this.selectedAnswer(),
     });
   }

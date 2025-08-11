@@ -1,7 +1,7 @@
 import { Input, Output, EventEmitter, Type, Directive } from '@angular/core';
 import { TextBlock } from './blocks/text-block/text-block';
 import { MultipleChoiceBlock } from './blocks/multiple-choice-block/multiple-choice-block';
-import { TrueFalse } from './blocks/true-false/true-false';
+import { TrueFalseBlock } from './blocks/true-false-block/true-false-block';
 
 @Directive()
 export abstract class BaseBlockComponent<T = any> {
@@ -15,7 +15,7 @@ export abstract class BaseBlockComponent<T = any> {
 export const BlockRegistry: Record<string, Type<BaseBlockComponent>> = {
   [TextBlock.blockTemplate]: TextBlock,
   [MultipleChoiceBlock.blockTemplate]: MultipleChoiceBlock,
-  [TrueFalse.blockTemplate]: TrueFalse,
+  [TrueFalseBlock.blockTemplate]: TrueFalseBlock,
 };
 
 export const DocumentSchemas: Record<

@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TrueFalse } from './true-false';
+import { TrueFalseBlock } from './true-false-block';
 
-describe('TrueFalse', () => {
-  let component: TrueFalse;
-  let fixture: ComponentFixture<TrueFalse>;
+describe('TrueFalseBlock', () => {
+  let component: TrueFalseBlock;
+  let fixture: ComponentFixture<TrueFalseBlock>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TrueFalse],
+      imports: [TrueFalseBlock],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TrueFalse);
+    fixture = TestBed.createComponent(TrueFalseBlock);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

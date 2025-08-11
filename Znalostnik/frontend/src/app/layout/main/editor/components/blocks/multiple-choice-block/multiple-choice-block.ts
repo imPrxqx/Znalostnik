@@ -93,12 +93,12 @@ export class MultipleChoiceBlock implements BaseBlockComponent {
 
   toggleCorrect(optionId: string) {
     const answers = this.metadata.solution.answer;
-    const pos = answers.indexOf(optionId);
+    const index = answers.indexOf(optionId);
 
-    if (pos === -1) {
+    if (index === -1) {
       answers.push(optionId);
     } else {
-      answers.splice(pos, 1);
+      answers.splice(index, 1);
     }
 
     this.changed.emit();
