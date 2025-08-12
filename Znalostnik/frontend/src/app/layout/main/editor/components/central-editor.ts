@@ -6,12 +6,10 @@ import { DocumentSchemas } from './block-registry';
 })
 export class CentralEditor {
   document = signal<Record<string, any>>({ exercises: [] });
-  selectedExercise = signal<any>({});
+  selectedExercise = signal<any>({ exercises: [] });
 
   private history: any[] = [];
   private currentIndex = -1;
-
-  constructor() {}
 
   setSnapshot(): void {
     console.log('History before slice', this.history);
@@ -36,18 +34,18 @@ export class CentralEditor {
     const exercises = this.document()['exercises'] || [];
 
     if (id === null) {
-      this.selectedExercise.set({});
+      this.selectedExercise.set({ exercises: [] });
       return;
     }
 
     const exercise = exercises.find((e: any) => e.id === id);
 
     if (exercise) {
-      this.selectedExercise.set(exercise);
+      this.selectedExercise.set({ exercises: [exercise] });
     } else if (exercises.length > 0) {
-      this.selectedExercise.set(exercises[0]);
+      this.selectedExercise.set({ exercises: [exercises[0]] });
     } else {
-      this.selectedExercise.set({});
+      this.selectedExercise.set({ exercises: [] });
     }
   }
 
@@ -82,8 +80,8 @@ export class CentralEditor {
   clear(): void {
     this.history = [];
     this.currentIndex = -1;
-    this.document.set({});
-    this.selectedExercise.set({});
+    this.document.set({ exercises: [] });
+    this.selectedExercise.set({ exercises: [] });
   }
 
   setExerciseBlock(schema: string, blockGroup: string, template: string) {
@@ -118,7 +116,7 @@ export class CentralEditor {
         exercises: [...(document['exercises'] || []), newExercise],
       }));
 
-      this.selectedExercise.set(newExercise);
+      this.selectedExercise.set({ exercises: [newExercise] });
       this.setSnapshot();
       return;
     }
@@ -180,7 +178,7 @@ export class CentralEditor {
     try {
       const parsed = JSON.parse(json);
       this.document.set(parsed || {});
-      this.selectedExercise.set(this.document()['exercises'][0] || []);
+      this.selectedExercise.set({ exercises: [this.document()['exercises'][0]] });
       this.setSnapshot();
 
       console.log('History after loading:', this.history);
@@ -214,7 +212,7 @@ export class CentralEditor {
       exercises: [...(document['exercises'] || []), newExercise],
     }));
 
-    this.selectedExercise.set(newExercise);
+    this.selectedExercise.set({ exercises: [newExercise] });
     this.setSnapshot();
   }
 }

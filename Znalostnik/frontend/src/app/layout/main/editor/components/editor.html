@@ -8,8 +8,7 @@
 <app-tool-bar />
 <app-list-exercises />
 <app-renderer
-  [document]="centralEditorService.document()"
-  [selectedExercise]="centralEditorService.selectedExercise()"
+  [document]="centralEditorService.selectedExercise()"
   [editable]="isEditingMode()"
   (dataChanged)="onBlockChanged()"
 ></app-renderer>

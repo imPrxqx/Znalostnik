@@ -11,9 +11,5 @@
   <button type="submit" i18n>Načíst cvičení</button>
 </form>
 
-<app-renderer
-  [document]="document()"
-  [selectedExercise]="selectedExercise()"
-  (answer)="onAnswerChanged($event)"
-/>
+<app-renderer [document]="document()" [answered]="answers" (answer)="onAnswerChanged($event)" />
 <button (click)="sendAnswers()" i18n>Odeslat řešení</button>

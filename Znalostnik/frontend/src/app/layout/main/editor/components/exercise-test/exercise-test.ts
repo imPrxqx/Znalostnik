@@ -14,7 +14,6 @@ export class ExerciseTest {
   answers = { answers: [] };
   exerciseId: string = '';
   document = signal<Record<string, any>>({ exercises: [] });
-  selectedExercise = signal<any>({});
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -30,8 +29,7 @@ export class ExerciseTest {
       try {
         (this.answers as any) = { answers: [] };
         const parsed = JSON.parse(reader.result as string);
-        this.document.set(parsed || {});
-        this.selectedExercise.set(this.document()['exercises'][0] || []);
+        this.document.set(parsed);
       } catch (e) {
         console.error('Json Parser error');
       }
@@ -61,10 +59,9 @@ export class ExerciseTest {
 
       const exercises = await response.json();
       this.document.set(exercises);
-      this.selectedExercise.set(exercises.exercises[0]);
 
-      (this.answers as any) = { answers: [] };
-      console.log('FEEEDBACAAAK', this.document());
+      //(this.answers as any) = { answers: [] };
+      console.log('FEEEDBACAAAK', this.document(), this.answers);
     } catch (error) {
       console.error(error);
     }
@@ -121,7 +118,6 @@ export class ExerciseTest {
       const parsedContent = JSON.parse(exercises['content']);
       console.log(parsedContent);
       this.document.set(parsedContent);
-      this.selectedExercise.set(parsedContent.exercises[0]);
       this.exerciseId = exercises['id'];
     } catch (error) {
       console.error(error);

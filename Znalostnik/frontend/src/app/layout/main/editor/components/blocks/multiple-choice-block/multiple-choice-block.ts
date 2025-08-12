@@ -24,6 +24,8 @@ export class MultipleChoiceBlock implements BaseBlockComponent {
   @Input() exerciseId: string = '';
   @Input() metadata: any;
   @Input() editable: boolean = false;
+  @Input() answered: any;
+
   @Output() changed = new EventEmitter<void>();
   @Output() answer = new EventEmitter<{ exerciseId: string; blockTemplate: string; answer: any }>();
 
@@ -47,6 +49,21 @@ export class MultipleChoiceBlock implements BaseBlockComponent {
       (this.metadata as any).solution = {};
       (this.metadata as any).solution.answer = [];
     }
+
+    if (this.answered && this.answered.hasOwnProperty('answers')) {
+      const found = this.answered.answers.find(
+        (a: any) =>
+          a.exerciseId === this.exerciseId && a.blockTemplate === MultipleChoiceBlock.blockTemplate,
+      );
+
+      if (found) {
+        this.selectedAnswers.set(found.answer);
+      }
+    }
+  }
+
+  isSelected(optionId: string): boolean {
+    return this.selectedAnswers().includes(optionId);
   }
 
   setAnswer(optionId: string) {

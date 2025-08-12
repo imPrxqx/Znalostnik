@@ -1,14 +1,15 @@
 import {
   Component,
   Input,
-  effect,
+  signal,
   ViewContainerRef,
   EventEmitter,
   Output,
+  ViewChild,
   SimpleChanges,
 } from '@angular/core';
 import { BlockRegistry, DocumentSchemas } from '../../editor/components/block-registry';
-import { CentralEditor } from '../../editor/components/central-editor';
+import { SequenceMode } from './sequence-mode/sequence-mode';
 
 @Component({
   selector: 'app-renderer',
@@ -17,38 +18,74 @@ import { CentralEditor } from '../../editor/components/central-editor';
   styleUrl: './renderer.css',
 })
 export class Renderer {
-  private viewContainer: ViewContainerRef;
+  @ViewChild('modeContainer', { read: ViewContainerRef, static: true })
+  modeContainer!: ViewContainerRef;
+  @ViewChild('exercisesContainer', { read: ViewContainerRef, static: true })
+  exercisesContainer!: ViewContainerRef;
 
-  @Input() document: any = null;
-  @Input() selectedExercise: any = null;
+  @Input() document: any;
+  @Input() modeComponent: any = SequenceMode;
+  @Input() answered: any = { answers: [] };
   @Input() editable: boolean = false;
   @Output() dataChanged = new EventEmitter<void>();
   @Output() answer = new EventEmitter<any>();
 
-  constructor(viewContainer: ViewContainerRef) {
-    this.viewContainer = viewContainer;
-  }
+  selectedExercise = signal(null);
 
   ngOnChanges(changes: SimpleChanges) {
-    if (
-      changes['document'] ||
-      changes['selectedExercise'] ||
-      changes['solutions'] ||
-      changes['editable']
-    ) {
+    if (changes['document']) {
+      if (this.editable === false) {
+        this.createModeComponent();
+      } else {
+        this.modeContainer.clear();
+
+        if (this.document.exercises.length === 0) {
+          return;
+        }
+
+        this.selectedExercise.set(this.document.exercises[0]);
+      }
+
+      this.renderBlocks();
+    }
+
+    if (changes['editable']) {
+      if (this.editable === true) {
+        this.createModeComponent();
+      } else {
+        this.modeContainer.clear();
+      }
+
       this.renderBlocks();
     }
   }
 
+  private createModeComponent() {
+    this.modeContainer.clear();
+
+    const compRef = this.modeContainer.createComponent(this.modeComponent);
+    compRef.setInput('document', this.document);
+
+    (compRef.instance as any).selectedExercise.subscribe((exercise: any) => {
+      this.selectedExercise.set(exercise);
+      this.renderBlocks();
+    });
+  }
+
   renderBlocks(): void {
+    console.log(this.selectedExercise());
+    if (this.selectedExercise() === null || this.selectedExercise() === undefined) {
+      return;
+    }
+
     console.log('START');
 
-    this.viewContainer.clear();
+    this.exercisesContainer.clear();
 
-    console.log(this.selectedExercise['blocks'] || []);
+    console.log(this.selectedExercise()!['blocks'] || []);
 
-    const exerciseSchema = this.selectedExercise['documentSchema'];
-    const blocks = this.selectedExercise['blocks'];
+    const exerciseSchema = this.selectedExercise()!['documentSchema'];
+    const blocks: any = this.selectedExercise()!['blocks'];
 
     console.log('exercise schema', exerciseSchema);
     console.log('blocks', blocks);
@@ -80,11 +117,11 @@ export class Renderer {
         continue;
       }
 
-      const componentRef = this.viewContainer.createComponent(componentType);
+      const componentRef = this.exercisesContainer.createComponent(componentType);
       console.log(this.editable);
       componentRef.setInput('metadata', block.metadata);
       componentRef.setInput('editable', this.editable);
-      componentRef.setInput('exerciseId', this.selectedExercise.id);
+      componentRef.setInput('exerciseId', this.selectedExercise()!['id']);
 
       if ('changed' in componentRef.instance && componentRef.instance.changed?.subscribe) {
         componentRef.instance.changed.subscribe(() => {
@@ -97,6 +134,10 @@ export class Renderer {
           console.log('Answer', data);
           this.answer.emit(data);
         });
+      }
+
+      if ('answered' in componentRef.instance) {
+        componentRef.setInput('answered', this.answered);
       }
     }
 

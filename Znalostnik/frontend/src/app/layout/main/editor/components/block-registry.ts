@@ -8,6 +8,7 @@ export abstract class BaseBlockComponent<T = any> {
   @Input() exerciseId!: string;
   @Input() metadata!: T;
   @Input() editable: boolean = true;
+  @Input() answered?: any;
   @Output() changed?: EventEmitter<void>;
   @Output() answer?: EventEmitter<any>;
 }

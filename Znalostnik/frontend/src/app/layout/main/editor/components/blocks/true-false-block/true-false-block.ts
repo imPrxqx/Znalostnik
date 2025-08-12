@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, signal } from '@angular/core';
 import { BaseBlockComponent } from '../../block-registry';
 import { CommonModule } from '@angular/common';
+import { Console } from 'node:console';
 
 @Component({
   selector: 'app-true-false-block',
@@ -13,6 +14,7 @@ export class TrueFalseBlock implements BaseBlockComponent {
   @Input() exerciseId: string = '';
   @Input() editable: boolean = false;
   @Input() metadata: any;
+  @Input() answered: any;
 
   @Output() changed = new EventEmitter<void>();
   @Output() answer = new EventEmitter<{ exerciseId: string; blockTemplate: string; answer: any }>();
@@ -20,6 +22,8 @@ export class TrueFalseBlock implements BaseBlockComponent {
   selectedAnswer = signal<boolean | null>(null);
 
   ngOnInit() {
+    console.log('Init true false');
+
     if (!this.metadata.hasOwnProperty('data')) {
       (this.metadata as any).data = {};
       (this.metadata as any).data.options = { true: 'True', false: 'False' };
@@ -28,6 +32,17 @@ export class TrueFalseBlock implements BaseBlockComponent {
     if (this.editable && !this.metadata.hasOwnProperty('solution')) {
       (this.metadata as any).solution = {};
       (this.metadata as any).solution.answer = null;
+    }
+
+    if (this.answered && this.answered.hasOwnProperty('answers')) {
+      const found = this.answered.answers.find(
+        (a: any) =>
+          a.exerciseId === this.exerciseId && a.blockTemplate === TrueFalseBlock.blockTemplate,
+      );
+
+      if (found) {
+        this.selectedAnswer.set(found.answer);
+      }
     }
   }
 
