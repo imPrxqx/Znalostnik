@@ -136,7 +136,10 @@ export class MultipleChoiceBlock implements BaseBlockComponent {
       return;
     }
 
-    this.metadata.data.options.push({ text: 'Default odpoved' });
+    this.metadata.data.options.push({
+      id: Math.random().toString(36).substring(2, 9),
+      text: 'Default odpoved',
+    });
   }
 
   removeOption() {

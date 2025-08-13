@@ -38,8 +38,9 @@ export class Renderer {
         this.createModeComponent();
       } else {
         this.modeContainer.clear();
-
+        console.log(this.document);
         if (this.document.exercises.length === 0) {
+          this.selectedExercise.set(null);
           return;
         }
 
@@ -50,7 +51,7 @@ export class Renderer {
     }
 
     if (changes['editable']) {
-      if (this.editable === true) {
+      if (this.editable === false) {
         this.createModeComponent();
       } else {
         this.modeContainer.clear();
@@ -75,6 +76,7 @@ export class Renderer {
   renderBlocks(): void {
     console.log(this.selectedExercise());
     if (this.selectedExercise() === null || this.selectedExercise() === undefined) {
+      this.exercisesContainer.clear();
       return;
     }
 

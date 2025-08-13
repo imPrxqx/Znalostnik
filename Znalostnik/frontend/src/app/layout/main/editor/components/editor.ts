@@ -12,8 +12,6 @@ import { CentralEditor } from './central-editor';
   styleUrl: './editor.css',
 })
 export class Editor {
-  isEditingMode = signal<boolean>(true);
-
   constructor(public centralEditorService: CentralEditor) {}
 
   onFileSelected(event: Event): void {
@@ -65,6 +63,6 @@ export class Editor {
   }
 
   toggleEditingMode() {
-    this.isEditingMode.set(!this.isEditingMode());
+    this.centralEditorService.toggleEditingMode();
   }
 }

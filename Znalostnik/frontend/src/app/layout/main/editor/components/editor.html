@@ -1,7 +1,9 @@
 <p>editor works!</p>
 
 <div>
-  <button (click)="toggleEditingMode()" i18n>{{ isEditingMode() }}</button>
+  <button (click)="toggleEditingMode()" i18n>
+    Jsi v editovacím režimu: {{ centralEditorService.isEditingMode() }}
+  </button>
 </div>
 <input type="file" accept=".json" (change)="onFileSelected($event)" />
 <button (click)="saveJson()" i18n>Uložit jako JSON</button>
@@ -9,6 +11,6 @@
 <app-list-exercises />
 <app-renderer
   [document]="centralEditorService.selectedExercise()"
-  [editable]="isEditingMode()"
+  [editable]="centralEditorService.isEditingMode()"
   (dataChanged)="onBlockChanged()"
 ></app-renderer>

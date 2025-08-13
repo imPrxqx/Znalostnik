@@ -8,7 +8,7 @@ import { environment } from '../../../../../environments/environment.development
   providedIn: 'root',
 })
 export class Room {
-  private apiUrl = environment.apiURL + 'room';
+  private apiUrl = environment.apiURL;
   public connectionHub: signalR.HubConnection | null = null;
   public connectionRejected$ = new Subject<string>();
   public connectionAccepted$ = new Subject<void>();
@@ -19,7 +19,7 @@ export class Room {
   constructor(private http: HttpClient) {}
 
   joinRoom(roomId: string, password: string, username: string): Observable<boolean> {
-    const url = this.apiUrl + `hub?roomId=${roomId}&username=${username}&password=${password}`;
+    const url = this.apiUrl + `/hub?roomId=${roomId}&username=${username}&password=${password}`;
     return new Observable<boolean>((observer) => {
       this.connectionHub = new signalR.HubConnectionBuilder()
         .withUrl(url)
@@ -35,7 +35,7 @@ export class Room {
   }
 
   createRoom(): Observable<any> {
-    return this.http.post(this.apiUrl, null);
+    return this.http.post(this.apiUrl + '/room', null);
   }
 
   registerHubEvents() {
