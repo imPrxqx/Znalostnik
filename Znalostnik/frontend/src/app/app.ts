@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Header } from './layout/header/components/header';
-import { Footer } from './layout/footer/components/footer';
-import { Authentication } from './layout/main/authentication/services/authentication';
+import { Header } from '../features/header/components/header';
+import { Footer } from '../features/footer/components/footer';
+import { Authentication } from '../features/authentication/services/authentication';
 import { error } from 'console';
 
 @Component({
@@ -14,11 +14,7 @@ import { error } from 'console';
 export class App implements OnInit {
   protected title = 'frontend';
 
-  authService: Authentication;
-
-  constructor(authService: Authentication) {
-    this.authService = authService;
-  }
+  authService: Authentication = inject(Authentication);
 
   ngOnInit(): void {
     this.authService.loadUser().subscribe({

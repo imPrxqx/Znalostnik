@@ -7,7 +7,12 @@
     "types": [
       "node",
       "@angular/localize"
-    ]
+    ],
+    "baseUrl": "src",
+    "paths": {
+      "@features/*": ["features/*"],
+      "@shared/*": ["shared/*"]
+    }
   },
   "include": [
     "src/**/*.ts"
