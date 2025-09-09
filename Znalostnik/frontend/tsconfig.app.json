@@ -10,8 +10,10 @@
     ],
     "baseUrl": "src",
     "paths": {
+      "@core/*": ["core/*"],
       "@features/*": ["features/*"],
-      "@shared/*": ["shared/*"]
+      "@shared/*": ["shared/*"],
+      "@environments/*": ["environments/*"]
     }
   },
   "include": [

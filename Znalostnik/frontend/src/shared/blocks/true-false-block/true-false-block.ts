@@ -1,7 +1,6 @@
 import { Component, Input, Output, EventEmitter, signal } from '@angular/core';
-import { BaseBlockComponent } from '../../features/editor/models/block-registry';
+import { BaseBlockComponent } from '@shared/models/block-registry';
 import { CommonModule } from '@angular/common';
-import { Console } from 'node:console';
 
 @Component({
   selector: 'app-true-false-block',

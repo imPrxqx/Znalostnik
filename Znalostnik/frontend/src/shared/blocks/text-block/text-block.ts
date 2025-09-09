@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BaseBlockComponent } from '../../features/editor/models/block-registry';
+import { BaseBlockComponent } from '@shared/models/block-registry';
 
 @Component({
   selector: 'app-text-block',

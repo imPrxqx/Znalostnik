@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { CentralEditor } from '../../services/central-editor';
-import { DocumentSchemas } from '../../models/block-registry';
 
 @Component({
   selector: 'app-list-exercises',

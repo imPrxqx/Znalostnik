@@ -1,7 +1,7 @@
 import { Input, Output, EventEmitter, Type, Directive } from '@angular/core';
-import { TextBlock } from '../../../shared/text-block/text-block';
-import { MultipleChoiceBlock } from '../../../shared/multiple-choice-block/multiple-choice-block';
-import { TrueFalseBlock } from '../../../shared/true-false-block/true-false-block';
+import { TextBlock } from '@shared/blocks/text-block/text-block';
+import { MultipleChoiceBlock } from '@shared/blocks/multiple-choice-block/multiple-choice-block';
+import { TrueFalseBlock } from '@shared/blocks/true-false-block/true-false-block';
 
 @Directive()
 export abstract class BaseBlockComponent<T = any> {
@@ -83,31 +83,5 @@ export const DocumentSchemas: Record<
       },
     },
     renderOrder: ['quizText', 'quizOption'],
-  },
-  puzzle: {
-    alias: {
-      cs: 'Puzzle',
-      en: 'Puzzle',
-    },
-    requiredBody: ['puzzleContent'],
-    bodyMeta: {
-      puzzleContent: {
-        types: [
-          {
-            key: 'puzzleContent',
-            alias: {
-              cs: 'Puzzle blok',
-              en: 'Puzzle block',
-            },
-          },
-        ],
-        alias: {
-          cs: 'Puzzle obsah',
-          en: 'Puzzle content',
-        },
-        defaultTemplate: 'puzzleContent',
-      },
-    },
-    renderOrder: ['puzzleContent'],
   },
 };

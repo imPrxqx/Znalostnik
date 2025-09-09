@@ -1,8 +1,8 @@
 import { Component, inject, HostListener } from '@angular/core';
-import { Renderer } from '../../../../shared/renderer/components/renderer';
-import { ToolBar } from '../tool-bar/tool-bar';
-import { ListExercises } from '../list-exercises/list-exercises';
-import { CentralEditor } from '../../services/central-editor';
+import { Renderer } from '@shared/renderer/renderer';
+import { ToolBar } from '../../components/tool-bar/tool-bar';
+import { ListExercises } from '@features/editor/components/list-exercises/list-exercises';
+import { CentralEditor } from '@features/editor/services/central-editor';
 
 @Component({
   selector: 'app-canvas',

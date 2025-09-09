@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Room } from '../../services/room';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';

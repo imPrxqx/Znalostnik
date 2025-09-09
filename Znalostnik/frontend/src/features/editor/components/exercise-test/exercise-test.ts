@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
-import { Renderer } from '../../../../shared/renderer/components/renderer';
-import { environment } from '../../../../environments/environment.development';
+import { Renderer } from '@shared/renderer/renderer';
+import { environment } from '@environments/environment';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 

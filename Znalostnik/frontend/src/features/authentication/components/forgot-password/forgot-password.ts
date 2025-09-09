@@ -1,8 +1,7 @@
 import { Component, inject, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { Authentication } from '../../services/authentication';
+import { Authentication } from '@core/services/authentication';
 import { Router } from '@angular/router';
 
 @Component({

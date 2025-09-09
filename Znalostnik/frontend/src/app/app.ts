@@ -1,9 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Header } from '../features/header/components/header';
-import { Footer } from '../features/footer/components/footer';
-import { Authentication } from '../features/authentication/services/authentication';
-import { error } from 'console';
+import { Footer } from '@features/footer/footer';
+import { Header } from '@features/header/header';
+import { Authentication } from '@core/services/authentication';
 
 @Component({
   selector: 'app-root',

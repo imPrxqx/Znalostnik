@@ -1,5 +1,5 @@
 import { Component, inject, Inject, LOCALE_ID } from '@angular/core';
-import { DocumentSchemas } from '../../models/block-registry';
+import { DocumentSchemas } from '@shared/models/block-registry';
 import { CentralEditor } from '../../services/central-editor';
 
 @Component({

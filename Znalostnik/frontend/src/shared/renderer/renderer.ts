@@ -8,8 +8,8 @@ import {
   ViewChild,
   SimpleChanges,
 } from '@angular/core';
-import { BlockRegistry, DocumentSchemas } from '../../../features/editor/models/block-registry';
-import { SequenceMode } from './sequence-mode/sequence-mode';
+import { BlockRegistry, DocumentSchemas } from '@shared/models/block-registry';
+import { SequenceMode } from '@shared/sequence-mode/sequence-mode';
 
 @Component({
   selector: 'app-renderer',

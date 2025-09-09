@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { DocumentSchemas } from '../models/block-registry';
+import { DocumentSchemas } from '@shared/models/block-registry';
 
 @Injectable({
   providedIn: 'root',
