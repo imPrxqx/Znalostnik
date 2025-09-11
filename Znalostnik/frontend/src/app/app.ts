@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Footer } from '@features/footer/footer';
-import { Header } from '@features/header/header';
+import { Footer } from '@shared/components/footer/footer';
+import { Header } from '@shared/components/header/header';
 import { Authentication } from '@core/services/authentication';
 
 @Component({
