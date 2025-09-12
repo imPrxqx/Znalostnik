@@ -1,269 +1,73 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, Signal, signal } from '@angular/core';
 import { DocumentSchemas } from '@shared/models/block-registry';
+import { ExerciseDocumentModel } from '@shared/models/exercise-document.model';
+import { TaskModel } from '@shared/models/task.model';
+import { ExerciseHistory } from './exercise-history';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ExerciseDocument {
-  document = signal<Record<string, any>>({ exercises: [] });
-  selectedExercise = signal<any>({ exercises: [] });
-  isEditingMode = signal<boolean>(true);
+  private exerciseHistoryService = inject(ExerciseHistory);
+  private exerciseDocument = signal<ExerciseDocumentModel>({ tasks: [] });
+  private selectedTasks = signal<TaskModel[] | undefined>(undefined);
+  private isEditingMode = signal<boolean>(true);
 
-  private history: any[] = [];
-  private currentIndex = -1;
-
-  toggleEditingMode() {
-    this.isEditingMode.set(!this.isEditingMode());
-
-    if (this.isEditingMode() === true) {
-      this.selectedExercise.set({
-        exercises: this.document()?.['exercises']?.[0] ? [this.document()?.['exercises']?.[0]] : [],
-      });
-    } else {
-      console.log(this.document());
-      this.selectedExercise.set(this.document());
-    }
-  }
-
-  setSnapshot(): void {
-    console.log('History before slice', this.history);
-
-    this.history = this.history.slice(0, this.currentIndex + 1);
-    console.log('History after slice', this.history);
-
-    const snapshotCopy = structuredClone([this.selectedExercise()['id'], this.document()]);
-    this.history.push(snapshotCopy);
-
-    console.log('Index before loading:', this.currentIndex);
-    if (this.currentIndex < 0) {
-      this.currentIndex = 0;
-    } else {
-      this.currentIndex++;
-    }
-
-    console.log('History: setSnapshot', this.history);
-  }
-
-  selectExercise(id: string | null): void {
-    const exercises = this.document()['exercises'] || [];
-
-    if (id === null) {
-      if (this.isEditingMode() === true) {
-        this.selectedExercise.set({ exercises: [] });
-      } else {
-        this.selectedExercise.set({ exercises: [] });
-      }
-
+  setSelectedTasksByIds(
+    taskIds: string[] | undefined,
+    skipExerciseSnapshot: boolean = false,
+  ): void {
+    if (!taskIds || taskIds.length === 0) {
+      this.selectedTasks.set(undefined);
       return;
     }
 
-    const exercise = exercises.find((e: any) => e.id === id);
+    const tasks: TaskModel[] = taskIds
+      .map((id) => this.exerciseDocument().tasks.find((t) => t.id === id))
+      .filter((t): t is TaskModel => !!t);
+    this.selectedTasks.set(tasks);
 
-    if (exercise) {
-      if (this.isEditingMode() === true) {
-        this.selectedExercise.set({ exercises: [exercise] });
-      } else {
-        this.selectedExercise.set(this.document());
-      }
-    } else if (exercises.length > 0) {
-      if (this.isEditingMode() === true) {
-        this.selectedExercise.set({ exercises: [exercises[0]] });
-      } else {
-        this.selectedExercise.set(this.document());
-      }
-    } else {
-      if (this.isEditingMode() === true) {
-        this.selectedExercise.set({ exercises: [] });
-      } else {
-        this.selectedExercise.set(this.document());
-      }
+    if (!skipExerciseSnapshot) {
+      this.saveExerciseSnapshot();
     }
   }
 
-  undo() {
-    console.log('Index before undo:', this.currentIndex);
-    if (this.currentIndex > 0) {
-      this.currentIndex--;
+  setExerciseDocument(
+    newDocument: ExerciseDocumentModel,
+    skipExerciseSnapshot: boolean = false,
+  ): void {
+    this.exerciseDocument.set(newDocument);
 
-      console.log('Undo to index:', this.history[this.currentIndex][1], this.currentIndex);
-      console.log('Undo to index:', this.history[this.currentIndex][0], this.currentIndex);
-
-      const snapshot = this.history[this.currentIndex];
-      this.document.set(structuredClone(snapshot[1]));
-      this.selectExercise(snapshot[0]);
+    if (!skipExerciseSnapshot) {
+      this.saveExerciseSnapshot();
     }
   }
 
-  redo() {
-    console.log('Index before redo:', this.currentIndex);
-
-    if (this.currentIndex < this.history.length - 1) {
-      this.currentIndex++;
-      console.log('Redo to index:', this.history[this.currentIndex][1], this.currentIndex);
-      console.log('Redo to index:', this.history[this.currentIndex][0], this.currentIndex);
-
-      const snapshot = this.history[this.currentIndex];
-      this.document.set(structuredClone(snapshot[1]));
-      this.selectExercise(snapshot[0]);
-    }
+  getExerciseDocument(): Signal<ExerciseDocumentModel> {
+    return this.exerciseDocument;
   }
 
-  clear(): void {
-    this.history = [];
-    this.currentIndex = -1;
-    this.document.set({ exercises: [] });
-    this.selectedExercise.set({ exercises: [] });
-  }
-
-  setExerciseBlock(schema: string, blockGroup: string, template: string) {
-    if (this.isEditingMode() === false) {
-      return;
-    }
-
-    const currentExercise = this.selectedExercise()['exercises'];
-    const currentExerciseId = currentExercise[0]?.id;
-    const currentSchema = currentExercise[0]?.documentSchema;
-
-    if (!currentExerciseId || currentSchema !== schema) {
-      const newId = 'exercise-' + Math.random().toString(36).substring(2, 7);
-
-      const blocks = DocumentSchemas[schema].requiredBody.map((groupKey: string) => {
-        const section = DocumentSchemas[schema].bodyMeta[groupKey];
-        const defaultTemplate = section.defaultTemplate;
-
-        const localTemplate = groupKey === blockGroup ? template : defaultTemplate;
-
-        return {
-          blockSchema: groupKey,
-          blockTemplate: localTemplate,
-          metadata: {},
-        };
-      });
-
-      const newExercise = {
-        id: newId,
-        documentSchema: schema,
-        blocks,
-      };
-
-      this.document.update((document) => ({
-        ...document,
-        exercises: [...(document['exercises'] || []), newExercise],
-      }));
-
-      if (this.isEditingMode() === true) {
-        this.selectedExercise.set({ exercises: [newExercise] });
-      } else {
-        this.selectedExercise.set(this.document());
-      }
-
-      this.setSnapshot();
-      return;
-    }
-
-    this.document.update((doc) => {
-      const updatedExercises = doc['exercises'].map((exercise: any) => {
-        if (exercise.id !== currentExerciseId) {
-          return exercise;
-        }
-
-        const targetBlock = exercise.blocks.find((block: any) => block.blockSchema === blockGroup);
-
-        if (!targetBlock || targetBlock.blockTemplate === template) {
-          return exercise;
-        }
-
-        const updatedBlocks = exercise.blocks.map((block: any) => {
-          if (block.blockSchema === blockGroup) {
-            return {
-              ...block,
-              blockTemplate: template,
-              metadata: {},
-            };
-          }
-          return block;
-        });
-
-        return {
-          ...exercise,
-          blocks: updatedBlocks,
-        };
-      });
-
-      return {
-        ...doc,
-        exercises: updatedExercises,
-      };
-    });
-
-    this.selectExercise(currentExerciseId);
-    this.setSnapshot();
-  }
-
-  removeExercise(id: string) {
-    this.document.update((document) => {
-      const updated = { ...document };
-      updated['exercises'] = updated['exercises'].filter((exercise: any) => exercise.id !== id);
-      return updated;
-    });
-
-    this.selectExercise(this.document()['exercises'][0]?.id || null);
+  getSelectedTasks(): Signal<TaskModel[] | undefined> {
+    return this.selectedTasks;
   }
 
   getJson(): string {
-    return JSON.stringify(this.document());
+    return JSON.stringify(this.exerciseDocument());
   }
 
-  loadFromJson(json: string): void {
+  loadFromJson(jsonExerciseDocument: string): void {
     try {
-      const parsed = JSON.parse(json);
-      this.document.set(parsed);
-
-      if (this.isEditingMode() === true) {
-        this.selectedExercise.set({ exercises: [this.document()['exercises'][0]] });
-      } else {
-        this.selectedExercise.set(this.document());
-      }
-
-      this.setSnapshot();
-
-      console.log('History after loading:', this.history);
+      const parsedExercise: ExerciseDocumentModel = JSON.parse(jsonExerciseDocument);
+      this.setExerciseDocument(parsedExercise);
     } catch {
       console.error('Invalid JSON');
     }
   }
 
-  createDefaultExercise(schema: string) {
-    const newId = 'exercise-' + Math.random().toString(36).substring(2, 7);
-
-    const blocks = DocumentSchemas[schema].requiredBody.map((groupKey: string) => {
-      const section = DocumentSchemas[schema].bodyMeta[groupKey];
-      const defaultTemplate = section.defaultTemplate;
-
-      return {
-        blockSchema: groupKey,
-        blockTemplate: defaultTemplate,
-        metadata: {},
-      };
-    });
-
-    const newExercise = {
-      id: newId,
-      documentSchema: schema,
-      blocks,
-    };
-
-    this.document.update((document) => ({
-      ...document,
-      exercises: [...(document['exercises'] || []), newExercise],
-    }));
-
-    if (this.isEditingMode() === true) {
-      this.selectedExercise.set({ exercises: [newExercise] });
-    } else {
-      this.selectedExercise.set(this.document());
-    }
-
-    this.setSnapshot();
+  private saveExerciseSnapshot(): void {
+    this.exerciseHistoryService.pushExerciseSnapshot(
+      this.exerciseDocument(),
+      this.selectedTasks()?.map((task) => task.id),
+    );
   }
 }
