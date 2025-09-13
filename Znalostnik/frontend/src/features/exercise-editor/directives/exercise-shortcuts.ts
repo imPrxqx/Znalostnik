@@ -1,19 +1,19 @@
 import { Directive, HostListener, inject } from '@angular/core';
-import { ExerciseHistory } from '@features/exercise-editor/services/exercise-history';
-import { ExerciseDocument } from '../services/exercise-document';
-import { IExerciseSnapshot } from '../interfaces/exercise-snapshot.interface';
+import { ExerciseDocumentHistoryManager } from '../services/exercise-document-history-manager';
+import { ExerciseDocumentManager } from '../services/exercise-document-manager';
+import { ExerciseSnapshot } from '../interfaces/exercise-snapshot.interface';
 
 @Directive({
   selector: '[appExerciseShortcuts]',
 })
 export class ExerciseShortcuts {
-  exerciseHistoryService: ExerciseHistory = inject(ExerciseHistory);
-  exerciseDocumentService: ExerciseDocument = inject(ExerciseDocument);
+  exerciseHistoryService: ExerciseDocumentHistoryManager = inject(ExerciseDocumentHistoryManager);
+  exerciseDocumentService: ExerciseDocumentManager = inject(ExerciseDocumentManager);
 
   @HostListener('window:keydown.control.z', ['$event'])
   onUndo(event: Event) {
     event.preventDefault();
-    const snapshot: IExerciseSnapshot | undefined = this.exerciseHistoryService.undo();
+    const snapshot: ExerciseSnapshot | undefined = this.exerciseHistoryService.undo();
     if (snapshot) {
       this.exerciseDocumentService.setExerciseDocument(snapshot.exerciseDocument, true);
       this.exerciseDocumentService.setSelectedTaskById(snapshot.selectedTaskId, true);
@@ -23,7 +23,7 @@ export class ExerciseShortcuts {
   @HostListener('window:keydown.control.y', ['$event'])
   onRedo(event: Event) {
     event.preventDefault();
-    const snapshot: IExerciseSnapshot | undefined = this.exerciseHistoryService.redo();
+    const snapshot: ExerciseSnapshot | undefined = this.exerciseHistoryService.redo();
 
     if (snapshot) {
       this.exerciseDocumentService.setExerciseDocument(snapshot.exerciseDocument, true);
