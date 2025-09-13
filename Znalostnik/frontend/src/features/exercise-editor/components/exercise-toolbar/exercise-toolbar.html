@@ -1,1 +1,16 @@
-<p>exercise-toolbar works!</p>
+<div>
+  @for (document of documentSchemas; track document) {
+  <h2>{{ document.alias[locale] }}</h2>
+  <button i18n>Vytvořit</button>
+  @for (group of document.bodyMeta; track group) {
+  <div>
+    <h3>{{ group.alias[locale] }}</h3>
+    @for (type of group.types; track type) {
+    <div>
+      <span>{{ type.alias[locale] }}</span>
+      <button i18n>Použít</button>
+    </div>
+    }
+  </div>
+  } }
+</div>

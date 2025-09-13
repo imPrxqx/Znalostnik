@@ -1,21 +1,19 @@
-import { Injectable, inject, effect } from '@angular/core';
-import { ExerciseDocument } from './exercise-document';
-import { ExerciseSnapshotModel } from '../models/exercise-snapshot';
-import { TaskModel } from '@shared/models/task.model';
-import { ExerciseDocumentModel } from '@shared/models/exercise-document.model';
+import { Injectable } from '@angular/core';
+import { IExerciseSnapshot } from '../interfaces/exercise-snapshot.interface';
+import { IExerciseDocument } from '@shared/interfaces/exercise-document.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ExerciseHistory {
   private currentIndex: number = -1;
-  private history: ExerciseSnapshotModel[] = [];
+  private history: IExerciseSnapshot[] = [];
 
-  undo(): ExerciseSnapshotModel | undefined {
+  undo(): IExerciseSnapshot | undefined {
     return this.getSnapshotByStep(-1);
   }
 
-  redo(): ExerciseSnapshotModel | undefined {
+  redo(): IExerciseSnapshot | undefined {
     return this.getSnapshotByStep(1);
   }
 
@@ -24,14 +22,11 @@ export class ExerciseHistory {
     this.currentIndex = -1;
   }
 
-  pushExerciseSnapshot(
-    exerciseDocument: ExerciseDocumentModel,
-    taskIds: string[] | undefined,
-  ): void {
+  pushExerciseSnapshot(exerciseDocument: IExerciseDocument, taskId: string | undefined): void {
     this.history = this.history.slice(0, this.currentIndex + 1);
 
-    const snapshotCopy: ExerciseSnapshotModel = structuredClone<ExerciseSnapshotModel>({
-      selectedTaskIds: taskIds,
+    const snapshotCopy: IExerciseSnapshot = structuredClone<IExerciseSnapshot>({
+      selectedTaskId: taskId,
       exerciseDocument: exerciseDocument,
     });
 
@@ -39,7 +34,7 @@ export class ExerciseHistory {
     this.currentIndex = Math.max(this.currentIndex + 1, 0);
   }
 
-  private getSnapshotByStep(directionStep: number): ExerciseSnapshotModel | undefined {
+  private getSnapshotByStep(directionStep: number): IExerciseSnapshot | undefined {
     const newIndex = this.currentIndex + directionStep;
 
     if (newIndex >= 0 && newIndex < this.history.length) {

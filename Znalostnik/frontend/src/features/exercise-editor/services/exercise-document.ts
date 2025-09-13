@@ -1,41 +1,35 @@
-import { inject, Injectable, Signal, signal } from '@angular/core';
+import { inject, Injectable, Signal, signal, ɵPendingTasksInternal } from '@angular/core';
 import { DocumentSchemas } from '@shared/models/block-registry';
-import { ExerciseDocumentModel } from '@shared/models/exercise-document.model';
-import { TaskModel } from '@shared/models/task.model';
+import { IExerciseDocument } from '@shared/interfaces/exercise-document.interface';
+import { IExerciseTask } from '@shared/interfaces/exercise-task.interface';
 import { ExerciseHistory } from './exercise-history';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ExerciseDocument {
-  private exerciseHistoryService = inject(ExerciseHistory);
-  private exerciseDocument = signal<ExerciseDocumentModel>({ tasks: [] });
-  private selectedTasks = signal<TaskModel[] | undefined>(undefined);
+  private exerciseHistoryService: ExerciseHistory = inject(ExerciseHistory);
+  private exerciseDocument = signal<IExerciseDocument>({ tasks: [] });
+  private selectedTask = signal<IExerciseTask | undefined>(undefined);
   private isEditingMode = signal<boolean>(true);
 
-  setSelectedTasksByIds(
-    taskIds: string[] | undefined,
-    skipExerciseSnapshot: boolean = false,
-  ): void {
-    if (!taskIds || taskIds.length === 0) {
-      this.selectedTasks.set(undefined);
+  setSelectedTaskById(taskId: string | undefined, skipExerciseSnapshot: boolean = false): void {
+    if (!taskId) {
+      this.selectedTask.set(undefined);
       return;
     }
 
-    const tasks: TaskModel[] = taskIds
-      .map((id) => this.exerciseDocument().tasks.find((t) => t.id === id))
-      .filter((t): t is TaskModel => !!t);
-    this.selectedTasks.set(tasks);
+    const task: IExerciseTask | undefined = this.exerciseDocument().tasks.find(
+      (task) => task.id === taskId,
+    );
+    this.selectedTask.set(task);
 
     if (!skipExerciseSnapshot) {
       this.saveExerciseSnapshot();
     }
   }
 
-  setExerciseDocument(
-    newDocument: ExerciseDocumentModel,
-    skipExerciseSnapshot: boolean = false,
-  ): void {
+  setExerciseDocument(newDocument: IExerciseDocument, skipExerciseSnapshot: boolean = false): void {
     this.exerciseDocument.set(newDocument);
 
     if (!skipExerciseSnapshot) {
@@ -43,12 +37,12 @@ export class ExerciseDocument {
     }
   }
 
-  getExerciseDocument(): Signal<ExerciseDocumentModel> {
+  getExerciseDocument(): Signal<IExerciseDocument> {
     return this.exerciseDocument;
   }
 
-  getSelectedTasks(): Signal<TaskModel[] | undefined> {
-    return this.selectedTasks;
+  getSelectedTask(): Signal<IExerciseTask | undefined> {
+    return this.selectedTask;
   }
 
   getJson(): string {
@@ -57,7 +51,7 @@ export class ExerciseDocument {
 
   loadFromJson(jsonExerciseDocument: string): void {
     try {
-      const parsedExercise: ExerciseDocumentModel = JSON.parse(jsonExerciseDocument);
+      const parsedExercise: IExerciseDocument = JSON.parse(jsonExerciseDocument);
       this.setExerciseDocument(parsedExercise);
     } catch {
       console.error('Invalid JSON');
@@ -67,7 +61,7 @@ export class ExerciseDocument {
   private saveExerciseSnapshot(): void {
     this.exerciseHistoryService.pushExerciseSnapshot(
       this.exerciseDocument(),
-      this.selectedTasks()?.map((task) => task.id),
+      this.selectedTask()?.id,
     );
   }
 }
