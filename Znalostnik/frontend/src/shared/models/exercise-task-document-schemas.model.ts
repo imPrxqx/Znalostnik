@@ -1,6 +1,6 @@
-import { ITaskDocumentSchema } from '@shared/interfaces/exercise-document-schema.interface';
+import { ExerciseTaskDocumentSchema } from '@shared/interfaces/exercise-task-document-schema.interface';
 
-export const TaskDocumentSchemas: ITaskDocumentSchema[] = [
+export const ExerciseTaskDocumentSchemas: ExerciseTaskDocumentSchema[] = [
   {
     key: 'quiz',
     alias: { cs: 'Kvíz', en: 'Quiz' },

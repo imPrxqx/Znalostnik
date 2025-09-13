@@ -1,8 +1,8 @@
-import { IExerciseTaskBlock } from '@shared/interfaces/exercise-task-block.interface';
-import { TaskDocumentSchemaKey } from '@shared/types/task-document-schema-key.type';
+import { ExerciseTaskBlock } from '@shared/interfaces/exercise-task-block.interface';
+import { ExerciseTaskDocumentSchemaKey } from '@shared/types/exercise-task-document-schema-key.type';
 
-export interface IExerciseTask {
+export interface ExerciseTask {
   id: string;
-  taskDocumentSchema: TaskDocumentSchemaKey;
-  taskBlocks: IExerciseTaskBlock[];
+  exerciseTaskDocumentSchema: ExerciseTaskDocumentSchemaKey;
+  exerciseTaskBlocks: ExerciseTaskBlock[];
 }

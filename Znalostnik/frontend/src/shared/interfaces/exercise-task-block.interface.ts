@@ -1,8 +1,8 @@
-import { TaskBlockTypeKey } from '@shared/types/task-block-type-key.type';
+import { ExerciseTaskBlockTypeKey } from '@shared/types/exercise-task-block-type-key.type';
 
-export interface IExerciseTaskBlock {
-  taskBlockSchema: TaskBlockTypeKey;
-  taskBlockTemplate: TaskBlockTypeKey;
+export interface ExerciseTaskBlock {
+  taskBlockSchema: ExerciseTaskBlockTypeKey;
+  taskBlockTemplate: ExerciseTaskBlockTypeKey;
   metadata: {
     data?: Record<string, any>;
     solution?: Record<string, any>;

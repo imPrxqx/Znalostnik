@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ExerciseDocument } from '../../services/exercise-document';
+import { ExerciseDocumentManager } from '../../services/exercise-document-manager';
 
 @Component({
   selector: 'app-exercise-export',
@@ -8,7 +8,7 @@ import { ExerciseDocument } from '../../services/exercise-document';
   styleUrl: './exercise-export.css',
 })
 export class ExerciseExport {
-  exerciseDocumentService: ExerciseDocument = inject(ExerciseDocument);
+  exerciseDocumentService: ExerciseDocumentManager = inject(ExerciseDocumentManager);
 
   saveExerciseDocument(): void {
     const json = this.exerciseDocumentService.getJson();

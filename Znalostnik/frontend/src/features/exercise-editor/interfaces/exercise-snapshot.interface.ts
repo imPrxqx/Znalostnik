@@ -1,6 +1,6 @@
-import { IExerciseDocument } from '@shared/interfaces/exercise-document.interface';
+import { ExerciseDocument } from '@shared/interfaces/exercise-document.interface';
 
-export interface IExerciseSnapshot {
+export interface ExerciseSnapshot {
   selectedTaskId: string | undefined;
-  exerciseDocument: IExerciseDocument;
+  exerciseDocument: ExerciseDocument;
 }

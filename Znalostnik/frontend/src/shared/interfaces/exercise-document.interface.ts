@@ -1,5 +1,5 @@
-import { IExerciseTask } from '@shared/interfaces/exercise-task.interface';
+import { ExerciseTask } from '@shared/interfaces/exercise-task.interface';
 
-export interface IExerciseDocument {
-  tasks: IExerciseTask[];
+export interface ExerciseDocument {
+  tasks: ExerciseTask[];
 }

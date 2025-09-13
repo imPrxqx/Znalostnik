@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ExerciseDocument } from '../../services/exercise-document';
+import { ExerciseDocumentManager } from '../../services/exercise-document-manager';
 
 @Component({
   selector: 'app-exercise-import',
@@ -8,7 +8,7 @@ import { ExerciseDocument } from '../../services/exercise-document';
   styleUrl: './exercise-import.css',
 })
 export class ExerciseImport {
-  exerciseDocumentService: ExerciseDocument = inject(ExerciseDocument);
+  exerciseDocumentService: ExerciseDocumentManager = inject(ExerciseDocumentManager);
 
   loadExerciseDocument(event: Event): void {
     const input = event.target as HTMLInputElement;

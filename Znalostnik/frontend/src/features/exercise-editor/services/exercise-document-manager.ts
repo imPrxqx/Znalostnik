@@ -1,16 +1,18 @@
 import { inject, Injectable, Signal, signal, ɵPendingTasksInternal } from '@angular/core';
 import { DocumentSchemas } from '@shared/models/block-registry';
-import { IExerciseDocument } from '@shared/interfaces/exercise-document.interface';
-import { IExerciseTask } from '@shared/interfaces/exercise-task.interface';
-import { ExerciseHistory } from './exercise-history';
+import { ExerciseDocument } from '@shared/interfaces/exercise-document.interface';
+import { ExerciseTask } from '@shared/interfaces/exercise-task.interface';
+import { ExerciseDocumentHistoryManager } from './exercise-document-history-manager';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ExerciseDocument {
-  private exerciseHistoryService: ExerciseHistory = inject(ExerciseHistory);
-  private exerciseDocument = signal<IExerciseDocument>({ tasks: [] });
-  private selectedTask = signal<IExerciseTask | undefined>(undefined);
+export class ExerciseDocumentManager {
+  private exerciseHistoryService: ExerciseDocumentHistoryManager = inject(
+    ExerciseDocumentHistoryManager,
+  );
+  private exerciseDocument = signal<ExerciseDocument>({ tasks: [] });
+  private selectedTask = signal<ExerciseTask | undefined>(undefined);
   private isEditingMode = signal<boolean>(true);
 
   setSelectedTaskById(taskId: string | undefined, skipExerciseSnapshot: boolean = false): void {
@@ -19,7 +21,7 @@ export class ExerciseDocument {
       return;
     }
 
-    const task: IExerciseTask | undefined = this.exerciseDocument().tasks.find(
+    const task: ExerciseTask | undefined = this.exerciseDocument().tasks.find(
       (task) => task.id === taskId,
     );
     this.selectedTask.set(task);
@@ -29,7 +31,7 @@ export class ExerciseDocument {
     }
   }
 
-  setExerciseDocument(newDocument: IExerciseDocument, skipExerciseSnapshot: boolean = false): void {
+  setExerciseDocument(newDocument: ExerciseDocument, skipExerciseSnapshot: boolean = false): void {
     this.exerciseDocument.set(newDocument);
 
     if (!skipExerciseSnapshot) {
@@ -37,11 +39,11 @@ export class ExerciseDocument {
     }
   }
 
-  getExerciseDocument(): Signal<IExerciseDocument> {
+  getExerciseDocument(): Signal<ExerciseDocument> {
     return this.exerciseDocument;
   }
 
-  getSelectedTask(): Signal<IExerciseTask | undefined> {
+  getSelectedTask(): Signal<ExerciseTask | undefined> {
     return this.selectedTask;
   }
 
@@ -51,7 +53,7 @@ export class ExerciseDocument {
 
   loadFromJson(jsonExerciseDocument: string): void {
     try {
-      const parsedExercise: IExerciseDocument = JSON.parse(jsonExerciseDocument);
+      const parsedExercise: ExerciseDocument = JSON.parse(jsonExerciseDocument);
       this.setExerciseDocument(parsedExercise);
     } catch {
       console.error('Invalid JSON');

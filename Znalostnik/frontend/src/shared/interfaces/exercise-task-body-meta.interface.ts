@@ -1,11 +1,11 @@
-import { TaskBlockMetaKey } from '@shared/types/task-block-meta-key.type';
+import { ExerciseTaskBlockMetaKey } from '@shared/types/exercise-task-block-meta-key.type';
 import { Locale } from '@shared/types/locale.type';
-import { IExerciseTaskBlockType } from '@shared/interfaces/exercise-task-block-type.interface';
-import { TaskBlockTypeKey } from '@shared/types/task-block-type-key.type';
+import { ExerciseTaskBlockType } from '@shared/interfaces/exercise-task-block-type.interface';
+import { ExerciseTaskBlockTypeKey } from '@shared/types/exercise-task-block-type-key.type';
 
-export interface ITaskBodyMeta {
-  key: TaskBlockMetaKey;
+export interface ExerciseTaskBodyMeta {
+  key: ExerciseTaskBlockMetaKey;
   alias: Locale;
-  defaultTemplate: TaskBlockTypeKey;
-  types: IExerciseTaskBlockType[];
+  defaultTemplate: ExerciseTaskBlockTypeKey;
+  types: ExerciseTaskBlockType[];
 }
