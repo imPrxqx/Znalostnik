@@ -1,8 +1,11 @@
 import { inject, Injectable, Signal, signal, ɵPendingTasksInternal } from '@angular/core';
-import { DocumentSchemas } from '@shared/models/block-registry';
+import { ExerciseTaskDocumentSchema } from '@shared/interfaces/exercise-task-document-schema.interface';
 import { ExerciseDocument } from '@shared/interfaces/exercise-document.interface';
 import { ExerciseTask } from '@shared/interfaces/exercise-task.interface';
 import { ExerciseDocumentHistoryManager } from './exercise-document-history-manager';
+import { ExerciseTaskDocumentSchemaKey } from '@shared/types/exercise-task-document-schema-key.type';
+import { ExerciseTaskBlockTemplateKey } from '@shared/types/exercise-task-block-template-key.type';
+import { ExerciseTaskBlockMetaKey } from '@shared/types/exercise-task-block-meta-key.type';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +16,18 @@ export class ExerciseDocumentManager {
   );
   private exerciseDocument = signal<ExerciseDocument>({ tasks: [] });
   private selectedTask = signal<ExerciseTask | undefined>(undefined);
-  private isEditingMode = signal<boolean>(true);
+
+  removeTask(taskId: string): void {}
+
+  addNewTask(taskSchema: ExerciseTaskDocumentSchemaKey): void {}
+
+  changeTaskSchema(taskId: string, newSchema: ExerciseTaskDocumentSchemaKey): void {}
+
+  changeTaskBlockTemplate(
+    taskId: string,
+    blockSchema: ExerciseTaskBlockMetaKey,
+    newTemplate: ExerciseTaskBlockTemplateKey,
+  ): void {}
 
   setSelectedTaskById(taskId: string | undefined, skipExerciseSnapshot: boolean = false): void {
     if (!taskId) {
@@ -47,7 +61,7 @@ export class ExerciseDocumentManager {
     return this.selectedTask;
   }
 
-  getJson(): string {
+  getAsJson(): string {
     return JSON.stringify(this.exerciseDocument());
   }
 
@@ -65,5 +79,10 @@ export class ExerciseDocumentManager {
       this.exerciseDocument(),
       this.selectedTask()?.id,
     );
+  }
+
+  private setFirstTaskAsSelected(): void {
+    const firstTaskId = this.exerciseDocument().tasks[0]?.id;
+    this.setSelectedTaskById(firstTaskId, true);
   }
 }

@@ -3,10 +3,12 @@ import { ExerciseDocumentManager } from '../../services/exercise-document-manage
 import { ExerciseTaskDocumentSchema } from '@shared/interfaces/exercise-task-document-schema.interface';
 import { ExerciseTaskDocumentSchemas } from '@shared/models/exercise-task-document-schemas.model';
 import { Locale } from '@shared/types/locale.type';
+import { ExerciseRedo } from '../exercise-redo/exercise-redo';
+import { ExerciseUndo } from '../exercise-undo/exercise-undo';
 
 @Component({
   selector: 'app-exercise-toolbar',
-  imports: [],
+  imports: [ExerciseRedo, ExerciseUndo],
   templateUrl: './exercise-toolbar.html',
   styleUrl: './exercise-toolbar.css',
 })

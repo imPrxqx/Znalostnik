@@ -11,7 +11,7 @@ export class ExerciseExport {
   exerciseDocumentService: ExerciseDocumentManager = inject(ExerciseDocumentManager);
 
   saveExerciseDocument(): void {
-    const json = this.exerciseDocumentService.getJson();
+    const json = this.exerciseDocumentService.getAsJson();
     const blob = new Blob([json], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
 

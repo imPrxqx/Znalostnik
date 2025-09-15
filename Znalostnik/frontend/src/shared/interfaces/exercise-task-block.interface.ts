@@ -1,8 +1,9 @@
-import { ExerciseTaskBlockTypeKey } from '@shared/types/exercise-task-block-type-key.type';
+import { ExerciseTaskBlockTemplateKey } from '@shared/types/exercise-task-block-template-key.type';
+import { ExerciseTaskBlockMetaKey } from '@shared/types/exercise-task-block-meta-key.type';
 
 export interface ExerciseTaskBlock {
-  taskBlockSchema: ExerciseTaskBlockTypeKey;
-  taskBlockTemplate: ExerciseTaskBlockTypeKey;
+  taskBlockSchema: ExerciseTaskBlockMetaKey;
+  taskBlockTemplate: ExerciseTaskBlockTemplateKey;
   metadata: {
     data?: Record<string, any>;
     solution?: Record<string, any>;

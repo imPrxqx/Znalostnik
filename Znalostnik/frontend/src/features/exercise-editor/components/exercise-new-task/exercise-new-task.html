@@ -1,0 +1,11 @@
+<button type="button" (click)="toggleMenu()" i18n>Nová úloha</button>
+
+@if (isOpenedTaskMenu()) {
+<div>
+  @for (document of documentSchemas; track document) {
+  <div>
+    <button (click)="addNewTask(document.key)" i18n>{{ document.alias[locale] }}</button>
+  </div>
+  }
+</div>
+}
