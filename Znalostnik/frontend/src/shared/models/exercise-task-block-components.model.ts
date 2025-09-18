@@ -1,0 +1,20 @@
+import { Input, Output, EventEmitter, Type, Directive } from '@angular/core';
+import { TextBlock } from '@shared/blocks/text-block/text-block';
+import { MultipleChoiceBlock } from '@shared/blocks/multiple-choice-block/multiple-choice-block';
+import { TrueFalseBlock } from '@shared/blocks/true-false-block/true-false-block';
+
+@Directive()
+export abstract class BaseBlockComponent<T = any> {
+  @Input() exerciseId!: string;
+  @Input() metadata!: T;
+  @Input() editable: boolean = true;
+  @Input() answered?: any;
+  @Output() changed?: EventEmitter<void>;
+  @Output() answer?: EventEmitter<any>;
+}
+
+export const ExerciseTaskBlockComponents: Record<string, Type<BaseBlockComponent>> = {
+  [TextBlock.blockTemplate]: TextBlock,
+  [MultipleChoiceBlock.blockTemplate]: MultipleChoiceBlock,
+  [TrueFalseBlock.blockTemplate]: TrueFalseBlock,
+};

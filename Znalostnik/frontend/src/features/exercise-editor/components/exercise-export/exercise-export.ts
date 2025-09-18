@@ -11,13 +11,12 @@ export class ExerciseExport {
   exerciseDocumentService: ExerciseDocumentManager = inject(ExerciseDocumentManager);
 
   saveExerciseDocument(): void {
-    const json = this.exerciseDocumentService.getAsJson();
-    const blob = new Blob([json], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'exercise.json';
-    a.click();
+    // const json = JSON.stringify(this.exerciseDocumentService.getExerciseDocument()());
+    // const blob = new Blob([json], { type: 'application/json' });
+    // const url = URL.createObjectURL(blob);
+    // const a = document.createElement('a');
+    // a.href = url;
+    // a.download = 'exercise.json';
+    // a.click();
   }
 }

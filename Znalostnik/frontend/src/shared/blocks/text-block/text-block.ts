@@ -48,6 +48,7 @@ export class TextBlock implements BaseBlockComponent {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     console.log('klik');
+
     if (this.isEditing && this.editableRef) {
       const clickedInside = this.editableRef.nativeElement.contains(event.target);
       if (!clickedInside) {

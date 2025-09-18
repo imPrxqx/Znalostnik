@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ExerciseDocumentManager } from '../../services/exercise-document-manager';
+import { ExerciseDocument } from '@shared/interfaces/exercise-document.interface';
 
 @Component({
   selector: 'app-exercise-import',
@@ -22,7 +23,8 @@ export class ExerciseImport {
 
     reader.onload = () => {
       try {
-        this.exerciseDocumentService.loadFromJson(reader.result as string);
+        const parsedExercise: ExerciseDocument = JSON.parse(reader.result as string);
+        this.exerciseDocumentService.setExerciseDocument(parsedExercise);
       } catch (e) {
         console.error(e);
       }

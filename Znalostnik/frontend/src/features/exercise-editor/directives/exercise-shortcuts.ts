@@ -16,7 +16,7 @@ export class ExerciseShortcuts {
     const snapshot: ExerciseSnapshot | undefined = this.exerciseHistoryService.undo();
     if (snapshot) {
       this.exerciseDocumentService.setExerciseDocument(snapshot.exerciseDocument, true);
-      this.exerciseDocumentService.setSelectedTaskById(snapshot.selectedTaskId, true);
+      //this.exerciseDocumentService.setSelectedTaskById(snapshot.selectedTaskId, true);
     }
   }
 
@@ -27,7 +27,7 @@ export class ExerciseShortcuts {
 
     if (snapshot) {
       this.exerciseDocumentService.setExerciseDocument(snapshot.exerciseDocument, true);
-      this.exerciseDocumentService.setSelectedTaskById(snapshot.selectedTaskId, true);
+      //this.exerciseDocumentService.setSelectedTaskById(snapshot.selectedTaskId, true);
     }
   }
 }

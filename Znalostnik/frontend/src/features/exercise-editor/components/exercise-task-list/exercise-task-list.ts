@@ -5,7 +5,7 @@ import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk
 
 @Component({
   selector: 'app-exercise-task-list',
-  imports: [ExerciseTaskItem, CdkDropList, CdkDrag],
+  imports: [],
   templateUrl: './exercise-task-list.html',
   styleUrl: './exercise-task-list.css',
 })
@@ -13,10 +13,10 @@ export class ExerciseTaskList {
   protected exerciseDocumentService: ExerciseDocumentManager = inject(ExerciseDocumentManager);
 
   protected changeOrder(event: CdkDragDrop<string[]>) {
-    moveItemInArray(
-      this.exerciseDocumentService.getExerciseDocument()().tasks,
-      event.previousIndex,
-      event.currentIndex,
-    );
+    // moveItemInArray(
+    //   this.exerciseDocumentService.getExerciseDocument()().tasks,
+    //   event.previousIndex,
+    //   event.currentIndex,
+    // ); ExerciseTaskItem, CdkDropList, CdkDrag
   }
 }

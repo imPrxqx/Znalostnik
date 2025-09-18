@@ -4,6 +4,7 @@ import { ExerciseTaskDocumentSchema } from '@shared/interfaces/exercise-task-doc
 import { ExerciseTaskDocumentSchemas } from '@shared/models/exercise-task-document-schemas.model';
 import { Locale } from '@shared/types/locale.type';
 import { ExerciseTaskDocumentSchemaKey } from '@shared/types/exercise-task-document-schema-key.type';
+import { ExerciseTaskEdit } from '@features/exercise-editor/services/exercise-task-edit';
 
 @Component({
   selector: 'app-exercise-new-task',
@@ -13,6 +14,7 @@ import { ExerciseTaskDocumentSchemaKey } from '@shared/types/exercise-task-docum
 })
 export class ExerciseNewTask {
   private exerciseDocumentService: ExerciseDocumentManager = inject(ExerciseDocumentManager);
+  private exerciseTaskService: ExerciseTaskEdit = inject(ExerciseTaskEdit);
 
   protected documentSchemas: ExerciseTaskDocumentSchema[] = ExerciseTaskDocumentSchemas;
   protected locale: keyof Locale = inject(LOCALE_ID) as keyof Locale;
@@ -24,7 +26,8 @@ export class ExerciseNewTask {
   }
 
   protected addNewTask(taskSchema: ExerciseTaskDocumentSchemaKey) {
-    this.exerciseDocumentService.addNewTask(taskSchema);
+    const newTaskId = this.exerciseDocumentService.addTask(taskSchema);
+    this.exerciseTaskService.editExerciseTask(newTaskId);
 
     this.isOpenedTaskMenu.set(false);
   }
