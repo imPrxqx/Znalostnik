@@ -4,12 +4,12 @@ import {
   Signal,
   WritableSignal,
   signal,
+  linkedSignal,
   ɵPendingTasksInternal,
 } from '@angular/core';
 import { ExerciseTaskDocumentSchema } from '@shared/interfaces/exercise-task-document-schema.interface';
 import { ExerciseDocument } from '@shared/interfaces/exercise-document.interface';
 import { ExerciseTask } from '@shared/interfaces/exercise-task.interface';
-import { ExerciseDocumentHistoryManager } from './exercise-document-history-manager';
 import { ExerciseTaskDocumentSchemaKey } from '@shared/types/exercise-task-document-schema-key.type';
 import { ExerciseTaskBlockTemplateKey } from '@shared/types/exercise-task-block-template-key.type';
 import { ExerciseTaskBlockMetaKey } from '@shared/types/exercise-task-block-meta-key.type';
@@ -21,23 +21,22 @@ import { ExerciseTaskBlock } from '@shared/interfaces/exercise-task-block.interf
   providedIn: 'root',
 })
 export class ExerciseDocumentManager {
-  private exerciseHistoryService: ExerciseDocumentHistoryManager = inject(
-    ExerciseDocumentHistoryManager,
-  );
+  tasks = signal<WritableSignal<ExerciseTask>[]>([]);
 
-  private tasks = signal<WritableSignal<ExerciseTask>[]>([]);
+  addTask(task: WritableSignal<ExerciseTask>, index: number = this.tasks().length) {
+    const currentTasks = [...this.tasks()];
+    currentTasks.splice(index, 0, task);
+    this.tasks.set(currentTasks);
+  }
 
-  addTask(taskSchema: ExerciseTaskDocumentSchemaKey): string {
+  createTask(taskSchema: ExerciseTaskDocumentSchemaKey): string {
     const newTask = this.createDefaultBody(taskSchema);
-    this.tasks.update((list) => [...list, signal<ExerciseTask>(newTask)]);
+    const newSignal = signal<ExerciseTask>(newTask);
+    this.tasks.update((list) => [...list, newSignal]);
 
-    console.log('Document: ', this.tasks());
-    console.log('Task ', newTask);
-
-    const foundTask = this.tasks().find((t) => (t().id = newTask.id));
-
-    if (foundTask) {
-      console.log('Task in signal', foundTask());
+    console.log('DOCUMENT', this.tasks());
+    for (const taskSignal of this.tasks()) {
+      console.log(taskSignal().id);
     }
 
     return newTask.id;
@@ -52,18 +51,20 @@ export class ExerciseDocumentManager {
       throw new Error(`Unknown task schema: ${taskSchema}`);
     }
 
-    const blocks: ExerciseTaskBlock[] = schema.bodyMeta.map((blockMeta) => {
+    const blocks: WritableSignal<ExerciseTaskBlock>[] = schema.bodyMeta.map((blockMeta) => {
       const bodyTemplate = ExerciseBlockTemplates.find((t) => t.key === blockMeta.defaultTemplate);
 
       if (!bodyTemplate) {
         throw new Error(`Unknown template: ${bodyTemplate}`);
       }
 
-      return {
+      const taskBlock = signal<ExerciseTaskBlock>({
         taskBlockSchema: blockMeta.key,
         taskBlockTemplate: blockMeta.defaultTemplate,
         metadata: structuredClone(bodyTemplate.defaultMetadata),
-      };
+      });
+
+      return taskBlock;
     });
 
     const newTask: ExerciseTask = {
@@ -108,16 +109,26 @@ export class ExerciseDocumentManager {
   //   return this.exerciseDocument;
   // }
 
-  getExerciseTask(taskId: string): WritableSignal<ExerciseTask> | undefined {
-    return this.tasks().find((t) => t().id === taskId);
+  getExerciseTask(taskId: string): WritableSignal<ExerciseTask> {
+    const task = this.tasks().find((t) => t().id === taskId);
+
+    if (!task) {
+      throw new Error(`Task with ${taskId} doesnt exists`);
+    }
+
+    return task;
   }
 
-  getExerciseTaskIndex(index: number): WritableSignal<ExerciseTask> | undefined {
+  getExerciseTaskIndex(index: number): WritableSignal<ExerciseTask> {
     if (index < 0 || index >= this.tasks().length) {
-      return undefined;
+      throw new Error(`Task with index ${index} doesnt exists`);
     }
 
     return this.tasks()[index];
+  }
+
+  getExerciseTasks(): WritableSignal<WritableSignal<ExerciseTask>[]> {
+    return this.tasks;
   }
 
   private saveExerciseSnapshot(): void {
@@ -150,18 +161,20 @@ class ExerciseTaskSignal {
       throw new Error(`Unknown task schema: ${taskSchema}`);
     }
 
-    const blocks: ExerciseTaskBlock[] = schema.bodyMeta.map((blockMeta) => {
+    const blocks: WritableSignal<ExerciseTaskBlock>[] = schema.bodyMeta.map((blockMeta) => {
       const bodyTemplate = ExerciseBlockTemplates.find((t) => t.key === blockMeta.defaultTemplate);
 
       if (!bodyTemplate) {
         throw new Error(`Unknown template: ${bodyTemplate}`);
       }
 
-      return {
+      const taskBlock = signal<ExerciseTaskBlock>({
         taskBlockSchema: blockMeta.key,
         taskBlockTemplate: blockMeta.defaultTemplate,
         metadata: structuredClone(bodyTemplate.defaultMetadata),
-      };
+      });
+
+      return taskBlock;
     });
 
     const newTask: ExerciseTask = {

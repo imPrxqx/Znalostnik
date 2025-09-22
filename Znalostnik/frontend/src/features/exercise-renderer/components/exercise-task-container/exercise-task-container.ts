@@ -1,4 +1,4 @@
-import { Component, input, WritableSignal, signal } from '@angular/core';
+import { Component, input, WritableSignal, Signal, signal, model } from '@angular/core';
 import { ExerciseTask } from '@shared/interfaces/exercise-task.interface';
 
 import { ExerciseTaskItem } from '../exercise-task-item/exercise-task-item';
@@ -10,6 +10,5 @@ import { ExerciseTaskItem } from '../exercise-task-item/exercise-task-item';
   styleUrl: './exercise-task-container.css',
 })
 export class ExerciseTaskContainer {
-  exerciseDocument = input<WritableSignal<ExerciseTask> | undefined>();
-  itemsPerPage = input<number>(1);
+  readonly task = input.required<WritableSignal<ExerciseTask>>();
 }

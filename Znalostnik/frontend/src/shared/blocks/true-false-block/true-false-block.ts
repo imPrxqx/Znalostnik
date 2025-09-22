@@ -1,7 +1,7 @@
-import { Component, Input, Output, EventEmitter, signal } from '@angular/core';
+import { Component, Input, Output, EventEmitter, signal, output } from '@angular/core';
 import { BaseBlockComponent } from '@shared/models/block-registry';
 import { CommonModule } from '@angular/common';
-
+import { CommandUIItem } from '@shared/interfaces/command-items.interface';
 @Component({
   selector: 'app-true-false-block',
   imports: [CommonModule],
@@ -17,12 +17,13 @@ export class TrueFalseBlock implements BaseBlockComponent {
 
   @Output() changed = new EventEmitter<void>();
   @Output() answer = new EventEmitter<{ exerciseId: string; blockTemplate: string; answer: any }>();
+  commandCreated = output<Command>();
+  commandList = output<CommandUIItem[]>();
 
   selectedAnswer = signal<boolean | null>(null);
 
   ngOnInit() {
     console.log('Init true false');
-
     if (!this.metadata.hasOwnProperty('data')) {
       (this.metadata as any).data = {};
       (this.metadata as any).data.options = { true: 'True', false: 'False' };

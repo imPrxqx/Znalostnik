@@ -1,11 +1,1 @@
-<div>
-  <!-- @for (task of this.exerciseDocument().tasks; track task().id) {
-  <div >
-    <app-exercise-task-item [task]="this.exerciseDocument()"></app-exercise-task-item>
-  </div>
-  } -->
-
-  <div>
-    <app-exercise-task-item [task]="exerciseDocument()!"></app-exercise-task-item>
-  </div>
-</div>
+<app-exercise-task-item [task]="task()"></app-exercise-task-item>

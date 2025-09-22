@@ -6,10 +6,18 @@ import {
   HostListener,
   ElementRef,
   ViewChild,
+  model,
+  WritableSignal,
+  input,
+  output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BaseBlockComponent } from '@shared/models/block-registry';
+import { ExerciseTask } from '@shared/interfaces/exercise-task.interface';
+import { CommandUIItem } from '@shared/interfaces/command-items.interface';
+import { UpdateTextCommandUi } from '@shared/commands/components/update-text-command-ui/update-text-command-ui';
+import { ExerciseTaskBlock } from '@shared/interfaces/exercise-task-block.interface';
 
 @Component({
   selector: 'app-text-block',
@@ -20,6 +28,12 @@ import { BaseBlockComponent } from '@shared/models/block-registry';
 export class TextBlock implements BaseBlockComponent {
   static readonly blockTemplate: string = 'text';
   @Input() exerciseId: string = '';
+
+  //readonly task = input.required<WritableSignal<ExerciseTask>>();
+  readonly block = input.required<WritableSignal<ExerciseTaskBlock>>();
+
+  commandList = output<CommandUIItem[]>();
+  commandCreated = output<Command>();
 
   @Input() metadata: any;
   @Input() editable: boolean = false;
@@ -33,6 +47,8 @@ export class TextBlock implements BaseBlockComponent {
       (this.metadata as any).data = {};
       (this.metadata as any).data.content = 'Default Text';
     }
+
+    this.getCommandConfigs();
   }
 
   startEditing() {
@@ -56,5 +72,24 @@ export class TextBlock implements BaseBlockComponent {
         this.changed.emit();
       }
     }
+  }
+
+  applyText(newText: string) {
+    const currentBlock: ExerciseTaskBlock = this.block()();
+
+    this.block().set({
+      ...currentBlock,
+      metadata: {
+        ...currentBlock.metadata,
+        data: {
+          ...currentBlock.metadata.data,
+          content: newText,
+        },
+      },
+    });
+  }
+
+  getCommandConfigs(): void {
+    this.commandList.emit([{ component: UpdateTextCommandUi, receiver: this }]);
   }
 }

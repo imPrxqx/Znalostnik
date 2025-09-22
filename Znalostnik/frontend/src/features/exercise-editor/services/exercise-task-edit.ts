@@ -1,5 +1,4 @@
-import { Injectable, inject, signal, Signal, WritableSignal } from '@angular/core';
-import { ExerciseDocumentHistoryManager } from './exercise-document-history-manager';
+import { Injectable, inject, signal, Signal, WritableSignal, linkedSignal } from '@angular/core';
 import { ExerciseDocumentManager } from './exercise-document-manager';
 import { ExerciseTask } from '@shared/interfaces/exercise-task.interface';
 import { ExerciseTaskBlock } from '@shared/interfaces/exercise-task-block.interface';
@@ -12,20 +11,44 @@ import { ExerciseTaskBlockTemplateKey } from '@shared/types/exercise-task-block-
   providedIn: 'root',
 })
 export class ExerciseTaskEdit {
-  private editTask: WritableSignal<ExerciseTask> | undefined;
-  private exerciseHistoryService = inject(ExerciseDocumentHistoryManager);
   private exerciseDocumentService = inject(ExerciseDocumentManager);
 
+  tasks: WritableSignal<WritableSignal<ExerciseTask>[]> =
+    this.exerciseDocumentService.getExerciseTasks();
+  //editTask = linkedSignal(() => this.tasks()[0])
+  //editTask = signal<WritableSignal<ExerciseTask> | undefined>(undefined);
+
+  private lastSelectedIndex: number | undefined = undefined;
+
+  editTask = linkedSignal<WritableSignal<ExerciseTask>[], WritableSignal<ExerciseTask> | undefined>(
+    {
+      source: () => this.tasks(),
+      computation: (source) => {
+        if (source.length === 0) {
+          return undefined;
+        }
+
+        if (this.lastSelectedIndex !== undefined && this.lastSelectedIndex < source.length) {
+          return source[this.lastSelectedIndex];
+        }
+
+        this.lastSelectedIndex = source.length - 1;
+
+        return source[this.lastSelectedIndex];
+      },
+    },
+  );
+
   editExerciseTask(taskId: string): void {
-    this.editTask = this.exerciseDocumentService.getExerciseTask(taskId);
+    this.editTask.set(this.exerciseDocumentService.getExerciseTask(taskId));
   }
 
-  getEditTask(): WritableSignal<ExerciseTask> | undefined {
-    return this.editTask;
+  getEditTask(): WritableSignal<ExerciseTask> {
+    return this.editTask()!;
   }
 
   editFirstTask(): void {
-    this.editTask = this.exerciseDocumentService.getExerciseTaskIndex(0);
+    this.editTask.set(this.exerciseDocumentService.getExerciseTaskIndex(0));
   }
 
   changeTaskSchema(newSchema: ExerciseTaskDocumentSchemaKey): void {
@@ -34,9 +57,9 @@ export class ExerciseTaskEdit {
     }
 
     const newDefaultTask: ExerciseTask = this.createDefaultBody(newSchema);
-    newDefaultTask.id = this.editTask().id;
+    newDefaultTask.id = this.editTask()!().id;
 
-    this.editTask.set(newDefaultTask);
+    this.editTask()!.set(newDefaultTask);
   }
 
   changeTaskBlockTemplate(part: string, newTemplate: ExerciseTaskBlockTemplateKey): void {
@@ -46,15 +69,15 @@ export class ExerciseTaskEdit {
       return;
     }
 
-    const blocks = [...this.editTask().exerciseTaskBlocks];
-    const index = blocks.findIndex((block) => block.taskBlockSchema === part);
+    const blocks = [...this.editTask()!().exerciseTaskBlocks];
+    const index = blocks.findIndex((block) => block().taskBlockSchema === part);
 
     if (index !== -1) {
-      blocks[index] = {
-        ...blocks[index],
+      blocks[index].update((block) => ({
+        ...block,
         taskBlockTemplate: newTemplate,
         metadata: structuredClone(bodyDefaultTemplate.defaultMetadata),
-      };
+      }));
     }
   }
 
@@ -67,18 +90,20 @@ export class ExerciseTaskEdit {
       throw new Error(`Unknown task schema: ${taskSchema}`);
     }
 
-    const blocks: ExerciseTaskBlock[] = schema.bodyMeta.map((blockMeta) => {
+    const blocks: WritableSignal<ExerciseTaskBlock>[] = schema.bodyMeta.map((blockMeta) => {
       const bodyTemplate = ExerciseBlockTemplates.find((t) => t.key === blockMeta.defaultTemplate);
 
       if (!bodyTemplate) {
         throw new Error(`Unknown template: ${bodyTemplate}`);
       }
 
-      return {
+      const taskBlock = signal<ExerciseTaskBlock>({
         taskBlockSchema: blockMeta.key,
         taskBlockTemplate: blockMeta.defaultTemplate,
         metadata: structuredClone(bodyTemplate.defaultMetadata),
-      };
+      });
+
+      return taskBlock;
     });
 
     const newTask: ExerciseTask = {

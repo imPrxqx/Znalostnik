@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ExerciseDocumentHistoryManager } from '@features/exercise-editor/services/exercise-document-history-manager';
+import { CommandManager } from '@features/exercise-editor/services/command-manager';
 
 @Component({
   selector: 'app-exercise-undo',
@@ -8,11 +8,9 @@ import { ExerciseDocumentHistoryManager } from '@features/exercise-editor/servic
   styleUrl: './exercise-undo.css',
 })
 export class ExerciseUndo {
-  protected exerciseDocumentHistoryService: ExerciseDocumentHistoryManager = inject(
-    ExerciseDocumentHistoryManager,
-  );
+  commandManager = inject(CommandManager);
 
   protected undo() {
-    this.exerciseDocumentHistoryService.undo();
+    this.commandManager.undo();
   }
 }

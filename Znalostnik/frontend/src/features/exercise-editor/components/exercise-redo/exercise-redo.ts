@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ExerciseDocumentHistoryManager } from '@features/exercise-editor/services/exercise-document-history-manager';
+import { CommandManager } from '@features/exercise-editor/services/command-manager';
 
 @Component({
   selector: 'app-exercise-redo',
@@ -8,11 +8,9 @@ import { ExerciseDocumentHistoryManager } from '@features/exercise-editor/servic
   styleUrl: './exercise-redo.css',
 })
 export class ExerciseRedo {
-  protected exerciseDocumentHistoryService: ExerciseDocumentHistoryManager = inject(
-    ExerciseDocumentHistoryManager,
-  );
+  commandManager = inject(CommandManager);
 
   protected redo() {
-    this.exerciseDocumentHistoryService.redo();
+    this.commandManager.redo();
   }
 }

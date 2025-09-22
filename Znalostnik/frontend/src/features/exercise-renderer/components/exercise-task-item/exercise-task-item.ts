@@ -3,12 +3,18 @@ import {
   input,
   WritableSignal,
   ViewChild,
+  model,
   ViewContainerRef,
   effect,
+  Signal,
+  inject,
 } from '@angular/core';
 import { ExerciseTask } from '@shared/interfaces/exercise-task.interface';
 import { ExerciseTaskDocumentSchemas } from '@shared/models/exercise-task-document-schemas.model';
 import { ExerciseTaskBlockComponents } from '@shared/models/exercise-task-block-components.model';
+import { BaseBlockComponent } from '@shared/models/block-registry';
+import { CommandManager } from '@features/exercise-editor/services/command-manager';
+import { ToolbarManager } from '@features/exercise-editor/services/toolbar-manager';
 
 @Component({
   selector: 'app-exercise-task-item',
@@ -17,7 +23,9 @@ import { ExerciseTaskBlockComponents } from '@shared/models/exercise-task-block-
   styleUrl: './exercise-task-item.css',
 })
 export class ExerciseTaskItem {
-  task = input<WritableSignal<ExerciseTask>>();
+  readonly task = input.required<WritableSignal<ExerciseTask>>();
+  readonly commandManager = inject(CommandManager);
+  readonly toolbarManager = inject(ToolbarManager);
 
   @ViewChild('taskContainer', { read: ViewContainerRef, static: true })
   taskContainer!: ViewContainerRef;
@@ -25,20 +33,20 @@ export class ExerciseTaskItem {
   constructor() {
     effect(() => {
       const taskValue = this.task();
+      console.log('changed task', this.task());
 
       this.renderBlocks();
-      console.log('changed task');
     });
   }
 
   renderBlocks(): void {
     this.taskContainer.clear();
 
-    if (!this.task()) {
+    if (this.task() === null) {
       return;
     }
 
-    const task = this.task()!();
+    const task = this.task()();
 
     const taskSchema = task.exerciseTaskDocumentSchema;
     const blocks = task.exerciseTaskBlocks;
@@ -46,28 +54,35 @@ export class ExerciseTaskItem {
     const renderOrder = ExerciseTaskDocumentSchemas.find((s) => s.key === taskSchema)!.renderOrder;
 
     for (const order of renderOrder) {
-      const block = blocks.find((b) => b.taskBlockSchema === order);
+      const block = blocks.find((b) => b().taskBlockSchema === order);
 
       if (!block) {
         console.warn(`Block of type ${order} not found in exercise`);
         continue;
       }
 
-      console.log('Rendering block:', block);
+      console.log('Rendering block:', block());
 
-      const componentType = ExerciseTaskBlockComponents[block.taskBlockTemplate];
+      const componentType = ExerciseTaskBlockComponents[block().taskBlockTemplate];
 
       if (!componentType) {
-        console.warn(`Unknown block type: ${block}`);
+        console.warn(`Unknown block type: ${block()}`);
         continue;
       }
 
       const componentRef = this.taskContainer.createComponent(componentType);
-
-      console.log('METADATA', block.metadata);
-      componentRef.setInput('metadata', block.metadata);
+      componentRef.setInput('block', block);
+      componentRef.setInput('metadata', block().metadata);
       //componentRef.setInput('editable', this.editable);
       componentRef.setInput('exerciseId', task.id);
+
+      componentRef.instance.commandCreated.subscribe((cmd) => {
+        this.commandManager.execute(cmd);
+      });
+
+      componentRef.instance.commandList.subscribe(cmd => {
+          this.toolbarManager.setCommands(cmd);
+      });
 
       //   if ('changed' in componentRef.instance && componentRef.instance.changed?.subscribe) {
       //     componentRef.instance.changed.subscribe(() => {

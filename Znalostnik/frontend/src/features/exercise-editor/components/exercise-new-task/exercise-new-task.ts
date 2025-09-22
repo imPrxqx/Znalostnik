@@ -26,8 +26,8 @@ export class ExerciseNewTask {
   }
 
   protected addNewTask(taskSchema: ExerciseTaskDocumentSchemaKey) {
-    const newTaskId = this.exerciseDocumentService.addTask(taskSchema);
-    this.exerciseTaskService.editExerciseTask(newTaskId);
+    const newTaskId = this.exerciseDocumentService.createTask(taskSchema);
+    //this.exerciseTaskService.editExerciseTask(newTaskId);
 
     this.isOpenedTaskMenu.set(false);
   }

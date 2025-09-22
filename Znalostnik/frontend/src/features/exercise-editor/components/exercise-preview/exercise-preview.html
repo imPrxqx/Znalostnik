@@ -1,3 +1,8 @@
 <p>THIS WORKS</p>
-<app-exercise-task-container [exerciseDocument]="exerciseTaskEdit.getEditTask()">
-</app-exercise-task-container>
+
+@if (exerciseTaskEdit() !== undefined) {
+<p>{{exerciseTaskEdit()().id}}</p>
+<app-exercise-task-container [task]="exerciseTaskEdit()"></app-exercise-task-container>
+} @else {
+<p>THERE IS NOTHING</p>
+}

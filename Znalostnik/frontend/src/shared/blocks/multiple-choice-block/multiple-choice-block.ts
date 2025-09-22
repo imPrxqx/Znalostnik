@@ -8,10 +8,12 @@ import {
   ViewChildren,
   QueryList,
   signal,
+  output,
 } from '@angular/core';
 import { BaseBlockComponent } from '@shared/models/block-registry';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CommandUIItem } from '@shared/interfaces/command-items.interface';
 
 @Component({
   selector: 'app-multiple-choice-block',
@@ -25,6 +27,8 @@ export class MultipleChoiceBlock implements BaseBlockComponent {
   @Input() metadata: any;
   @Input() editable: boolean = false;
   @Input() answered: any;
+  commandCreated = output<Command>();
+  commandList = output<CommandUIItem[]>();
 
   @Output() changed = new EventEmitter<void>();
   @Output() answer = new EventEmitter<{ exerciseId: string; blockTemplate: string; answer: any }>();
