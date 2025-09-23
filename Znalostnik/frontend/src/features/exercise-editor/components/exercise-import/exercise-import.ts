@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ExerciseDocumentManager } from '../../services/exercise-document-manager';
-import { ExerciseDocument } from '@shared/interfaces/exercise-document.interface';
+import { ExerciseDocument } from '@shared/interfaces/exercise/exercise-document.interface';
 
 @Component({
   selector: 'app-exercise-import',

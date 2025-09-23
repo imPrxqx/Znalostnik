@@ -1,6 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { TextBlock } from '@shared/blocks/text-block/text-block';
-import { CommandUI } from '@shared/interfaces/command-ui.interface';
+import { CommandUI } from '@shared/interfaces/command/command-ui.interface';
 import { UpdateTextCommand } from '@shared/commands/update-text-command';
 
 @Component({

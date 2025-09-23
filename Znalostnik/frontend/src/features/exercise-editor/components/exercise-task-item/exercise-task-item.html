@@ -1,7 +1,1 @@
-<p>Task: {{ taskId() }}</p>
-
-<app-remove-task-command-ui
-  [receiver]="exerciseManager"
-  [taskId]="taskId()"
-  (commandCreated)="execute($event)"
-></app-remove-task-command-ui>
+<ng-template #taskContainer></ng-template>

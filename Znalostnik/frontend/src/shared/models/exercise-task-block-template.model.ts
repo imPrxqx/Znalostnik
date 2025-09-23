@@ -1,4 +1,4 @@
-import { ExerciseTaskBlockTemplate } from '@shared/interfaces/exercise-task-block-template.interface';
+import { ExerciseTaskBlockTemplate } from '@shared/interfaces/exercise/exercise-task-block.interface';
 
 export const ExerciseBlockTemplates: ExerciseTaskBlockTemplate[] = [
   {

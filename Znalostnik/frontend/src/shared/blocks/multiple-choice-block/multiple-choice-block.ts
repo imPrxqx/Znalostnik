@@ -13,7 +13,7 @@ import {
 import { BaseBlockComponent } from '@shared/models/block-registry';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CommandUIItem } from '@shared/interfaces/command-items.interface';
+import { CommandUIItem } from '@shared/interfaces/command/command-items.interface';
 
 @Component({
   selector: 'app-multiple-choice-block',

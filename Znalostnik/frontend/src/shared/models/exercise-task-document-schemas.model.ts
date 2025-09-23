@@ -1,4 +1,4 @@
-import { ExerciseTaskDocumentSchema } from '@shared/interfaces/exercise-task-document-schema.interface';
+import { ExerciseTaskDocumentSchema } from '@shared/interfaces/exercise/exercise-task.interface';
 
 export const ExerciseTaskDocumentSchemas: ExerciseTaskDocumentSchema[] = [
   {

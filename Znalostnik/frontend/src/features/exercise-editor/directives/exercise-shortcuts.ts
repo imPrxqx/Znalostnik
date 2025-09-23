@@ -1,7 +1,4 @@
 import { Directive, HostListener, inject } from '@angular/core';
-import { ExerciseDocumentManager } from '../services/exercise-document-manager';
-import { ExerciseSnapshot } from '../interfaces/exercise-snapshot.interface';
-import { CommandHistory } from '../services/command-history';
 import { CommandManager } from '../services/command-manager';
 
 @Directive({
@@ -9,7 +6,6 @@ import { CommandManager } from '../services/command-manager';
 })
 export class ExerciseShortcuts {
   commandManager = inject(CommandManager);
-  exerciseDocumentService: ExerciseDocumentManager = inject(ExerciseDocumentManager);
 
   @HostListener('window:keydown.control.z', ['$event'])
   onUndo(event: Event) {

@@ -14,10 +14,10 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BaseBlockComponent } from '@shared/models/block-registry';
-import { ExerciseTask } from '@shared/interfaces/exercise-task.interface';
-import { CommandUIItem } from '@shared/interfaces/command-items.interface';
+import { ExerciseTask } from '@shared/interfaces/exercise/exercise-task.interface';
+import { CommandUIItem } from '@shared/interfaces/command/command-items.interface';
 import { UpdateTextCommandUi } from '@shared/commands/components/update-text-command-ui/update-text-command-ui';
-import { ExerciseTaskBlock } from '@shared/interfaces/exercise-task-block.interface';
+import { ExerciseTaskBlock } from '@shared/interfaces/exercise/exercise-task-block.interface';
 
 @Component({
   selector: 'app-text-block',

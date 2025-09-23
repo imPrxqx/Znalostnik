@@ -1,7 +1,7 @@
 import { Injectable, inject, signal, Signal, WritableSignal, linkedSignal } from '@angular/core';
 import { ExerciseDocumentManager } from './exercise-document-manager';
-import { ExerciseTask } from '@shared/interfaces/exercise-task.interface';
-import { ExerciseTaskBlock } from '@shared/interfaces/exercise-task-block.interface';
+import { ExerciseTask } from '@shared/interfaces/exercise/exercise-task.interface';
+import { ExerciseTaskBlock } from '@shared/interfaces/exercise/exercise-task-block.interface';
 import { ExerciseTaskDocumentSchemaKey } from '@shared/types/exercise-task-document-schema-key.type';
 import { ExerciseTaskDocumentSchemas } from '@shared/models/exercise-task-document-schemas.model';
 import { ExerciseBlockTemplates } from '@shared/models/exercise-task-block-template.model';
@@ -15,8 +15,6 @@ export class ExerciseTaskEdit {
 
   tasks: WritableSignal<WritableSignal<ExerciseTask>[]> =
     this.exerciseDocumentService.getExerciseTasks();
-  //editTask = linkedSignal(() => this.tasks()[0])
-  //editTask = signal<WritableSignal<ExerciseTask> | undefined>(undefined);
 
   private lastSelectedIndex: number | undefined = undefined;
 

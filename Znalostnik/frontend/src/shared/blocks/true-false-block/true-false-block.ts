@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, signal, output } from '@angular/core';
 import { BaseBlockComponent } from '@shared/models/block-registry';
 import { CommonModule } from '@angular/common';
-import { CommandUIItem } from '@shared/interfaces/command-items.interface';
+import { CommandUIItem } from '@shared/interfaces/command/command-items.interface';
 @Component({
   selector: 'app-true-false-block',
   imports: [CommonModule],

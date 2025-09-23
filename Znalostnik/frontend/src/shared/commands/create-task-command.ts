@@ -1,11 +1,12 @@
 import { Component, input, WritableSignal } from '@angular/core';
 import { ExerciseDocumentManager } from '@features/exercise-editor/services/exercise-document-manager';
 import { TextBlock } from '@shared/blocks/text-block/text-block';
-import { ExerciseTaskBlock } from '@shared/interfaces/exercise-task-block.interface';
-import { ExerciseTask } from '@shared/interfaces/exercise-task.interface';
+import { ExerciseTaskBlock } from '@shared/interfaces/exercise/exercise-task-block.interface';
+import { ExerciseTask } from '@shared/interfaces/exercise/exercise-task.interface';
 import { ExerciseTaskDocumentSchemaKey } from '@shared/types/exercise-task-document-schema-key.type';
 
-export class CreateTaskCommand implements Command {
+export class CreateTaskCommand implements CommandWithResult<string> {
+  public result: string = '';
   private receiver: ExerciseDocumentManager;
   private taskSchema: ExerciseTaskDocumentSchemaKey;
   private backup: string | undefined;
@@ -24,5 +25,6 @@ export class CreateTaskCommand implements Command {
   execute(): void {
     const taskId = this.receiver.createTask(this.taskSchema);
     this.backup = taskId;
+    this.result = taskId;
   }
 }

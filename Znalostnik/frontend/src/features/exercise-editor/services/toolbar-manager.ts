@@ -1,5 +1,5 @@
 import { Injectable, signal, ViewContainerRef, ViewChild } from '@angular/core';
-import { CommandUIItem } from '@shared/interfaces/command-items.interface';
+import { CommandUIItem } from '@shared/interfaces/command/command-items.interface';
 
 @Injectable({
   providedIn: 'root',

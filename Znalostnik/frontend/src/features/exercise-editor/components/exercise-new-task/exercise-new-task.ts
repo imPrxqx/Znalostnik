@@ -1,10 +1,13 @@
 import { Component, inject, LOCALE_ID, signal } from '@angular/core';
 import { ExerciseDocumentManager } from '../../services/exercise-document-manager';
-import { ExerciseTaskDocumentSchema } from '@shared/interfaces/exercise-task-document-schema.interface';
+import { ExerciseTaskDocumentSchema } from '@shared/interfaces/exercise/exercise-task.interface';
 import { ExerciseTaskDocumentSchemas } from '@shared/models/exercise-task-document-schemas.model';
 import { Locale } from '@shared/types/locale.type';
 import { ExerciseTaskDocumentSchemaKey } from '@shared/types/exercise-task-document-schema-key.type';
 import { ExerciseTaskEdit } from '@features/exercise-editor/services/exercise-task-edit';
+import { CreateTaskCommand } from '@shared/commands/create-task-command';
+import { CommandManager } from '@features/exercise-editor/services/command-manager';
+import { SelectTaskCommand } from '@shared/commands/select-task-command';
 
 @Component({
   selector: 'app-exercise-new-task',
@@ -15,10 +18,9 @@ import { ExerciseTaskEdit } from '@features/exercise-editor/services/exercise-ta
 export class ExerciseNewTask {
   private exerciseDocumentService: ExerciseDocumentManager = inject(ExerciseDocumentManager);
   private exerciseTaskService: ExerciseTaskEdit = inject(ExerciseTaskEdit);
-
+  private commandManager = inject(CommandManager);
   protected documentSchemas: ExerciseTaskDocumentSchema[] = ExerciseTaskDocumentSchemas;
   protected locale: keyof Locale = inject(LOCALE_ID) as keyof Locale;
-
   protected isOpenedTaskMenu = signal<boolean>(false);
 
   protected toggleMenu() {
@@ -26,8 +28,14 @@ export class ExerciseNewTask {
   }
 
   protected addNewTask(taskSchema: ExerciseTaskDocumentSchemaKey) {
-    const newTaskId = this.exerciseDocumentService.createTask(taskSchema);
-    //this.exerciseTaskService.editExerciseTask(newTaskId);
+    const commandCreateTask = new CreateTaskCommand(this.exerciseDocumentService, taskSchema);
+    this.commandManager.execute(commandCreateTask);
+
+    const commandSelectTask = new SelectTaskCommand(
+      this.exerciseTaskService,
+      commandCreateTask.result,
+    );
+    this.commandManager.execute(commandSelectTask);
 
     this.isOpenedTaskMenu.set(false);
   }

@@ -1,7 +1,7 @@
 <div cdkDropList (cdkDropListDropped)="changeOrder($event)">
   @for (task of this.exerciseDocumentService.getExerciseTasks()(); track task().id) {
   <div cdkDrag>
-    <app-exercise-task-item [taskId]="task().id"></app-exercise-task-item>
+    <app-exercise-task-item-overview [taskId]="task().id"></app-exercise-task-item-overview>
   </div>
   }
 </div>
