@@ -1,23 +1,20 @@
-import { Locale } from '@shared/types/locale.type';
 import { ExerciseTaskBlockMetaKey } from '@shared/types/exercise-task-block-meta-key.type';
 import { ExerciseTaskBlockTemplateKey } from '@shared/types/exercise-task-block-template-key.type';
+import { BaseBlockMetadata } from './exercise-task-block-metadata.interface';
+import {
+  TextBlockMetadata,
+  MultipleChoiceBlockMetadata,
+  TrueFalseBlockMetadata,
+} from '@shared/interfaces/exercise/exercise-task-block-metadata.interface';
 
-export interface ExerciseTaskBlock {
+export interface ExerciseTaskBlock<T extends BaseBlockMetadata = BaseBlockMetadata> {
   taskBlockSchema: ExerciseTaskBlockMetaKey;
   taskBlockTemplate: ExerciseTaskBlockTemplateKey;
-  metadata: {
-    data?: Record<string, any>;
-    solution?: Record<string, any>;
-    feedback?: Record<string, any>;
-  };
+  metadata: T;
 }
 
-export interface ExerciseTaskBlockTemplate {
+export interface ExerciseTaskBlockTemplate<T extends BaseBlockMetadata = BaseBlockMetadata> {
   key: ExerciseTaskBlockTemplateKey;
-  alias: Locale;
-  defaultMetadata: {
-    data?: Record<string, any>;
-    solution?: Record<string, any>;
-    feedback?: Record<string, any>;
-  };
+  alias: string;
+  defaultMetadata: () => T;
 }

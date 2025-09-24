@@ -3,19 +3,19 @@ import { ExerciseTaskDocumentSchema } from '@shared/interfaces/exercise/exercise
 export const ExerciseTaskDocumentSchemas: ExerciseTaskDocumentSchema[] = [
   {
     key: 'quiz',
-    alias: { cs: 'Kvíz', en: 'Quiz' },
+    alias: $localize`:@@document.quiz:Kvíz`,
     requiredBody: ['question', 'answer'],
     renderOrder: ['question', 'answer'],
     bodyMeta: [
       {
         key: 'question',
-        alias: { cs: 'Otázka', en: 'Question' },
+        alias: $localize`:@@document.quiz.question:Otázka`,
         defaultTemplate: 'text',
         allowedTemplates: ['text'],
       },
       {
         key: 'answer',
-        alias: { cs: 'Odpovědi', en: 'Answers' },
+        alias: $localize`:@@document.quiz.answer:Odpověd`,
         defaultTemplate: 'multipleChoice',
         allowedTemplates: ['multipleChoice', 'trueFalse'],
       },

@@ -1,4 +1,7 @@
 <p>update-text-command-ui works!</p>
 
-<input [value]="currentText" (input)="onInputChange($event.target.value)" />
+<input
+  [value]="receiver().block()().metadata.data.content"
+  (input)="onInputChange($event.target.value)"
+/>
 <button (click)="apply()">Aplikovat</button>

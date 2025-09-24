@@ -4,7 +4,7 @@
 <div>
   @for (document of documentSchemas; track document) {
   <div>
-    <button (click)="addNewTask(document.key)" i18n>{{ document.alias[locale] }}</button>
+    <button (click)="addNewTask(document.key)" i18n>{{ document.alias }}</button>
   </div>
   }
 </div>

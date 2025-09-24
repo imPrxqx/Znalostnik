@@ -98,7 +98,7 @@ export class ExerciseTaskEdit {
       const taskBlock = signal<ExerciseTaskBlock>({
         taskBlockSchema: blockMeta.key,
         taskBlockTemplate: blockMeta.defaultTemplate,
-        metadata: structuredClone(bodyTemplate.defaultMetadata),
+        metadata: structuredClone(bodyTemplate.defaultMetadata()),
       });
 
       return taskBlock;

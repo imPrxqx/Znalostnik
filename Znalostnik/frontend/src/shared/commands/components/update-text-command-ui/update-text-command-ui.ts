@@ -16,7 +16,7 @@ export class UpdateTextCommandUi implements CommandUI {
   currentText: string = '';
 
   ngOnInit() {
-    this.currentText = this.receiver().block()()?.metadata?.data?.['content'] ?? 'null';
+    this.currentText = this.receiver().block()().metadata.data.content;
   }
 
   onInputChange(value: string) {
@@ -24,6 +24,7 @@ export class UpdateTextCommandUi implements CommandUI {
   }
 
   apply() {
+    console.log('Applying text change:', this.currentText);
     const cmd = new UpdateTextCommand(this.receiver(), this.currentText);
     this.commandCreated.emit(cmd);
   }

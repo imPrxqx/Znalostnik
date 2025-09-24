@@ -13,7 +13,7 @@ export abstract class BaseBlockComponent<T = any> {
   @Output() answer?: EventEmitter<any>;
 }
 
-export const BlockRegistry: Record<string, Type<BaseBlockComponent>> = {
+export const BlockRegistry: Record<string, Type<BaseBlockComponent<any>>> = {
   [TextBlock.blockTemplate]: TextBlock,
   [MultipleChoiceBlock.blockTemplate]: MultipleChoiceBlock,
   [TrueFalseBlock.blockTemplate]: TrueFalseBlock,

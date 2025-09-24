@@ -2,7 +2,6 @@ import { Component, inject, LOCALE_ID, signal } from '@angular/core';
 import { ExerciseDocumentManager } from '../../services/exercise-document-manager';
 import { ExerciseTaskDocumentSchema } from '@shared/interfaces/exercise/exercise-task.interface';
 import { ExerciseTaskDocumentSchemas } from '@shared/models/exercise-task-document-schemas.model';
-import { Locale } from '@shared/types/locale.type';
 import { ExerciseTaskDocumentSchemaKey } from '@shared/types/exercise-task-document-schema-key.type';
 import { ExerciseTaskEdit } from '@features/exercise-editor/services/exercise-task-edit';
 import { CreateTaskCommand } from '@shared/commands/create-task-command';
@@ -20,7 +19,6 @@ export class ExerciseNewTask {
   private exerciseTaskService: ExerciseTaskEdit = inject(ExerciseTaskEdit);
   private commandManager = inject(CommandManager);
   protected documentSchemas: ExerciseTaskDocumentSchema[] = ExerciseTaskDocumentSchemas;
-  protected locale: keyof Locale = inject(LOCALE_ID) as keyof Locale;
   protected isOpenedTaskMenu = signal<boolean>(false);
 
   protected toggleMenu() {

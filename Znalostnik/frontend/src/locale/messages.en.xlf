@@ -2,27 +2,404 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="cs" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="4768749765465246664" datatype="html">
+        <source>Email</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/authentication/components/forgot-password/forgot-password.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/authentication/components/login/login.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/authentication/components/register/register.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9052102256297693968" datatype="html">
+        <source>Poslat reset heslat</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/authentication/components/forgot-password/forgot-password.html</context>
+          <context context-type="linenumber">7,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5042502527614691070" datatype="html">
+        <source>Heslo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/authentication/components/login/login.html</context>
+          <context context-type="linenumber">8,9</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/authentication/components/register/register.html</context>
+          <context context-type="linenumber">7,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6380435365906958873" datatype="html">
+        <source>Přihlásit se</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/authentication/components/login/login.html</context>
+          <context context-type="linenumber">12,13</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/shared/components/header/header.html</context>
+          <context context-type="linenumber">14,15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7002391369348884826" datatype="html">
+        <source>Neplatný email nebo heslo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/authentication/components/login/login.html</context>
+          <context context-type="linenumber">15,18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5361535874640773150" datatype="html">
+        <source>Zapomněl heslo?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/authentication/components/login/login.html</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7787931504970911808" datatype="html">
+        <source>Odhlašuji se...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/authentication/components/logout/logout.html</context>
+          <context context-type="linenumber">1,2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2257967878256566144" datatype="html">
+        <source>Znova Heslo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/authentication/components/register/register.html</context>
+          <context context-type="linenumber">11,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2157444518303340680" datatype="html">
+        <source>Zaregistrovat se</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/authentication/components/register/register.html</context>
+          <context context-type="linenumber">14,15</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/shared/components/header/header.html</context>
+          <context context-type="linenumber">13,14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="248897986766503051" datatype="html">
+        <source> Neplatný email (musí obsahovat @) nebo heslo (musí obsahovat velké písmeno, číslici a specialní znak)
+</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/authentication/components/register/register.html</context>
+          <context context-type="linenumber">18,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2533894595258143670" datatype="html">
+        <source> Jsi v editovacím režimu: <x id="INTERPOLATION" equiv-text="{{ centralEditorService.isEditingMode() }}"/> </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/editor/components/canvas/canvas.html</context>
+          <context context-type="linenumber">5,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8426406367963199166" datatype="html">
+        <source>Uložit jako JSON</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/editor/components/canvas/canvas.html</context>
+          <context context-type="linenumber">9,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1240438521267895602" datatype="html">
+        <source>Uložit cvičení na server</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/editor/components/exercise-test/exercise-test.html</context>
+          <context context-type="linenumber">4,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2943330857581316320" datatype="html">
+        <source>ID Cvičení</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/editor/components/exercise-test/exercise-test.html</context>
+          <context context-type="linenumber">8,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2617288202642834957" datatype="html">
+        <source>Načíst cvičení</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/editor/components/exercise-test/exercise-test.html</context>
+          <context context-type="linenumber">11,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7712371040899187443" datatype="html">
+        <source>Odeslat řešení</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/editor/components/exercise-test/exercise-test.html</context>
+          <context context-type="linenumber">15,16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1546768268912071945" datatype="html">
+        <source> Otevřít cvičení <x id="INTERPOLATION" equiv-text="{{ exercise.documentSchema }}"/> </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/editor/components/list-exercises/list-exercises.html</context>
+          <context context-type="linenumber">6,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4659352757292058257" datatype="html">
+        <source> Smazat cvičení <x id="INTERPOLATION" equiv-text="{{ exercise.documentSchema }}"/> </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/editor/components/list-exercises/list-exercises.html</context>
+          <context context-type="linenumber">9,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3405585266904155914" datatype="html">
+        <source>Vytvořit</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/editor/components/tool-bar/tool-bar.html</context>
+          <context context-type="linenumber">6,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3591896477207439526" datatype="html">
+        <source>Použít</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/editor/components/tool-bar/tool-bar.html</context>
+          <context context-type="linenumber">13,14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2140537831432289999" datatype="html">
+        <source>Uložit</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/exercise-editor/components/exercise-export/exercise-export.html</context>
+          <context context-type="linenumber">1,2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8022078953207648064" datatype="html">
+        <source> Otevřít cvičení <x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input type=&quot;file&quot; accept=&quot;.json&quot; (change)=&quot;loadExerciseDocument($event)&quot; /&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/exercise-editor/components/exercise-import/exercise-import.html</context>
+          <context context-type="linenumber">2,5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1487251105812249369" datatype="html">
+        <source>Nová úloha</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/exercise-editor/components/exercise-new-task/exercise-new-task.html</context>
+          <context context-type="linenumber">1,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="187187500641108332" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ document.alias }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/exercise-editor/components/exercise-new-task/exercise-new-task.html</context>
+          <context context-type="linenumber">7,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="280311836507543" datatype="html">
+        <source>Vytvořit místnost</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/rooms/components/create-room/create-room.html</context>
+          <context context-type="linenumber">2,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1951671536429311455" datatype="html">
+        <source>Nelze vytvořit místnost</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/rooms/components/create-room/create-room.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6921962382838315635" datatype="html">
+        <source>Vytvořena místnost</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/rooms/components/create-room/create-room.html</context>
+          <context context-type="linenumber">7,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4529443431150877021" datatype="html">
+        <source>Místnost: <x id="INTERPOLATION" equiv-text="{{roomId}}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/rooms/components/create-room/create-room.html</context>
+          <context context-type="linenumber">8,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6568748921786734386" datatype="html">
+        <source>Heslo: <x id="INTERPOLATION" equiv-text="{{password}}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/rooms/components/create-room/create-room.html</context>
+          <context context-type="linenumber">9,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5109026967339836091" datatype="html">
+        <source>Přezdívka</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/rooms/components/join-room/join-room.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3686061351602184728" datatype="html">
+        <source>Místnost</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/rooms/components/join-room/join-room.html</context>
+          <context context-type="linenumber">7,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8763213547680398681" datatype="html">
+        <source>Připojit se</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/rooms/components/join-room/join-room.html</context>
+          <context context-type="linenumber">14,16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1148489862095570227" datatype="html">
+        <source>Neplatná místnost</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/rooms/components/join-room/join-room.html</context>
+          <context context-type="linenumber">17,19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4162534100858407371" datatype="html">
+        <source>Čekáme na hráče...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/rooms/components/room-hub/room-hub.html</context>
+          <context context-type="linenumber">4,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4768155040172809832" datatype="html">
+        <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input
+      type=&quot;radio&quot;
+      [checked]=&quot;metadata.solution.answer === true&quot;
+      (change)=&quot;setSolution(true)&quot;
+    /&gt;"/> Pravda </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/shared/blocks/true-false-block/true-false-block.html</context>
+          <context context-type="linenumber">6,11</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/shared/blocks/true-false-block/true-false-block.html</context>
+          <context context-type="linenumber">25,27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7463187945866150730" datatype="html">
+        <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input
+      type=&quot;radio&quot;
+      [checked]=&quot;metadata.solution.answer === false&quot;
+      (change)=&quot;setSolution(false)&quot;
+    /&gt;"/> Lež </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/shared/blocks/true-false-block/true-false-block.html</context>
+          <context context-type="linenumber">15,20</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/shared/blocks/true-false-block/true-false-block.html</context>
+          <context context-type="linenumber">30,32</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7502781958106935586" datatype="html">
         <source>© 2025 Znalostník. Všechna práva vyhrazena.</source>
-        <target>© 2025 Znalostník. All rights reversed.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/layout/footer/footer.html</context>
+          <context context-type="sourcefile">src/shared/components/footer/footer.html</context>
           <context context-type="linenumber">2,3</context>
         </context-group>
       </trans-unit>
       <trans-unit id="156893847130530340" datatype="html">
         <source>Domů</source>
-        <target>Home</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/layout/header/header.html</context>
+          <context context-type="sourcefile">src/shared/components/header/header.html</context>
           <context context-type="linenumber">3,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3453288433176196531" datatype="html">
-        <source>Přihlasit se</source>        
-        <target>Log in</target>
+      <trans-unit id="6035149529099443331" datatype="html">
+        <source>Cvičení</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/layout/header/header.html</context>
+          <context context-type="sourcefile">src/shared/components/header/header.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8497859556668275423" datatype="html">
+        <source>Připojit Místnost</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/shared/components/header/header.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5498745280367360263" datatype="html">
+        <source>Vytvořit Místnost</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/shared/components/header/header.html</context>
+          <context context-type="linenumber">6,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3742657416068781599" datatype="html">
+        <source>Editor</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/shared/components/header/header.html</context>
+          <context context-type="linenumber">7,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4491439563912139758" datatype="html">
+        <source>New Editor</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/shared/components/header/header.html</context>
+          <context context-type="linenumber">8,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6077367416750744712" datatype="html">
+        <source>Log out</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/shared/components/header/header.html</context>
+          <context context-type="linenumber">11,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="block.text" datatype="html">
+        <source>Text</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/shared/models/exercise-task-block-template.model.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="block.multipleChoice" datatype="html">
+        <source>Multichoice</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/shared/models/exercise-task-block-template.model.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="block.trueFalse" datatype="html">
+        <source>True/False</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/shared/models/exercise-task-block-template.model.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="document.quiz" datatype="html">
+        <source>Quiz</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/shared/models/exercise-task-document-schemas.model.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="document.quiz.question" datatype="html">
+        <source>Question</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/shared/models/exercise-task-document-schemas.model.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="document.quiz.answer" datatype="html">
+        <source>Answer</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/shared/models/exercise-task-document-schemas.model.ts</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5768618124871650197" datatype="html">
+        <source>Předchozí</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/shared/sequence-mode/sequence-mode.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5336845985627275540" datatype="html">
+        <source>Následující</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/shared/sequence-mode/sequence-mode.html</context>
           <context context-type="linenumber">4,5</context>
         </context-group>
       </trans-unit>

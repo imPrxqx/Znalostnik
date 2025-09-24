@@ -1,14 +1,28 @@
-import { Component, Input, Output, EventEmitter, signal, output } from '@angular/core';
-import { BaseBlockComponent } from '@shared/models/block-registry';
+import {
+  Component,
+  input,
+  Input,
+  Output,
+  EventEmitter,
+  signal,
+  output,
+  InputSignal,
+  WritableSignal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CommandUIItem } from '@shared/interfaces/command/command-items.interface';
+import { TrueFalseBlockMetadata } from '@shared/interfaces/exercise/exercise-task-block-metadata.interface';
+import { BaseBlockComponent } from '@shared/models/exercise-task-block-components.model';
+import { ExerciseTaskBlock } from '@shared/interfaces/exercise/exercise-task-block.interface';
+
 @Component({
   selector: 'app-true-false-block',
   imports: [CommonModule],
   templateUrl: './true-false-block.html',
   styleUrl: './true-false-block.css',
 })
-export class TrueFalseBlock implements BaseBlockComponent {
+export class TrueFalseBlock implements BaseBlockComponent<TrueFalseBlockMetadata> {
+  block = input.required<WritableSignal<ExerciseTaskBlock<TrueFalseBlockMetadata>>>();
   static readonly blockTemplate: string = 'trueFalse';
   @Input() exerciseId: string = '';
   @Input() editable: boolean = false;

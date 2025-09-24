@@ -5,20 +5,21 @@ import { ExerciseTask } from '@shared/interfaces/exercise/exercise-task.interfac
 
 export class UpdateTextCommand implements Command {
   private receiver: TextBlock;
-  private backup: ExerciseTaskBlock;
+  private backup: string;
   private newText: string;
 
   constructor(receiver: TextBlock, newText: string) {
     this.receiver = receiver;
-    this.backup = structuredClone(receiver.block()());
+    this.backup = structuredClone(receiver.block()().metadata.data.content);
     this.newText = newText;
   }
 
   undo(): void {
-    this.receiver.block().set(this.backup);
+    this.receiver.applyText(this.backup);
   }
 
   execute(): void {
+    console.log('Executing UpdateTextCommand with newText:', this.newText);
     this.receiver.applyText(this.newText);
   }
 }

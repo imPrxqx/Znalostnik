@@ -1,7 +1,7 @@
 <p>text-block works!</p>
 
 @if (isEditing) {
-<textarea #editable [(ngModel)]="metadata.data.content" rows="5"></textarea>
+<textarea #editable [(ngModel)]="block()().metadata.data.content" rows="5"></textarea>
 } @else {
-<div (dblclick)="startEditing()">{{ metadata.data.content }}</div>
+<div (dblclick)="startEditing()">{{ block()().metadata.data.content }}</div>
 }

@@ -2,7 +2,6 @@ import { Component, ViewChild, ViewContainerRef, effect, inject } from '@angular
 import { ExerciseDocumentManager } from '../../services/exercise-document-manager';
 import { ExerciseTaskDocumentSchema } from '@shared/interfaces/exercise/exercise-task.interface';
 import { ExerciseTaskDocumentSchemas } from '@shared/models/exercise-task-document-schemas.model';
-import { Locale } from '@shared/types/locale.type';
 import { ExerciseRedo } from '../exercise-redo/exercise-redo';
 import { ExerciseUndo } from '../exercise-undo/exercise-undo';
 import { ToolbarManager } from '@features/exercise-editor/services/toolbar-manager';

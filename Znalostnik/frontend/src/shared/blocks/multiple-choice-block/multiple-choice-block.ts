@@ -9,11 +9,15 @@ import {
   QueryList,
   signal,
   output,
+  input,
+  WritableSignal,
 } from '@angular/core';
-import { BaseBlockComponent } from '@shared/models/block-registry';
+import { BaseBlockComponent } from '@shared/models/exercise-task-block-components.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CommandUIItem } from '@shared/interfaces/command/command-items.interface';
+import { MultipleChoiceBlockMetadata } from '@shared/interfaces/exercise/exercise-task-block-metadata.interface';
+import { ExerciseTaskBlock } from '@shared/interfaces/exercise/exercise-task-block.interface';
 
 @Component({
   selector: 'app-multiple-choice-block',
@@ -21,7 +25,8 @@ import { CommandUIItem } from '@shared/interfaces/command/command-items.interfac
   templateUrl: './multiple-choice-block.html',
   styleUrl: './multiple-choice-block.css',
 })
-export class MultipleChoiceBlock implements BaseBlockComponent {
+export class MultipleChoiceBlock implements BaseBlockComponent<MultipleChoiceBlockMetadata> {
+  readonly block = input.required<WritableSignal<ExerciseTaskBlock<MultipleChoiceBlockMetadata>>>();
   static readonly blockTemplate: string = 'multipleChoice';
   @Input() exerciseId: string = '';
   @Input() metadata: any;
@@ -38,21 +43,21 @@ export class MultipleChoiceBlock implements BaseBlockComponent {
   selectedAnswers = signal<string[]>([]);
 
   ngOnInit() {
-    if (!this.metadata.hasOwnProperty('data')) {
-      (this.metadata as any).data = {};
+    // if (!this.metadata.hasOwnProperty('data')) {
+    //   (this.metadata as any).data = {};
 
-      (this.metadata as any).data.options = [
-        { id: Math.random().toString(36).substring(2, 9), text: 'Odpoved 1' },
-        { id: Math.random().toString(36).substring(2, 9), text: 'Odpoved 2' },
-        { id: Math.random().toString(36).substring(2, 9), text: 'Odpoved 3' },
-        { id: Math.random().toString(36).substring(2, 9), text: 'Odpoved 4' },
-      ];
-    }
+    //   (this.metadata as any).data.options = [
+    //     { id: Math.random().toString(36).substring(2, 9), text: 'Odpoved 1' },
+    //     { id: Math.random().toString(36).substring(2, 9), text: 'Odpoved 2' },
+    //     { id: Math.random().toString(36).substring(2, 9), text: 'Odpoved 3' },
+    //     { id: Math.random().toString(36).substring(2, 9), text: 'Odpoved 4' },
+    //   ];
+    // }
 
-    if (this.editable && !this.metadata.hasOwnProperty('solution')) {
-      (this.metadata as any).solution = {};
-      (this.metadata as any).solution.answer = [];
-    }
+    // if (this.editable && !this.metadata.hasOwnProperty('solution')) {
+    //   (this.metadata as any).solution = {};
+    //   (this.metadata as any).solution.answer = [];
+    // }
 
     if (this.answered && this.answered.hasOwnProperty('answers')) {
       const found = this.answered.answers.find(

@@ -8,11 +8,11 @@ import {
   effect,
   Signal,
   inject,
+  SimpleChanges,
 } from '@angular/core';
 import { ExerciseTask } from '@shared/interfaces/exercise/exercise-task.interface';
 import { ExerciseTaskDocumentSchemas } from '@shared/models/exercise-task-document-schemas.model';
 import { ExerciseTaskBlockComponents } from '@shared/models/exercise-task-block-components.model';
-import { BaseBlockComponent } from '@shared/models/block-registry';
 import { CommandManager } from '@features/exercise-editor/services/command-manager';
 import { ToolbarManager } from '@features/exercise-editor/services/toolbar-manager';
 
@@ -30,13 +30,10 @@ export class ExerciseTaskItem {
   @ViewChild('taskContainer', { read: ViewContainerRef, static: true })
   taskContainer!: ViewContainerRef;
 
-  constructor() {
-    effect(() => {
-      const taskValue = this.task();
-      console.log('changed task', this.task());
-
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['task'] && changes['task'].currentValue()) {
       this.renderBlocks();
-    });
+    }
   }
 
   renderBlocks(): void {
@@ -71,7 +68,7 @@ export class ExerciseTaskItem {
       const componentType = ExerciseTaskBlockComponents[block().taskBlockTemplate];
 
       if (!componentType) {
-        console.warn(`Unknown block type: ${block()}`);
+        console.warn(`Unknown block type: ${block().taskBlockTemplate}`);
         continue;
       }
 

@@ -10,14 +10,16 @@ import {
   WritableSignal,
   input,
   output,
+  InputSignal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BaseBlockComponent } from '@shared/models/block-registry';
+import { BaseBlockComponent } from '@shared/models/exercise-task-block-components.model';
 import { ExerciseTask } from '@shared/interfaces/exercise/exercise-task.interface';
 import { CommandUIItem } from '@shared/interfaces/command/command-items.interface';
 import { UpdateTextCommandUi } from '@shared/commands/components/update-text-command-ui/update-text-command-ui';
 import { ExerciseTaskBlock } from '@shared/interfaces/exercise/exercise-task-block.interface';
+import { TextBlockMetadata } from '@shared/interfaces/exercise/exercise-task-block-metadata.interface';
 
 @Component({
   selector: 'app-text-block',
@@ -25,12 +27,14 @@ import { ExerciseTaskBlock } from '@shared/interfaces/exercise/exercise-task-blo
   templateUrl: './text-block.html',
   styleUrl: './text-block.css',
 })
-export class TextBlock implements BaseBlockComponent {
+export class TextBlock implements BaseBlockComponent<TextBlockMetadata> {
+  answered?: any;
+
   static readonly blockTemplate: string = 'text';
   @Input() exerciseId: string = '';
+  readonly block = input.required<WritableSignal<ExerciseTaskBlock<TextBlockMetadata>>>();
 
   //readonly task = input.required<WritableSignal<ExerciseTask>>();
-  readonly block = input.required<WritableSignal<ExerciseTaskBlock>>();
 
   commandList = output<CommandUIItem[]>();
   commandCreated = output<Command>();
@@ -82,7 +86,7 @@ export class TextBlock implements BaseBlockComponent {
       metadata: {
         ...currentBlock.metadata,
         data: {
-          ...currentBlock.metadata.data,
+          ...currentBlock.metadata,
           content: newText,
         },
       },

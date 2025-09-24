@@ -3,7 +3,6 @@ import { ExerciseTaskBlock } from '@shared/interfaces/exercise/exercise-task-blo
 import { ExerciseTaskDocumentSchemaKey } from '@shared/types/exercise-task-document-schema-key.type';
 import { ExerciseTaskBlockMetaKey } from '@shared/types/exercise-task-block-meta-key.type';
 import { ExerciseTaskBlockTemplateKey } from '@shared/types/exercise-task-block-template-key.type';
-import { Locale } from '@shared/types/locale.type';
 
 export interface ExerciseTask {
   id: string;
@@ -13,7 +12,7 @@ export interface ExerciseTask {
 
 export interface ExerciseTaskDocumentSchema {
   key: ExerciseTaskDocumentSchemaKey;
-  alias: Locale;
+  alias: string;
   requiredBody: ExerciseTaskBlockMetaKey[];
   renderOrder: ExerciseTaskBlockMetaKey[];
   bodyMeta: ExerciseTaskBodyMeta[];
@@ -21,7 +20,7 @@ export interface ExerciseTaskDocumentSchema {
 
 export interface ExerciseTaskBodyMeta {
   key: ExerciseTaskBlockMetaKey;
-  alias: Locale;
+  alias: string;
   defaultTemplate: ExerciseTaskBlockTemplateKey;
   allowedTemplates: ExerciseTaskBlockTemplateKey[];
 }
