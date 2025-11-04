@@ -25,7 +25,7 @@ export abstract class BaseBlockComponent<T extends BaseBlockMetadata> {
 }
 
 export const ExerciseTaskBlockComponents: Record<string, Type<BaseBlockComponent<any>>> = {
-  [TextBlock.blockTemplate]: TextBlock,
-  [MultipleChoiceBlock.blockTemplate]: MultipleChoiceBlock,
+  // [TextBlock.blockTemplate]: TextBlock,
+  // [MultipleChoiceBlock.blockTemplate]: MultipleChoiceBlock,
   // [TrueFalseBlock.blockTemplate]: TrueFalseBlock,
 };

@@ -1,7 +1,9 @@
 <p>text-block works!</p>
 
-@if (isEditing) {
-<textarea #editable [(ngModel)]="block()().metadata.data.content" rows="5"></textarea>
+@if (viewMode() === 'edit') { @if(editing()) {
+<textarea #editable [value]="format().content()" (keydown.enter)="stopEditing(editable)"></textarea>
 } @else {
-<div (dblclick)="startEditing()">{{ block()().metadata.data.content }}</div>
+<div (dblclick)="startEditing()">{{ format().content() }}</div>
+} } @else {
+<div>{{ format().content() }}</div>
 }

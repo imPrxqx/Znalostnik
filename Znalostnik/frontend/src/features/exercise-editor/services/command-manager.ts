@@ -9,9 +9,10 @@ export class CommandManager {
   private backup: Command[] = [];
 
   execute(command: Command) {
-    command.execute();
-    this.history.push(command);
-    this.backup = [];
+    if (command.execute()) {
+      this.history.push(command);
+      this.backup = [];
+    }
   }
 
   undo() {

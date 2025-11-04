@@ -1,26 +1,25 @@
-import { Component, input, WritableSignal } from '@angular/core';
 import { ExerciseDocumentManager } from '@features/exercise-editor/services/exercise-document-manager';
-import { TextBlock } from '@shared/blocks/text-block/text-block';
-import { ExerciseTaskBlock } from '@shared/interfaces/exercise/exercise-task-block.interface';
-import { ExerciseTask } from '@shared/interfaces/exercise/exercise-task.interface';
+import { Task } from '@shared/models/format';
 
 export class RemoveTaskCommand implements Command {
   private receiver: ExerciseDocumentManager;
+  private index: number;
   private taskId: string;
-  private backup: WritableSignal<ExerciseTask>;
+  private backup: Task;
 
   constructor(receiver: ExerciseDocumentManager, taskId: string) {
     this.receiver = receiver;
     this.taskId = taskId;
-    this.backup = receiver.getExerciseTask(taskId);
+    this.index = receiver.getTaskIndexById(taskId);
+    this.backup = receiver.getTaskById(taskId)!;
   }
 
   undo(): void {
-    this.receiver.addTask(this.backup);
+    this.receiver.addTaskAt(this.backup, this.index);
   }
 
-  execute(): void {
-    console.log('removing task', this.taskId);
-    this.receiver.removeTask(this.taskId);
+  execute(): boolean {
+    this.receiver.deleteTaskById(this.taskId);
+    return true;
   }
 }

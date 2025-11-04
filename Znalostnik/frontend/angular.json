@@ -101,7 +101,8 @@
             ],
             "polyfills": [
               "@angular/localize/init"
-            ]
+            ],
+            "karmaConfig": "karma.conf.js"
           }
         }
       }

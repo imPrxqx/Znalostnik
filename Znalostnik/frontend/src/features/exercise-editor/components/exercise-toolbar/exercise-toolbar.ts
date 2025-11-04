@@ -1,7 +1,4 @@
 import { Component, ViewChild, ViewContainerRef, effect, inject } from '@angular/core';
-import { ExerciseDocumentManager } from '../../services/exercise-document-manager';
-import { ExerciseTaskDocumentSchema } from '@shared/interfaces/exercise/exercise-task.interface';
-import { ExerciseTaskDocumentSchemas } from '@shared/models/exercise-task-document-schemas.model';
 import { ExerciseRedo } from '../exercise-redo/exercise-redo';
 import { ExerciseUndo } from '../exercise-undo/exercise-undo';
 import { ToolbarManager } from '@features/exercise-editor/services/toolbar-manager';
@@ -23,8 +20,6 @@ export class ExerciseToolbar {
   constructor() {
     effect(() => {
       const taskValue = this.toolbarManager.commands();
-      console.log('changed commands', this.toolbarManager.commands());
-
       this.renderCommands();
     });
   }
@@ -32,22 +27,16 @@ export class ExerciseToolbar {
   renderCommands(): void {
     this.commandContainer.clear();
 
-    for (const command of this.toolbarManager.commands()) {
-      console.log('Rendering command:', command);
+    if (this.toolbarManager.commands() === undefined) {
+      return;
+    }
 
-      const componentType = command.component;
+    for (const component of this.toolbarManager.commands()!.components) {
+      const componentRef = this.commandContainer.createComponent(component);
 
-      if (!componentType) {
-        console.warn(`Unknown command type: ${command}`);
-        continue;
-      }
+      componentRef.setInput('format', this.toolbarManager.commands()!.receiver);
 
-      const componentRef = this.commandContainer.createComponent(componentType);
-
-      componentRef.setInput('receiver', command.receiver);
-
-      componentRef.instance.commandCreated.subscribe((cmd) => {
-        console.log('applying cmd', cmd);
+      componentRef.instance.commands.subscribe((cmd) => {
         this.commandManager.execute(cmd);
       });
     }

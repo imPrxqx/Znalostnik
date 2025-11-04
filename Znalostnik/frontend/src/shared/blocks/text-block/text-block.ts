@@ -1,25 +1,27 @@
 import {
   Component,
-  Input,
-  EventEmitter,
-  Output,
   HostListener,
   ElementRef,
-  ViewChild,
-  model,
-  WritableSignal,
   input,
+  ViewChildren,
+  QueryList,
   output,
-  InputSignal,
+  signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BaseBlockComponent } from '@shared/models/exercise-task-block-components.model';
-import { ExerciseTask } from '@shared/interfaces/exercise/exercise-task.interface';
-import { CommandUIItem } from '@shared/interfaces/command/command-items.interface';
 import { UpdateTextCommandUi } from '@shared/commands/components/update-text-command-ui/update-text-command-ui';
-import { ExerciseTaskBlock } from '@shared/interfaces/exercise/exercise-task-block.interface';
-import { TextBlockMetadata } from '@shared/interfaces/exercise/exercise-task-block-metadata.interface';
+import {
+  Focusable,
+  ViewModeType,
+  Action,
+  FormatComponent,
+  TextFormat,
+  ToolbarSupport,
+  CommandUiComponent,
+  ToolbarOutput,
+} from '@shared/models/format';
+import { UpdateTextCommand } from '@shared/commands/update-text-command';
 
 @Component({
   selector: 'app-text-block',
@@ -27,73 +29,59 @@ import { TextBlockMetadata } from '@shared/interfaces/exercise/exercise-task-blo
   templateUrl: './text-block.html',
   styleUrl: './text-block.css',
 })
-export class TextBlock implements BaseBlockComponent<TextBlockMetadata> {
-  answered?: any;
+export class TextBlock implements FormatComponent<TextFormat>, Focusable {
+  @ViewChildren('editable') editableRefs!: QueryList<ElementRef>;
+  protected editing = signal<boolean>(false);
 
-  static readonly blockTemplate: string = 'text';
-  @Input() exerciseId: string = '';
-  readonly block = input.required<WritableSignal<ExerciseTaskBlock<TextBlockMetadata>>>();
-
-  //readonly task = input.required<WritableSignal<ExerciseTask>>();
-
-  commandList = output<CommandUIItem[]>();
-  commandCreated = output<Command>();
-
-  @Input() metadata: any;
-  @Input() editable: boolean = false;
-  @Output() changed = new EventEmitter<void>();
-  isEditing = false;
-
-  @ViewChild('editable') editableRef!: ElementRef;
-
-  ngOnInit() {
-    if (!this.metadata.hasOwnProperty('data')) {
-      (this.metadata as any).data = {};
-      (this.metadata as any).data.content = 'Default Text';
-    }
-
-    this.getCommandConfigs();
-  }
+  viewMode = input.required<ViewModeType>();
+  format = input.required<TextFormat>();
+  actions = output<Action>();
 
   startEditing() {
-    if (this.editable) {
-      this.isEditing = true;
-    }
+    this.editing.set(true);
+
+    this.actions.emit({
+      type: 'toolbar',
+      payload: this,
+    });
   }
 
-  stopEditing() {
-    this.isEditing = false;
+  stopEditing(textarea: HTMLTextAreaElement) {
+    this.editing.set(false);
+    const newValue = textarea.value;
+    this.applyText(newValue);
+  }
+
+  onFocus(): void {
+    throw new Error('Method not implemented.');
   }
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     console.log('klik');
 
-    if (this.isEditing && this.editableRef) {
-      const clickedInside = this.editableRef.nativeElement.contains(event.target);
-      if (!clickedInside) {
-        this.stopEditing();
-        this.changed.emit();
+    if (this.editing() && this.editableRefs) {
+      const clickedInsideAny = this.editableRefs.some((ref) =>
+        ref.nativeElement.contains(event.target),
+      );
+
+      if (!clickedInsideAny) {
+        this.stopEditing(this.editableRefs.first.nativeElement);
       }
     }
   }
 
-  applyText(newText: string) {
-    const currentBlock: ExerciseTaskBlock = this.block()();
-
-    this.block().set({
-      ...currentBlock,
-      metadata: {
-        ...currentBlock.metadata,
-        data: {
-          ...currentBlock.metadata,
-          content: newText,
-        },
-      },
+  applyText(newText: string): void {
+    this.actions.emit({
+      type: 'central',
+      payload: new UpdateTextCommand(this.format(), newText),
     });
   }
 
-  getCommandConfigs(): void {
-    this.commandList.emit([{ component: UpdateTextCommandUi, receiver: this }]);
+  getToolbarCommands(): ToolbarOutput<TextFormat> {
+    return {
+      receiver: this.format(),
+      components: [UpdateTextCommandUi],
+    };
   }
 }

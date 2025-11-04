@@ -1,6 +1,10 @@
 <p>THIS WORKS</p>
 
 @if (exerciseTaskEdit() !== undefined) {
-<p>{{exerciseTaskEdit()!().id}}</p>
+<app-exercise-task-item
+  [task]="exerciseTaskEdit()"
+  [viewMode]="viewMode()"
+></app-exercise-task-item>
+} @else {
+<p>NO TASK SELECTED</p>
 }
-<app-exercise-task-item [task]="exerciseTaskEdit()"></app-exercise-task-item>

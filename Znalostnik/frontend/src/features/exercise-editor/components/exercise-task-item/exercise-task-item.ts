@@ -15,6 +15,10 @@ import { ExerciseTaskDocumentSchemas } from '@shared/models/exercise-task-docume
 import { ExerciseTaskBlockComponents } from '@shared/models/exercise-task-block-components.model';
 import { CommandManager } from '@features/exercise-editor/services/command-manager';
 import { ToolbarManager } from '@features/exercise-editor/services/toolbar-manager';
+import { Task } from '@shared/models/format';
+import { Registry } from '@shared/models/format';
+import { ToolbarSupport, ToolbarOutput } from '@shared/models/format';
+import { ShowBlockCommands } from '@shared/commands/show-block-commands-command';
 
 @Component({
   selector: 'app-exercise-task-item',
@@ -23,7 +27,8 @@ import { ToolbarManager } from '@features/exercise-editor/services/toolbar-manag
   styleUrl: './exercise-task-item.css',
 })
 export class ExerciseTaskItem {
-  readonly task = input.required<WritableSignal<ExerciseTask> | undefined>();
+  readonly viewMode = input.required<'edit' | 'view'>();
+  readonly task = input.required<Task | undefined>();
   readonly commandManager = inject(CommandManager);
   readonly toolbarManager = inject(ToolbarManager);
 
@@ -31,12 +36,14 @@ export class ExerciseTaskItem {
   taskContainer!: ViewContainerRef;
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['task'] && changes['task'].currentValue()) {
+    if (changes['task'] && this.task() !== undefined) {
       this.renderBlocks();
     }
   }
 
   renderBlocks(): void {
+    console.log('REnder');
+
     this.toolbarManager.clear();
     this.taskContainer.clear();
 
@@ -44,65 +51,58 @@ export class ExerciseTaskItem {
       return;
     }
 
-    const task = this.task()!();
+    const task = this.task();
 
     if (task === undefined) {
       return;
     }
 
-    const taskSchema = task.exerciseTaskDocumentSchema;
-    const blocks = task.exerciseTaskBlocks;
+    const taskSchema = task.type();
+    const blocks = task.formats();
 
-    const renderOrder = ExerciseTaskDocumentSchemas.find((s) => s.key === taskSchema)!.renderOrder;
+    for (const block of blocks) {
+      const component = block.component();
 
-    for (const order of renderOrder) {
-      const block = blocks.find((b) => b().taskBlockSchema === order);
-
-      if (!block) {
-        console.warn(`Block of type ${order} not found in exercise`);
+      if (!component) {
         continue;
       }
 
-      console.log('Rendering block:', block());
+      const componentType = Registry.components.get(component);
 
-      const componentType = ExerciseTaskBlockComponents[block().taskBlockTemplate];
-
-      if (!componentType) {
-        console.warn(`Unknown block type: ${block().taskBlockTemplate}`);
+      if (componentType === undefined) {
         continue;
       }
 
       const componentRef = this.taskContainer.createComponent(componentType);
-      componentRef.setInput('block', block);
-      componentRef.setInput('metadata', block().metadata);
-      //componentRef.setInput('editable', this.editable);
-      componentRef.setInput('exerciseId', task.id);
+      componentRef.setInput('viewMode', this.viewMode());
+      componentRef.setInput('format', block);
 
-      componentRef.instance.commandCreated.subscribe((cmd) => {
-        this.commandManager.execute(cmd);
+      componentRef.instance.actions.subscribe((action) => {
+        if (action.type === 'toolbar') {
+          if (this.isToolbarSupport(action.payload)) {
+            const toolbarCmd = new ShowBlockCommands(this.toolbarManager, action.payload);
+            this.commandManager.execute(toolbarCmd);
+          }
+
+          return;
+        }
+
+        if (action.type === 'central') {
+          if (this.isCommand(action.payload)) {
+            this.commandManager.execute(action.payload);
+          }
+
+          return;
+        }
       });
-
-      componentRef.instance.commandList.subscribe((cmd) => {
-        this.toolbarManager.setCommands(cmd);
-      });
-
-      //   if ('changed' in componentRef.instance && componentRef.instance.changed?.subscribe) {
-      //     componentRef.instance.changed.subscribe(() => {
-      //       this.dataChanged.emit();
-      //     });
-      //   }
-
-      //   if ('answer' in componentRef.instance && componentRef.instance.answer?.subscribe) {
-      //     componentRef.instance.answer.subscribe((data: any) => {
-      //       console.log('Answer', data);
-      //       this.answer.emit(data);
-      //     });
-      //   }
-
-      //   if ('answered' in componentRef.instance) {
-      //     componentRef.setInput('answered', this.answered);
-      //   }
-      // }
     }
+  }
+
+  isToolbarSupport(obj: any): obj is ToolbarSupport<any> {
+    return obj && typeof obj.getToolbarCommands === 'function';
+  }
+
+  isCommand(obj: any): obj is Command {
+    return obj && typeof obj.execute === 'function' && typeof obj.undo === 'function';
   }
 }

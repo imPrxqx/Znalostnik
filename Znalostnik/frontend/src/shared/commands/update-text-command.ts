@@ -1,25 +1,22 @@
-import { Component, input } from '@angular/core';
-import { TextBlock } from '@shared/blocks/text-block/text-block';
-import { ExerciseTaskBlock } from '@shared/interfaces/exercise/exercise-task-block.interface';
-import { ExerciseTask } from '@shared/interfaces/exercise/exercise-task.interface';
+import { TextFormat } from '@shared/models/format';
 
 export class UpdateTextCommand implements Command {
-  private receiver: TextBlock;
+  private receiver: TextFormat;
   private backup: string;
   private newText: string;
 
-  constructor(receiver: TextBlock, newText: string) {
+  constructor(receiver: TextFormat, newText: string) {
     this.receiver = receiver;
-    this.backup = structuredClone(receiver.block()().metadata.data.content);
+    this.backup = receiver.getContent();
     this.newText = newText;
   }
 
   undo(): void {
-    this.receiver.applyText(this.backup);
+    this.receiver.setContent(this.backup);
   }
 
-  execute(): void {
-    console.log('Executing UpdateTextCommand with newText:', this.newText);
-    this.receiver.applyText(this.newText);
+  execute(): boolean {
+    this.receiver.setContent(this.newText);
+    return true;
   }
 }

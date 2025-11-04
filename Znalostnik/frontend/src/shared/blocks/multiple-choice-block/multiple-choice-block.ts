@@ -10,14 +10,11 @@ import {
   signal,
   output,
   input,
-  WritableSignal,
 } from '@angular/core';
-import { BaseBlockComponent } from '@shared/models/exercise-task-block-components.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CommandUIItem } from '@shared/interfaces/command/command-items.interface';
-import { MultipleChoiceBlockMetadata } from '@shared/interfaces/exercise/exercise-task-block-metadata.interface';
-import { ExerciseTaskBlock } from '@shared/interfaces/exercise/exercise-task-block.interface';
+import { FormatComponent, ChoiceFormat, ViewModeType, Action } from '@shared/models/format';
 
 @Component({
   selector: 'app-multiple-choice-block',
@@ -25,8 +22,7 @@ import { ExerciseTaskBlock } from '@shared/interfaces/exercise/exercise-task-blo
   templateUrl: './multiple-choice-block.html',
   styleUrl: './multiple-choice-block.css',
 })
-export class MultipleChoiceBlock implements BaseBlockComponent<MultipleChoiceBlockMetadata> {
-  readonly block = input.required<WritableSignal<ExerciseTaskBlock<MultipleChoiceBlockMetadata>>>();
+export class MultipleChoiceBlock implements FormatComponent<ChoiceFormat> {
   static readonly blockTemplate: string = 'multipleChoice';
   @Input() exerciseId: string = '';
   @Input() metadata: any;
@@ -41,6 +37,10 @@ export class MultipleChoiceBlock implements BaseBlockComponent<MultipleChoiceBlo
   isEditing = false;
   @ViewChildren('editable') editableRefs!: QueryList<ElementRef>;
   selectedAnswers = signal<string[]>([]);
+
+  viewMode = input.required<ViewModeType>();
+  format = input.required<ChoiceFormat>();
+  actions = output<Action>();
 
   ngOnInit() {
     // if (!this.metadata.hasOwnProperty('data')) {
@@ -114,20 +114,19 @@ export class MultipleChoiceBlock implements BaseBlockComponent<MultipleChoiceBlo
   }
 
   isOptionCorrect(optionId: string): boolean {
-    return this.metadata.solution.answer.includes(optionId);
+    return true;
+    this.metadata.solution.answer.includes(optionId);
   }
 
   toggleCorrect(optionId: string) {
-    const answers = this.metadata.solution.answer;
-    const index = answers.indexOf(optionId);
-
-    if (index === -1) {
-      answers.push(optionId);
-    } else {
-      answers.splice(index, 1);
-    }
-
-    this.changed.emit();
+    // const answers = this.metadata.solution.answer;
+    // const index = answers.indexOf(optionId);
+    // if (index === -1) {
+    //   answers.push(optionId);
+    // } else {
+    //   answers.splice(index, 1);
+    // }
+    // this.changed.emit();
   }
 
   stopEditing() {

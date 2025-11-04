@@ -6,10 +6,12 @@ export interface TextBlockMetadata extends BaseBlockMetadata {
 
 export interface MultipleChoiceBlockMetadata extends BaseBlockMetadata {
   data: { options: { id: string; content: string }[] };
-  solution: { correctOptions: string[] };
+  solution?: { correctOptions: string[] };
 }
 
 export interface TrueFalseBlockMetadata extends BaseBlockMetadata {
   data: { options: { true: string; false: string }[] };
-  solution: { correctOption: boolean };
+  solution?: { correctOption: boolean };
+  answers?: { answer: boolean };
+  feedback?: { correct: string[]; incorrect: string[] };
 }

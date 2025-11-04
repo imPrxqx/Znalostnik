@@ -2,10 +2,13 @@ import { Injectable, inject, signal, Signal, WritableSignal, linkedSignal } from
 import { ExerciseDocumentManager } from './exercise-document-manager';
 import { ExerciseTask } from '@shared/interfaces/exercise/exercise-task.interface';
 import { ExerciseTaskBlock } from '@shared/interfaces/exercise/exercise-task-block.interface';
-import { ExerciseTaskDocumentSchemaKey } from '@shared/types/exercise-task-document-schema-key.type';
 import { ExerciseTaskDocumentSchemas } from '@shared/models/exercise-task-document-schemas.model';
 import { ExerciseBlockTemplates } from '@shared/models/exercise-task-block-template.model';
-import { ExerciseTaskBlockTemplateKey } from '@shared/types/exercise-task-block-template-key.type';
+import {
+  ExerciseTaskBlockTemplateKey,
+  ExerciseTaskDocumentSchemaKey,
+} from '@shared/types/exercise-key.type';
+import { Exercise, Task } from '@shared/models/format';
 
 @Injectable({
   providedIn: 'root',
@@ -13,107 +16,36 @@ import { ExerciseTaskBlockTemplateKey } from '@shared/types/exercise-task-block-
 export class ExerciseTaskEdit {
   private exerciseDocumentService = inject(ExerciseDocumentManager);
 
-  tasks: WritableSignal<WritableSignal<ExerciseTask>[]> =
-    this.exerciseDocumentService.getExerciseTasks();
-
   private lastSelectedIndex: number | undefined = undefined;
+  task = linkedSignal<Task[], Task | undefined>({
+    source: this.exerciseDocumentService.getTasks(),
+    computation: (source) => {
+      console.log('TASK EDIT COMPUTATION', source, this.lastSelectedIndex);
 
-  editTask = linkedSignal<WritableSignal<ExerciseTask>[], WritableSignal<ExerciseTask> | undefined>(
-    {
-      source: () => this.tasks(),
-      computation: (source) => {
-        if (source.length === 0) {
-          return undefined;
-        }
-
-        if (this.lastSelectedIndex !== undefined && this.lastSelectedIndex < source.length) {
-          return source[this.lastSelectedIndex];
-        }
-
-        this.lastSelectedIndex = source.length - 1;
-
+      if (source.length === 0) {
+        return undefined;
+      }
+      if (this.lastSelectedIndex !== undefined && this.lastSelectedIndex < source.length) {
         return source[this.lastSelectedIndex];
-      },
-    },
-  );
-
-  editExerciseTask(taskId: string): void {
-    this.editTask.set(this.exerciseDocumentService.getExerciseTask(taskId));
-  }
-
-  getEditTask(): WritableSignal<ExerciseTask> {
-    return this.editTask()!;
-  }
-
-  editFirstTask(): void {
-    this.editTask.set(this.exerciseDocumentService.getExerciseTaskIndex(0));
-  }
-
-  changeTaskSchema(newSchema: ExerciseTaskDocumentSchemaKey): void {
-    if (!this.editTask) {
-      return;
-    }
-
-    const newDefaultTask: ExerciseTask = this.createDefaultBody(newSchema);
-    newDefaultTask.id = this.editTask()!().id;
-
-    this.editTask()!.set(newDefaultTask);
-  }
-
-  changeTaskBlockTemplate(part: string, newTemplate: ExerciseTaskBlockTemplateKey): void {
-    const bodyDefaultTemplate = ExerciseBlockTemplates.find((t) => t.key === newTemplate);
-
-    if (!this.editTask || !bodyDefaultTemplate) {
-      return;
-    }
-
-    const blocks = [...this.editTask()!().exerciseTaskBlocks];
-    const index = blocks.findIndex((block) => block().taskBlockSchema === part);
-
-    if (index !== -1) {
-      blocks[index].update((block) => ({
-        ...block,
-        taskBlockTemplate: newTemplate,
-        metadata: structuredClone(bodyDefaultTemplate.defaultMetadata),
-      }));
-    }
-  }
-
-  private createDefaultBody(taskSchema: ExerciseTaskDocumentSchemaKey): ExerciseTask {
-    const newTaskId = this.generateTaskId();
-
-    const schema = ExerciseTaskDocumentSchemas.find((s) => s.key === taskSchema);
-
-    if (!schema) {
-      throw new Error(`Unknown task schema: ${taskSchema}`);
-    }
-
-    const blocks: WritableSignal<ExerciseTaskBlock>[] = schema.bodyMeta.map((blockMeta) => {
-      const bodyTemplate = ExerciseBlockTemplates.find((t) => t.key === blockMeta.defaultTemplate);
-
-      if (!bodyTemplate) {
-        throw new Error(`Unknown template: ${bodyTemplate}`);
       }
 
-      const taskBlock = signal<ExerciseTaskBlock>({
-        taskBlockSchema: blockMeta.key,
-        taskBlockTemplate: blockMeta.defaultTemplate,
-        metadata: structuredClone(bodyTemplate.defaultMetadata()),
-      });
+      this.lastSelectedIndex = source.length - 1;
 
-      return taskBlock;
-    });
+      return source[this.lastSelectedIndex];
+    },
+  });
 
-    const newTask: ExerciseTask = {
-      id: newTaskId,
-      exerciseTaskDocumentSchema: taskSchema,
-      exerciseTaskBlocks: blocks,
-    };
-
-    return newTask;
+  editExerciseTask(taskId: string): void {
+    //this.task.set(this.exerciseDocumentService.getExerciseTask(taskId));
   }
 
-  private generateTaskId(): string {
-    return 'task-' + Math.random().toString(36).substring(2, 7);
+  getEditTask(): Task | undefined {
+    return this.task();
   }
+
+  editFirstTask(): void {}
+
+  changeTaskSchema(newSchema: ExerciseTaskDocumentSchemaKey): void {}
+
+  changeTaskBlockTemplate(part: string, newTemplate: ExerciseTaskBlockTemplateKey): void {}
 }

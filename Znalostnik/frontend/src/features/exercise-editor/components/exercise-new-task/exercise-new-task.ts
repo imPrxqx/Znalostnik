@@ -2,11 +2,10 @@ import { Component, inject, LOCALE_ID, signal } from '@angular/core';
 import { ExerciseDocumentManager } from '../../services/exercise-document-manager';
 import { ExerciseTaskDocumentSchema } from '@shared/interfaces/exercise/exercise-task.interface';
 import { ExerciseTaskDocumentSchemas } from '@shared/models/exercise-task-document-schemas.model';
-import { ExerciseTaskDocumentSchemaKey } from '@shared/types/exercise-task-document-schema-key.type';
+import { ExerciseTaskDocumentSchemaKey } from '@shared/types/exercise-key.type';
 import { ExerciseTaskEdit } from '@features/exercise-editor/services/exercise-task-edit';
-import { CreateTaskCommand } from '@shared/commands/create-task-command';
 import { CommandManager } from '@features/exercise-editor/services/command-manager';
-import { SelectTaskCommand } from '@shared/commands/select-task-command';
+import { CreateSelectTaskCommand } from '@shared/commands/create-select-task-command';
 
 @Component({
   selector: 'app-exercise-new-task',
@@ -26,15 +25,12 @@ export class ExerciseNewTask {
   }
 
   protected addNewTask(taskSchema: ExerciseTaskDocumentSchemaKey) {
-    const commandCreateTask = new CreateTaskCommand(this.exerciseDocumentService, taskSchema);
-    this.commandManager.execute(commandCreateTask);
-
-    const commandSelectTask = new SelectTaskCommand(
+    const commandCreateSelectTask = new CreateSelectTaskCommand(
+      this.exerciseDocumentService,
       this.exerciseTaskService,
-      commandCreateTask.result,
+      taskSchema,
     );
-    this.commandManager.execute(commandSelectTask);
-
+    this.commandManager.execute(commandCreateSelectTask);
     this.isOpenedTaskMenu.set(false);
   }
 }

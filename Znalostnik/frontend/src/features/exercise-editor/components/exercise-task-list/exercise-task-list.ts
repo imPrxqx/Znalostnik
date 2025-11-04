@@ -14,7 +14,7 @@ export class ExerciseTaskList {
 
   protected changeOrder(event: CdkDragDrop<string[]>) {
     moveItemInArray(
-      this.exerciseDocumentService.getExerciseTasks()(),
+      this.exerciseDocumentService.getTasks()(),
       event.previousIndex,
       event.currentIndex,
     );

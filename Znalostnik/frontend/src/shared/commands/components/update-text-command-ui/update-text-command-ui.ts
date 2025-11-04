@@ -1,7 +1,6 @@
-import { Component, input, output } from '@angular/core';
-import { TextBlock } from '@shared/blocks/text-block/text-block';
-import { CommandUI } from '@shared/interfaces/command/command-ui.interface';
+import { Component, input, InputSignal, output, OutputEmitterRef } from '@angular/core';
 import { UpdateTextCommand } from '@shared/commands/update-text-command';
+import { TextFormat, CommandUiComponent } from '@shared/models/format';
 
 @Component({
   selector: 'app-update-text-command-ui',
@@ -9,23 +8,18 @@ import { UpdateTextCommand } from '@shared/commands/update-text-command';
   templateUrl: './update-text-command-ui.html',
   styleUrl: './update-text-command-ui.css',
 })
-export class UpdateTextCommandUi implements CommandUI {
-  receiver = input.required<TextBlock>();
-  commandCreated = output<Command>();
+export class UpdateTextCommandUi implements CommandUiComponent<TextFormat> {
+  format = input.required<TextFormat>();
+  commands = output<Command>();
 
   currentText: string = '';
-
-  ngOnInit() {
-    this.currentText = this.receiver().block()().metadata.data.content;
-  }
 
   onInputChange(value: string) {
     this.currentText = value;
   }
 
   apply() {
-    console.log('Applying text change:', this.currentText);
-    const cmd = new UpdateTextCommand(this.receiver(), this.currentText);
-    this.commandCreated.emit(cmd);
+    const cmd = new UpdateTextCommand(this.format(), this.currentText);
+    this.commands.emit(cmd);
   }
 }
