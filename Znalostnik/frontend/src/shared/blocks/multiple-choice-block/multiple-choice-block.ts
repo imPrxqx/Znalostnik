@@ -14,7 +14,15 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CommandUIItem } from '@shared/interfaces/command/command-items.interface';
-import { FormatComponent, ChoiceFormat, ViewModeType, Action } from '@shared/models/format';
+import {
+  FormatComponentWithResponse,
+  FormatComponent,
+  ChoiceFormat,
+  ViewModeType,
+  Action,
+  ChoiceResponse,
+  TextFormat,
+} from '@shared/models/format';
 
 @Component({
   selector: 'app-multiple-choice-block',
@@ -22,7 +30,9 @@ import { FormatComponent, ChoiceFormat, ViewModeType, Action } from '@shared/mod
   templateUrl: './multiple-choice-block.html',
   styleUrl: './multiple-choice-block.css',
 })
-export class MultipleChoiceBlock implements FormatComponent<ChoiceFormat> {
+export class MultipleChoiceBlock
+  implements FormatComponentWithResponse<ChoiceFormat, ChoiceResponse>
+{
   static readonly blockTemplate: string = 'multipleChoice';
   @Input() exerciseId: string = '';
   @Input() metadata: any;
@@ -35,11 +45,15 @@ export class MultipleChoiceBlock implements FormatComponent<ChoiceFormat> {
   @Output() answer = new EventEmitter<{ exerciseId: string; blockTemplate: string; answer: any }>();
 
   isEditing = false;
-  @ViewChildren('editable') editableRefs!: QueryList<ElementRef>;
   selectedAnswers = signal<string[]>([]);
+
+  @ViewChildren('editable') editableRefs!: QueryList<ElementRef>;
+  protected editing = signal<boolean>(false);
 
   viewMode = input.required<ViewModeType>();
   format = input.required<ChoiceFormat>();
+  response = input<ChoiceResponse>();
+
   actions = output<Action>();
 
   ngOnInit() {

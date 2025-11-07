@@ -33,9 +33,7 @@ export abstract class Format implements VisitorAccept {
 
 export class Exercise implements VisitorAccept {
   id = signal<string>(crypto.randomUUID());
-  mode = signal<string>('online');
-  settings = signal<ExerciseSetting | undefined>(undefined);
-
+  mode = signal<string>('exercise');
   tasks = signal<Task[]>([]);
 
   accept(visitor: Visitor): void {
@@ -87,6 +85,22 @@ export class Exercise implements VisitorAccept {
   getTaskIndexById(taskId: string): number {
     return this.tasks().findIndex((task) => task.id() === taskId);
   }
+}
+
+export class HomeworkExercise extends Exercise {
+  settings = signal<ExerciseSetting | undefined>(undefined);
+  override mode = signal<string>('homework');
+}
+
+export class TestExercise extends Exercise {
+  settings = signal<ExerciseSetting | undefined>(undefined);
+  override mode = signal<string>('test');
+}
+
+export class OnlineExercise extends Exercise {
+  settings = signal<ExerciseSetting | undefined>(undefined);
+  override mode = signal<string>('online');
+  // override tasks = signal<> asi by mel obsahovat jen interaktivni tasky
 }
 
 export abstract class Task implements VisitorAccept {
@@ -166,27 +180,33 @@ export class TextFormat extends Format {
   }
 }
 
-export interface ChoiceOption {
-  id: string;
-  content: string;
+export class ChoiceOption {
+  id: string = crypto.randomUUID();
+  content: string = 'Default Text';
 }
 
-export interface ChoiceData {
-  options: ChoiceOption[];
-  solution: {
-    correctOptions: number[];
-  };
+export abstract class Response {
+  abstract id: string;
+  abstract taskId: string;
+}
+
+export class ChoiceResponse extends Response {
+  id: string = crypto.randomUUID();
+  taskId: string = crypto.randomUUID();
+  answer = signal<number | undefined>(undefined);
+  correct = signal<number | undefined>(undefined);
 }
 
 export class ChoiceFormat extends Format {
   type = signal<string>('choice');
   component = signal<string>('multichoice');
   options = signal<ChoiceOption[]>([
-    { id: crypto.randomUUID(), content: 'Default Option 1' },
-    { id: crypto.randomUUID(), content: 'Default Option 2' },
+    new ChoiceOption(),
+    new ChoiceOption(),
+    new ChoiceOption(),
+    new ChoiceOption(),
   ]);
-  correctAnswers = signal<number[]>([0]);
-  feedback = signal<string | undefined>(undefined);
+  solution = signal<string[] | undefined>(undefined);
 
   override accept(visitor: Visitor): void {
     throw new Error('Method not implemented.');
@@ -213,10 +233,13 @@ export interface FormatComponent<T extends Format> {
   actions: OutputEmitterRef<Action>;
 }
 
-export type ActionType = 'central' | 'toolbar' | 'answer';
+export interface FormatComponentWithResponse<T extends Format, U extends Response>
+  extends FormatComponent<T> {
+  response: InputSignal<U | undefined>;
+}
 
 export interface Action {
-  type: ActionType;
+  type: string;
   payload?: any;
 }
 

@@ -39,11 +39,7 @@ export class TextBlock implements FormatComponent<TextFormat>, Focusable {
 
   startEditing() {
     this.editing.set(true);
-
-    this.actions.emit({
-      type: 'toolbar',
-      payload: this,
-    });
+    this.onFocus();
   }
 
   stopEditing(textarea: HTMLTextAreaElement) {
@@ -53,7 +49,10 @@ export class TextBlock implements FormatComponent<TextFormat>, Focusable {
   }
 
   onFocus(): void {
-    throw new Error('Method not implemented.');
+    this.actions.emit({
+      type: 'toolbar',
+      payload: this,
+    });
   }
 
   @HostListener('document:click', ['$event'])

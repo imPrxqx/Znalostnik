@@ -1,0 +1,5 @@
+<select [ngModel]="currentMode()" (change)="onSelectChange($event)">
+  @for (mode of modes; track mode) {
+  <option [value]="mode">{{ mode }}</option>
+  }
+</select>

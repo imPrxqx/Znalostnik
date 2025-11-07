@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { ExerciseEditor } from '@pages/exercise-editor/exercise-editor';
+import { ExerciseEditor } from '@features/exercise-editor/components/exercise-editor/exercise-editor';
 import { Home } from '@features/home/home';
 import { CreateRoom } from '@features/rooms/components/create-room/create-room';
 import { JoinRoom } from '@features/rooms/components/join-room/join-room';
