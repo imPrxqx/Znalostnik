@@ -1,28 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using backend.Domain;
+using backend.Models;
+using System.Collections;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 
 namespace backend.Models
 {
     public class Exercise
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
-        public string Content { get; set; } = "";
-
-        private JsonElement StripSolutions(JsonElement exerciseDocument)
-        {
-            var node = JsonNode.Parse(exerciseDocument.GetRawText())!;
-
-            foreach (var exercise in node["exercises"]!.AsArray())
-            {
-                foreach (var block in exercise!["blocks"]!.AsArray())
-                {
-                    var metadata = block!["metadata"]!.AsObject();
-                    metadata.Remove("solution");
-                }
-            }
-
-            return JsonSerializer.Deserialize<JsonElement>(node.ToJsonString());
-        }
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public string Title { get; set; } = string.Empty;
+        public string Mode { get; set; } = string.Empty;
+        public JsonDocument Settings { get; set; } = JsonDocument.Parse("{}"); 
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public ICollection<ExerciseTask> Tasks { get; set; } = new List<ExerciseTask>();
+        public List<string> Tags { get; set; } = new List<string>();
+        public string UserId { get; set; } = string.Empty;
+        public User User { get; set; } = null!;
     }
+
 }
