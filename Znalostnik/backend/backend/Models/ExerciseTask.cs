@@ -11,6 +11,6 @@ namespace backend.Models
         public int Order { get; set; } = default(int);
         public JsonDocument Content { get; set; } = JsonDocument.Parse("{}");
         public Guid ExerciseId { get; set; }
-        public Exercise? Exercise { get; set; }
+        public Exercise Exercise { get; set; } = null!;
     }
 }
