@@ -9,12 +9,13 @@ namespace backend.Models
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Title { get; set; } = string.Empty;
         public string Mode { get; set; } = string.Empty;
-        public JsonDocument Settings { get; set; } = JsonDocument.Parse("{}"); 
+        public JsonDocument Settings { get; set; } = JsonDocument.Parse("{}");
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public string UserId { get; set; } = string.Empty;
         public User User { get; set; } = null!;
+        public ICollection<Session> Sessions { get; set; } = new List<Session>();
+        public ICollection<ExerciseTask> ExerciseTasks { get; set; } = new List<ExerciseTask>();
         public ICollection<ExerciseTag> ExerciseTags { get; set; } = new List<ExerciseTag>();
     }
-
 }

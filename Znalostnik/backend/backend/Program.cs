@@ -1,11 +1,10 @@
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
-using backend.Domain;
-using backend.Graders;
+using backend.Data;
+using backend.Data.Repository;
 using backend.Hubs;
-using backend.Managers;
 using backend.Models;
-using backend.Monitors;
+using backend.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
@@ -20,10 +19,7 @@ namespace backend
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -60,30 +56,43 @@ namespace backend
 
             if (!isDesignTime)
             {
-                string X509CertificatePassword = Environment.GetEnvironmentVariable(
-                    "X509_CERTIFICATE_2_PASSWORD"
-                )!;
-                builder
-                    .Services.AddDataProtection()
-                    .PersistKeysToFileSystem(new DirectoryInfo("/app/keys"))
-                    .ProtectKeysWithCertificate(
-                        new X509Certificate2(
-                            "/certificates/certificate.pfx",
-                            X509CertificatePassword
-                        )
-                    );
+                //string X509CertificatePassword = Environment.GetEnvironmentVariable(
+                //    "X509_CERTIFICATE_2_PASSWORD"
+                //)!;
+                //builder
+                //    .Services.AddDataProtection()
+                //    .PersistKeysToFileSystem(new DirectoryInfo("/app/keys"))
+                //    .ProtectKeysWithCertificate(
+                //        new X509Certificate2(
+                //            "/certificates/certificate.pfx",
+                //            X509CertificatePassword
+                //        )
+                //    );
             }
 
             // Logger
             builder.Logging.ClearProviders();
             builder.Logging.AddConsole();
 
-            // SignalR
-            builder.Services.AddSignalR();
+            // Services
+            //builder.Services.AddScoped<ISessionService, SessionService>();
+
+            // Repositories
+            builder.Services.AddScoped<IExerciseTagRepository, ExerciseTagRepository>();
+            builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
+            builder.Services.AddScoped<IExerciseTaskRepository, ExerciseTaskRepository>();
+            builder.Services.AddScoped<ISessionUserRepository, SessionUserRepository>();
+            builder.Services.AddScoped<ISubmissionRepository, SubmissionRepository>();
+            builder.Services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IExerciseTagRepository, ExerciseTagRepository>();
 
             // Background
-            builder.Services.AddHostedService<RoomMonitor>();
-            builder.Services.AddSingleton<RoomManager>();
+            //builder.Services.AddHostedService<RoomMonitor>();
+            //builder.Services.AddSingleton<RoomManager>();
+
+            // SignalR
+            builder.Services.AddSignalR();
 
             // Database
             string server = Environment.GetEnvironmentVariable("DATABASE_SERVER")!;
@@ -142,7 +151,7 @@ namespace backend
             app.UseHttpsRedirection();
 
             // SignalR - Hubs
-            app.MapGroup("/api").MapHub<RoomHub>("/hub");
+            app.MapGroup("/api").MapHub<SessionHub>("/hub");
 
             // Login
             app.MapGroup("/api").MapIdentityApi<User>();
