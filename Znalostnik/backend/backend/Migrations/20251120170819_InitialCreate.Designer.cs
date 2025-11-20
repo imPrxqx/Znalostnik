@@ -13,7 +13,7 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251118161246_InitialCreate")]
+    [Migration("20251120170819_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -324,7 +324,6 @@ namespace backend.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -600,8 +599,7 @@ namespace backend.Migrations
                     b.HasOne("backend.Models.User", "User")
                         .WithMany("SessionUsers")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Session");
 

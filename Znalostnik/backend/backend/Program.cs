@@ -5,6 +5,7 @@ using backend.Data.Repository;
 using backend.Hubs;
 using backend.Models;
 using backend.Services;
+using backend.Services.Legacy;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
@@ -76,6 +77,7 @@ namespace backend
 
             // Services
             //builder.Services.AddScoped<ISessionService, SessionService>();
+            builder.Services.AddScoped<IUserService, UserService>();
 
             // Repositories
             builder.Services.AddScoped<IExerciseTagRepository, ExerciseTagRepository>();
@@ -84,8 +86,7 @@ namespace backend
             builder.Services.AddScoped<ISessionUserRepository, SessionUserRepository>();
             builder.Services.AddScoped<ISubmissionRepository, SubmissionRepository>();
             builder.Services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IExerciseTagRepository, ExerciseTagRepository>();
+            builder.Services.AddScoped<ISessionRepository, SessionRepository>();
 
             // Background
             //builder.Services.AddHostedService<RoomMonitor>();
@@ -154,28 +155,7 @@ namespace backend
             app.MapGroup("/api").MapHub<SessionHub>("/hub");
 
             // Login
-            app.MapGroup("/api").MapIdentityApi<User>();
-            app.MapGroup("/api")
-                .MapGet(
-                    "account/me",
-                    async (ClaimsPrincipal claims, ApplicationDbContext context) =>
-                    {
-                        string userId = claims
-                            .Claims.First(c => c.Type == ClaimTypes.NameIdentifier)
-                            .Value;
-                        return await context.Users.FindAsync(userId);
-                    }
-                )
-                .RequireAuthorization();
-            app.MapGroup("/api")
-                .MapPost(
-                    "/logout",
-                    async (SignInManager<User> signInManager) =>
-                    {
-                        await signInManager.SignOutAsync().ConfigureAwait(false);
-                    }
-                );
-
+            app.MapGroup("/api/user").MapIdentityApi<User>().WithTags("User");
             app.MapControllers();
 
             app.Run();
