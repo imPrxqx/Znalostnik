@@ -1,43 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
-using backend.Graders;
+﻿using backend.DTOs;
 using backend.Models;
-using Humanizer;
+using backend.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/exercise")]
     public class ExerciseController : ControllerBase
     {
-        private ApplicationDbContext _context;
-        private Grader _grader;
+        private readonly IExerciseService _exerciseService;
+        private readonly IUserService _userService;
 
-        public ExerciseController(ApplicationDbContext context, Grader grader)
+        public ExerciseController(IExerciseService exerciseService, IUserService userService)
         {
-            _context = context;
-            _grader = grader;
+            _exerciseService = exerciseService;
+            _userService = userService;
         }
 
-        // GET: Exercises
         [HttpGet]
-        public async Task<IActionResult> Exercises()
+        public async Task<IActionResult> Exercises([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
         {
-            var exercises = await _context.Exercises.ToListAsync();
+            var user = await _userService.GetCurrentUserAsync(User);
+            
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var exercises = await _exerciseService.GetAllUserExercisesAsync(user, page, pageSize);
+
             return Ok(exercises);
         }
 
-        // GET: Exercises/Exercise/5
-        [HttpGet("{exerciseId}")]
-        public async Task<IActionResult> Exercise(string exerciseId)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Exercise(Guid id)
         {
-            var exercise = await _context.Exercises.FindAsync(exerciseId);
+            var user = await _userService.GetCurrentUserAsync(User);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var exercise = await _exerciseService.GetByIdAsync(user, id);
 
             if (exercise == null)
             {
@@ -47,61 +53,85 @@ namespace backend.Controllers
             return Ok(exercise);
         }
 
-        // POST: Exercises/CreateExercise
         [HttpPost]
-        public IActionResult CreateExercise([FromBody] Dictionary<string, string> exerciseData)
+        public async Task<IActionResult> CreateExercise([FromBody] CreateExerciseDto dto)
         {
-            if (
-                exerciseData == null
-                || !exerciseData.TryGetValue("exerciseDocument", out var exerciseDocument)
-            )
+            if (!ModelState.IsValid)
             {
-                return BadRequest("exerciseDocument is required.");
+                return BadRequest(ModelState);
             }
 
-            var exercise = new Exercise { Content = exerciseDocument };
+            var user = await _userService.GetCurrentUserAsync(User);
 
-            _context.Exercises.Add(exercise);
-            _context.SaveChanges();
-
-            return Ok(new { ExerciseId = exercise.Id });
-        }
-
-        // POST: Exercises/GradeExercise
-        [HttpPost("{exerciseId}")]
-        public async Task<IActionResult> GradeExercise(
-            string exerciseId,
-            [FromBody] Dictionary<string, string> exerciseData
-        )
-        {
-            if (
-                exerciseData == null
-                || !exerciseData.TryGetValue("exerciseAnswer", out var exerciseAnswer)
-            )
+            if (user == null)
             {
-                return BadRequest("exerciseAnswer is required.");
-            }
-
-            var exercise = await _context.Exercises.FindAsync(exerciseId);
-
-            if (exercise == null)
-            {
-                return NotFound("Exercise not found.");
+                return NotFound();
             }
 
             try
             {
-                var exerciseJson = JsonDocument.Parse(exercise.Content).RootElement;
-                var answerJson = JsonDocument.Parse(exerciseAnswer).RootElement;
+                var created = await _exerciseService.CreateAsync(user, dto);
 
-                var feedback = _grader.GradeExercise(exerciseJson, answerJson);
-
-                return Ok(feedback);
+                return Ok(created);
             }
-            catch (JsonException)
+            catch (Exception ex)
             {
-                return BadRequest("Invalid JSON format.");
+                return Conflict(new { message = ex.Message });
             }
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateExercise(Guid id, [FromBody] UpdateExerciseDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userService.GetCurrentUserAsync(User);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                var updated = await _exerciseService.UpdateAsync(user, dto);
+                
+                if (!updated)
+                {
+                    return NotFound();
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteExercise(Guid id)
+        {
+            var user = await _userService.GetCurrentUserAsync(User);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+
+            var deleted = await _exerciseService.DeleteAsync(user, id);
+
+            if (!deleted)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
+
     }
 }

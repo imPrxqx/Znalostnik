@@ -17,12 +17,33 @@ namespace backend.Data.Repository
             return await _context.Exercises.FirstOrDefaultAsync(e => e.Id == id);
         }
 
+        public async Task<IEnumerable<Exercise>> GetAllUserExercisesAsync(string userId, int page = 1, int pageSize = 20)
+        {
+            return await _context
+                .Exercises
+                .Where(e => e.UserId == userId)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Exercise>> GetAllAsync(int page = 1, int pageSize = 20)
         {
             return await _context
                 .Exercises.Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
+        }
+        public async Task<IEnumerable<Exercise>> GetAllUserExercisesByTagsAsync(string userId, string[] tags, int page = 1, int pageSize = 20)
+        {
+            return await _context
+            .Exercises
+            .Where(e => e.UserId == userId)
+            .Include(e => e.ExerciseTags)
+            .Where(e => e.ExerciseTags.Any(et => tags.Contains(et.Tag)))
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
         }
 
         public async Task<IEnumerable<Exercise>> GetAllByTagsAsync(
@@ -60,5 +81,7 @@ namespace backend.Data.Repository
                 await _context.SaveChangesAsync();
             }
         }
+
+
     }
 }
