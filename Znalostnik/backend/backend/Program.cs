@@ -3,6 +3,7 @@ using System.Security.Cryptography.X509Certificates;
 using backend.Data;
 using backend.Data.Repository;
 using backend.Hubs;
+using backend.Middleware;
 using backend.Models;
 using backend.Services;
 using backend.Services.Legacy;
@@ -23,6 +24,33 @@ namespace backend
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // Database
+            string server = Environment.GetEnvironmentVariable("DATABASE_SERVER")!;
+            string database = Environment.GetEnvironmentVariable("DATABASE_NAME")!;
+            string username = Environment.GetEnvironmentVariable("DATABASE_USER")!;
+            string password = Environment.GetEnvironmentVariable("DATABASE_PASS")!;
+            string connectionString =
+                $"Server={server};Username={username};Database={database};Password={password}";
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseNpgsql(connectionString)
+            );
+
+            // Cors
+            var allowedOrigins = builder
+                .Configuration.GetValue<string>("allowedOrigins")!
+                .Split(",");
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    policy
+                        .WithOrigins(allowedOrigins)
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
 
             // Login
             builder.Services.AddAuthorization();
@@ -95,35 +123,12 @@ namespace backend
             //builder.Services.AddHostedService<RoomMonitor>();
             //builder.Services.AddSingleton<RoomManager>();
 
+            // Global Exception Handler
+            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+            builder.Services.AddProblemDetails();
+
             // SignalR
             builder.Services.AddSignalR();
-
-            // Database
-            string server = Environment.GetEnvironmentVariable("DATABASE_SERVER")!;
-            string database = Environment.GetEnvironmentVariable("DATABASE_NAME")!;
-            string username = Environment.GetEnvironmentVariable("DATABASE_USER")!;
-            string password = Environment.GetEnvironmentVariable("DATABASE_PASS")!;
-            string connectionString =
-                $"Server={server};Username={username};Database={database};Password={password}";
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(connectionString)
-            );
-
-            // Cors
-            var allowedOrigins = builder
-                .Configuration.GetValue<string>("allowedOrigins")!
-                .Split(",");
-            builder.Services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(policy =>
-                {
-                    policy
-                        .WithOrigins(allowedOrigins)
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials();
-                });
-            });
 
             var app = builder.Build();
 
@@ -160,6 +165,9 @@ namespace backend
             // Login
             app.MapGroup("/api/users").MapIdentityApi<User>().WithTags("User");
             app.MapControllers();
+
+            // Global Exception Handler
+            app.UseExceptionHandler();
 
             app.Run();
         }
