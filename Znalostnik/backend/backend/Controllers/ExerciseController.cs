@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace backend.Controllers
 {
     [ApiController]
-    [Route("api/exercise")]
+    [Route("api/exercises")]
     public class ExerciseController : ControllerBase
     {
         private readonly IExerciseService _exerciseService;
@@ -19,10 +19,13 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Exercises([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+        public async Task<IActionResult> Exercises(
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 20
+        )
         {
             var user = await _userService.GetCurrentUserAsync(User);
-            
+
             if (user == null)
             {
                 return NotFound();
@@ -98,7 +101,7 @@ namespace backend.Controllers
             try
             {
                 var updated = await _exerciseService.UpdateAsync(user, dto);
-                
+
                 if (!updated)
                 {
                     return NotFound();
@@ -122,7 +125,6 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-
             var deleted = await _exerciseService.DeleteAsync(user, id);
 
             if (!deleted)
@@ -132,6 +134,5 @@ namespace backend.Controllers
 
             return Ok();
         }
-
     }
 }

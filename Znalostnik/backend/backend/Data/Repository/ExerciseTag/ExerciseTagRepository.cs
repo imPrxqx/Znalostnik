@@ -12,6 +12,13 @@ namespace backend.Data.Repository
             _context = context;
         }
 
+        public async Task<ExerciseTag?> GetExerciseTagByIdAsync(Guid exerciseId, string tag)
+        {
+            return await _context.ExerciseTags.FirstOrDefaultAsync(et =>
+                et.ExerciseId == exerciseId && et.Tag == tag
+            );
+        }
+
         public async Task<IEnumerable<ExerciseTag>> GetAllTagsByExerciseIdAsync(Guid exerciseId)
         {
             return await _context
@@ -31,9 +38,11 @@ namespace backend.Data.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(ExerciseTag id)
+        public async Task DeleteAsync(Guid exerciseId, string tag)
         {
-            var exerciseTag = await _context.ExerciseTags.FindAsync(id);
+            var exerciseTag = await _context.ExerciseTags.FirstOrDefaultAsync(et =>
+                et.ExerciseId == exerciseId && et.Tag == tag
+            );
 
             if (exerciseTag != null)
             {

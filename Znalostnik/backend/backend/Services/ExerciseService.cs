@@ -68,7 +68,7 @@ namespace backend.Services
                 Settings = dto.Settings,
                 UserId = user.Id,
                 CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                UpdatedAt = DateTime.UtcNow,
             };
 
             await _exerciseRepository.AddAsync(exercise);

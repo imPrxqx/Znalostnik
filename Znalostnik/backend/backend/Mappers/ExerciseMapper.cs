@@ -5,7 +5,6 @@ namespace backend.DTOs
 {
     public static class ExerciseMapper
     {
-
         public static ExerciseDto ToExerciseDto(this Exercise exercise)
         {
             return new ExerciseDto
@@ -15,7 +14,7 @@ namespace backend.DTOs
                 Mode = exercise.Mode,
                 Settings = exercise.Settings,
                 CreatedAt = exercise.CreatedAt,
-                UpdatedAt = exercise.UpdatedAt
+                UpdatedAt = exercise.UpdatedAt,
             };
         }
     }

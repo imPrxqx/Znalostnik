@@ -78,6 +78,9 @@ namespace backend
             // Services
             //builder.Services.AddScoped<ISessionService, SessionService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IExerciseService, ExerciseService>();
+            builder.Services.AddScoped<IExerciseTagService, ExerciseTagService>();
+            builder.Services.AddScoped<IExerciseTaskService, ExerciseTaskService>();
 
             // Repositories
             builder.Services.AddScoped<IExerciseTagRepository, ExerciseTagRepository>();
@@ -155,7 +158,7 @@ namespace backend
             app.MapGroup("/api").MapHub<SessionHub>("/hub");
 
             // Login
-            app.MapGroup("/api/user").MapIdentityApi<User>().WithTags("User");
+            app.MapGroup("/api/users").MapIdentityApi<User>().WithTags("User");
             app.MapControllers();
 
             app.Run();
