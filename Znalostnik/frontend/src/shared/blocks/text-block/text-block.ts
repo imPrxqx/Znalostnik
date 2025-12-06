@@ -8,7 +8,7 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { UpdateTextCommandUi } from '@shared/commands/components/update-text-command-ui/update-text-command-ui';
 import {
@@ -25,7 +25,7 @@ import { UpdateTextCommand } from '@shared/commands/update-text-command';
 
 @Component({
   selector: 'app-text-block',
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './text-block.html',
   styleUrl: './text-block.css',
 })

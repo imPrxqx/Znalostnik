@@ -1,12 +1,12 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { Router } from '@angular/router';
 import { Room } from '../../services/room';
 
 @Component({
   selector: 'app-join-room',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule],
   templateUrl: './join-room.html',
   styleUrl: './join-room.css',
 })

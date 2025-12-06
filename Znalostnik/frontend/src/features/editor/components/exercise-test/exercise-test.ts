@@ -2,11 +2,11 @@ import { Component, signal } from '@angular/core';
 import { Renderer } from '@shared/renderer/renderer';
 import { environment } from '@environments/environment';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-exercise-test',
-  imports: [Renderer, FormsModule, CommonModule],
+  imports: [Renderer, FormsModule],
   templateUrl: './exercise-test.html',
   styleUrl: './exercise-test.css',
 })
