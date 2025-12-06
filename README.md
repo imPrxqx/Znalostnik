@@ -4,7 +4,7 @@ Ročníková a bakalářská práce na téma: Nástroj pro procvičování učiv
 # Požadavky 
 Verze nebo novější
 - Docker 28.1.1 
-- .NET 8
+- .NET 10.0
 - Angular CLI: 20.0.2
 - Node: 22.16.0
 - Package Manager: npm 10.9.2
