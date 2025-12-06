@@ -71,16 +71,9 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            try
-            {
-                var created = await _exerciseService.CreateAsync(user, dto);
+            var created = await _exerciseService.CreateAsync(user, dto);
 
-                return Ok(created);
-            }
-            catch (Exception ex)
-            {
-                return Conflict(new { message = ex.Message });
-            }
+            return Ok(created);
         }
 
         [HttpPut("{id}")]
@@ -98,21 +91,14 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            try
-            {
-                var updated = await _exerciseService.UpdateAsync(user, dto);
+            var updated = await _exerciseService.UpdateAsync(user, dto);
 
-                if (!updated)
-                {
-                    return NotFound();
-                }
-
-                return Ok();
-            }
-            catch (Exception ex)
+            if (!updated)
             {
-                return Conflict(new { message = ex.Message });
+                return NotFound();
             }
+
+            return Ok();
         }
 
         [HttpDelete("{id}")]

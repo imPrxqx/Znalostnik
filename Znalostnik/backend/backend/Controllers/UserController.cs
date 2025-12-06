@@ -1,8 +1,6 @@
-﻿using System.Security.Claims;
-using backend.DTOs;
-using backend.Models;
+﻿using backend.Models;
 using backend.Services;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,14 +8,27 @@ namespace backend.Controllers
 {
     [ApiController]
     [Route("api/users")]
-    [Authorize]
     public class UserController : Controller
     {
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
+        private readonly IConfiguration _configuration;
+        private readonly IServiceProvider _sp;
         private readonly IUserService _userService;
 
-        public UserController(IUserService userService)
+        public UserController(
+            IUserService userService,
+            UserManager<User> userManager,
+            SignInManager<User> signInManager,
+            IConfiguration configuration,
+            IServiceProvider sp
+        )
         {
             _userService = userService;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _configuration = configuration;
+            _sp = sp;
         }
 
         [HttpGet("me")]

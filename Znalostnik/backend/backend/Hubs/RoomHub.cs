@@ -1,119 +1,118 @@
-﻿using System.Collections.Concurrent;
-using backend.Domain;
-using backend.Managers;
-using backend.Monitors;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Primitives;
+﻿//using System.Collections.Concurrent;
 
-namespace backend.Hubs
-{
-    public class RoomHub : Hub
-    {
-        public ILogger Logger { get; set; }
-        public RoomManager RoomManager { get; set; }
+//using backend.Monitors;
+//using Microsoft.AspNetCore.SignalR;
+//using Microsoft.Extensions.Logging;
+//using Microsoft.Extensions.Primitives;
 
-        public RoomHub(ILogger<RoomMonitor> logger, RoomManager roomManager)
-        {
-            Logger = logger;
-            RoomManager = roomManager;
-        }
+//namespace backend.Hubs
+//{
+//    public class RoomHub : Hub
+//    {
+//        public ILogger Logger { get; set; }
+//        public RoomManager RoomManager { get; set; }
 
-        public override async Task OnConnectedAsync()
-        {
-            HttpContext? httpContext = Context.GetHttpContext();
+//        public RoomHub(ILogger<RoomMonitor> logger, RoomManager roomManager)
+//        {
+//            Logger = logger;
+//            RoomManager = roomManager;
+//        }
 
-            if (httpContext == null)
-            {
-                await Clients.Caller.SendAsync("ConnectionRejected");
-                Context.Abort();
-                return;
-            }
+//        public override async Task OnConnectedAsync()
+//        {
+//            HttpContext? httpContext = Context.GetHttpContext();
 
-            IQueryCollection queryCollection = httpContext.Request.Query;
+//            if (httpContext == null)
+//            {
+//                await Clients.Caller.SendAsync("ConnectionRejected");
+//                Context.Abort();
+//                return;
+//            }
 
-            if (queryCollection == null)
-            {
-                await Clients.Caller.SendAsync("ConnectionRejected");
-                Context.Abort();
-                return;
-            }
+//            IQueryCollection queryCollection = httpContext.Request.Query;
 
-            if (
-                !queryCollection.TryGetValue("roomId", out StringValues roomId)
-                || !queryCollection.TryGetValue("username", out StringValues username)
-                || !queryCollection.TryGetValue("password", out StringValues password)
-            )
-            {
-                await Clients.Caller.SendAsync("ConnectionRejected");
-                Context.Abort();
-                return;
-            }
+//            if (queryCollection == null)
+//            {
+//                await Clients.Caller.SendAsync("ConnectionRejected");
+//                Context.Abort();
+//                return;
+//            }
 
-            if (!RoomManager.TryGetRoom(roomId!, out Room? room) || room!.Password != password)
-            {
-                await Clients.Caller.SendAsync("ConnectionRejected");
-                Context.Abort();
-                return;
-            }
+//            if (
+//                !queryCollection.TryGetValue("roomId", out StringValues roomId)
+//                || !queryCollection.TryGetValue("username", out StringValues username)
+//                || !queryCollection.TryGetValue("password", out StringValues password)
+//            )
+//            {
+//                await Clients.Caller.SendAsync("ConnectionRejected");
+//                Context.Abort();
+//                return;
+//            }
 
-            string userId;
+//            if (!RoomManager.TryGetRoom(roomId!, out Room? room) || room!.Password != password)
+//            {
+//                await Clients.Caller.SendAsync("ConnectionRejected");
+//                Context.Abort();
+//                return;
+//            }
 
-            if (Context.User?.Identity?.IsAuthenticated == true)
-            {
-                userId = Context.User.Identity.Name!;
-            }
-            else
-            {
-                userId = "temp-" + Guid.NewGuid();
-            }
+//            string userId;
 
-            room!.PlayerManager.AddPlayer(Context.ConnectionId, new Player(userId, username!));
-            Context.Items["roomId"] = roomId.ToString();
-            List<string> snapshot = room!.PlayerManager.GetPlayerUsernames();
+//            if (Context.User?.Identity?.IsAuthenticated == true)
+//            {
+//                userId = Context.User.Identity.Name!;
+//            }
+//            else
+//            {
+//                userId = "temp-" + Guid.NewGuid();
+//            }
 
-            await Groups.AddToGroupAsync(Context.ConnectionId, roomId!);
-            await Clients.Group(roomId!).SendAsync("UpdatePlayers", snapshot);
-            await Clients.Caller.SendAsync("ConnectionAccepted");
-            await base.OnConnectedAsync();
+//            room!.PlayerManager.AddPlayer(Context.ConnectionId, new Player(userId, username!));
+//            Context.Items["roomId"] = roomId.ToString();
+//            List<string> snapshot = room!.PlayerManager.GetPlayerUsernames();
 
-            Logger.LogInformation(
-                "[User] {username} joined room {room} with user id {usedId}",
-                username,
-                roomId,
-                userId
-            );
-            Logger.LogInformation(
-                "[Room] {roomId}] Player list updated: {count} players",
-                roomId,
-                snapshot.Count
-            );
-        }
+//            await Groups.AddToGroupAsync(Context.ConnectionId, roomId!);
+//            await Clients.Group(roomId!).SendAsync("UpdatePlayers", snapshot);
+//            await Clients.Caller.SendAsync("ConnectionAccepted");
+//            await base.OnConnectedAsync();
 
-        public override async Task OnDisconnectedAsync(Exception? exception)
-        {
-            if (Context.Items.TryGetValue("roomId", out var roomIdObj))
-            {
-                string roomId = (string)roomIdObj!;
+//            Logger.LogInformation(
+//                "[User] {username} joined room {room} with user id {usedId}",
+//                username,
+//                roomId,
+//                userId
+//            );
+//            Logger.LogInformation(
+//                "[Room] {roomId}] Player list updated: {count} players",
+//                roomId,
+//                snapshot.Count
+//            );
+//        }
 
-                if (RoomManager.Rooms.TryGetValue(roomId, out var room))
-                {
-                    string username = room.PlayerManager.GetPlayerUsername(Context.ConnectionId);
-                    room.PlayerManager.RemovePlayer(Context.ConnectionId);
-                    List<string> snapshot = room.PlayerManager.GetPlayerUsernames();
+//        public override async Task OnDisconnectedAsync(Exception? exception)
+//        {
+//            if (Context.Items.TryGetValue("roomId", out var roomIdObj))
+//            {
+//                string roomId = (string)roomIdObj!;
 
-                    await Clients.Group(roomId).SendAsync("UpdatePlayers", snapshot);
+//                if (RoomManager.Rooms.TryGetValue(roomId, out var room))
+//                {
+//                    string username = room.PlayerManager.GetPlayerUsername(Context.ConnectionId);
+//                    room.PlayerManager.RemovePlayer(Context.ConnectionId);
+//                    List<string> snapshot = room.PlayerManager.GetPlayerUsernames();
 
-                    Logger.LogInformation("[User] {username} left room {room}", username, roomId);
-                    Logger.LogInformation(
-                        "[Room {roomId}] Player list updated: {count} players",
-                        roomId,
-                        snapshot.Count
-                    );
-                }
-            }
+//                    await Clients.Group(roomId).SendAsync("UpdatePlayers", snapshot);
 
-            await base.OnDisconnectedAsync(exception);
-        }
-    }
-}
+//                    Logger.LogInformation("[User] {username} left room {room}", username, roomId);
+//                    Logger.LogInformation(
+//                        "[Room {roomId}] Player list updated: {count} players",
+//                        roomId,
+//                        snapshot.Count
+//                    );
+//                }
+//            }
+
+//            await base.OnDisconnectedAsync(exception);
+//        }
+//    }
+//}

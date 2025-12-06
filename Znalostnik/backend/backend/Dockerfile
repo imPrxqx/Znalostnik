@@ -1,7 +1,7 @@
 # Na https://aka.ms/customizecontainer se dozvíte, jak si přizpůsobit kontejner ladění a jak Visual Studio používá tento dokument Dockerfile k sestavení vašich imagí pro rychlejší ladění.
 
 # Tato fáze se používá při spuštění z VS v rychlém režimu (výchozí pro konfiguraci ladění).
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
 
 USER root
 RUN apt-get update
@@ -14,7 +14,7 @@ EXPOSE 8080
 EXPOSE 8081
 
 # Tato fáze slouží k sestavení projektu služby.
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["backend/backend.csproj", "backend/"]

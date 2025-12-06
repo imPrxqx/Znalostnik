@@ -29,6 +29,8 @@ namespace backend.Controllers
             Guid exerciseId
         )
         {
+            if (User.Identity != null && User.Identity.IsAuthenticated) { }
+
             var user = await _userService.GetCurrentUserAsync(User);
 
             if (user == null)

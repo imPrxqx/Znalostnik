@@ -6,12 +6,8 @@ using backend.Hubs;
 using backend.Middleware;
 using backend.Models;
 using backend.Services;
-using backend.Services.Legacy;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace backend
 {
@@ -26,12 +22,16 @@ namespace backend
             builder.Services.AddSwaggerGen();
 
             // Database
-            string server = Environment.GetEnvironmentVariable("DATABASE_SERVER")!;
-            string database = Environment.GetEnvironmentVariable("DATABASE_NAME")!;
-            string username = Environment.GetEnvironmentVariable("DATABASE_USER")!;
-            string password = Environment.GetEnvironmentVariable("DATABASE_PASS")!;
-            string connectionString =
-                $"Server={server};Username={username};Database={database};Password={password}";
+            //string server = Environment.GetEnvironmentVariable("DATABASE_SERVER")!;
+            //string database = Environment.GetEnvironmentVariable("DATABASE_NAME")!;
+            //string username = Environment.GetEnvironmentVariable("DATABASE_USER")!;
+            //string password = Environment.GetEnvironmentVariable("DATABASE_PASS")!;
+            var connectionString =
+                Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true"
+                    ? "Server=host.docker.internal;Database=postgres;Username=postgres;Password=example"
+                    : builder.Configuration.GetConnectionString("DatabaseConnection");
+
+            Console.WriteLine(connectionString);
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(connectionString)
             );
@@ -79,9 +79,6 @@ namespace backend
             var isDesignTime = AppDomain
                 .CurrentDomain.GetAssemblies()
                 .Any(a => a.FullName!.StartsWith("Microsoft.EntityFrameworkCore.Design"));
-
-            // Grader
-            builder.Services.AddSingleton<Grader>();
 
             if (!isDesignTime)
             {
