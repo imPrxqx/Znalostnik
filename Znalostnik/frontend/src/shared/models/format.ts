@@ -3,44 +3,20 @@ import { TextBlock } from '@shared/blocks/text-block/text-block';
 import { MultipleChoiceBlock } from '@shared/blocks/multiple-choice-block/multiple-choice-block';
 import { UpdateTextCommandUi } from '@shared/commands/components/update-text-command-ui/update-text-command-ui';
 
-export interface ExerciseSetting {
-  teamwork: boolean;
-  timer: number;
-}
-
-export interface TaskSetting {
-  points: number;
-  timer: number;
-}
-
 export interface VisitorAccept {
   accept(visitor: Visitor): void;
 }
 
-export abstract class Format implements VisitorAccept {
-  id: WritableSignal<string>;
-  abstract type: WritableSignal<string>;
-  abstract component: WritableSignal<string>;
-
-  constructor() {
-    this.id = signal(crypto.randomUUID());
-  }
-
-  accept(visitor: Visitor): void {
-    throw new Error('Method not implemented.');
-  }
-}
-
-export class Exercise implements VisitorAccept {
+export abstract class Exercise<T extends Task> implements VisitorAccept {
   id = signal<string>(crypto.randomUUID());
-  mode = signal<string>('exercise');
-  tasks = signal<Task[]>([]);
+  abstract mode: WritableSignal<string>;
+  tasks = signal<T[]>([]);
 
   accept(visitor: Visitor): void {
     throw new Error('Method not implemented.');
   }
 
-  deleteTask(task: Task): void {
+  deleteTask(task: T): void {
     const currentTasks = this.tasks();
     const index = currentTasks.indexOf(task);
     if (index !== -1) {
@@ -58,27 +34,27 @@ export class Exercise implements VisitorAccept {
     }
   }
 
-  addTask(task: Task): void {
+  addTask(task: T): void {
     const currentTasks = [...this.tasks()];
     currentTasks.push(task);
     this.tasks.set(currentTasks);
   }
 
-  addTaskAt(task: Task, index: number): void {
+  addTaskAt(task: T, index: number): void {
     const currentTasks = [...this.tasks()];
     currentTasks.splice(index, 0, task);
     this.tasks.set(currentTasks);
   }
 
-  getTasks() {
+  getTasks(): WritableSignal<T[]> {
     return this.tasks;
   }
 
-  getTaskById(taskId: string): Task | undefined {
+  getTaskById(taskId: string): T | undefined {
     return this.tasks().find((task) => task.id() === taskId);
   }
 
-  getIndexOfTask(task: Task): number {
+  getIndexOfTask(task: T): number {
     return this.tasks().indexOf(task);
   }
 
@@ -87,27 +63,36 @@ export class Exercise implements VisitorAccept {
   }
 }
 
-export class HomeworkExercise extends Exercise {
-  settings = signal<ExerciseSetting | undefined>(undefined);
-  override mode = signal<string>('homework');
+export class HomeworkExercise extends Exercise<HomeworkTask & Task> {
+  mode = signal('homework');
 }
 
-export class TestExercise extends Exercise {
-  settings = signal<ExerciseSetting | undefined>(undefined);
-  override mode = signal<string>('test');
+export class TestExercise extends Exercise<TestTask & Task> {
+  mode = signal('test');
 }
 
-export class OnlineExercise extends Exercise {
-  settings = signal<ExerciseSetting | undefined>(undefined);
-  override mode = signal<string>('online');
-  // override tasks = signal<> asi by mel obsahovat jen interaktivni tasky
+export class InteractiveExercise extends Exercise<InteractiveTask & Task> {
+  mode = signal('interactive');
+  teacherViewData = signal<any>(null);
+}
+
+export interface InteractiveTask {
+  __interactiveTask: true;
+}
+
+export interface HomeworkTask {
+  __homeworkTask: true;
+}
+
+export interface TestTask {
+  __testTask: true;
 }
 
 export abstract class Task implements VisitorAccept {
   id: WritableSignal<string>;
   abstract type: WritableSignal<string>;
   abstract formats: WritableSignal<Format[]>;
-  abstract settings: WritableSignal<TaskSetting | undefined>;
+  abstract settings: WritableSignal<undefined>;
 
   constructor() {
     this.id = signal(crypto.randomUUID());
@@ -116,20 +101,35 @@ export abstract class Task implements VisitorAccept {
   abstract accept(visitor: Visitor): void;
 }
 
-export class Quiz extends Task {
+export abstract class QuizTask extends Task {
   type = signal<string>('quiz');
+
+  question = signal<TextFormat>(new TextFormat());
+  answer = signal<ChoiceFormat>(new ChoiceFormat());
+
   formats = signal<Format[]>([new TextFormat(), new ChoiceFormat()]);
-  settings = signal<TaskSetting | undefined>(undefined);
+  settings = signal<undefined>(undefined);
 
   override accept(visitor: Visitor): void {
     throw new Error('Method not implemented.');
   }
 }
 
+export class HomeworkQuiz extends QuizTask implements HomeworkTask {
+  __homeworkTask: true = true;
+}
+export class InteractiveQuiz extends QuizTask implements InteractiveTask {
+  __interactiveTask: true = true;
+}
+export class TestQuiz extends QuizTask implements TestTask {
+  __testTask: true = true;
+}
+
 export class Puzzle extends Task {
   type = signal<string>('quiz');
+  question = signal<ChoiceFormat>(new ChoiceFormat());
   formats = signal<Format[]>([]);
-  settings = signal<TaskSetting | undefined>(undefined);
+  settings = signal<undefined>(undefined);
 
   override accept(visitor: Visitor): void {
     throw new Error('Method not implemented.');
@@ -137,18 +137,18 @@ export class Puzzle extends Task {
 }
 
 export interface Visitor {
-  visitExercise(exercise: Exercise): void;
-  visitQuiz(task: Quiz): void;
+  visitExercise(exercise: Exercise<any>): void;
+  visitQuiz(task: QuizTask): void;
   visitPuzzle(puzzle: Puzzle): void;
   visitChoiceFormat(choiceFormat: ChoiceFormat): void;
   visitTextFormat(textFormat: TextFormat): void;
 }
 
 export class JsonExportVisitor implements Visitor {
-  visitExercise(exercise: Exercise): void {
+  visitExercise(exercise: Exercise<any>): void {
     throw new Error('Method not implemented.');
   }
-  visitQuiz(task: Quiz): void {
+  visitQuiz(task: QuizTask): void {
     throw new Error('Method not implemented.');
   }
   visitPuzzle(puzzle: Puzzle): void {
@@ -158,6 +158,32 @@ export class JsonExportVisitor implements Visitor {
     throw new Error('Method not implemented.');
   }
   visitTextFormat(): void {
+    throw new Error('Method not implemented.');
+  }
+}
+
+export abstract class Response {
+  abstract id: string;
+  abstract taskId: string;
+}
+
+export class ChoiceResponse extends Response {
+  id: string = crypto.randomUUID();
+  taskId: string = crypto.randomUUID();
+  answer = signal<number | undefined>(undefined);
+  correct = signal<number | undefined>(undefined);
+}
+
+export abstract class Format implements VisitorAccept {
+  id: WritableSignal<string>;
+  abstract type: WritableSignal<string>;
+  abstract component: WritableSignal<string>;
+
+  constructor() {
+    this.id = signal(crypto.randomUUID());
+  }
+
+  accept(visitor: Visitor): void {
     throw new Error('Method not implemented.');
   }
 }
@@ -180,26 +206,9 @@ export class TextFormat extends Format {
   }
 }
 
-export class ChoiceOption {
-  id: string = crypto.randomUUID();
-  content: string = 'Default Text';
-}
-
-export abstract class Response {
-  abstract id: string;
-  abstract taskId: string;
-}
-
-export class ChoiceResponse extends Response {
-  id: string = crypto.randomUUID();
-  taskId: string = crypto.randomUUID();
-  answer = signal<number | undefined>(undefined);
-  correct = signal<number | undefined>(undefined);
-}
-
 export class ChoiceFormat extends Format {
-  type = signal<string>('choice');
-  component = signal<string>('multichoice');
+  type = signal<'choice'>('choice');
+  component = signal<'multichoice'>('multichoice');
   options = signal<ChoiceOption[]>([
     new ChoiceOption(),
     new ChoiceOption(),
@@ -211,6 +220,11 @@ export class ChoiceFormat extends Format {
   override accept(visitor: Visitor): void {
     throw new Error('Method not implemented.');
   }
+}
+
+export class ChoiceOption {
+  id: string = crypto.randomUUID();
+  content: string = 'Default Text';
 }
 
 export type ToolbarOutput<T extends Format> = {
@@ -258,16 +272,57 @@ export interface TaskValidator {
   validate(task: Task): boolean;
 }
 
+type Mode = 'homework' | 'test';
+
+interface ModeRegistryEntry<T> {
+  [mode: string]: Type<T>;
+}
+
 export class Registry {
   static components = new Map<string, Type<FormatComponent<any>>>([
     ['text', TextBlock],
     ['multichoice', MultipleChoiceBlock],
   ]);
 
-  static tasks = new Map<string, Type<Task>>([
-    ['quiz', Quiz],
-    ['puzzle', Puzzle],
-  ]);
+  static exercises: Record<string, Type<Exercise<any>>> = {
+    interactive: InteractiveExercise,
+    test: TestExercise,
+    homework: HomeworkExercise,
+  };
+
+  static tasks: Record<string, ModeRegistryEntry<Task>> = {
+    quiz: {
+      homework: HomeworkQuiz,
+      test: TestQuiz,
+      interactive: InteractiveQuiz,
+    },
+  };
+
+  static getExercise(key: string): Type<Exercise<any>> {
+    const exercise = this.exercises[key];
+
+    if (!exercise) {
+      throw new Error(`Unknown exercise key: ${key}`);
+    }
+
+    return exercise;
+  }
+
+  static getTask(key: string, mode: string): Type<Task> {
+    const entry = this.tasks[key];
+
+    if (!entry) {
+      throw new Error(`Unknown task key: ${key}`);
+    }
+
+    const taskClass = entry[mode];
+
+    if (!taskClass) {
+      throw new Error(`No task class for key "${key}" in mode "${mode}"`);
+    }
+
+    return taskClass;
+  }
 
   static formats = new Map<string, Type<Format>>([
     ['text', TextFormat],
@@ -280,3 +335,7 @@ export class Registry {
 }
 
 export class DocumentBuilder {}
+
+const homeworkExercise: Exercise<any> = new TestExercise();
+homeworkExercise.addTask(new HomeworkQuiz());
+homeworkExercise.addTask(new TestQuiz());

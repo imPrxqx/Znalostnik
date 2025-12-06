@@ -1,12 +1,16 @@
-import { Injectable, WritableSignal, signal } from '@angular/core';
+import { Injectable, WritableSignal, computed, signal, inject } from '@angular/core';
 import { ExerciseDocument } from '@shared/interfaces/exercise/exercise-document.interface';
-import { Exercise, Task, Registry } from '@shared/models/format';
+import { Exercise, Task, Registry, HomeworkExercise } from '@shared/models/format';
+import { EditorManager } from './editor-manager';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ExerciseDocumentManager {
-  private exercise = signal<Exercise>(new Exercise());
+  editorService = inject(EditorManager);
+  currentMode = computed(() => this.editorService.mode());
+
+  exercise = signal<Exercise<any>>(new (Registry.getExercise(this.currentMode()))());
 
   addTask(task: Task): void {
     this.exercise().addTask(task);
@@ -17,7 +21,7 @@ export class ExerciseDocumentManager {
   }
 
   createTask(schema: string): Task {
-    const task = Registry.tasks.get(schema)!;
+    const task = Registry.getTask(schema, this.currentMode())!;
     const newTask = new task();
     return newTask;
   }

@@ -13,7 +13,7 @@ import { ChangeModeComponent } from '@shared/commands/change-mode-command';
 export class SwitchMode {
   editorService = inject(EditorManager);
   commandManager = inject(CommandManager);
-  modes: string[] = ['homework', 'test', 'online', 'exercise'];
+  modes: string[] = ['homework', 'test', 'interactive', 'exercise'];
 
   currentMode = computed(() => this.editorService.mode());
 

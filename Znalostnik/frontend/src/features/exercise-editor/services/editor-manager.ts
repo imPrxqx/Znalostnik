@@ -4,7 +4,7 @@ import { Injectable, signal } from '@angular/core';
   providedIn: 'root',
 })
 export class EditorManager {
-  mode = signal<string>('online');
+  mode = signal<string>('interactive');
 
   setMode(mode: string) {
     this.mode.set(mode);

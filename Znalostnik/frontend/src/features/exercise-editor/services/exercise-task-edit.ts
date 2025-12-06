@@ -21,7 +21,7 @@ export class ExerciseTaskEdit {
     source: this.exerciseDocumentService.getTasks(),
     computation: (source) => {
       console.log('TASK EDIT COMPUTATION', source, this.lastSelectedIndex);
-
+      console.log('Exercise', this.exerciseDocumentService.exercise());
       if (source.length === 0) {
         return undefined;
       }
