@@ -8,7 +8,7 @@ import { ChangeModeComponent } from '@shared/commands/change-mode-command';
   selector: 'app-switch-mode',
   imports: [FormsModule],
   templateUrl: './switch-mode.html',
-  styleUrl: './switch-mode.css',
+  styleUrl: './switch-mode.scss',
 })
 export class SwitchMode {
   editorService = inject(EditorManager);

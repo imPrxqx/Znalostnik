@@ -247,8 +247,10 @@ export interface FormatComponent<T extends Format> {
   actions: OutputEmitterRef<Action>;
 }
 
-export interface FormatComponentWithResponse<T extends Format, U extends Response>
-  extends FormatComponent<T> {
+export interface FormatComponentWithResponse<
+  T extends Format,
+  U extends Response,
+> extends FormatComponent<T> {
   response: InputSignal<U | undefined>;
 }
 

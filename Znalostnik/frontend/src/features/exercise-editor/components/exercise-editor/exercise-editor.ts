@@ -20,7 +20,7 @@ import { ExerciseShortcuts } from '@features/exercise-editor/directives/exercise
     SwitchMode,
   ],
   templateUrl: './exercise-editor.html',
-  styleUrl: './exercise-editor.css',
+  styleUrl: './exercise-editor.scss',
   hostDirectives: [ExerciseShortcuts],
 })
 export class ExerciseEditor {}

@@ -5,7 +5,7 @@ import { CentralEditor } from '../../services/central-editor';
   selector: 'app-list-exercises',
   imports: [],
   templateUrl: './list-exercises.html',
-  styleUrl: './list-exercises.css',
+  styleUrl: './list-exercises.scss',
 })
 export class ListExercises {
   centralEditorService: CentralEditor = inject(CentralEditor);

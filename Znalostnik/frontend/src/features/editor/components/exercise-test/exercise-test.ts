@@ -3,12 +3,11 @@ import { Renderer } from '@shared/renderer/renderer';
 import { environment } from '@environments/environment';
 import { FormsModule } from '@angular/forms';
 
-
 @Component({
   selector: 'app-exercise-test',
   imports: [Renderer, FormsModule],
   templateUrl: './exercise-test.html',
-  styleUrl: './exercise-test.css',
+  styleUrl: './exercise-test.scss',
 })
 export class ExerciseTest {
   answers = { answers: [] };

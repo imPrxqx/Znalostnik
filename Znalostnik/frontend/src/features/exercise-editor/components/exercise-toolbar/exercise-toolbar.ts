@@ -8,7 +8,7 @@ import { CommandManager } from '@features/exercise-editor/services/command-manag
   selector: 'app-exercise-toolbar',
   imports: [ExerciseRedo, ExerciseUndo],
   templateUrl: './exercise-toolbar.html',
-  styleUrl: './exercise-toolbar.css',
+  styleUrl: './exercise-toolbar.scss',
 })
 export class ExerciseToolbar {
   toolbarManager = inject(ToolbarManager);

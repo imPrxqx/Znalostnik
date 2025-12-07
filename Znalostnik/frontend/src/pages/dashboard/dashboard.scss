@@ -1,0 +1,21 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+mat-sidenav-container {
+  flex: 1;
+  height: auto;
+}
+
+.flat {
+  border-radius: 0;
+  background-color: var(--mat-sys-primary-container);
+}

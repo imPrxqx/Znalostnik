@@ -15,7 +15,7 @@ import { SequenceMode } from '@shared/sequence-mode/sequence-mode';
   selector: 'app-renderer',
   imports: [],
   templateUrl: './renderer.html',
-  styleUrl: './renderer.css',
+  styleUrl: './renderer.scss',
 })
 export class Renderer {
   @ViewChild('modeContainer', { read: ViewContainerRef, static: true })

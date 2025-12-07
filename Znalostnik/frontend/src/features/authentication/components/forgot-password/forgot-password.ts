@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   selector: 'app-forgot-password',
   imports: [FormsModule],
   templateUrl: './forgot-password.html',
-  styleUrl: './forgot-password.css',
+  styleUrl: './forgot-password.scss',
 })
 export class ForgotPassword {
   router: Router = inject(Router);

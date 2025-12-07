@@ -9,7 +9,7 @@ import { RemoveTaskCommand } from '@shared/commands/remove-task-command';
   selector: 'app-exercise-task-item-overview',
   imports: [],
   templateUrl: './exercise-task-item-overview.html',
-  styleUrl: './exercise-task-item-overview.css',
+  styleUrl: './exercise-task-item-overview.scss',
 })
 export class ExerciseTaskItemOverview {
   commandManager = inject(CommandManager);

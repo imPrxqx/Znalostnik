@@ -6,7 +6,7 @@ import { TextFormat, CommandUiComponent } from '@shared/models/format';
   selector: 'app-update-text-command-ui',
   imports: [],
   templateUrl: './update-text-command-ui.html',
-  styleUrl: './update-text-command-ui.css',
+  styleUrl: './update-text-command-ui.scss',
 })
 export class UpdateTextCommandUi implements CommandUiComponent<TextFormat> {
   format = input.required<TextFormat>();

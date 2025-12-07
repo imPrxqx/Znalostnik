@@ -8,7 +8,7 @@ import { signal } from '@angular/core';
   selector: 'app-create-room',
   imports: [FormsModule],
   templateUrl: './create-room.html',
-  styleUrl: './create-room.css',
+  styleUrl: './create-room.scss',
 })
 export class CreateRoom {
   createRoomFailed = signal<boolean>(false);

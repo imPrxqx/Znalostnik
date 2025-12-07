@@ -6,7 +6,7 @@ import { ExerciseDocument } from '@shared/interfaces/exercise/exercise-document.
   selector: 'app-exercise-import',
   imports: [],
   templateUrl: './exercise-import.html',
-  styleUrl: './exercise-import.css',
+  styleUrl: './exercise-import.scss',
 })
 export class ExerciseImport {
   exerciseDocumentService: ExerciseDocumentManager = inject(ExerciseDocumentManager);

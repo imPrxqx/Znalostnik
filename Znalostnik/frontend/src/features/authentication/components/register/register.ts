@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   selector: 'app-register',
   imports: [FormsModule],
   templateUrl: './register.html',
-  styleUrl: './register.css',
+  styleUrl: './register.scss',
 })
 export class Register {
   router: Router = inject(Router);

@@ -24,7 +24,7 @@ import { ShowBlockCommands } from '@shared/commands/show-block-commands-command'
   selector: 'app-exercise-task-item',
   imports: [],
   templateUrl: './exercise-task-item.html',
-  styleUrl: './exercise-task-item.css',
+  styleUrl: './exercise-task-item.scss',
 })
 export class ExerciseTaskItem {
   readonly viewMode = input.required<'edit' | 'view'>();

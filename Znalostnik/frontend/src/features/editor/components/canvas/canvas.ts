@@ -8,7 +8,7 @@ import { CentralEditor } from '@features/editor/services/central-editor';
   selector: 'app-canvas',
   imports: [Renderer, ToolBar, ListExercises],
   templateUrl: './canvas.html',
-  styleUrl: './canvas.css',
+  styleUrl: './canvas.scss',
 })
 export class Canvas {
   centralEditorService: CentralEditor = inject(CentralEditor);

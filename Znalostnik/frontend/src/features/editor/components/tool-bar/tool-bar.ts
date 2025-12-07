@@ -6,7 +6,7 @@ import { CentralEditor } from '../../services/central-editor';
   selector: 'app-tool-bar',
   imports: [],
   templateUrl: './tool-bar.html',
-  styleUrl: './tool-bar.css',
+  styleUrl: './tool-bar.scss',
 })
 export class ToolBar {
   allDocumentGroups: any[] = [];

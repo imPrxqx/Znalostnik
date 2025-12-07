@@ -13,10 +13,17 @@ import { ForgotPassword } from '@features/authentication/components/forgot-passw
 
 import { Canvas } from '@features/editor/components/canvas/canvas';
 import { ExerciseTest } from '@features/editor/components/exercise-test/exercise-test';
+import { Dashboard } from '@pages/dashboard/dashboard';
+import { MainLayout } from '@shared/components/main-layout/main-layout';
 export const routes: Routes = [
   {
     path: '',
-    component: Home,
+    component: MainLayout,
+    children: [{ path: '', component: Home }],
+  },
+  {
+    path: 'dashboard',
+    component: Dashboard,
   },
   {
     path: 'exercise-test',

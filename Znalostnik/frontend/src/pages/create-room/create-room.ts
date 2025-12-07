@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-create-room',
   imports: [],
   templateUrl: './create-room.html',
-  styleUrl: './create-room.css',
+  styleUrl: './create-room.scss',
 })
 export class CreateRoom {}

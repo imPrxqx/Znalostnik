@@ -9,7 +9,7 @@ import { signal } from '@angular/core';
   selector: 'app-login',
   imports: [FormsModule, RouterLink],
   templateUrl: './login.html',
-  styleUrl: './login.css',
+  styleUrl: './login.scss',
 })
 export class Login {
   authService: Authentication = inject(Authentication);

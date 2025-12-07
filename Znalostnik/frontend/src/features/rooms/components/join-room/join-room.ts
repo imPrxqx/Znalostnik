@@ -8,7 +8,7 @@ import { Room } from '../../services/room';
   selector: 'app-join-room',
   imports: [FormsModule],
   templateUrl: './join-room.html',
-  styleUrl: './join-room.css',
+  styleUrl: './join-room.scss',
 })
 export class JoinRoom implements OnInit {
   roomId: string = '';

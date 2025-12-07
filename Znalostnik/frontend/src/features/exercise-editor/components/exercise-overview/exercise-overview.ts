@@ -6,6 +6,6 @@ import { ExerciseTaskList } from '../exercise-task-list/exercise-task-list';
   selector: 'app-exercise-overview',
   imports: [ExerciseNewTask, ExerciseTaskList],
   templateUrl: './exercise-overview.html',
-  styleUrl: './exercise-overview.css',
+  styleUrl: './exercise-overview.scss',
 })
 export class ExerciseOverview {}

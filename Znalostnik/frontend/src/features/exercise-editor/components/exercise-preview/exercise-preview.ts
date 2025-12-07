@@ -6,7 +6,7 @@ import { ExerciseTaskItem } from '../exercise-task-item/exercise-task-item';
   selector: 'app-exercise-preview',
   imports: [ExerciseTaskItem],
   templateUrl: './exercise-preview.html',
-  styleUrl: './exercise-preview.css',
+  styleUrl: './exercise-preview.scss',
 })
 export class ExercisePreview {
   protected readonly viewMode = signal<'edit' | 'view'>('edit');

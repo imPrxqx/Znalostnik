@@ -19,7 +19,7 @@ import { ExerciseTaskBlock } from '@shared/interfaces/exercise/exercise-task-blo
   selector: 'app-true-false-block',
   imports: [CommonModule],
   templateUrl: './true-false-block.html',
-  styleUrl: './true-false-block.css',
+  styleUrl: './true-false-block.scss',
 })
 export class TrueFalseBlock implements BaseBlockComponent<TrueFalseBlockMetadata> {
   block = input.required<WritableSignal<ExerciseTaskBlock<TrueFalseBlockMetadata>>>();

@@ -11,7 +11,7 @@ import { CreateSelectTaskCommand } from '@shared/commands/create-select-task-com
   selector: 'app-exercise-new-task',
   imports: [],
   templateUrl: './exercise-new-task.html',
-  styleUrl: './exercise-new-task.css',
+  styleUrl: './exercise-new-task.scss',
 })
 export class ExerciseNewTask {
   private exerciseDocumentService: ExerciseDocumentManager = inject(ExerciseDocumentManager);

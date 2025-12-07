@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-join-room',
   imports: [],
   templateUrl: './join-room.html',
-  styleUrl: './join-room.css',
+  styleUrl: './join-room.scss',
 })
 export class JoinRoom {}

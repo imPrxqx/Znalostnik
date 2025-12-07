@@ -5,7 +5,7 @@ import { CommandManager } from '@features/exercise-editor/services/command-manag
   selector: 'app-exercise-redo',
   imports: [],
   templateUrl: './exercise-redo.html',
-  styleUrl: './exercise-redo.css',
+  styleUrl: './exercise-redo.scss',
 })
 export class ExerciseRedo {
   commandManager = inject(CommandManager);

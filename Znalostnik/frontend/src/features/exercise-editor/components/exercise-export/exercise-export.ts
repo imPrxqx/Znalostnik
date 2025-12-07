@@ -5,7 +5,7 @@ import { ExerciseDocumentManager } from '../../services/exercise-document-manage
   selector: 'app-exercise-export',
   imports: [],
   templateUrl: './exercise-export.html',
-  styleUrl: './exercise-export.css',
+  styleUrl: './exercise-export.scss',
 })
 export class ExerciseExport {
   exerciseDocumentService: ExerciseDocumentManager = inject(ExerciseDocumentManager);

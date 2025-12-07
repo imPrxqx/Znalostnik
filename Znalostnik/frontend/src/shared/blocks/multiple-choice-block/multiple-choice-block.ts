@@ -28,11 +28,12 @@ import {
   selector: 'app-multiple-choice-block',
   imports: [CommonModule, FormsModule],
   templateUrl: './multiple-choice-block.html',
-  styleUrl: './multiple-choice-block.css',
+  styleUrl: './multiple-choice-block.scss',
 })
-export class MultipleChoiceBlock
-  implements FormatComponentWithResponse<ChoiceFormat, ChoiceResponse>
-{
+export class MultipleChoiceBlock implements FormatComponentWithResponse<
+  ChoiceFormat,
+  ChoiceResponse
+> {
   static readonly blockTemplate: string = 'multipleChoice';
   @Input() exerciseId: string = '';
   @Input() metadata: any;

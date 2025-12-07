@@ -27,7 +27,7 @@ import { UpdateTextCommand } from '@shared/commands/update-text-command';
   selector: 'app-text-block',
   imports: [FormsModule],
   templateUrl: './text-block.html',
-  styleUrl: './text-block.css',
+  styleUrl: './text-block.scss',
 })
 export class TextBlock implements FormatComponent<TextFormat>, Focusable {
   @ViewChildren('editable') editableRefs!: QueryList<ElementRef>;

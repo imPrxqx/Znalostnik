@@ -7,7 +7,7 @@ import { ExerciseTaskItemOverview } from '../exercise-task-item-overview/exercis
   selector: 'app-exercise-task-list',
   imports: [ExerciseTaskItemOverview, CdkDropList, CdkDrag],
   templateUrl: './exercise-task-list.html',
-  styleUrl: './exercise-task-list.css',
+  styleUrl: './exercise-task-list.scss',
 })
 export class ExerciseTaskList {
   protected exerciseDocumentService: ExerciseDocumentManager = inject(ExerciseDocumentManager);

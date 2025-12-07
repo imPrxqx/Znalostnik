@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-room-hub',
   imports: [CommonModule],
   templateUrl: './room-hub.html',
-  styleUrl: './room-hub.css',
+  styleUrl: './room-hub.scss',
 })
 export class RoomHub {
   roomId: string | null = null;

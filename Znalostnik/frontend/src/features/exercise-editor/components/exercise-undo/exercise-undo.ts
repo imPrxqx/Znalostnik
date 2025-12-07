@@ -5,7 +5,7 @@ import { CommandManager } from '@features/exercise-editor/services/command-manag
   selector: 'app-exercise-undo',
   imports: [],
   templateUrl: './exercise-undo.html',
-  styleUrl: './exercise-undo.css',
+  styleUrl: './exercise-undo.scss',
 })
 export class ExerciseUndo {
   commandManager = inject(CommandManager);

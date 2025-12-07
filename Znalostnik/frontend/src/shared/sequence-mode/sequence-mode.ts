@@ -4,7 +4,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   selector: 'app-sequence-mode',
   imports: [],
   templateUrl: './sequence-mode.html',
-  styleUrl: './sequence-mode.css',
+  styleUrl: './sequence-mode.scss',
 })
 export class SequenceMode {
   @Input() document!: any;

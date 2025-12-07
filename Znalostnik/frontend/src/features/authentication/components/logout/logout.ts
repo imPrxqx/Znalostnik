@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
   selector: 'app-logout',
   imports: [],
   templateUrl: './logout.html',
-  styleUrl: './logout.css',
+  styleUrl: './logout.scss',
 })
 export class Logout {
   router: Router = inject(Router);
