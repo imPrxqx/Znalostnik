@@ -1,0 +1,33 @@
+.container {
+  height: 100%;
+  display: flex;
+  background: var(--mat-sys-surface-container-low);
+}
+
+.sidebar {
+  width: 12%;
+  background: var(--mat-sys-surface-container);
+  border-right: 2px solid var(--mat-sys-outline-variant);
+  padding: 16px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  gap: 16px;
+}
+
+.sidebar-list a {
+  border-radius: var(--mat-sys-corner-medium);
+  margin-bottom: 8px;
+}
+
+.sidebar-list a.active {
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+}
+
+.sidebar-content {
+  width: 100%;
+}

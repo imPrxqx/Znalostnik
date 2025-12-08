@@ -4,7 +4,6 @@ import { Home } from '@features/home/home';
 import { CreateRoom } from '@features/rooms/components/create-room/create-room';
 import { JoinRoom } from '@features/rooms/components/join-room/join-room';
 import { RoomHub } from '@features/rooms/components/room-hub/room-hub';
-import { Account } from '@features/authentication/components/account/account';
 import { Login } from '@features/authentication/components/login/login';
 import { Logout } from '@features/authentication/components/logout/logout';
 import { Register } from '@features/authentication/components/register/register';
@@ -13,8 +12,13 @@ import { ForgotPassword } from '@features/authentication/components/forgot-passw
 
 import { Canvas } from '@features/editor/components/canvas/canvas';
 import { ExerciseTest } from '@features/editor/components/exercise-test/exercise-test';
-import { Dashboard } from '@pages/dashboard/dashboard';
 import { MainLayout } from '@shared/components/main-layout/main-layout';
+import { Dashboard } from '@pages/dashboard/dashboard';
+import { Account } from '@pages/account/account';
+import { Profile } from '@pages/account/profile/profile';
+import { Settings } from '@pages/account/settings/settings';
+import { Preferences } from '@pages/account/preferences/preferences';
+
 export const routes: Routes = [
   {
     path: '',
@@ -24,6 +28,15 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: Dashboard,
+  },
+  {
+    path: 'account',
+    component: Account,
+    children: [
+      { path: 'profile', component: Profile },
+      { path: 'settings', component: Settings },
+      { path: 'preferences', component: Preferences },
+    ],
   },
   {
     path: 'exercise-test',

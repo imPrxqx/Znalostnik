@@ -1,0 +1,14 @@
+.card {
+  width: 50%;
+  margin: auto;
+  margin-top: 32px;
+  padding: 16px;
+  border-radius: var(--mat-shape-small, 12px);
+  background: var(--mat-sys-surface-container);
+  border: 2px solid var(--mat-sys-outline-variant);
+}
+
+.item {
+  margin: 0px;
+  padding: 0px;
+}

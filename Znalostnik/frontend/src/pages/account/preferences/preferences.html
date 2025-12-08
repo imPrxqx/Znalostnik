@@ -1,0 +1,38 @@
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-card class="card">
+    <br />
+    <h3 class="item" i18n>Předvolby uživatele</h3>
+    <br />
+  </mat-card>
+
+  <mat-card class="card">
+    <br />
+    <h3 class="item" i18n>Jazyk</h3>
+    <br />
+    <mat-form-field class="item">
+      <mat-label i18n>Jazyk</mat-label>
+      <mat-select formControlName="language">
+        <mat-option value="en" i18n>Angličtina</mat-option>
+        <mat-option value="cs" i18n>Čeština</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <br />
+    <h3 class="item" i18n>Vzhled</h3>
+    <br />
+    <mat-form-field>
+      <mat-label class="item" i18n>Motiv</mat-label>
+      <mat-select formControlName="theme">
+        <mat-option value="light" i18n>Světlý</mat-option>
+        <mat-option value="dark" i18n>Tmavý</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br />
+  </mat-card>
+
+  <mat-card class="card">
+    <br />
+    <button mat-raised-button type="submit" i18n>Uložit předvolby</button>
+    <br />
+  </mat-card>
+</form>

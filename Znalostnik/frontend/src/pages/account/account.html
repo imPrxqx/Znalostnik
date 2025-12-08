@@ -1,0 +1,29 @@
+<mat-sidenav-container class="container">
+  <mat-sidenav class="sidebar" mode="side" opened>
+    <div class="sidebar-header">
+      <img src="favicon.ico" />
+      <h2>Znalostník</h2>
+    </div>
+
+    <mat-nav-list class="sidebar-list">
+      <a mat-list-item [routerLink]="['profile']" routerLinkActive="active">
+        <mat-icon matListItemIcon>person</mat-icon>
+        <span matListItemTitle>Můj profil</span>
+      </a>
+
+      <a mat-list-item [routerLink]="['settings']" routerLinkActive="active">
+        <mat-icon matListItemIcon>settings</mat-icon>
+        <span matListItemTitle>Nastavení Účtu</span>
+      </a>
+
+      <a mat-list-item [routerLink]="['preferences']" routerLinkActive="active">
+        <mat-icon matListItemIcon>tune</mat-icon>
+        <span matListItemTitle>Předvolby</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="sidebar-content">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

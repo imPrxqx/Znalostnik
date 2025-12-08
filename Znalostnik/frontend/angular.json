@@ -34,9 +34,7 @@
               }
             ],
             "styles": [
-              {
-                "input": "src/custom-theme.scss"
-              }, 
+              "src/custom-theme.scss",
               "src/styles.scss"
             ],
             "polyfills": [
