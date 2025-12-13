@@ -13,9 +13,6 @@
   </div>
   <button type="submit" i18n>Zaregistrovat se</button>
 </form>
-@if (errorMessage()) {
-<div i18n>
-  Neplatný email (musí obsahovat &#64;) nebo heslo (musí obsahovat velké písmeno, číslici a
-  specialní znak)
-</div>
+@if (error()) {
+<div i18n>{{ error() }}</div>
 }

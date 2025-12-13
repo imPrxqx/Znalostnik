@@ -12,9 +12,5 @@
   <button type="submit" i18n>Přihlásit se</button>
 </form>
 @if (errorMessage()) {
-<div i18n>Neplatný email nebo heslo</div>
+<div i18n>{{ errorMessage() }}</div>
 }
-
-<ul>
-  <li><a i18n routerLink="/forgot-password">Zapomněl heslo?</a></li>
-</ul>

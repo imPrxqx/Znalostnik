@@ -1,49 +1,72 @@
 import { Injectable } from '@angular/core';
-import { inject } from '@angular/core';
+import { inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { environment } from '@environments/environment';
-import { ROUTES } from '@shared/contants/routes';
+import { ROUTES } from '@core/contants/routes';
+
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class Authentication {
-  private apiUrl = environment.apiURL;
-  private isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
-  isLoggedIn$: Observable<boolean> = this.isLoggedIn.asObservable();
+  user = signal<User | null>(null);
   http: HttpClient = inject(HttpClient);
 
-  login(data: any) {
-    return this.http
-      .post(`${this.apiUrl}${ROUTES.LOGIN}`, data)
-      .pipe(tap(() => this.isLoggedIn.next(true)));
+  async login(email: string, password: string): Promise<void> {
+    try {
+      await firstValueFrom(
+        this.http.post(`${environment.apiURL}${ROUTES.LOGIN}`, { email, password }),
+      );
+      await this.loadUser();
+    } catch (err: any) {
+      this.user.set(null);
+      throw new Error(err?.error?.message || 'Login failed');
+    }
   }
 
-  logout() {
-    return this.http
-      .post(`${this.apiUrl}${ROUTES.LOGOUT}`, null)
-      .pipe(tap(() => this.isLoggedIn.next(false)));
+  async logout(): Promise<void> {
+    try {
+      await firstValueFrom(this.http.post(`${environment.apiURL}${ROUTES.LOGOUT}`, null));
+    } finally {
+      this.user.set(null);
+    }
   }
 
-  register(data: any) {
-    return this.http.post(`${this.apiUrl}${ROUTES.REGISTER}`, data).pipe(
-      tap(() =>
-        this.login(data)
-          .pipe(tap(() => this.isLoggedIn.next(true)))
-          .subscribe(),
-      ),
-    );
+  async register(email: string, password: string): Promise<void> {
+    try {
+      await firstValueFrom(
+        this.http.post(`${environment.apiURL}${ROUTES.REGISTER}`, { email, password }),
+      );
+      await this.login(email, password);
+    } catch (err: any) {
+      this.user.set(null);
+      throw new Error(err?.error?.message || 'Register failed');
+    }
   }
 
-  forgotPassword(email: string) {
-    return this.http.post(`${this.apiUrl}${ROUTES.FORGOT_PASSWORD}`, { email });
+  async refresh(): Promise<void> {
+    try {
+      await firstValueFrom(this.http.post(`${environment.apiURL}/refresh`, {}));
+      await this.loadUser();
+    } catch {
+      this.user.set(null);
+    }
   }
 
-  loadUser() {
-    return this.http
-      .get<{ username: string }>(`${this.apiUrl}${ROUTES.ACCOUNT}`)
-      .pipe(tap(() => this.isLoggedIn.next(true)));
+  async loadUser(): Promise<void> {
+    try {
+      const account = await firstValueFrom(
+        this.http.get<User>(`${environment.apiURL}${ROUTES.ACCOUNT}`),
+      );
+      this.user.set(account);
+    } catch {
+      this.user.set(null);
+    }
   }
 }

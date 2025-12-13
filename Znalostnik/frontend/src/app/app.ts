@@ -13,12 +13,9 @@ import { Authentication } from '@core/services/authentication';
 export class App implements OnInit {
   protected title = 'frontend';
 
-  authService: Authentication = inject(Authentication);
+  auth: Authentication = inject(Authentication);
 
   ngOnInit(): void {
-    this.authService.loadUser().subscribe({
-      error: () => console.log('Loading user not success'),
-      next: () => console.log('Loading user success'),
-    });
+    this.auth.loadUser();
   }
 }

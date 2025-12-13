@@ -13,7 +13,7 @@ export class Logout {
   authService: Authentication = inject(Authentication);
 
   ngOnInit() {
-    this.authService.logout().subscribe();
+    this.authService.logout();
     this.router.navigateByUrl('/');
   }
 }

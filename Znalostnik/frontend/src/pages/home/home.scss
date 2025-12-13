@@ -1,0 +1,42 @@
+.introduction {
+  padding: 128px;
+  color: var(--mat-sys-on-surface);
+}
+
+.session {
+  padding: 128px;
+  color: var(--mat-sys-on-surface);
+  background-color: var(--mat-sys-surface-container-low);
+}
+
+.features {
+  padding: 128px;
+  color: var(--mat-sys-on-surface);
+}
+
+.features-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+}
+
+.feature-card {
+  padding: 30px;
+  color: var(--mat-sys-on-surface);
+  width: 33%;
+}
+
+h1,
+h2 {
+  font: var(--mat-sys-display-medium);
+
+  margin-bottom: 60px;
+}
+
+section {
+  min-height: 256px;
+  text-align: center;
+
+  margin: auto;
+}

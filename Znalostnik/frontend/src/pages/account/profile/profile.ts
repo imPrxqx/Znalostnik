@@ -8,7 +8,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { Preference } from '@core/services/preference';
+import { UserPreferences } from '@core/services/user-preferences';
 
 @Component({
   selector: 'app-profile',
@@ -27,7 +27,7 @@ import { Preference } from '@core/services/preference';
   styleUrl: './profile.scss',
 })
 export class Profile {
-  private prefs = inject(Preference);
+  private prefs = inject(UserPreferences);
 
   form = new FormGroup({});
 

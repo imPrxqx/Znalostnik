@@ -1,14 +1,10 @@
 import { Routes } from '@angular/router';
 import { ExerciseEditor } from '@features/exercise-editor/components/exercise-editor/exercise-editor';
-import { Home } from '@features/home/home';
+import { Home } from '@pages/home/home';
 import { CreateRoom } from '@features/rooms/components/create-room/create-room';
 import { JoinRoom } from '@features/rooms/components/join-room/join-room';
 import { RoomHub } from '@features/rooms/components/room-hub/room-hub';
-import { Login } from '@features/authentication/components/login/login';
 import { Logout } from '@features/authentication/components/logout/logout';
-import { Register } from '@features/authentication/components/register/register';
-import { ResetPassword } from '@features/authentication/components/reset-password/reset-password';
-import { ForgotPassword } from '@features/authentication/components/forgot-password/forgot-password';
 
 import { Canvas } from '@features/editor/components/canvas/canvas';
 import { ExerciseTest } from '@features/editor/components/exercise-test/exercise-test';
@@ -18,7 +14,9 @@ import { Account } from '@pages/account/account';
 import { Profile } from '@pages/account/profile/profile';
 import { Settings } from '@pages/account/settings/settings';
 import { Preferences } from '@pages/account/preferences/preferences';
-
+import { Authentication } from '@pages/authentication/authentication';
+import { Register } from '@pages/authentication/register/register';
+import { Login } from '@pages/authentication/login/login';
 export const routes: Routes = [
   {
     path: '',
@@ -33,9 +31,18 @@ export const routes: Routes = [
     path: 'account',
     component: Account,
     children: [
+      { path: '', redirectTo: 'profile', pathMatch: 'full' },
       { path: 'profile', component: Profile },
       { path: 'settings', component: Settings },
       { path: 'preferences', component: Preferences },
+    ],
+  },
+  {
+    path: 'authentication',
+    children: [
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
+      { path: 'login', component: Login },
+      { path: 'register', component: Register },
     ],
   },
   {
@@ -67,23 +74,11 @@ export const routes: Routes = [
     component: Account,
   },
   {
-    path: 'login',
-    component: Login,
-  },
-  {
     path: 'logout',
     component: Logout,
   },
   {
-    path: 'register',
-    component: Register,
-  },
-  {
-    path: 'reset-password',
-    component: ResetPassword,
-  },
-  {
-    path: 'forgot-password',
-    component: ForgotPassword,
+    path: 'session',
+    component: JoinRoom,
   },
 ];

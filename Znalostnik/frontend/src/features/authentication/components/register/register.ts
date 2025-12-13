@@ -13,28 +13,25 @@ import { Router } from '@angular/router';
 })
 export class Register {
   router: Router = inject(Router);
-  authService: Authentication = inject(Authentication);
+  auth: Authentication = inject(Authentication);
+
   email: string = '';
   password: string = '';
   passwordConfirmation: string = '';
-  errorMessage = signal<boolean>(false);
 
-  createAccount() {
-    const data = {
-      email: this.email,
-      password: this.password,
-    };
+  isLoading = signal(false);
+  error = signal<string | null>(null);
 
-    this.authService.register(data).subscribe({
-      next: (response) => {
-        console.log('Registration Success:', response);
-        this.router.navigate(['/']);
-        this.errorMessage.set(false);
-      },
-      error: (error) => {
-        console.error('Registration not success:', error);
-        this.errorMessage.set(true);
-      },
-    });
+  async createAccount() {
+    this.isLoading.set(true);
+    this.error.set(null);
+    try {
+      await this.auth.register(this.email, this.password);
+      await this.router.navigate(['/']);
+    } catch (e: any) {
+      this.error.set(e.message || 'Login failed');
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 }

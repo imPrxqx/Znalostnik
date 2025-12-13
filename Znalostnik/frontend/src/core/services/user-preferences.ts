@@ -8,7 +8,7 @@ export interface PreferenceData {
 @Injectable({
   providedIn: 'root',
 })
-export class Preference {
+export class UserPreferences {
   private userPreferences = signal<PreferenceData>({
     language: 'en',
     theme: 'dark',

@@ -1,19 +1,26 @@
-<header>
-  <ul>
-    <li><a i18n routerLink="/">Domů</a></li>
-    <li><a i18n routerLink="/dashboard">Dashboard</a></li>
-    <li><a i18n routerLink="/account">Účet</a></li>
-    <li><a i18n routerLink="/exercise-test">Cvičení</a></li>
-    <li><a i18n routerLink="/join-room">Připojit Místnost</a></li>
-    <li><a i18n routerLink="/create-room">Vytvořit Místnost</a></li>
-    <li><a i18n routerLink="/editor">Editor</a></li>
-    <li><a i18n routerLink="/exercise-editor">Nový Editor</a></li>
+<mat-toolbar class="header-toolbar">
+  <div class="header-left">
+    <img src="favicon.ico" class="logo" />
+    <h2><a routerLink="/" class="header-title">Znalostník</a></h2>
+  </div>
 
-    @if (authService.isLoggedIn$ | async ) {
-    <li><a i18n routerLink="/logout">Odhlásit se</a></li>
-    } @else {
-    <li><a i18n routerLink="/register">Zaregistrovat se</a></li>
-    <li><a i18n routerLink="/login">Přihlásit se</a></li>
-    }
-  </ul>
-</header>
+  <nav mat-tab-nav-bar class="header-nav">
+    <a mat-tab-link routerLink="/dashboard" i18n> Dashboard </a>
+
+    <a mat-tab-link routerLink="/account" i18n> Účet </a>
+
+    <a mat-tab-link routerLink="/exercise-test" i18n> Cvičení </a>
+
+    <a mat-tab-link routerLink="/join-room" i18n> Připojit Místnost </a>
+
+    <a mat-tab-link routerLink="/create-room" i18n> Vytvořit Místnost </a>
+
+    <a mat-tab-link routerLink="/editor" i18n> Editor </a>
+
+    <a mat-tab-link routerLink="/exercise-editor" i18n> Nový Editor </a>
+
+    <a mat-tab-link routerLink="/authentication/login" i18n> Nový Přihlášení </a>
+
+    <a mat-tab-link routerLink="/authentication/register" i18n> Nový Registr </a>
+  </nav>
+</mat-toolbar>

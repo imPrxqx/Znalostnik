@@ -1,1 +1,38 @@
-<p>register works!</p>
+<div class="auth-container">
+  <mat-card class="auth-card">
+    <div class="auth-header">
+      <img src="favicon.ico" />
+      <a [routerLink]="['/']"><h2>Znalostník</h2></a>
+    </div>
+
+    <h2 class="auth-title" i18n>Registrace</h2>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <mat-form-field>
+        <mat-label i18n>Email</mat-label>
+        <input matInput formControlName="email" type="email" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label i18n>Heslo</mat-label>
+        <input matInput formControlName="password" type="password" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label i18n>Potvrzení hesla</mat-label>
+        <input matInput formControlName="confirmPassword" type="password" />
+      </mat-form-field>
+
+      <div class="auth-login">
+        <a mat-button color="primary" [routerLink]="['/authentication/login']">
+          <mat-icon>login</mat-icon>
+          <span i18n>Přihlašte se</span>
+        </a>
+      </div>
+
+      <button mat-raised-button type="submit" class="auth-submit" [disabled]="!registerForm.valid">
+        Registrovat se
+      </button>
+    </form>
+  </mat-card>
+</div>
