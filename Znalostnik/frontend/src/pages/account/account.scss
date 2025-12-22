@@ -1,7 +1,6 @@
 .container {
   height: 100%;
   display: flex;
-  background: var(--mat-sys-surface-container-low);
 }
 
 .sidebar {
@@ -34,4 +33,11 @@
 
 .sidebar-content {
   width: 100%;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
 }

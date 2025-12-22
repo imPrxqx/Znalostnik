@@ -4,23 +4,50 @@
     <h2><a routerLink="/" class="header-title">Znalostník</a></h2>
   </div>
 
-  <nav mat-tab-nav-bar class="header-nav">
-    <a mat-tab-link routerLink="/dashboard" i18n> Dashboard </a>
+  <div class="header-center">
+    <nav class="header-nav">
+      <a routerLink="/dashboard" i18n> Dashboard </a>
 
-    <a mat-tab-link routerLink="/account" i18n> Účet </a>
+      <a routerLink="/exercise-test" i18n> Cvičení </a>
 
-    <a mat-tab-link routerLink="/exercise-test" i18n> Cvičení </a>
+      <a routerLink="/join-room" i18n> Připojit Místnost </a>
 
-    <a mat-tab-link routerLink="/join-room" i18n> Připojit Místnost </a>
+      <a routerLink="/create-room" i18n> Vytvořit Místnost </a>
 
-    <a mat-tab-link routerLink="/create-room" i18n> Vytvořit Místnost </a>
+      <a routerLink="/editor" i18n> Editor </a>
+      <a routerLink="/exercise-editor" i18n> Nový Editor </a>
+    </nav>
+  </div>
+  <div class="header-right">
+    @if(!auth.user()) {
+    <a routerLink="/authentication/login" i18n>Přihlásit se</a>
+    }
+    <button mat-icon-button [matMenuTriggerFor]="userMenu">
+      <mat-icon>account_circle</mat-icon>
+    </button>
 
-    <a mat-tab-link routerLink="/editor" i18n> Editor </a>
+    <mat-menu #userMenu="matMenu">
+      <a mat-menu-item routerLink="/account/preferences" i18n>
+        <mat-icon>tune</mat-icon>
+        Předvolby
+      </a>
 
-    <a mat-tab-link routerLink="/exercise-editor" i18n> Nový Editor </a>
+      @if(auth.user()) {
+      <a mat-menu-item routerLink="/account/profile" i18n>
+        <mat-icon>person</mat-icon>
+        Můj Profil
+      </a>
 
-    <a mat-tab-link routerLink="/authentication/login" i18n> Nový Přihlášení </a>
-
-    <a mat-tab-link routerLink="/authentication/register" i18n> Nový Registr </a>
-  </nav>
+      <a mat-menu-item routerLink="/account/settings" i18n>
+        <mat-icon>settings</mat-icon>
+        Nastavení
+      </a>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="logout()" i18n>
+        <mat-icon>logout</mat-icon>
+        Odhlásit se
+      </button>
+      }
+    </mat-menu>
+  </div>
 </mat-toolbar>

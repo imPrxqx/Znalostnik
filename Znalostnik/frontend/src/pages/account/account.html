@@ -2,28 +2,49 @@
   <mat-sidenav class="sidebar" mode="side" opened>
     <div class="sidebar-header">
       <img src="favicon.ico" />
-      <a [routerLink]="['/']" class="sidebar-title"><h2>Znalostník</h2></a>
+      <a [routerLink]="['/']" class="sidebar-title"><h2 i18n>Znalostník</h2></a>
     </div>
 
     <mat-nav-list class="sidebar-list">
       <a mat-list-item [routerLink]="['profile']" routerLinkActive="active">
         <mat-icon matListItemIcon>person</mat-icon>
-        <span matListItemTitle>Můj profil</span>
+        <span matListItemTitle i18n>Můj profil</span>
       </a>
 
       <a mat-list-item [routerLink]="['settings']" routerLinkActive="active">
         <mat-icon matListItemIcon>settings</mat-icon>
-        <span matListItemTitle>Nastavení Účtu</span>
+        <span matListItemTitle i18n>Nastavení Účtu</span>
       </a>
 
       <a mat-list-item [routerLink]="['preferences']" routerLinkActive="active">
         <mat-icon matListItemIcon>tune</mat-icon>
-        <span matListItemTitle>Předvolby</span>
+        <span matListItemTitle i18n>Předvolby</span>
       </a>
     </mat-nav-list>
   </mat-sidenav>
 
   <mat-sidenav-content class="sidebar-content">
+    <mat-toolbar>
+      <div class="header-right">
+        @if(!auth.user()) {
+        <a routerLink="/authentication/login" i18n>Přihlásit se</a>
+        }
+
+        <button mat-icon-button [matMenuTriggerFor]="userMenu">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+
+        <mat-menu #userMenu="matMenu">
+          @if(auth.user()) {
+          <button mat-menu-item (click)="logout()" i18n>
+            <mat-icon>logout</mat-icon>
+            Odhlásit se
+          </button>
+          }
+        </mat-menu>
+      </div>
+    </mat-toolbar>
+
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
