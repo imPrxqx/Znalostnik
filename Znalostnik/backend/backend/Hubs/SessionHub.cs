@@ -1,6 +1,9 @@
-﻿using backend.Data.Repository;
+﻿using System.Security.Claims;
+using backend.Data.Repository;
 using backend.DTOs;
+using backend.Models;
 using backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace backend.Hubs
@@ -8,59 +11,23 @@ namespace backend.Hubs
     public class SessionHub : Hub
     {
         private readonly ISessionService _sessionService;
+        private readonly IUserService _userService;
 
-        public SessionHub(ISessionService sessionService)
+        public SessionHub(ISessionService sessionService, IUserService userService)
         {
             _sessionService = sessionService;
+            _userService = userService;
         }
 
-        public async Task CreateSessionAsync(Guid sessionId) { }
-
-        public async Task StartSessionAsync(Guid sessionId) { }
-
-        public async Task LockAnswersAsync(Guid sessionId) { }
-
-        public async Task RevealCorrectAnswerAsync(Guid sessionId) { }
-
-        public async Task AssignPlayerToTeamAsync(
-            string sessionId,
-            string playerId,
-            string teamName
-        ) { }
-
-        public async Task JoinSessionAsync(Guid sessionId) { }
-
-        public async Task JoinTeamInSessionAsync(Guid sessionId, string teamName)
+        [Authorize]
+        public async Task JoinSessionAsync(Guid sessionId)
         {
-            //var sessionExists = await _sessionService.GetSessionAsync(sessionId);
-            //if (sessionExists == null)
-            //{
-            //    throw new HubException($"Team {sessionId} does not exist");
-            //}
-
-            //await Groups.AddToGroupAsync(Context.ConnectionId, $"session:{sessionId}_team:{teamName}");
+            await Groups.AddToGroupAsync(Context.ConnectionId, sessionId.ToString());
         }
 
-        public async Task LeaveSessionAsync(string sessionId) { }
-
-        //public async Task SubmitIndividualAnswerAsync(Guid sessionId, AnswerRequestDto answer)
-        //{
-        //}
-
-        //public async Task SubmitTeamProposalAsync(Guid sessionId, AnswerRequestDto answer, string teamName)
-        //{
-        //}
-
-        //public async Task SubmitTeamAnswerAsync(Guid sessionId, AnswerRequestDto answer, string teamName)
-        //{
-        //}
-
-        public async Task NextTaskAsync(string sessionId) { }
-
-        public async Task PreviousTaskAsync(string sessionId) { }
-
-        public async Task JumpToTaskAsync(string sessionId) { }
-
-        private async Task BroadcastSessionStateAsync(string sessionId) { }
+        public async Task NotifySessionUpdated(Guid sessionId)
+        {
+            await Clients.Group(sessionId.ToString()).SendAsync("NotifySessionUpdated");
+        }
     }
 }

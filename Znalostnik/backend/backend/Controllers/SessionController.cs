@@ -3,6 +3,7 @@ using backend.DTOs;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxTokenParser;
 
 namespace backend.Controllers
 {
@@ -19,6 +20,132 @@ namespace backend.Controllers
             _userService = userService;
         }
 
+        [HttpGet("my")]
+        [Authorize]
+        public async Task<IActionResult> MySessions()
+        {
+            var user = await _userService.GetCurrentUserAsync(User);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _sessionService.GetUsersCreatedSessions(user);
+
+            if (result.IsFailure)
+            {
+                return NotFound();
+            }
+
+            return Ok(result.Value);
+        }
+
+        [HttpPost("{id}/start")]
+        [Authorize]
+        public async Task<IActionResult> StartSession(Guid id)
+        {
+            var user = await _userService.GetCurrentUserAsync(User);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _sessionService.StartSessionAsync(user, id);
+
+            if (result.IsFailure)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
+
+        [HttpPost("{id}/end")]
+        [Authorize]
+        public async Task<IActionResult> EndSession(Guid id)
+        {
+            var user = await _userService.GetCurrentUserAsync(User);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _sessionService.EndSessionAsync(user, id);
+
+            if (result.IsFailure)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
+
+        [HttpPost("{id}/next")]
+        [Authorize]
+        public async Task<IActionResult> NextTask(Guid id)
+        {
+            var user = await _userService.GetCurrentUserAsync(User);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _sessionService.NextTaskAsync(user, id);
+
+            if (result.IsFailure)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
+
+        [HttpPost("{id}/previous")]
+        [Authorize]
+        public async Task<IActionResult> PreviousTask(Guid id)
+        {
+            var user = await _userService.GetCurrentUserAsync(User);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _sessionService.PreviousTaskAsync(user, id);
+
+            if (result.IsFailure)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
+
+        [HttpPost("{id}/join")]
+        [Authorize]
+        public async Task<IActionResult> JoinSession(Guid id)
+        {
+            var user = await _userService.GetCurrentUserAsync(User);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _sessionService.PreviousTaskAsync(user, id);
+
+            if (result.IsFailure)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
+
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> Session(Guid id)
@@ -30,14 +157,14 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            var session = await _sessionService.GetByIdAsync(user, id);
+            var result = await _sessionService.GetByIdAsync(user, id);
 
-            if (session == null)
+            if (result.IsFailure)
             {
                 return NotFound();
             }
 
-            return Ok(session);
+            return Ok(result.Value);
         }
 
         [HttpPost]
@@ -55,9 +182,14 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            var created = await _sessionService.CreateAsync(user, dto);
+            var result = await _sessionService.CreateAsync(user, dto);
 
-            return Ok(created);
+            if (result.IsFailure)
+            {
+                return NotFound();
+            }
+
+            return Ok(result.Value);
         }
 
         [HttpPut("{id}")]
@@ -75,9 +207,9 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            var updated = await _sessionService.UpdateAsync(user, dto);
+            var result = await _sessionService.UpdateAsync(user, dto);
 
-            if (!updated)
+            if (result.IsFailure)
             {
                 return NotFound();
             }
@@ -95,9 +227,9 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            var deleted = await _sessionService.DeleteAsync(user, id);
+            var result = await _sessionService.DeleteAsync(user, id);
 
-            if (!deleted)
+            if (result.IsFailure)
             {
                 return NotFound();
             }
