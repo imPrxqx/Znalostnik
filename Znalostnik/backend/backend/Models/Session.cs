@@ -11,6 +11,8 @@ namespace backend.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public string? AccessCode { get; set; }
         public int CurrentTaskIndex { get; set; } = 0;
+        public Guid CurrentExerciseTaskId { get; set; }
+        public ExerciseTask CurrentExerciseTask { get; set; } = null!;
         public Guid ExerciseId { get; set; }
         public Exercise Exercise { get; set; } = null!;
         public string CreatedByUserId { get; set; } = string.Empty;

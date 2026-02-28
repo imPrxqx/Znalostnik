@@ -8,6 +8,7 @@ namespace backend.Models
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Title { get; set; } = string.Empty;
         public string Type { get; set; } = string.Empty;
+        public string RespondMode { get; set; } = string.Empty; // Team, Individual
         public int Order { get; set; } = default(int);
         public JsonDocument Content { get; set; } = JsonDocument.Parse("{}");
         public Guid ExerciseId { get; set; }

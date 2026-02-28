@@ -12,7 +12,7 @@ namespace backend.Services
         Task<Result> JoinSessionAsync(UserDto user, Guid sessionId);
         Task<Result> NextTaskAsync(UserDto user, Guid sessionId);
         Task<Result> PreviousTaskAsync(UserDto user, Guid sessionId);
-        Task<Result<SessionDto>> GetByIdAsync(UserDto user, Guid id);
+        Task<Result<SessionDto>> GetByIdAsync(UserDto user, Guid sessionId);
         Task<Result<SessionDto>> CreateAsync(UserDto user, CreateSessionDto dto);
         Task<Result> UpdateAsync(UserDto user, UpdateSessionDto dto);
         Task<Result> DeleteAsync(UserDto user, Guid id);

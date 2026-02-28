@@ -3,8 +3,6 @@ using System.Text.Json;
 using backend.Data.Repository;
 using backend.DTOs;
 using backend.Models;
-using Humanizer;
-using Microsoft.EntityFrameworkCore;
 
 namespace backend.Services
 {

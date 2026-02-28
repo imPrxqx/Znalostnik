@@ -101,20 +101,27 @@ namespace backend
             builder.Logging.AddConsole();
 
             // Services
-            //builder.Services.AddScoped<ISessionService, SessionService>();
-            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IAnswerService, AnswerService>();
             builder.Services.AddScoped<IExerciseService, ExerciseService>();
             builder.Services.AddScoped<IExerciseTagService, ExerciseTagService>();
             builder.Services.AddScoped<IExerciseTaskService, ExerciseTaskService>();
+            builder.Services.AddScoped<ISessionService, SessionService>();
+            builder.Services.AddScoped<ISessionUserService, SessionUserService>();
+            builder.Services.AddScoped<ISubmissionService, SubmissionService>();
+            builder.Services.AddScoped<ITeamService, TeamService>();
+            builder.Services.AddScoped<ITeamMemberService, TeamMemberService>();
 
             // Repositories
-            builder.Services.AddScoped<IExerciseTagRepository, ExerciseTagRepository>();
+            builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();
             builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
+            builder.Services.AddScoped<IExerciseTagRepository, ExerciseTagRepository>();
             builder.Services.AddScoped<IExerciseTaskRepository, ExerciseTaskRepository>();
+            builder.Services.AddScoped<ISessionRepository, SessionRepository>();
             builder.Services.AddScoped<ISessionUserRepository, SessionUserRepository>();
             builder.Services.AddScoped<ISubmissionRepository, SubmissionRepository>();
+            builder.Services.AddScoped<ITeamRepository, TeamRepository>();
+
             builder.Services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
-            builder.Services.AddScoped<ISessionRepository, SessionRepository>();
 
             // Background
             //builder.Services.AddHostedService<RoomMonitor>();
