@@ -1,10 +1,12 @@
-﻿namespace backend.Utils
+﻿using Newtonsoft.Json.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace backend.Utils
 {
     public record Result
     {
         public bool IsSuccess { get; }
         public bool IsFailure => !IsSuccess;
-
         public Error Error { get; }
 
         protected Result(bool isSuccess, Error error)
@@ -13,26 +15,59 @@
             Error = error;
         }
 
-        public static Result Success() => new(true, Errors.None);
+        public static Result Success()
+        {
+            return new Result(true, Errors.None);
+        }
 
-        public static Result Failure(Error error) => new(false, error);
-
-        public static implicit operator Result(Error error) => Failure(error);
+        public static Result Failure(Error error)
+        {
+            return new Result(false, error);
+        }
     }
 
     public record Result<T> : Result
     {
-        public T? Value { get; }
+        private T? _value;
+
+        public T Value
+        {
+            get
+            {
+                if (!IsSuccess)
+                {
+                    throw new InvalidOperationException("Result is failure");
+                }
+                return _value!;
+            }
+        }
 
         private Result(T value)
-            : base(true, Errors.None) => Value = value;
+            : base(true, Errors.None)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException("Null value");
+            }
+
+            _value = value;
+        }
 
         private Result(Error error)
-            : base(false, error) { }
+            : base(false, error)
+        {
+            _value = default;
+        }
 
-        public static Result<T> Success(T value) => new Result<T>(value);
+        public static Result<T> Success(T value)
+        {
+            return new Result<T>(value);
+        }
 
-        public static new Result<T> Failure(Error error) => new Result<T>(error);
+        public static new Result<T> Failure(Error error)
+        {
+            return new Result<T>(error);
+        }
     }
 
     public record Error(string Type, string Description);

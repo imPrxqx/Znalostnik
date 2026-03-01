@@ -9,6 +9,7 @@ namespace backend.Controllers
 {
     [ApiController]
     [Route("api/sessions")]
+    [Authorize]
     public class SessionController : Controller
     {
         private readonly ISessionService _sessionService;
@@ -21,17 +22,16 @@ namespace backend.Controllers
         }
 
         [HttpGet("my")]
-        [Authorize]
         public async Task<IActionResult> MySessions()
         {
             var user = await _userService.GetCurrentUserAsync(User);
 
-            if (user == null)
+            if (user.IsFailure)
             {
                 return NotFound();
             }
 
-            var result = await _sessionService.GetUsersCreatedSessions(user);
+            var result = await _sessionService.GetUsersCreatedSessions(user.Value);
 
             if (result.IsFailure)
             {
@@ -42,17 +42,16 @@ namespace backend.Controllers
         }
 
         [HttpPost("{id}/start")]
-        [Authorize]
         public async Task<IActionResult> StartSession(Guid id)
         {
             var user = await _userService.GetCurrentUserAsync(User);
 
-            if (user == null)
+            if (user.IsFailure)
             {
                 return NotFound();
             }
 
-            var result = await _sessionService.StartSessionAsync(user, id);
+            var result = await _sessionService.StartSessionAsync(user.Value, id);
 
             if (result.IsFailure)
             {
@@ -63,17 +62,16 @@ namespace backend.Controllers
         }
 
         [HttpPost("{id}/end")]
-        [Authorize]
         public async Task<IActionResult> EndSession(Guid id)
         {
             var user = await _userService.GetCurrentUserAsync(User);
 
-            if (user == null)
+            if (user.IsFailure)
             {
                 return NotFound();
             }
 
-            var result = await _sessionService.EndSessionAsync(user, id);
+            var result = await _sessionService.EndSessionAsync(user.Value, id);
 
             if (result.IsFailure)
             {
@@ -84,17 +82,16 @@ namespace backend.Controllers
         }
 
         [HttpPost("{id}/next")]
-        [Authorize]
         public async Task<IActionResult> NextTask(Guid id)
         {
             var user = await _userService.GetCurrentUserAsync(User);
 
-            if (user == null)
+            if (user.IsFailure)
             {
                 return NotFound();
             }
 
-            var result = await _sessionService.NextTaskAsync(user, id);
+            var result = await _sessionService.NextTaskAsync(user.Value, id);
 
             if (result.IsFailure)
             {
@@ -105,17 +102,16 @@ namespace backend.Controllers
         }
 
         [HttpPost("{id}/previous")]
-        [Authorize]
         public async Task<IActionResult> PreviousTask(Guid id)
         {
             var user = await _userService.GetCurrentUserAsync(User);
 
-            if (user == null)
+            if (user.IsFailure)
             {
                 return NotFound();
             }
 
-            var result = await _sessionService.PreviousTaskAsync(user, id);
+            var result = await _sessionService.PreviousTaskAsync(user.Value, id);
 
             if (result.IsFailure)
             {
@@ -126,17 +122,16 @@ namespace backend.Controllers
         }
 
         [HttpPost("{id}/join")]
-        [Authorize]
         public async Task<IActionResult> JoinSession(Guid id)
         {
             var user = await _userService.GetCurrentUserAsync(User);
 
-            if (user == null)
+            if (user.IsFailure)
             {
                 return NotFound();
             }
 
-            var result = await _sessionService.PreviousTaskAsync(user, id);
+            var result = await _sessionService.PreviousTaskAsync(user.Value, id);
 
             if (result.IsFailure)
             {
@@ -147,17 +142,16 @@ namespace backend.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
         public async Task<IActionResult> Session(Guid id)
         {
             var user = await _userService.GetCurrentUserAsync(User);
 
-            if (user == null)
+            if (user.IsFailure)
             {
                 return NotFound();
             }
 
-            var result = await _sessionService.GetByIdAsync(user, id);
+            var result = await _sessionService.GetByIdAsync(user.Value, id);
 
             if (result.IsFailure)
             {
@@ -177,12 +171,12 @@ namespace backend.Controllers
 
             var user = await _userService.GetCurrentUserAsync(User);
 
-            if (user == null)
+            if (user.IsFailure)
             {
                 return NotFound();
             }
 
-            var result = await _sessionService.CreateAsync(user, dto);
+            var result = await _sessionService.CreateAsync(user.Value, dto);
 
             if (result.IsFailure)
             {
@@ -202,12 +196,12 @@ namespace backend.Controllers
 
             var user = await _userService.GetCurrentUserAsync(User);
 
-            if (user == null)
+            if (user.IsFailure)
             {
                 return NotFound();
             }
 
-            var result = await _sessionService.UpdateAsync(user, dto);
+            var result = await _sessionService.UpdateAsync(user.Value, dto);
 
             if (result.IsFailure)
             {
@@ -222,12 +216,12 @@ namespace backend.Controllers
         {
             var user = await _userService.GetCurrentUserAsync(User);
 
-            if (user == null)
+            if (user.IsFailure)
             {
                 return NotFound();
             }
 
-            var result = await _sessionService.DeleteAsync(user, id);
+            var result = await _sessionService.DeleteAsync(user.Value, id);
 
             if (result.IsFailure)
             {

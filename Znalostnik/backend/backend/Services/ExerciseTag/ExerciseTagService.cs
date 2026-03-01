@@ -1,9 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using backend.Data.Repository;
+﻿using backend.Data.Repository;
 using backend.DTOs;
 using backend.Models;
-using Microsoft.EntityFrameworkCore;
+using backend.Utils;
 
 namespace backend.Services
 {
@@ -21,82 +19,93 @@ namespace backend.Services
             _exerciseRepository = exerciseRepository;
         }
 
-        public async Task<IEnumerable<ExerciseTagDto>> GetTagsAsync(UserDto user, Guid exerciseId)
+        public async Task<Result<IEnumerable<ExerciseTagDto>>> GetTagsAsync(
+            UserDto user,
+            Guid exerciseId
+        )
         {
             var exercise = await _exerciseRepository.GetByIdAsync(exerciseId);
 
             if (exercise == null || exercise.UserId != user.Id)
             {
-                return Enumerable.Empty<ExerciseTagDto>();
+                return Result<IEnumerable<ExerciseTagDto>>.Failure(Errors.NotFound);
             }
 
             var exerciseTags = await _exerciseTagRepository.GetAllTagsByExerciseIdAsync(exerciseId);
 
-            return exerciseTags.Select(t => t.ToExerciseTagDto());
+            return Result<IEnumerable<ExerciseTagDto>>.Success(
+                exerciseTags.Select(t => t.ToExerciseTagDto())
+            );
         }
 
-        public async Task<ExerciseTagDto?> CreateTagAsync(UserDto user, CreateExerciseTagDto dto)
+        public async Task<Result<ExerciseTagDto>> CreateTagAsync(
+            UserDto user,
+            Guid exerciseId,
+            CreateExerciseTagDto dto
+        )
         {
-            var exercise = await _exerciseRepository.GetByIdAsync(dto.ExerciseId);
+            var exercise = await _exerciseRepository.GetByIdAsync(exerciseId);
 
             if (exercise == null || exercise.UserId != user.Id)
             {
-                return null;
+                return Result<ExerciseTagDto>.Failure(Errors.NotFound);
             }
 
-            var exerciseTag = new ExerciseTag { ExerciseId = dto.ExerciseId, Tag = dto.Tag };
+            var exerciseTag = new ExerciseTag { ExerciseId = exerciseId, Tag = dto.Tag };
 
             await _exerciseTagRepository.AddAsync(exerciseTag);
-            return exerciseTag.ToExerciseTagDto();
+            return Result<ExerciseTagDto>.Success(exerciseTag.ToExerciseTagDto());
         }
 
-        public async Task<bool> UpdateTagAsync(UserDto user, UpdateExerciseTagDto dto)
+        public async Task<Result> UpdateTagAsync(
+            UserDto user,
+            Guid exerciseId,
+            string tag,
+            UpdateExerciseTagDto dto
+        )
         {
-            var exercise = await _exerciseRepository.GetByIdAsync(dto.ExerciseId);
+            var exercise = await _exerciseRepository.GetByIdAsync(exerciseId);
 
             if (exercise == null || exercise.UserId != user.Id)
             {
-                return false;
+                return Result.Failure(Errors.NotFound);
             }
 
             var exerciseTag = await _exerciseTagRepository.GetExerciseTagByIdAsync(
-                dto.ExerciseId,
+                exerciseId,
                 dto.Tag
             );
 
             if (exerciseTag == null)
             {
-                return false;
+                return Result.Failure(Errors.InvalidOperation);
             }
 
-            exerciseTag.ExerciseId = dto.ExerciseId;
+            exerciseTag.ExerciseId = exerciseId;
             exerciseTag.Tag = dto.Tag;
 
             await _exerciseTagRepository.UpdateAsync(exerciseTag);
-            return true;
+            return Result.Success();
         }
 
-        public async Task<bool> DeleteTagAsync(UserDto user, DeleteExerciseTagDto dto)
+        public async Task<Result> DeleteTagAsync(UserDto user, Guid exerciseId, string tag)
         {
-            var exercise = await _exerciseRepository.GetByIdAsync(dto.ExerciseId);
+            var exercise = await _exerciseRepository.GetByIdAsync(exerciseId);
 
             if (exercise == null || exercise.UserId != user.Id)
             {
-                return false;
+                return Result.Failure(Errors.NotFound);
             }
 
-            var exerciseTag = await _exerciseTagRepository.GetExerciseTagByIdAsync(
-                dto.ExerciseId,
-                dto.Tag
-            );
+            var exerciseTag = await _exerciseTagRepository.GetExerciseTagByIdAsync(exerciseId, tag);
 
             if (exerciseTag == null)
             {
-                return false;
+                return Result.Failure(Errors.NotFound);
             }
 
-            await _exerciseTagRepository.DeleteAsync(dto.ExerciseId, dto.Tag);
-            return true;
+            await _exerciseTagRepository.DeleteAsync(exerciseId, tag);
+            return Result.Success();
         }
     }
 }

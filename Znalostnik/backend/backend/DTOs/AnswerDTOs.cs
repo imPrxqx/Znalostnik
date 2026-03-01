@@ -15,9 +15,8 @@ namespace backend.DTOs
 
     public class CreateAnswerDto
     {
-        public JsonDocument AnswerSubmit { get; set; } = JsonDocument.Parse("{}");
-        public Guid SessionId { get; set; }
-        public Guid SubmissionId { get; set; }
+        public Guid SessionUserId { get; set; }
         public Guid TaskId { get; set; }
+        public JsonDocument AnswerSubmit { get; set; } = JsonDocument.Parse("{}");
     }
 }

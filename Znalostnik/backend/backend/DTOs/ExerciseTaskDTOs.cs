@@ -5,7 +5,6 @@ namespace backend.DTOs
 {
     public class CreateExerciseTaskDto
     {
-        public Guid ExerciseId { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Type { get; set; } = string.Empty;
         public int Order { get; set; }
@@ -14,8 +13,6 @@ namespace backend.DTOs
 
     public class UpdateExerciseTaskDto
     {
-        public Guid Id { get; set; }
-        public Guid ExerciseId { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Type { get; set; } = string.Empty;
         public int Order { get; set; }

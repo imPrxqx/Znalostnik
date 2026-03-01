@@ -2,6 +2,7 @@
 using backend.Data.Repository;
 using backend.DTOs;
 using backend.Models;
+using backend.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Services
@@ -15,22 +16,22 @@ namespace backend.Services
             _exerciseRepository = exerciseRepository;
         }
 
-        public async Task<ExerciseDto?> GetByIdAsync(UserDto user, Guid id)
+        public async Task<Result<ExerciseDto>> GetByIdAsync(UserDto user, Guid exerciseId)
         {
-            var exercise = await _exerciseRepository.GetByIdAsync(id);
+            var exercise = await _exerciseRepository.GetByIdAsync(exerciseId);
 
             if (exercise == null || exercise.UserId != user.Id)
             {
-                return null;
+                return Result<ExerciseDto>.Failure(Errors.NotFound);
             }
 
-            return exercise.ToExerciseDto();
+            return Result<ExerciseDto>.Success(exercise.ToExerciseDto());
         }
 
-        public async Task<IEnumerable<ExerciseDto>> GetAllUserExercisesAsync(
+        public async Task<Result<IEnumerable<ExerciseDto>>> GetAllUserExercisesAsync(
             UserDto user,
-            int page = 1,
-            int pageSize = 20
+            int page,
+            int pageSize
         )
         {
             var exercises = await _exerciseRepository.GetAllUserExercisesAsync(
@@ -39,14 +40,16 @@ namespace backend.Services
                 pageSize
             );
 
-            return exercises.Select(e => e.ToExerciseDto());
+            return Result<IEnumerable<ExerciseDto>>.Success(
+                exercises.Select(e => e.ToExerciseDto())
+            );
         }
 
-        public async Task<IEnumerable<ExerciseDto>> GetAllUserExercisesByTagsAsync(
+        public async Task<Result<IEnumerable<ExerciseDto>>> GetAllUserExercisesByTagsAsync(
             UserDto user,
             string[] tags,
-            int page = 1,
-            int pageSize = 20
+            int page,
+            int pageSize
         )
         {
             var exercises = await _exerciseRepository.GetAllUserExercisesByTagsAsync(
@@ -56,10 +59,12 @@ namespace backend.Services
                 pageSize
             );
 
-            return exercises.Select(e => e.ToExerciseDto());
+            return Result<IEnumerable<ExerciseDto>>.Success(
+                exercises.Select(e => e.ToExerciseDto())
+            );
         }
 
-        public async Task<ExerciseDto> CreateAsync(UserDto user, CreateExerciseDto dto)
+        public async Task<Result<ExerciseDto>> CreateAsync(UserDto user, CreateExerciseDto dto)
         {
             var exercise = new Exercise
             {
@@ -72,16 +77,16 @@ namespace backend.Services
             };
 
             await _exerciseRepository.AddAsync(exercise);
-            return exercise.ToExerciseDto();
+            return Result<ExerciseDto>.Success(exercise.ToExerciseDto());
         }
 
-        public async Task<bool> UpdateAsync(UserDto user, UpdateExerciseDto dto)
+        public async Task<Result> UpdateAsync(UserDto user, Guid exerciseId, UpdateExerciseDto dto)
         {
-            var exercise = await _exerciseRepository.GetByIdAsync(dto.Id);
+            var exercise = await _exerciseRepository.GetByIdAsync(exerciseId);
 
             if (exercise == null || exercise.UserId != user.Id)
             {
-                return false;
+                return Result<ExerciseDto>.Failure(Errors.NotFound);
             }
 
             exercise.Title = dto.Title;
@@ -90,20 +95,20 @@ namespace backend.Services
             exercise.UpdatedAt = DateTime.UtcNow;
 
             await _exerciseRepository.UpdateAsync(exercise);
-            return true;
+            return Result.Success();
         }
 
-        public async Task<bool> DeleteAsync(UserDto user, Guid id)
+        public async Task<Result> DeleteAsync(UserDto user, Guid exerciseId)
         {
-            var exercise = await _exerciseRepository.GetByIdAsync(id);
+            var exercise = await _exerciseRepository.GetByIdAsync(exerciseId);
 
             if (exercise == null || exercise.UserId != user.Id)
             {
-                return false;
+                return Result<ExerciseDto>.Failure(Errors.NotFound);
             }
 
-            await _exerciseRepository.DeleteAsync(id);
-            return true;
+            await _exerciseRepository.DeleteAsync(exerciseId);
+            return Result.Success();
         }
     }
 }

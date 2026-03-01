@@ -1,13 +1,22 @@
 ﻿using backend.DTOs;
-using backend.Models;
+using backend.Utils;
 
 namespace backend.Services
 {
     public interface IExerciseTagService
     {
-        Task<IEnumerable<ExerciseTagDto>> GetTagsAsync(UserDto user, Guid exerciseId);
-        Task<ExerciseTagDto?> CreateTagAsync(UserDto user, CreateExerciseTagDto dto);
-        Task<bool> UpdateTagAsync(UserDto user, UpdateExerciseTagDto dto);
-        Task<bool> DeleteTagAsync(UserDto user, DeleteExerciseTagDto dto);
+        Task<Result<IEnumerable<ExerciseTagDto>>> GetTagsAsync(UserDto user, Guid exerciseId);
+        Task<Result<ExerciseTagDto>> CreateTagAsync(
+            UserDto user,
+            Guid exerciseId,
+            CreateExerciseTagDto dto
+        );
+        Task<Result> UpdateTagAsync(
+            UserDto user,
+            Guid exerciseId,
+            string tag,
+            UpdateExerciseTagDto dto
+        );
+        Task<Result> DeleteTagAsync(UserDto user, Guid exerciseId, string tag);
     }
 }

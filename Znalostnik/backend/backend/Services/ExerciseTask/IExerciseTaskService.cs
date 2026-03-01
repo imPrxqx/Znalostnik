@@ -1,14 +1,30 @@
 ﻿using backend.DTOs;
-using backend.Models;
+using backend.Utils;
 
 namespace backend.Services
 {
     public interface IExerciseTaskService
     {
-        Task<IEnumerable<ExerciseTaskDto>> GetExerciseTasksAsync(UserDto user, Guid exerciseId);
-        Task<ExerciseTaskDto?> GetExerciseTaskAsync(UserDto user, Guid exerciseId, Guid taskId);
-        Task<ExerciseTaskDto?> CreateAsync(UserDto user, CreateExerciseTaskDto dto);
-        Task<bool> UpdateAsync(UserDto user, UpdateExerciseTaskDto dto);
-        Task<bool> DeleteAsync(UserDto user, Guid exerciseId, Guid taskId);
+        Task<Result<IEnumerable<ExerciseTaskDto>>> GetExerciseTasksAsync(
+            UserDto user,
+            Guid exerciseId
+        );
+        Task<Result<ExerciseTaskDto>> GetExerciseTaskAsync(
+            UserDto user,
+            Guid exerciseId,
+            Guid taskId
+        );
+        Task<Result<ExerciseTaskDto>> CreateAsync(
+            UserDto user,
+            Guid exerciseId,
+            CreateExerciseTaskDto dto
+        );
+        Task<Result> UpdateAsync(
+            UserDto user,
+            Guid exerciseId,
+            Guid taskId,
+            UpdateExerciseTaskDto dto
+        );
+        Task<Result> DeleteAsync(UserDto user, Guid exerciseId, Guid taskId);
     }
 }

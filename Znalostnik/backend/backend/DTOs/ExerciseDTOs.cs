@@ -12,7 +12,6 @@ namespace backend.DTOs
 
     public class UpdateExerciseDto
     {
-        public Guid Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Mode { get; set; } = string.Empty;
         public JsonDocument Settings { get; set; } = JsonDocument.Parse("{}");
