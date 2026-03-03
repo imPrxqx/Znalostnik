@@ -18,7 +18,7 @@ namespace backend.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.6")
+                .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -251,6 +251,10 @@ namespace backend.Migrations
                     b.Property<int>("Order")
                         .HasColumnType("integer");
 
+                    b.Property<string>("RespondMode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
@@ -282,6 +286,12 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("CurrentExerciseTaskId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("CurrentTaskIndex")
+                        .HasColumnType("integer");
+
                     b.Property<Guid>("ExerciseId")
                         .HasColumnType("uuid");
 
@@ -302,6 +312,8 @@ namespace backend.Migrations
                         .IsUnique();
 
                     b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("CurrentExerciseTaskId");
 
                     b.HasIndex("ExerciseId");
 
@@ -451,6 +463,9 @@ namespace backend.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
+                    b.Property<int>("UserType")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -574,6 +589,12 @@ namespace backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("backend.Models.ExerciseTask", "CurrentExerciseTask")
+                        .WithMany()
+                        .HasForeignKey("CurrentExerciseTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("backend.Models.Exercise", "Exercise")
                         .WithMany("Sessions")
                         .HasForeignKey("ExerciseId")
@@ -581,6 +602,8 @@ namespace backend.Migrations
                         .IsRequired();
 
                     b.Navigation("CreatedByUser");
+
+                    b.Navigation("CurrentExerciseTask");
 
                     b.Navigation("Exercise");
                 });

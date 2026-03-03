@@ -50,7 +50,7 @@ namespace backend.Controllers
                 pageSize
             );
 
-            return Ok(exercises);
+            return Ok(exercises.Value);
         }
 
         [HttpGet("{exerciseId}")]
@@ -70,7 +70,7 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            return Ok(exercise);
+            return Ok(exercise.Value);
         }
 
         [HttpPost]
@@ -158,8 +158,11 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            var exerciseTasks = _exerciseTaskService.GetExerciseTasksAsync(user.Value, exerciseId);
-            return Ok(exerciseTasks);
+            var exerciseTasks = await _exerciseTaskService.GetExerciseTasksAsync(
+                user.Value,
+                exerciseId
+            );
+            return Ok(exerciseTasks.Value);
         }
 
         // Tasks
@@ -287,7 +290,7 @@ namespace backend.Controllers
             }
 
             var tags = await _exerciseTagService.GetTagsAsync(user.Value, exerciseId);
-            return Ok(tags);
+            return Ok(tags.Value);
         }
 
         [HttpPost("{exerciseId}/tags")]

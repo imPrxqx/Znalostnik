@@ -7,7 +7,12 @@ namespace backend.DTOs
     {
         public static UserDto ToUserDto(this User user)
         {
-            return new UserDto { Id = user.Id, UserName = user.UserName };
+            return new UserDto
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                UserType = user.UserType,
+            };
         }
 
         public static UserDetailDto ToUserDetailDto(this User user)

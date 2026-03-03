@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using backend.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace backend.DTOs
 {
@@ -6,6 +7,7 @@ namespace backend.DTOs
     {
         public string Id { get; set; } = string.Empty;
         public string? UserName { get; set; }
+        public UserType UserType { get; set; }
     }
 
     public class UserDetailDto

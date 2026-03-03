@@ -1,4 +1,5 @@
-﻿using backend.Models;
+﻿using System.Security.Claims;
+using backend.Models;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -19,6 +20,20 @@ namespace backend.Controllers
             _userService = userService;
         }
 
+        [HttpPost("guest")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Guest()
+        {
+            var guestUser = await _userService.SignInAsGuestUser();
+
+            if (guestUser.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
+        }
+
         [HttpGet("me")]
         public async Task<IActionResult> Me()
         {
@@ -29,7 +44,7 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            return Ok(user);
+            return Ok(user.Value);
         }
 
         [HttpGet("me/detail")]
@@ -42,7 +57,7 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            return Ok(userDetail);
+            return Ok(userDetail.Value);
         }
 
         [HttpPost("logout")]

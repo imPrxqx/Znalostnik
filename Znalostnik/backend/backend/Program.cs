@@ -6,6 +6,7 @@ using backend.Hubs;
 using backend.Middleware;
 using backend.Models;
 using backend.Services;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -82,6 +83,10 @@ namespace backend
 
             if (!isDesignTime)
             {
+                builder
+                    .Services.AddDataProtection()
+                    .PersistKeysToFileSystem(new DirectoryInfo("keys"));
+
                 //string X509CertificatePassword = Environment.GetEnvironmentVariable(
                 //    "X509_CERTIFICATE_2_PASSWORD"
                 //)!;
@@ -110,6 +115,7 @@ namespace backend
             builder.Services.AddScoped<ISubmissionService, SubmissionService>();
             builder.Services.AddScoped<ITeamService, TeamService>();
             builder.Services.AddScoped<ITeamMemberService, TeamMemberService>();
+            builder.Services.AddScoped<IUserService, UserService>();
 
             // Repositories
             builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();

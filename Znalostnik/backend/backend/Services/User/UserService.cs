@@ -18,6 +18,29 @@ namespace backend.Services
             _signInManager = signInManager;
         }
 
+        public async Task<Result<User>> SignInAsGuestUser()
+        {
+            string id = $"guest_{Guid.NewGuid()}";
+
+            var guestUser = new User
+            {
+                UserName = id,
+                Email = $"{id}@guest.com",
+                UserType = UserType.Guest,
+            };
+
+            var result = await _userManager.CreateAsync(guestUser);
+
+            if (!result.Succeeded)
+            {
+                Result<User>.Failure(Errors.InvalidOperation);
+            }
+
+            await _signInManager.SignInAsync(guestUser, isPersistent: true);
+
+            return Result<User>.Success(guestUser);
+        }
+
         public async Task<Result<UserDto>> GetCurrentUserAsync(ClaimsPrincipal userClaims)
         {
             var userId = userClaims.FindFirstValue(ClaimTypes.NameIdentifier);

@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class postgresqlcontainer_migration_390 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,6 +41,7 @@ namespace backend.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
+                    UserType = table.Column<int>(type: "integer", nullable: false),
                     UserName = table.Column<string>(
                         type: "character varying(256)",
                         maxLength: 256,
@@ -275,6 +276,7 @@ namespace backend.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
                     Type = table.Column<string>(type: "text", nullable: false),
+                    RespondMode = table.Column<string>(type: "text", nullable: false),
                     Order = table.Column<int>(type: "integer", nullable: false),
                     Content = table.Column<JsonDocument>(type: "jsonb", nullable: false),
                     ExerciseId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -305,6 +307,8 @@ namespace backend.Migrations
                         nullable: false
                     ),
                     AccessCode = table.Column<string>(type: "text", nullable: true),
+                    CurrentTaskIndex = table.Column<int>(type: "integer", nullable: false),
+                    CurrentExerciseTaskId = table.Column<Guid>(type: "uuid", nullable: false),
                     ExerciseId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedByUserId = table.Column<string>(type: "text", nullable: false),
                 },
@@ -315,6 +319,13 @@ namespace backend.Migrations
                         name: "FK_Sessions_AspNetUsers_CreatedByUserId",
                         column: x => x.CreatedByUserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade
+                    );
+                    table.ForeignKey(
+                        name: "FK_Sessions_ExerciseTasks_CurrentExerciseTaskId",
+                        column: x => x.CurrentExerciseTaskId,
+                        principalTable: "ExerciseTasks",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade
                     );
@@ -558,6 +569,12 @@ namespace backend.Migrations
             );
 
             migrationBuilder.CreateIndex(
+                name: "IX_Sessions_CurrentExerciseTaskId",
+                table: "Sessions",
+                column: "CurrentExerciseTaskId"
+            );
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Sessions_ExerciseId",
                 table: "Sessions",
                 column: "ExerciseId"
@@ -627,8 +644,6 @@ namespace backend.Migrations
 
             migrationBuilder.DropTable(name: "TeamMembers");
 
-            migrationBuilder.DropTable(name: "ExerciseTasks");
-
             migrationBuilder.DropTable(name: "Submissions");
 
             migrationBuilder.DropTable(name: "AspNetRoles");
@@ -638,6 +653,8 @@ namespace backend.Migrations
             migrationBuilder.DropTable(name: "Teams");
 
             migrationBuilder.DropTable(name: "Sessions");
+
+            migrationBuilder.DropTable(name: "ExerciseTasks");
 
             migrationBuilder.DropTable(name: "Exercises");
 
