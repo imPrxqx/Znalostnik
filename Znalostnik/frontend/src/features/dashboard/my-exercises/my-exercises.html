@@ -1,0 +1,21 @@
+<div>
+  <h1>My Exercises</h1>
+
+  <button mat-flat-button (click)="createExercise()">+ New Exercise</button>
+  <div>
+    @for(exercise of exercises; track exercise.id) {
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{ exercise.title }}</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content> </mat-card-content>
+
+      <mat-card-actions>
+        <button (click)="openEditor(exercise.id)">Editovat</button>
+        <button (click)="deleteExercise(exercise)">Delete</button>
+      </mat-card-actions>
+    </mat-card>
+    }
+  </div>
+</div>

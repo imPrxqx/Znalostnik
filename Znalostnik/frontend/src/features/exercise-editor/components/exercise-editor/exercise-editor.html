@@ -1,6 +1,86 @@
-<app-switch-mode />
-<app-exercise-import />
-<app-exercise-export />
-<app-exercise-toolbar />
-<app-exercise-overview />
-<app-exercise-preview />
+<div class="container">
+  <mat-toolbar class="toolbar">
+    <div class="toolbar-items">
+      <a [routerLink]="['/']">
+        <img src="favicon.ico" />
+      </a>
+      <button mat-button [matMenuTriggerFor]="fileMenu" i18n>Soubor</button>
+      <button mat-button [matMenuTriggerFor]="editMenu" i18n>Úpravy</button>
+
+      <mat-menu #fileMenu="matMenu">
+        <button mat-menu-item (click)="import()" i18n>Import</button>
+        <button mat-menu-item (click)="export()" i18n>Export</button>
+        <button mat-menu-item (click)="save()" i18n>Save</button>
+      </mat-menu>
+
+      <mat-menu #editMenu="matMenu">
+        <button mat-menu-item (click)="undo()">Undo</button>
+        <button mat-menu-item (click)="redo()">Redo</button>
+      </mat-menu>
+    </div>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav class="sidenav-left" mode="side" position="start" opened>
+      <mat-nav-list class="sidenav-list">
+        <button mat-stroked-button class="task-button" [matMenuTriggerFor]="taskMenu" i18n>
+          Nová úloha
+        </button>
+
+        <mat-menu #taskMenu="matMenu">
+          @for (document of documentSchemas; track document) {
+          <button mat-menu-item (click)="addNewTask(document.key)">{{ document.alias }}</button>
+          }
+        </mat-menu>
+        <div class="scroll-container">
+          <div cdkDropList (cdkDropListDropped)="drop($event)">
+            @for (task of document.getTasks()(); track task.id()) {
+            <div
+              cdkDrag
+              [cdkDragBoundary]="'.scroll-container'"
+              class="slide-container"
+              [class.selected]="edit.task()?.id() === task.id()"
+            >
+              <div class="vertical-line"></div>
+
+              <div class="sidenav-slide-content">
+                <span class="slide-index">{{ $index + 1 }}</span>
+
+                <button class="delete-button" (click)="remove(task.id())">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+
+              <app-slide
+                cdkDragHandle
+                class="slide"
+                [task]="task"
+                (click)="edit.editTask(task.id())"
+              >
+              </app-slide>
+
+              <ng-template cdkDragPreview>
+                <div></div>
+              </ng-template>
+            </div>
+            }
+          </div>
+        </div>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="sidenav-content">
+      @if (edit.task() !== undefined) {
+      <div class="sidenav-content-container">
+        <app-exercise-task [task]="edit.task()!"></app-exercise-task>
+      </div>
+      }
+    </mat-sidenav-content>
+
+    <mat-sidenav class="sidenav-right" mode="side" position="end" opened>
+      @if (edit.task() !== undefined) {
+      <app-exercise-toolbar [task]="edit.task()!"></app-exercise-toolbar>
+      }
+    </mat-sidenav>
+  </mat-sidenav-container>
+</div>

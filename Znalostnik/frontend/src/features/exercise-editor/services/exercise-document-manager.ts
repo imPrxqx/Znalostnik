@@ -1,16 +1,11 @@
 import { Injectable, WritableSignal, computed, signal, inject } from '@angular/core';
-import { ExerciseDocument } from '@shared/interfaces/exercise/exercise-document.interface';
-import { Exercise, Task, Registry, HomeworkExercise } from '@shared/models/format';
-import { EditorManager } from './editor-manager';
+import { Exercise, Task, Registry } from '@shared/models/format';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ExerciseDocumentManager {
-  editorService = inject(EditorManager);
-  currentMode = computed(() => this.editorService.mode());
-
-  exercise = signal<Exercise<any>>(new (Registry.getExercise(this.currentMode()))());
+  exercise = signal<Exercise>(new Exercise());
 
   addTask(task: Task): void {
     this.exercise().addTask(task);
@@ -21,12 +16,16 @@ export class ExerciseDocumentManager {
   }
 
   createTask(schema: string): Task {
-    const task = Registry.getTask(schema, this.currentMode())!;
+    const task = Registry.getTask(schema)!;
     const newTask = new task();
     return newTask;
   }
 
   duplicateTask(indexAt: number, indexTo: number): void {}
+
+  move(index1: number, index2: number): void {
+    this.exercise().move(index1, index2);
+  }
 
   deleteTask(task: Task): void {
     this.exercise().deleteTask(task);
@@ -50,9 +49,5 @@ export class ExerciseDocumentManager {
 
   getTaskIndexById(taskId: string): number {
     return this.exercise().getTaskIndexById(taskId);
-  }
-
-  setExerciseDocument(newDocument: ExerciseDocument, skipExerciseSnapshot: boolean = false): void {
-    //this.exerciseDocument.set(newDocument);
   }
 }

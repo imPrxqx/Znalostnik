@@ -1,6 +1,7 @@
-import { Component, input, InputSignal, output, OutputEmitterRef } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
+import { CommandManager } from '@features/exercise-editor/services/command-manager';
+import { QuizTask, Text } from '@shared/models/format';
 import { UpdateTextCommand } from '@shared/commands/update-text-command';
-import { TextFormat, CommandUiComponent } from '@shared/models/format';
 
 @Component({
   selector: 'app-update-text-command-ui',
@@ -8,18 +9,30 @@ import { TextFormat, CommandUiComponent } from '@shared/models/format';
   templateUrl: './update-text-command-ui.html',
   styleUrl: './update-text-command-ui.scss',
 })
-export class UpdateTextCommandUi implements CommandUiComponent<TextFormat> {
-  format = input.required<TextFormat>();
-  commands = output<Command>();
-
+export class UpdateTextCommandUi {
+  task = input.required<QuizTask>();
+  commandManager = inject(CommandManager);
   currentText: string = '';
+
+  ngAfterViewInit() {
+    this.currentText = this.task().content().content;
+  }
 
   onInputChange(value: string) {
     this.currentText = value;
   }
 
   apply() {
-    const cmd = new UpdateTextCommand(this.format(), this.currentText);
-    this.commands.emit(cmd);
+    const command = new UpdateTextCommand(this.task().content(), this.currentText);
+    this.commandManager.execute(command);
+  }
+
+  static supports(item: any): boolean {
+    if (!('content' in item)) {
+      return false;
+    }
+
+    const value = item.content?.();
+    return value instanceof Text;
   }
 }

@@ -1,0 +1,13 @@
+<div class="quiz">
+  <div class="quiz-header"><h2 class="quiz-question">{{ model().content().content }}</h2></div>
+  <div class="quiz-choices">
+    @for(option of model().options().options; track option.id) {
+    <div class="quiz-choice">
+      <label>
+        <input type="checkbox" (change)="setAnswer(option.id)" />
+        {{ option.content }}
+      </label>
+    </div>
+    }
+  </div>
+</div>

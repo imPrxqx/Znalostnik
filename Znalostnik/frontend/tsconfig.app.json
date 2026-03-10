@@ -19,7 +19,7 @@
   },
   "include": [
     "src/**/*.ts"
-  ],
+, "src/shared/commands/add-choice-command.ts"  ],
   "exclude": [
     "src/**/*.spec.ts"
   ]

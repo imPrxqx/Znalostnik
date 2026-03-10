@@ -1,6 +1,4 @@
-import { ExerciseTaskDocumentSchema } from '@shared/interfaces/exercise/exercise-task.interface';
-
-export const ExerciseTaskDocumentSchemas: ExerciseTaskDocumentSchema[] = [
+export const ExerciseTaskDocumentSchemas: any[] = [
   {
     key: 'quiz',
     alias: $localize`:@@document.quiz:Kvíz`,

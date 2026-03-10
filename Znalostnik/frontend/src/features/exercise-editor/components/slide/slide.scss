@@ -1,0 +1,16 @@
+.slide-container {
+  width: auto;
+  height: 140px;
+  user-select: none;
+  pointer-events: none;
+  border-radius: var(--mat-shape-medium, 12px);
+  border: 2px solid var(--mat-sys-surface-container-highest);
+  background: var(--mat-sys-surface-variant);
+}
+
+.slide-scaled {
+  width: 100%;
+  height: 100%;
+  zoom: 0.12;
+  overflow: hidden;
+}

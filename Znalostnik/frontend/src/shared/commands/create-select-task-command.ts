@@ -1,6 +1,5 @@
 import { ExerciseDocumentManager } from '@features/exercise-editor/services/exercise-document-manager';
 import { ExerciseTaskEdit } from '@features/exercise-editor/services/exercise-task-edit';
-import { ExerciseTaskDocumentSchemaKey } from '@shared/types/exercise-key.type';
 import { Task } from '@shared/models/format';
 
 export class CreateSelectTaskCommand implements Command {
@@ -8,12 +7,12 @@ export class CreateSelectTaskCommand implements Command {
   private receiver2: ExerciseTaskEdit;
 
   private backup: Task | undefined;
-  private newTaskSchema: ExerciseTaskDocumentSchemaKey;
+  private newTaskSchema: string;
 
   constructor(
     receiver1: ExerciseDocumentManager,
     receiver2: ExerciseTaskEdit,
-    newTaskSchema: ExerciseTaskDocumentSchemaKey,
+    newTaskSchema: string,
   ) {
     this.receiver1 = receiver1;
     this.receiver2 = receiver2;
@@ -33,7 +32,7 @@ export class CreateSelectTaskCommand implements Command {
     }
 
     this.receiver1.addTask(this.backup);
-    this.receiver2.editExerciseTask(this.backup.id());
+    this.receiver2.editTask(this.backup.id());
     return true;
   }
 }

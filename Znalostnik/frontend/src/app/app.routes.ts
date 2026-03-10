@@ -1,22 +1,21 @@
 import { Routes } from '@angular/router';
 import { ExerciseEditor } from '@features/exercise-editor/components/exercise-editor/exercise-editor';
-import { Home } from '@pages/home/home';
 import { CreateRoom } from '@features/rooms/components/create-room/create-room';
 import { JoinRoom } from '@features/rooms/components/join-room/join-room';
 import { RoomHub } from '@features/rooms/components/room-hub/room-hub';
 import { Logout } from '@features/authentication/components/logout/logout';
-
-import { Canvas } from '@features/editor/components/canvas/canvas';
-import { ExerciseTest } from '@features/editor/components/exercise-test/exercise-test';
+import { Home } from '@features/home/home';
 import { MainLayout } from '@shared/components/main-layout/main-layout';
-import { Dashboard } from '@pages/dashboard/dashboard';
-import { Account } from '@pages/account/account';
-import { Profile } from '@pages/account/profile/profile';
-import { Settings } from '@pages/account/settings/settings';
-import { Preferences } from '@pages/account/preferences/preferences';
-import { Authentication } from '@pages/authentication/authentication';
-import { Register } from '@pages/authentication/register/register';
-import { Login } from '@pages/authentication/login/login';
+import { Dashboard } from '@features/dashboard/dashboard';
+import { Account } from '@features/account/account';
+import { Profile } from '@features/account/profile/profile';
+import { Settings } from '@features/account/settings/settings';
+import { Preferences } from '@features/account/preferences/preferences';
+import { Authentication } from '@features/authentication/authentication';
+import { Register } from '@features/authentication/register/register';
+import { Login } from '@features/authentication/login/login';
+import { MyExercises } from '@features/dashboard/my-exercises/my-exercises';
+import { MySessions } from '@features/dashboard/my-sessions/my-sessions';
 export const routes: Routes = [
   {
     path: '',
@@ -26,6 +25,11 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: Dashboard,
+    children: [
+      { path: '', redirectTo: 'my-exercises', pathMatch: 'full' },
+      { path: 'my-exercises', component: MyExercises },
+      { path: 'my-sessions', component: MySessions },
+    ],
   },
   {
     path: 'account',
@@ -46,10 +50,6 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'exercise-test',
-    component: ExerciseTest,
-  },
-  {
     path: 'create-room',
     component: CreateRoom,
   },
@@ -60,25 +60,5 @@ export const routes: Routes = [
   {
     path: 'exercise-editor',
     component: ExerciseEditor,
-  },
-  {
-    path: 'editor',
-    component: Canvas,
-  },
-  {
-    path: 'room-hub',
-    component: RoomHub,
-  },
-  {
-    path: 'account',
-    component: Account,
-  },
-  {
-    path: 'logout',
-    component: Logout,
-  },
-  {
-    path: 'session',
-    component: JoinRoom,
   },
 ];

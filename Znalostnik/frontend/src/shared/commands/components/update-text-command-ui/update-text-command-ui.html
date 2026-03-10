@@ -1,4 +1,10 @@
-<p>update-text-command-ui works!</p>
-
-<input [value]="format().content()" (input)="onInputChange($event.target.value)" />
-<button (click)="apply()">Aplikovat</button>
+<div class="container">
+  <div class="text-content">
+    <input
+      type="text"
+      [value]="task().content().content"
+      (input)="onInputChange($event.target.value)"
+    />
+    <button (click)="apply()"></button>
+  </div>
+</div>

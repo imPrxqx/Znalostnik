@@ -1,48 +1,36 @@
-import { Component, ViewChild, ViewContainerRef, effect, inject } from '@angular/core';
-import { ExerciseRedo } from '../exercise-redo/exercise-redo';
-import { ExerciseUndo } from '../exercise-undo/exercise-undo';
-import { ToolbarManager } from '@features/exercise-editor/services/toolbar-manager';
-import { CommandManager } from '@features/exercise-editor/services/command-manager';
+import { Component, ViewChild, ViewContainerRef, effect, inject, input } from '@angular/core';
+import { Task } from '@shared/models/format';
+import { Registry } from '@shared/models/format';
 
 @Component({
   selector: 'app-exercise-toolbar',
-  imports: [ExerciseRedo, ExerciseUndo],
+  imports: [],
   templateUrl: './exercise-toolbar.html',
   styleUrl: './exercise-toolbar.scss',
 })
 export class ExerciseToolbar {
-  toolbarManager = inject(ToolbarManager);
-  commandManager = inject(CommandManager);
+  task = input<Task>();
+  viewContainer = inject(ViewContainerRef);
 
-  @ViewChild('commandContainer', { read: ViewContainerRef, static: true })
-  commandContainer!: ViewContainerRef;
-
-  constructor() {
-    effect(() => {
-      const taskValue = this.toolbarManager.commands();
-      this.renderCommands();
-    });
+  ngOnChanges() {
+    this.renderCommands();
   }
 
   renderCommands(): void {
-    this.commandContainer.clear();
+    this.viewContainer.clear();
 
-    if (this.toolbarManager.commands() === undefined) {
-      return;
-    }
+    const suportedCommands = Registry.getCommands().filter(
+      (cmd: any) => cmd.supports && cmd.supports(this.task()),
+    );
 
-    for (const component of this.toolbarManager.commands()!.components) {
-      const componentRef = this.commandContainer.createComponent(component);
+    suportedCommands.forEach((cmd: any, index: number) => {
+      const compRef = this.viewContainer.createComponent(cmd);
+      compRef.setInput('task', this.task());
 
-      componentRef.setInput('format', this.toolbarManager.commands()!.receiver);
-
-      componentRef.instance.commands.subscribe((cmd) => {
-        this.commandManager.execute(cmd);
-      });
-    }
-  }
-
-  clear(): void {
-    this.toolbarManager.clear();
+      if (index < suportedCommands.length - 1) {
+        const br = document.createElement('br');
+        compRef.location.nativeElement.appendChild(br);
+      }
+    });
   }
 }

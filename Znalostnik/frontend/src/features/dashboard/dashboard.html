@@ -1,0 +1,45 @@
+<mat-sidenav-container class="container">
+  <mat-sidenav class="sidebar" mode="side" opened>
+    <div class="sidebar-header">
+      <img src="favicon.ico" />
+      <a [routerLink]="['/']" class="sidebar-title"><h2 i18n>Znalostník</h2></a>
+    </div>
+
+    <mat-nav-list class="sidebar-list">
+      <a mat-list-item [routerLink]="['my-exercises']" routerLinkActive="active">
+        <mat-icon matListItemIcon>person</mat-icon>
+        <span matListItemTitle i18n>Moje cvičení</span>
+      </a>
+
+      <a mat-list-item [routerLink]="['my-sessions']" routerLinkActive="active">
+        <mat-icon matListItemIcon>person</mat-icon>
+        <span matListItemTitle i18n>Moje relace</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="sidebar-content">
+    <mat-toolbar>
+      <div class="header-right">
+        @if(!auth.user()) {
+        <a routerLink="/authentication/login" i18n>Přihlásit se</a>
+        }
+
+        <button mat-icon-button [matMenuTriggerFor]="userMenu">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+
+        <mat-menu #userMenu="matMenu">
+          @if(auth.user()) {
+          <button mat-menu-item (click)="logout()" i18n>
+            <mat-icon>logout</mat-icon>
+            Odhlásit se
+          </button>
+          }
+        </mat-menu>
+      </div>
+    </mat-toolbar>
+
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,19 @@
+<div class="container">
+  @for (option of task().options().options; track option.id) {
+  <div class="option-content">
+    <input type="checkbox" class="option-checkbox" />
+    <input
+      type="text"
+      [value]="option.content"
+      (input)="onInputChange($index, $event.target.value)"
+    />
+
+    <button (click)="apply($index)"></button>
+  </div>
+  }
+
+  <div class="option-footer">
+    <button class="footer-button add-button" (click)="addOption()">+</button>
+    <button class="footer-button remove-button" (click)="removeLastOption()">-</button>
+  </div>
+</div>

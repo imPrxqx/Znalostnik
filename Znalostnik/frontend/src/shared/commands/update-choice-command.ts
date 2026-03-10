@@ -1,11 +1,11 @@
-import { Text } from '@shared/models/format';
+import { ChoiceOption } from '@shared/models/format';
 
-export class UpdateTextCommand implements Command {
-  private receiver: Text;
+export class UpdateChoiceCommand implements Command {
+  private receiver: ChoiceOption;
   private backup: string;
   private newText: string;
 
-  constructor(receiver: Text, newText: string) {
+  constructor(receiver: ChoiceOption, newText: string) {
     this.receiver = receiver;
     this.backup = receiver.content;
     this.newText = newText;

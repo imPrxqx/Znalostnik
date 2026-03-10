@@ -1,9 +1,0 @@
-<p>text-block works!</p>
-
-@if (viewMode() === 'edit') { @if(editing()) {
-<textarea #editable [value]="format().content()" (keydown.enter)="stopEditing(editable)"></textarea>
-} @else {
-<div (dblclick)="startEditing()">{{ format().content() }}</div>
-} } @else {
-<div>{{ format().content() }}</div>
-}
