@@ -4,11 +4,18 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '@environments/environment';
 import { ROUTES } from '@core/contants/routes';
+import { Router } from '@angular/router';
+
+export enum UserType {
+  Registered,
+  Guest,
+}
 
 export interface User {
   id: string;
   email: string;
   name: string;
+  userType: UserType;
 }
 
 @Injectable({
@@ -16,57 +23,52 @@ export interface User {
 })
 export class Authentication {
   user = signal<User | null>(null);
-  http: HttpClient = inject(HttpClient);
+  http = inject(HttpClient);
+  router = inject(Router);
 
-  async login(email: string, password: string): Promise<void> {
-    try {
-      await firstValueFrom(
-        this.http.post(`${environment.apiURL}${ROUTES.LOGIN}`, { email, password }),
-      );
-      await this.loadUser();
-    } catch (err: any) {
-      this.user.set(null);
-      throw new Error(err?.error?.message || 'Login failed');
-    }
+  register(email: string, password: string) {
+    this.http.post(`${environment.apiURL}/users/register`, { email, password }).subscribe({
+      next: () => {
+        this.router.navigate(['/authentication/login']);
+      },
+    });
   }
 
-  async logout(): Promise<void> {
-    try {
-      await firstValueFrom(this.http.post(`${environment.apiURL}${ROUTES.LOGOUT}`, null));
-    } finally {
-      this.user.set(null);
-    }
+  login(email: string, password: string) {
+    this.http
+      .post(`${environment.apiURL}/users/login?useCookies=true`, { email, password })
+      .subscribe({
+        next: () => {
+          this.loadUser();
+          this.router.navigate(['']);
+        },
+        error: () => {
+          this.user.set(null);
+        },
+      });
   }
 
-  async register(email: string, password: string): Promise<void> {
-    try {
-      await firstValueFrom(
-        this.http.post(`${environment.apiURL}${ROUTES.REGISTER}`, { email, password }),
-      );
-      await this.login(email, password);
-    } catch (err: any) {
-      this.user.set(null);
-      throw new Error(err?.error?.message || 'Register failed');
-    }
+  logout() {
+    this.http.post(`${environment.apiURL}/users/logout`, null).subscribe({
+      next: () => {
+        this.user.set(null);
+        this.router.navigate(['']);
+      },
+    });
   }
 
-  async refresh(): Promise<void> {
-    try {
-      await firstValueFrom(this.http.post(`${environment.apiURL}/refresh`, {}));
-      await this.loadUser();
-    } catch {
-      this.user.set(null);
-    }
+  loadUser() {
+    this.http.get<User>(`${environment.apiURL}/users/me`).subscribe({
+      next: (account) => {
+        if (account.userType === UserType.Registered) {
+          this.user.set(account);
+        }
+      },
+      error: () => this.user.set(null),
+    });
   }
 
-  async loadUser(): Promise<void> {
-    try {
-      const account = await firstValueFrom(
-        this.http.get<User>(`${environment.apiURL}${ROUTES.ACCOUNT}`),
-      );
-      this.user.set(account);
-    } catch {
-      this.user.set(null);
-    }
+  initGuest() {
+    return this.http.post<User>(`${environment.apiURL}/users/guest`, null);
   }
 }

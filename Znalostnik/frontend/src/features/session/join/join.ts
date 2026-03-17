@@ -21,10 +21,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Authentication } from '@core/services/authentication';
+import { SessionState } from '../services/session-state';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-join',
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -41,18 +41,18 @@ import { Authentication } from '@core/services/authentication';
     MatToolbarModule,
     CommonModule,
   ],
-  templateUrl: './login.html',
-  styleUrl: './login.scss',
+  templateUrl: './join.html',
+  styleUrl: './join.scss',
 })
-export class Login {
-  auth = inject(Authentication);
+export class Join {
+  session = inject(SessionState);
 
-  loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required]),
+  joinForm = new FormGroup({
+    code: new FormControl('', [Validators.required]),
   });
 
   onSubmit() {
-    this.auth.login(this.loginForm.value.email!, this.loginForm.value.password!);
+    const code = this.joinForm.value.code as string;
+    this.session.joinSession(code);
   }
 }

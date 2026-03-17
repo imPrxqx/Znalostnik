@@ -1,5 +1,5 @@
 import { RouterOutlet, RouterModule } from '@angular/router';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
@@ -22,6 +22,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Authentication } from '@core/services/authentication';
 
 @Component({
   selector: 'app-register',
@@ -45,6 +46,8 @@ import {
   styleUrl: './register.scss',
 })
 export class Register {
+  auth = inject(Authentication);
+
   registerForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
@@ -52,6 +55,6 @@ export class Register {
   });
 
   onSubmit() {
-    console.warn(this.registerForm.value);
+    this.auth.register(this.registerForm.value.email!, this.registerForm.value.password!);
   }
 }

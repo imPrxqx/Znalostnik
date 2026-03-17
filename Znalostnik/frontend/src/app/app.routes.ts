@@ -16,6 +16,10 @@ import { Register } from '@features/authentication/register/register';
 import { Login } from '@features/authentication/login/login';
 import { MyExercises } from '@features/dashboard/my-exercises/my-exercises';
 import { MySessions } from '@features/dashboard/my-sessions/my-sessions';
+import { GetReady } from '@features/session/get-ready/get-ready';
+import { Join } from '@features/session/join/join';
+import { Participant } from '@features/session/participant/participant';
+import { Host } from '@angular/core';
 export const routes: Routes = [
   {
     path: '',
@@ -47,6 +51,16 @@ export const routes: Routes = [
       { path: '', redirectTo: 'login', pathMatch: 'full' },
       { path: 'login', component: Login },
       { path: 'register', component: Register },
+    ],
+  },
+  {
+    path: 'session',
+    children: [
+      { path: '', redirectTo: 'join', pathMatch: 'full' },
+      { path: 'get-ready', component: GetReady },
+      { path: 'participant', component: Participant },
+      { path: 'host', component: Host },
+      { path: 'join', component: Join },
     ],
   },
   {

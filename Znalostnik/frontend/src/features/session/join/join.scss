@@ -1,0 +1,43 @@
+.join-container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.join-card {
+  width: 416px;
+  padding: 32px;
+  border-radius: var(--mat-sys-corner-large);
+  background: var(--mat-sys-surface-container);
+  border: 2px solid var(--mat-sys-outline-variant);
+}
+
+.join-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.join-submit {
+  width: 100%;
+  font-size: 16px;
+  border-radius: var(--mat-sys-corner-medium);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+a {
+  text-decoration: none;
+}
