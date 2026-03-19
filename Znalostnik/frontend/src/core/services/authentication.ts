@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
 import { environment } from '@environments/environment';
-import { ROUTES } from '@core/contants/routes';
 import { Router } from '@angular/router';
 
 export enum UserType {

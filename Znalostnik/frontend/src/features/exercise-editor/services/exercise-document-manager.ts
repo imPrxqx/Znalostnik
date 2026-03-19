@@ -16,9 +16,8 @@ export class ExerciseDocumentManager {
   }
 
   createTask(schema: string): Task {
-    const task = Registry.getTask(schema)!;
-    const newTask = new task();
-    return newTask;
+    const task = Registry.createTask(schema, undefined)!;
+    return task;
   }
 
   duplicateTask(indexAt: number, indexTo: number): void {}

@@ -1,4 +1,4 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject, computed, ViewChild, ElementRef } from '@angular/core';
 import { ExerciseToolbar } from '@features/exercise-editor/components';
 import { ExerciseShortcuts } from '@features/exercise-editor/directives/exercise-shortcuts';
 import { RouterOutlet, RouterModule } from '@angular/router';
@@ -15,7 +15,7 @@ import { Slide } from '../slide/slide';
 import { ExerciseDocumentManager } from '@features/exercise-editor/services/exercise-document-manager';
 import { CommandManager } from '@features/exercise-editor/services/command-manager';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
-import { Task } from '@shared/models/format';
+import { ExportJsonVisitor, Task } from '@shared/models/format';
 import { MoveCommand } from '@shared/commands/move-command';
 import { RedoCommand } from '@shared/commands/redo-command';
 import { UndoCommand } from '@shared/commands/undo-command';
@@ -24,6 +24,7 @@ import { ExerciseTaskEdit } from '@features/exercise-editor/services/exercise-ta
 import { ExerciseTaskDocumentSchemas } from '@shared/models/exercise-task-document-schemas.model';
 import { ExerciseTask } from '../exercise-task/exercise-task';
 import { RemoveTaskCommand } from '@shared/commands/remove-task-command';
+import { LoadCommand } from '@shared/commands/load-command';
 
 @Component({
   selector: 'app-exercise-editor',
@@ -53,9 +54,44 @@ export class ExerciseEditor {
   commandManager = inject(CommandManager);
   documentSchemas = ExerciseTaskDocumentSchemas;
 
-  import() {}
+  import(event: Event) {
+    const input = event.target as HTMLInputElement;
 
-  export() {}
+    if (!input.files?.length) {
+      return;
+    }
+
+    const file = input.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const json = JSON.parse(reader.result as string);
+      this.load(json);
+    };
+
+    reader.readAsText(file);
+  }
+
+  export() {
+    const visitor = new ExportJsonVisitor();
+    visitor.visitExercise(this.document.exercise());
+
+    const json = visitor.toJson();
+
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'exercise.json';
+    a.click();
+
+    URL.revokeObjectURL(url);
+  }
+
+  load(json: any) {
+    const command = new LoadCommand(this.document, json);
+    this.commandManager.execute(command);
+  }
 
   save() {}
 

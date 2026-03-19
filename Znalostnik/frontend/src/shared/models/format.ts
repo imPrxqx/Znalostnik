@@ -1,10 +1,18 @@
 import { Type, signal, WritableSignal } from '@angular/core';
 import { UpdateMultiChoiceCommandUi } from '@shared/commands/components/update-multi-choice-command-ui/update-multi-choice-command-ui';
 import { UpdateTextCommandUi } from '@shared/commands/components/update-text-command-ui/update-text-command-ui';
-
 import { Quiz } from '@shared/templates/quiz/quiz';
 
-export class Exercise {
+export interface Element {
+  accept(visitor: Visitor): void;
+}
+
+export interface Visitor {
+  visitQuiz(quizTask: QuizTask): void;
+  visitExercise(exercise: Exercise): void;
+}
+
+export class Exercise implements Element {
   id = signal<string>(crypto.randomUUID());
   tasks = signal<Task[]>([]);
   settings = signal<undefined>(undefined);
@@ -75,23 +83,64 @@ export class Exercise {
   getTaskIndexById(taskId: string): number {
     return this.tasks().findIndex((task) => task.id() === taskId);
   }
+
+  accept(visitor: Visitor): void {
+    visitor.visitExercise(this);
+  }
 }
 
-export abstract class Task {
+export abstract class Task implements Element {
   id = signal(crypto.randomUUID());
   abstract type: WritableSignal<string>;
   abstract settings: WritableSignal<undefined>;
+
+  abstract accept(visitor: Visitor): void;
 }
 
-export class QuizTask extends Task {
+export class QuizTask extends Task implements Element {
   type = signal<string>('quiz');
-
-  styles = signal<string>('text');
   content = signal<Text>(new Text());
   options = signal<MultiChoiceOption>(new MultiChoiceOption());
-
   solution = signal<string[] | undefined>(undefined);
   settings = signal<undefined>(undefined);
+
+  constructor(config?: any) {
+    super();
+
+    if (config?.id) {
+      this.id.set(config.id);
+    }
+
+    if (config?.settings) {
+      this.settings.set(config.settings);
+    }
+
+    if (config?.content) {
+      const text = new Text();
+      text.content = config.content;
+      this.content.set(text);
+    }
+
+    if (config?.options) {
+      const multiChoice = new MultiChoiceOption();
+      multiChoice.options = [];
+      config.options.forEach((opt: ChoiceOption) => {
+        const option = new ChoiceOption();
+        option.id = opt.id;
+        option.content = opt.content;
+        multiChoice.addOption(option);
+      });
+      this.options.set(multiChoice);
+    }
+
+    if (config?.solution) {
+      this.solution.set(config.solution);
+    }
+  }
+
+  accept(visitor: Visitor): void {
+    visitor.visitQuiz(this);
+  }
 }
 
 export class ChoiceOption {
@@ -142,12 +191,63 @@ export class Registry {
 
   static commands: Type<any>[] = [UpdateTextCommandUi, UpdateMultiChoiceCommandUi];
 
-  static getTask(key: string): Type<Task> {
-    const entry = this.tasks[key];
-    return entry;
+  static createTask(key: any, config: any): Task {
+    const TaskClass = this.tasks[key];
+    return new TaskClass(config);
   }
 
   static getCommands(): any {
     return this.commands;
+  }
+}
+
+export class ExerciseFactory {
+  static createFromJson(json: any): Exercise {
+    const exercise = new Exercise();
+    exercise.id.set(json.id);
+    exercise.settings.set(json.settings);
+
+    json.tasks?.forEach((taskDef: any) => {
+      const task = Registry.createTask(taskDef.type, taskDef);
+      exercise.addTask(task);
+    });
+
+    return exercise;
+  }
+}
+
+export class ExportJsonVisitor implements Visitor {
+  private result: any = {};
+
+  visitExercise(exercise: Exercise) {
+    this.result = {
+      id: exercise.id(),
+      settings: exercise.settings(),
+      tasks: [],
+    };
+
+    exercise.tasks().forEach((task: Task) => {
+      const taskVisitor = new ExportJsonVisitor();
+      task.accept(taskVisitor);
+      this.result.tasks.push(taskVisitor.result);
+    });
+  }
+
+  visitQuiz(quizTask: QuizTask): void {
+    this.result = {
+      id: quizTask.id(),
+      type: quizTask.type(),
+      content: quizTask.content().content,
+      options: quizTask.options().options.map((option) => ({
+        id: option.id,
+        content: option.content,
+      })),
+      solution: quizTask.solution(),
+      settings: quizTask.settings(),
+    };
+  }
+
+  toJson(): string {
+    return JSON.stringify(this.result);
   }
 }

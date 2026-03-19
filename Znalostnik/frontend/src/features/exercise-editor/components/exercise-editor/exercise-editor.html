@@ -8,7 +8,8 @@
       <button mat-button [matMenuTriggerFor]="editMenu" i18n>Úpravy</button>
 
       <mat-menu #fileMenu="matMenu">
-        <button mat-menu-item (click)="import()" i18n>Import</button>
+        <input type="file" #fileInput accept=".json" class="none" (change)="import($event)" />
+        <button mat-menu-item (click)="fileInput.click()" i18n>Import</button>
         <button mat-menu-item (click)="export()" i18n>Export</button>
         <button mat-menu-item (click)="save()" i18n>Save</button>
       </mat-menu>

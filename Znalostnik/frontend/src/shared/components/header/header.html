@@ -18,6 +18,8 @@
   <div class="header-right">
     @if(!auth.user()) {
     <a routerLink="/authentication/login" i18n>Přihlásit se</a>
+    } @else {
+    <a routerLink="" (click)="logout()" i18n>Odhlásit se</a>
     }
     <button mat-icon-button [matMenuTriggerFor]="userMenu">
       <mat-icon>account_circle</mat-icon>
