@@ -18,7 +18,7 @@ export class LoadCommand implements Command {
 
   execute(): boolean {
     const exercise = ExerciseFactory.createFromJson(this.loadExercise);
-    this.receiver.exercise.set(exercise);
+    this.receiver.loadDocument(exercise);
     return true;
   }
 }

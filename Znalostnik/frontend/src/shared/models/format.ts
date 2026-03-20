@@ -2,6 +2,7 @@ import { Type, signal, WritableSignal } from '@angular/core';
 import { UpdateMultiChoiceCommandUi } from '@shared/commands/components/update-multi-choice-command-ui/update-multi-choice-command-ui';
 import { UpdateTextCommandUi } from '@shared/commands/components/update-text-command-ui/update-text-command-ui';
 import { Quiz } from '@shared/templates/quiz/quiz';
+import { sign } from 'crypto';
 
 export interface Element {
   accept(visitor: Visitor): void;
@@ -14,6 +15,8 @@ export interface Visitor {
 
 export class Exercise implements Element {
   id = signal<string>(crypto.randomUUID());
+  mode = signal<string>('interactive');
+  title = signal<string>('exercise');
   tasks = signal<Task[]>([]);
   settings = signal<undefined>(undefined);
 
@@ -208,11 +211,18 @@ export class ExerciseFactory {
     exercise.settings.set(json.settings);
 
     json.tasks?.forEach((taskDef: any) => {
-      const task = Registry.createTask(taskDef.type, taskDef);
+      const task = Registry.createTask(taskDef.type, taskDef.content);
       exercise.addTask(task);
     });
 
     return exercise;
+  }
+}
+
+export class ExerciseTaskFactory {
+  static createFromJson(json: any): Task {
+    const task = Registry.createTask(json.type, json.content);
+    return task;
   }
 }
 
@@ -221,14 +231,16 @@ export class ExportJsonVisitor implements Visitor {
 
   visitExercise(exercise: Exercise) {
     this.result = {
-      id: exercise.id(),
+      title: exercise.title(),
+      mode: exercise.mode(),
       settings: exercise.settings(),
       tasks: [],
     };
 
-    exercise.tasks().forEach((task: Task) => {
+    exercise.tasks().forEach((task: Task, index: number) => {
       const taskVisitor = new ExportJsonVisitor();
       task.accept(taskVisitor);
+      taskVisitor.result.order = taskVisitor.result.order ?? index;
       this.result.tasks.push(taskVisitor.result);
     });
   }
@@ -237,13 +249,17 @@ export class ExportJsonVisitor implements Visitor {
     this.result = {
       id: quizTask.id(),
       type: quizTask.type(),
-      content: quizTask.content().content,
-      options: quizTask.options().options.map((option) => ({
-        id: option.id,
-        content: option.content,
-      })),
-      solution: quizTask.solution(),
-      settings: quizTask.settings(),
+      respondType: 'individual',
+      order: 0,
+      content: {
+        content: quizTask.content().content,
+        options: quizTask.options().options.map((option) => ({
+          id: option.id,
+          content: option.content,
+        })),
+        solution: quizTask.solution(),
+        settings: quizTask.settings(),
+      },
     };
   }
 

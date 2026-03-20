@@ -7,6 +7,10 @@ import { Exercise, Task, Registry } from '@shared/models/format';
 export class ExerciseDocumentManager {
   exercise = signal<Exercise>(new Exercise());
 
+  loadDocument(exercise: Exercise) {
+    this.exercise.set(exercise);
+  }
+
   addTask(task: Task): void {
     this.exercise().addTask(task);
   }

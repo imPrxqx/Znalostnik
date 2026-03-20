@@ -25,6 +25,8 @@ import { ExerciseTaskDocumentSchemas } from '@shared/models/exercise-task-docume
 import { ExerciseTask } from '../exercise-task/exercise-task';
 import { RemoveTaskCommand } from '@shared/commands/remove-task-command';
 import { LoadCommand } from '@shared/commands/load-command';
+import { ExercisesManager } from '@features/dashboard/services/exercises-manager';
+import { SaveCommand } from '@shared/commands/save-command';
 
 @Component({
   selector: 'app-exercise-editor',
@@ -53,6 +55,7 @@ export class ExerciseEditor {
   edit = inject(ExerciseTaskEdit);
   commandManager = inject(CommandManager);
   documentSchemas = ExerciseTaskDocumentSchemas;
+  exercises = inject(ExercisesManager);
 
   import(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -93,7 +96,10 @@ export class ExerciseEditor {
     this.commandManager.execute(command);
   }
 
-  save() {}
+  save() {
+    const command = new SaveCommand(this.document, this.exercises);
+    this.commandManager.execute(command);
+  }
 
   undo() {
     const command = new UndoCommand(this.commandManager);

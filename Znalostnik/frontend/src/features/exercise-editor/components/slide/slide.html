@@ -1,5 +1,12 @@
+@if(task() !== undefined) {
 <div class="slide-container">
   <div class="slide-scaled">
     <app-exercise-task [task]="task()"></app-exercise-task>
   </div>
 </div>
+
+} @else {
+<div class="slide-empty">
+  <p i18n>Úloha není k dispozici</p>
+</div>
+}

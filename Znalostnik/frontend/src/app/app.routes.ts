@@ -3,7 +3,6 @@ import { ExerciseEditor } from '@features/exercise-editor/components/exercise-ed
 import { CreateRoom } from '@features/rooms/components/create-room/create-room';
 import { JoinRoom } from '@features/rooms/components/join-room/join-room';
 import { RoomHub } from '@features/rooms/components/room-hub/room-hub';
-import { Logout } from '@features/authentication/components/logout/logout';
 import { Home } from '@features/home/home';
 import { MainLayout } from '@shared/components/main-layout/main-layout';
 import { Dashboard } from '@features/dashboard/dashboard';
