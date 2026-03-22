@@ -1,6 +1,10 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title>{{ exercise().title }}</mat-card-title>
+
+    <button mat-mini-fab (click)="createSession()">
+      <mat-icon>bolt</mat-icon>
+    </button>
   </mat-card-header>
 
   <mat-card-content>

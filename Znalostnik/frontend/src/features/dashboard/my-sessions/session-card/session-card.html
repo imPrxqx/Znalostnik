@@ -1,0 +1,31 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{ session().title }}</mat-card-title>
+
+    @if(session().status === "Inactive") {
+    <button mat-mini-fab (click)="resultSession()">
+      <mat-icon>bar_chart</mat-icon>
+    </button>
+    }
+  </mat-card-header>
+
+  <mat-card-content>
+    <div>Status: <strong>{{ session().status }}</strong></div>
+    <div>Připojovací Kód: <strong>{{ session().accessCode }}</strong></div>
+    {{ session().players }}
+  </mat-card-content>
+
+  <mat-card-actions>
+    @if(session().status === "Active" || session().status === "Waiting" ) {
+    <button mat-mini-fab (click)="openSession()">
+      <mat-icon>play_arrow</mat-icon>
+    </button>
+    }
+
+    <p i18n>Vytvořeno: {{ session().createdAt | date:'short' }}</p>
+
+    <button mat-mini-fab (click)="deleteSession()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>

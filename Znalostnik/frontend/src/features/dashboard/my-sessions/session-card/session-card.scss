@@ -3,22 +3,15 @@ mat-card {
   width: 100%;
 }
 
-mat-card-header {
-  padding: 16px;
-  justify-content: space-between;
-}
-
 mat-card-content {
-  flex: auto;
   display: flex;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
   flex-direction: column;
 }
 
 mat-card-actions {
   margin-top: auto;
   justify-content: space-between;
-}
-
-app-slide {
-  height: 100%;
 }

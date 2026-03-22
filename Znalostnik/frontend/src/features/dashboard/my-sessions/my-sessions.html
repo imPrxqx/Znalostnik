@@ -1,1 +1,9 @@
-<p>my-sessions works!</p>
+<div>
+  <h1 i18n>Moje Relace</h1>
+
+  <div class="card-container">
+    @for(session of sessions(); track session.id) {
+    <app-session-card [session]="session"></app-session-card>
+    }
+  </div>
+</div>

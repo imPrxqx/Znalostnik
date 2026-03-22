@@ -2,9 +2,16 @@ import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { QuizTask, Task } from '@shared/models/format';
 import { environment } from '@environments/environment';
+import { SessionApi } from './session-api';
+import { Router } from '@angular/router';
 
 interface Session {
   id: string;
+}
+
+interface SessionUser {
+  id: string;
+  username: string;
 }
 
 @Injectable({
@@ -12,46 +19,58 @@ interface Session {
 })
 export class SessionState {
   session = signal<Session | null>(null);
+  sessionUser = signal<SessionUser | null>(null);
   task = signal<Task | undefined>(new QuizTask());
-  http = inject(HttpClient);
+  api = inject(SessionApi);
+  router = inject(Router);
 
-  createSession(exerciseId: string) {
-    const dto = {
-      exerciseID: exerciseId,
-    };
-
-    this.http.post(`${environment.apiURL}/sessions`, dto).subscribe();
-  }
-
-  joinSession(code: string) {
-    const dto = {
-      code: code,
-    };
-
-    this.http.post(`${environment.apiURL}/sessions/join`, dto).subscribe();
+  joinSession(accessCode: string) {
+    this.api.joinSession(accessCode).subscribe({
+      next: (id: any) => {
+        this.loadSession(id);
+        this.loadSessionUser(id);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
   }
 
   startSession() {
-    if (this.session() !== null) {
-      this.http
-        .post(`${environment.apiURL}/sessions/${this.session()!.id}/start`, null)
-        .subscribe();
-    }
+    // if (this.session() !== null) {
+    //   this.http
+    //     .post(`${environment.apiURL}/sessions/${this.session()!.id}/start`, null)
+    //     .subscribe();
+    // }
   }
 
   endSession() {
-    if (this.session() !== null) {
-      this.http.post(`${environment.apiURL}/sessions/${this.session()!.id}/end`, null).subscribe();
-    }
+    // if (this.session() !== null) {
+    //   this.http.post(`${environment.apiURL}/sessions/${this.session()!.id}/end`, null).subscribe();
+    // }
+  }
+
+  loadSessionUser(sessionId: string) {
+    this.api.loadSessionUser(sessionId).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        this.session.set(data);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
   }
 
   loadSession(sessionId: string) {
-    this.http.get<Session>(`${environment.apiURL}/sessions/${sessionId}`).subscribe({
-      next: (data) => {
+    this.api.loadSession(sessionId).subscribe({
+      next: (data: any) => {
+        console.log(data);
         this.session.set(data);
+        //this.router.navigate(['/session/participant']);
       },
-      error: (err) => {
-        console.error('Failed to load session', err);
+      error: (error) => {
+        console.error(error);
       },
     });
   }

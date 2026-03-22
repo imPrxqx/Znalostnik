@@ -54,6 +54,17 @@ export class ExercisesManager {
     });
   }
 
+  createSession(exerciseId: string) {
+    this.api.createSession(exerciseId).subscribe({
+      next: (json) => {
+        console.log(json);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
   editExercise(exerciseId: string) {
     this.api.loadExercise(exerciseId).subscribe({
       next: (json) => {

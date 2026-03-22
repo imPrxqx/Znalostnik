@@ -25,4 +25,8 @@ export class ExerciseCard {
   deleteExercise() {
     this.exercises.deleteExercise(this.exercise().id);
   }
+
+  createSession() {
+    this.exercises.createSession(this.exercise().id);
+  }
 }

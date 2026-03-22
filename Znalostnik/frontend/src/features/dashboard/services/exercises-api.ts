@@ -24,6 +24,12 @@ export class ExercisesApi {
     });
   }
 
+  createSession(exerciseId: string) {
+    return this.http.post(`${environment.apiURL}/sessions`, {
+      exerciseId: exerciseId,
+    });
+  }
+
   loadExercise(exerciseId: string) {
     return this.http.get(`${environment.apiURL}/exercises/${exerciseId}`);
   }

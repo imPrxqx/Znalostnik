@@ -1,0 +1,12 @@
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  padding: 24px;
+}
+
+app-session-card {
+  width: 320px;
+  height: 192px;
+}
