@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { QuizTask, Task } from '@shared/models/format';
+import { ExerciseTaskFactory, QuizTask, Task } from '@shared/models/format';
 import { environment } from '@environments/environment';
 import { SessionApi } from './session-api';
 import { Router } from '@angular/router';
@@ -18,17 +18,20 @@ interface SessionUser {
   providedIn: 'root',
 })
 export class SessionState {
-  session = signal<Session | null>(null);
-  sessionUser = signal<SessionUser | null>(null);
+  session = signal<Session | undefined>(undefined);
+  sessionUser = signal<SessionUser | undefined>(undefined);
+  role = signal<string | undefined>(undefined);
   task = signal<Task | undefined>(new QuizTask());
+  sessionUsers = signal<SessionUser[]>([]);
+
   api = inject(SessionApi);
   router = inject(Router);
 
-  joinSession(accessCode: string) {
-    this.api.joinSession(accessCode).subscribe({
-      next: (id: any) => {
-        this.loadSession(id);
-        this.loadSessionUser(id);
+  loadSessionRole(sessionId: string) {
+    this.api.loadSessionRole(sessionId).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        this.role.set(data);
       },
       error: (error) => {
         console.error(error);
@@ -36,18 +39,15 @@ export class SessionState {
     });
   }
 
-  startSession() {
-    // if (this.session() !== null) {
-    //   this.http
-    //     .post(`${environment.apiURL}/sessions/${this.session()!.id}/start`, null)
-    //     .subscribe();
-    // }
-  }
-
-  endSession() {
-    // if (this.session() !== null) {
-    //   this.http.post(`${environment.apiURL}/sessions/${this.session()!.id}/end`, null).subscribe();
-    // }
+  joinSession(accessCode: string) {
+    this.api.joinSession(accessCode).subscribe({
+      next: (id: any) => {
+        this.router.navigate([`/sessions/${id}/participant`]);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
   }
 
   loadSessionUser(sessionId: string) {
@@ -67,7 +67,8 @@ export class SessionState {
       next: (data: any) => {
         console.log(data);
         this.session.set(data);
-        //this.router.navigate(['/session/participant']);
+        const exerciseTask = ExerciseTaskFactory.createFromJson(data.currentExerciseTask);
+        this.task.set(exerciseTask);
       },
       error: (error) => {
         console.error(error);
@@ -75,9 +76,31 @@ export class SessionState {
     });
   }
 
-  loadTask(taskId: string) {}
+  nextTask(sessionId: string) {
+    this.api.nextTask(sessionId).subscribe({
+      next: (data: any) => {
+        this.session.set(data);
+        const exerciseTask = ExerciseTaskFactory.createFromJson(data.currentExerciseTask);
+        this.task.set(exerciseTask);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
 
-  nextTask() {}
+  previousTask(sessionId: string) {
+    this.api.previousTask(sessionId).subscribe({
+      next: (data: any) => {
+        this.session.set(data);
+        const exerciseTask = ExerciseTaskFactory.createFromJson(data.currentExerciseTask);
+        this.task.set(exerciseTask);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
 
   submitAnswer(answer: string) {}
 }

@@ -1,1 +1,18 @@
-<p>host works!</p>
+<div class="host-container">
+  <mat-toolbar-row class="top-toolbar">
+    <div>Nastavení</div>
+  </mat-toolbar-row>
+
+  <div class="task-container">
+    <app-exercise-task [task]="task()!"></app-exercise-task>
+  </div>
+
+  <mat-toolbar-row class="bottom-toolbar">
+    <button mat-mini-fab (click)="previousTask()">
+      <mat-icon>arrow_left</mat-icon>
+    </button>
+    <button mat-mini-fab (click)="nextTask()">
+      <mat-icon>arrow_right</mat-icon>
+    </button>
+  </mat-toolbar-row>
+</div>

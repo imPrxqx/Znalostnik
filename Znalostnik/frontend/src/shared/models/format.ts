@@ -27,6 +27,8 @@ export class Exercise implements Element {
       currentTasks.splice(index, 1);
       this.tasks.set(currentTasks);
     }
+
+    this.reindex();
   }
 
   deleteTaskById(taskId: string): void {
@@ -36,18 +38,24 @@ export class Exercise implements Element {
       currentTasks.splice(index, 1);
       this.tasks.set(currentTasks);
     }
+
+    this.reindex();
   }
 
   addTask(task: Task): void {
     const currentTasks = [...this.tasks()];
     currentTasks.push(task);
     this.tasks.set(currentTasks);
+
+    this.reindex();
   }
 
   addTaskAt(task: Task, index: number): void {
     const currentTasks = [...this.tasks()];
     currentTasks.splice(index, 0, task);
     this.tasks.set(currentTasks);
+
+    this.reindex();
   }
 
   move(index1: number, index2: number): void {
@@ -69,6 +77,7 @@ export class Exercise implements Element {
     currentTasks.splice(index2, 0, taskToMove);
 
     this.tasks.set(currentTasks);
+    this.reindex();
   }
 
   getTasks(): WritableSignal<Task[]> {
@@ -90,10 +99,20 @@ export class Exercise implements Element {
   accept(visitor: Visitor): void {
     visitor.visitExercise(this);
   }
+
+  private reindex() {
+    this.tasks().map((task, index) => {
+      task.order.set(index);
+      return task;
+    });
+  }
 }
 
 export abstract class Task implements Element {
   id = signal(crypto.randomUUID());
+  abstract order: WritableSignal<number>;
+  abstract respondType: WritableSignal<string>;
+  abstract gameMode: WritableSignal<string>;
   abstract type: WritableSignal<string>;
   abstract settings: WritableSignal<undefined>;
 
@@ -102,6 +121,10 @@ export abstract class Task implements Element {
 
 export class QuizTask extends Task implements Element {
   type = signal<string>('quiz');
+  order = signal<number>(0);
+  respondType = signal<string>('individual');
+  gameMode = signal<string>('classic');
+
   content = signal<Text>(new Text());
   options = signal<MultiChoiceOption>(new MultiChoiceOption());
   solution = signal<string[] | undefined>(undefined);
@@ -112,6 +135,18 @@ export class QuizTask extends Task implements Element {
 
     if (config?.id) {
       this.id.set(config.id);
+    }
+
+    if (config?.order) {
+      this.order.set(config.order);
+    }
+
+    if (config?.respondType) {
+      this.respondType.set(config.respondType);
+    }
+
+    if (config?.gameMode) {
+      this.gameMode.set(config.gameMode);
     }
 
     if (config?.settings) {
@@ -249,8 +284,9 @@ export class ExportJsonVisitor implements Visitor {
     this.result = {
       id: quizTask.id(),
       type: quizTask.type(),
-      respondType: 'individual',
-      order: 0,
+      gameMode: quizTask.gameMode(),
+      respondType: quizTask.respondType(),
+      order: quizTask.order(),
       content: {
         content: quizTask.content().content,
         options: quizTask.options().options.map((option) => ({

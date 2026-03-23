@@ -1,8 +1,5 @@
 import { Routes } from '@angular/router';
 import { ExerciseEditor } from '@features/exercise-editor/components/exercise-editor/exercise-editor';
-import { CreateRoom } from '@features/rooms/components/create-room/create-room';
-import { JoinRoom } from '@features/rooms/components/join-room/join-room';
-import { RoomHub } from '@features/rooms/components/room-hub/room-hub';
 import { Home } from '@features/home/home';
 import { MainLayout } from '@shared/components/main-layout/main-layout';
 import { Dashboard } from '@features/dashboard/dashboard';
@@ -56,19 +53,11 @@ export const routes: Routes = [
     path: 'session',
     children: [
       { path: '', redirectTo: 'join', pathMatch: 'full' },
-      { path: 'get-ready/:id', component: GetReady },
-      { path: 'participant/:id', component: Participant },
-      { path: 'host/:id', component: Host },
+      { path: 'get-ready', component: GetReady },
+      { path: ':id/participant', component: Participant },
+      { path: ':id/host', component: Host },
       { path: 'join', component: Join },
     ],
-  },
-  {
-    path: 'create-room',
-    component: CreateRoom,
-  },
-  {
-    path: 'join-room',
-    component: JoinRoom,
   },
   {
     path: 'exercise-editor/:id',

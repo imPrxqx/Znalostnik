@@ -20,11 +20,11 @@ export class SessionCard {
   router = inject(Router);
 
   resultSession() {
-    this.router.navigate([`/sessions/${this.session().id}/result`]);
+    this.router.navigate([`/session/${this.session().id}/result`]);
   }
 
   openSession() {
-    this.router.navigate([`/sessions/${this.session().id}`]);
+    this.router.navigate([`/session/${this.session().id}/host`]);
   }
 
   deleteSession() {

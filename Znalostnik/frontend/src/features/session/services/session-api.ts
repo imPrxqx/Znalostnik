@@ -9,8 +9,8 @@ import { environment } from '@environments/environment';
 export class SessionApi {
   http = inject(HttpClient);
 
-  joinSession(accessCode: string) {
-    return this.http.post(`${environment.apiURL}/sessions/join?accessCode=${accessCode}`, null);
+  loadSessionRole(sessionId: string) {
+    return this.http.get(`${environment.apiURL}/sessions/${sessionId}/role`);
   }
 
   loadSession(sessionId: string) {
@@ -19,5 +19,29 @@ export class SessionApi {
 
   loadSessionUser(sessionId: string) {
     return this.http.get(`${environment.apiURL}/sessions/${sessionId}/me`);
+  }
+
+  joinSession(accessCode: string) {
+    return this.http.post(`${environment.apiURL}/sessions/join?accessCode=${accessCode}`, null);
+  }
+
+  startSession(sessionId: string) {
+    return this.http.post(`${environment.apiURL}/sessions/${sessionId}/start`, null);
+  }
+
+  endSession(sessionId: string) {
+    return this.http.post(`${environment.apiURL}/sessions/${sessionId}/end`, null);
+  }
+
+  nextTask(sessionId: string) {
+    return this.http.post(`${environment.apiURL}/sessions/${sessionId}/next`, null);
+  }
+
+  previousTask(sessionId: string) {
+    return this.http.post(`${environment.apiURL}/sessions/${sessionId}/previous`, null);
+  }
+
+  deleteSession(sessionId: string) {
+    return this.http.delete(`${environment.apiURL}/sessions/${sessionId}`);
   }
 }

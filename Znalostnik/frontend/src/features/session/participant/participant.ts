@@ -12,6 +12,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { FormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Hub } from '../services/hub';
 @Component({
   selector: 'app-participant',
   imports: [
@@ -29,4 +31,22 @@ import { MatMenuModule } from '@angular/material/menu';
   templateUrl: './participant.html',
   styleUrl: './participant.scss',
 })
-export class Participant {}
+export class Participant {
+  state = inject(SessionState);
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+  session = computed(() => this.state.session());
+  task = computed(() => this.state.task());
+  hub = inject(Hub);
+
+  ngOnInit() {
+    const sessionId = this.route.snapshot.paramMap.get('id');
+
+    if (!sessionId) {
+      this.router.navigate([`/session/join`]);
+      return;
+    }
+
+    this.state.loadSession(sessionId);
+  }
+}
