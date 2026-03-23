@@ -24,4 +24,15 @@ export class SessionsManager {
       },
     });
   }
+
+  deleteSession(sessionId: string) {
+    this.api.deleteSession(sessionId).subscribe({
+      next: () => {
+        this.loadMySessions();
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
 }

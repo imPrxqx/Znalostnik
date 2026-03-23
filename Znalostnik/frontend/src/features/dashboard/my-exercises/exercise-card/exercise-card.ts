@@ -3,6 +3,7 @@ import { Component, inject, input, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 import { Exercise, ExercisesManager } from '@features/dashboard/services/exercises-manager';
 import { Slide } from '@features/exercise-editor/components/slide/slide';
 import { Task } from '@shared/models/format';
@@ -15,11 +16,11 @@ import { Task } from '@shared/models/format';
 })
 export class ExerciseCard {
   exercise = input.required<Exercise>();
-  task = signal<Task | undefined>(undefined);
   exercises = inject(ExercisesManager);
+  router = inject(Router);
 
   openEditor() {
-    this.exercises.editExercise(this.exercise().id);
+    this.router.navigate([`/exercise-editor/${this.exercise().id}`]);
   }
 
   deleteExercise() {

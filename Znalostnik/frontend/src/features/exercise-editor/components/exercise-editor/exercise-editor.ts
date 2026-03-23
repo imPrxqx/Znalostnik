@@ -1,7 +1,7 @@
 import { Component, inject, computed, ViewChild, ElementRef } from '@angular/core';
 import { ExerciseToolbar } from '@features/exercise-editor/components';
 import { ExerciseShortcuts } from '@features/exercise-editor/directives/exercise-shortcuts';
-import { RouterOutlet, RouterModule } from '@angular/router';
+import { RouterOutlet, RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
@@ -56,6 +56,19 @@ export class ExerciseEditor {
   commandManager = inject(CommandManager);
   documentSchemas = ExerciseTaskDocumentSchemas;
   exercises = inject(ExercisesManager);
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+
+  ngOnInit() {
+    const exerciseId = this.route.snapshot.paramMap.get('id');
+
+    if (!exerciseId) {
+      this.router.navigate([`/dashboard`]);
+      return;
+    }
+
+    this.exercises.editExercise(exerciseId);
+  }
 
   import(event: Event) {
     const input = event.target as HTMLInputElement;

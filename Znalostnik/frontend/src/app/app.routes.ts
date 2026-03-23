@@ -18,7 +18,7 @@ import { MySessions } from '@features/dashboard/my-sessions/my-sessions';
 import { GetReady } from '@features/session/get-ready/get-ready';
 import { Join } from '@features/session/join/join';
 import { Participant } from '@features/session/participant/participant';
-import { Host } from '@angular/core';
+import { Host } from '@features/session/host/host';
 export const routes: Routes = [
   {
     path: '',
@@ -56,9 +56,9 @@ export const routes: Routes = [
     path: 'session',
     children: [
       { path: '', redirectTo: 'join', pathMatch: 'full' },
-      { path: 'get-ready', component: GetReady },
-      { path: 'participant', component: Participant },
-      { path: 'host', component: Host },
+      { path: 'get-ready/:id', component: GetReady },
+      { path: 'participant/:id', component: Participant },
+      { path: 'host/:id', component: Host },
       { path: 'join', component: Join },
     ],
   },
@@ -71,7 +71,7 @@ export const routes: Routes = [
     component: JoinRoom,
   },
   {
-    path: 'exercise-editor',
+    path: 'exercise-editor/:id',
     component: ExerciseEditor,
   },
 ];

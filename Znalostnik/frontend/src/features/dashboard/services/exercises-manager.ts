@@ -70,7 +70,6 @@ export class ExercisesManager {
       next: (json) => {
         const exercise = ExerciseFactory.createFromJson(json);
         this.document.loadDocument(exercise);
-        this.router.navigate(['/exercise-editor']);
       },
       error: (error) => {
         console.error(error);

@@ -15,4 +15,8 @@ export class SessionsApi {
   loadSession(sessionId: string) {
     return this.http.get(`${environment.apiURL}/sessions/${sessionId}`);
   }
+
+  deleteSession(sessionId: string) {
+    return this.http.delete(`${environment.apiURL}/sessions/${sessionId}`);
+  }
 }
