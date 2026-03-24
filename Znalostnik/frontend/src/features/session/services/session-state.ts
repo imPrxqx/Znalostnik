@@ -21,7 +21,9 @@ export class SessionState {
   session = signal<Session | undefined>(undefined);
   sessionUser = signal<SessionUser | undefined>(undefined);
   role = signal<string | undefined>(undefined);
-  task = signal<Task | undefined>(new QuizTask());
+  task = signal<Task | undefined>(undefined);
+  answer = signal<any>(undefined);
+  submission = signal<any>(undefined);
   sessionUsers = signal<SessionUser[]>([]);
 
   api = inject(SessionApi);
@@ -102,5 +104,40 @@ export class SessionState {
     });
   }
 
-  submitAnswer(answer: string) {}
+  loadSubmission(sessionId: string) {
+    this.api.loadSubmission(sessionId).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        this.submission.set(data);
+        this.loadAnswer(sessionId, this.submission().id);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
+  loadAnswer(sessionId: string, submissionId: string) {
+    this.api.loadAnswer(sessionId, submissionId).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        this.answer.set(data);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
+  submitAnswer(sessionId: string, submissionId: string, answer: any) {
+    this.api.submitAnswer(sessionId, submissionId, answer).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        this.answer.set(data);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
 }

@@ -1,5 +1,15 @@
 <div class="participant-container">
+  <mat-toolbar-row class="top-toolbar">
+    <div>Nastavení</div>
+  </mat-toolbar-row>
+
   <div class="task-container">
-    <app-exercise-task [task]="task()!"></app-exercise-task>
+    <app-exercise-task [(answer)]="answer" [task]="task()!"></app-exercise-task>
   </div>
+
+  <mat-toolbar-row class="bottom-toolbar">
+    <button mat-mini-fab class="submit-button" (click)="submitAnswer()">
+      <mat-icon>publish</mat-icon>
+    </button>
+  </mat-toolbar-row>
 </div>

@@ -21,6 +21,14 @@ export class SessionApi {
     return this.http.get(`${environment.apiURL}/sessions/${sessionId}/me`);
   }
 
+  loadSubmission(sessionId: string) {
+    return this.http.get(`${environment.apiURL}/sessions/${sessionId}/submissions`);
+  }
+
+  loadAnswer(sessionId: string, submissionId: string) {
+    return this.http.get(`${environment.apiURL}/sessions/${sessionId}/submissions/${submissionId}`);
+  }
+
   joinSession(accessCode: string) {
     return this.http.post(`${environment.apiURL}/sessions/join?accessCode=${accessCode}`, null);
   }
@@ -39,6 +47,13 @@ export class SessionApi {
 
   previousTask(sessionId: string) {
     return this.http.post(`${environment.apiURL}/sessions/${sessionId}/previous`, null);
+  }
+
+  submitAnswer(sessionId: string, submissionId: string, answer: any) {
+    return this.http.post(
+      `${environment.apiURL}/sessions/${sessionId}/submissions/${submissionId}`,
+      answer,
+    );
   }
 
   deleteSession(sessionId: string) {

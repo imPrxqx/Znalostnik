@@ -13,3 +13,17 @@
   flex: auto;
   width: 100%;
 }
+
+.bottom-toolbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  height: 5%;
+}
+
+.submit-button {
+  width: 20%;
+  height: 80%;
+}

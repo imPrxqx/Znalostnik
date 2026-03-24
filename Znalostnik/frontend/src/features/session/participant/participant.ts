@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, linkedSignal } from '@angular/core';
 import { ExerciseTask } from '@features/exercise-editor/components/exercise-task/exercise-task';
 import { SessionState } from '../services/session-state';
 import { Task } from '@shared/models/format';
@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Hub } from '../services/hub';
+import { MatToolbarModule } from '@angular/material/toolbar';
 @Component({
   selector: 'app-participant',
   imports: [
@@ -27,6 +28,7 @@ import { Hub } from '../services/hub';
     MatProgressBarModule,
     MatSlideToggleModule,
     MatMenuModule,
+    MatToolbarModule,
   ],
   templateUrl: './participant.html',
   styleUrl: './participant.scss',
@@ -37,6 +39,8 @@ export class Participant {
   router = inject(Router);
   session = computed(() => this.state.session());
   task = computed(() => this.state.task());
+  answer = linkedSignal(() => this.state.answer());
+  submission = computed(() => this.state.submission());
   hub = inject(Hub);
 
   ngOnInit() {
@@ -48,5 +52,10 @@ export class Participant {
     }
 
     this.state.loadSession(sessionId);
+  }
+
+  submitAnswer() {
+    console.log('answer submitted: ', this.answer());
+    this.state.submitAnswer(this.session()?.id!, this.submission()?.id!, this.answer()!);
   }
 }
