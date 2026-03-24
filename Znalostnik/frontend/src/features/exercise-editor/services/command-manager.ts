@@ -10,6 +10,13 @@ export class CommandManager {
 
   execute(command: Command) {
     if (command.execute()) {
+      const last = this.history.history[this.history.history.length - 1];
+
+      if (last && this.isMergeable(last) && last.canMergeWith(command)) {
+        last.mergeWith(command);
+        return;
+      }
+
       this.history.push(command);
       this.backup = [];
     }
@@ -31,5 +38,9 @@ export class CommandManager {
       backupCommand.execute();
       this.history.push(backupCommand);
     }
+  }
+
+  private isMergeable(cmd: Command): cmd is Command & MergeableCommand {
+    return 'canMergeWith' in cmd && 'mergeWith' in cmd;
   }
 }

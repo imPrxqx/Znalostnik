@@ -41,3 +41,15 @@
   background: var(--mat-sys-surface-container);
   border-color: var(--mat-sys-primary);
 }
+
+.selected {
+  background-color: var(--mat-sys-surface-variant);
+}
+
+.correct {
+  background-color: var(--mat-sys-primary);
+}
+
+.incorrect {
+  background-color: var(--mat-sys-error);
+}

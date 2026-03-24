@@ -1,14 +1,12 @@
 <div class="container">
   @for (option of task().options().options; track option.id) {
   <div class="option-content">
-    <input type="checkbox" class="option-checkbox" />
+    <input type="checkbox" class="option-checkbox" (change)="onCheckboxChange(option.id)" />
     <input
       type="text"
       [value]="option.content"
       (input)="onInputChange($index, $event.target.value)"
     />
-
-    <button (click)="apply($index)"></button>
   </div>
   }
 

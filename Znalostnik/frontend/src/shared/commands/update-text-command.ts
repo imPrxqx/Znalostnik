@@ -1,6 +1,7 @@
 import { Text } from '@shared/models/format';
 
-export class UpdateTextCommand implements Command {
+export class UpdateTextCommand implements Command, MergeableCommand {
+  private mergeCount = 1;
   private receiver: Text;
   private backup: string;
   private newText: string;
@@ -18,5 +19,20 @@ export class UpdateTextCommand implements Command {
   execute(): boolean {
     this.receiver.setContent(this.newText);
     return true;
+  }
+
+  canMergeWith(other: Command): boolean {
+    return (
+      other instanceof UpdateTextCommand && other.receiver === this.receiver && this.mergeCount < 5
+    );
+  }
+
+  mergeWith(other: Command): void {
+    if (!(other instanceof UpdateTextCommand)) {
+      return;
+    }
+
+    this.newText = other.newText;
+    this.mergeCount++;
   }
 }

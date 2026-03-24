@@ -12,18 +12,9 @@ import { UpdateTextCommand } from '@shared/commands/update-text-command';
 export class UpdateTextCommandUi {
   task = input.required<QuizTask>();
   commandManager = inject(CommandManager);
-  currentText: string = '';
-
-  ngAfterViewInit() {
-    this.currentText = this.task().content().content;
-  }
 
   onInputChange(value: string) {
-    this.currentText = value;
-  }
-
-  apply() {
-    const command = new UpdateTextCommand(this.task().content(), this.currentText);
+    const command = new UpdateTextCommand(this.task().content(), value);
     this.commandManager.execute(command);
   }
 

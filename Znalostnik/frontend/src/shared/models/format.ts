@@ -127,7 +127,7 @@ export class QuizTask extends Task implements Element {
 
   content = signal<Text>(new Text());
   options = signal<MultiChoiceOption>(new MultiChoiceOption());
-  solution = signal<string[] | undefined>(undefined);
+  solution = signal<string[]>([]);
   settings = signal<undefined>(undefined);
 
   constructor(config?: any) {
@@ -173,6 +173,15 @@ export class QuizTask extends Task implements Element {
 
     if (config?.solution) {
       this.solution.set(config.solution);
+    }
+  }
+
+  setSolution(optionId: string) {
+    const index = this.solution().findIndex((id) => id === optionId);
+    if (index === -1) {
+      this.solution().push(optionId);
+    } else {
+      this.solution().splice(index, 1);
     }
   }
 

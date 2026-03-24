@@ -3,6 +3,7 @@ import { CommandManager } from '@features/exercise-editor/services/command-manag
 import { AddChoiceCommand } from '@shared/commands/add-choice-command';
 import { RemoveChoiceCommand } from '@shared/commands/remove-choice-command copy';
 import { UpdateChoiceCommand } from '@shared/commands/update-choice-command';
+import { UpdateChoiceSolutionCommand } from '@shared/commands/update-choice-solution-command';
 import { MultiChoiceOption, QuizTask } from '@shared/models/format';
 
 @Component({
@@ -14,25 +15,14 @@ import { MultiChoiceOption, QuizTask } from '@shared/models/format';
 export class UpdateMultiChoiceCommandUi {
   task = input.required<QuizTask>();
   commandManager = inject(CommandManager);
-  currentTexts: string[] = [];
 
-  ngAfterViewInit() {
-    this.task()
-      .options()
-      .options.forEach((option, index) => {
-        this.currentTexts[index] = option.content;
-      });
+  onCheckboxChange(optionId: string) {
+    const command = new UpdateChoiceSolutionCommand(this.task(), optionId);
+    this.commandManager.execute(command);
   }
 
   onInputChange(index: number, value: string) {
-    this.currentTexts[index] = value;
-  }
-
-  apply(index: number) {
-    const option = this.task().options().options[index];
-    const text = this.currentTexts[index];
-
-    const command = new UpdateChoiceCommand(option, text);
+    const command = new UpdateChoiceCommand(this.task().options().options[index], value);
     this.commandManager.execute(command);
   }
 
