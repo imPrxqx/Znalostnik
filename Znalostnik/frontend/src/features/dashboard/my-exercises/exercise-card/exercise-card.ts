@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { Exercise, ExercisesManager } from '@features/dashboard/services/exercises-manager';
 import { Slide } from '@features/exercise-editor/components/slide/slide';
-import { Task } from '@shared/models/format';
+import { ExerciseTaskFactory, Task } from '@shared/models/format';
 
 @Component({
   selector: 'app-exercise-card',
@@ -16,8 +16,21 @@ import { Task } from '@shared/models/format';
 })
 export class ExerciseCard {
   exercise = input.required<Exercise>();
+  task = signal<Task | undefined>(undefined);
   exercises = inject(ExercisesManager);
   router = inject(Router);
+
+  ngOnInit() {
+    this.exercises.loadFirstTask(this.exercise().id).subscribe({
+      next: (json) => {
+        const task = ExerciseTaskFactory.createFromJson(json);
+        this.task.set(task);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
 
   openEditor() {
     this.router.navigate([`/exercise-editor/${this.exercise().id}`]);

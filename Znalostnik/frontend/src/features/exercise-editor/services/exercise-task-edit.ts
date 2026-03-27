@@ -1,4 +1,12 @@
-import { Injectable, inject, signal, Signal, WritableSignal, linkedSignal } from '@angular/core';
+import {
+  Injectable,
+  inject,
+  signal,
+  Signal,
+  WritableSignal,
+  linkedSignal,
+  computed,
+} from '@angular/core';
 import { ExerciseDocumentManager } from './exercise-document-manager';
 import { Exercise, Task } from '@shared/models/format';
 
@@ -11,7 +19,7 @@ export class ExerciseTaskEdit {
   private lastSelectedTaskId: string | undefined = undefined;
 
   task = linkedSignal<Task[], Task | undefined>({
-    source: this.exerciseDocumentService.getTasks(),
+    source: computed(() => this.exerciseDocumentService.exercise().getTasks()()),
     computation: (source) => {
       if (source.length === 0) {
         this.lastSelectedTaskId = undefined;

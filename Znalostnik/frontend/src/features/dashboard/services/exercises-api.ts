@@ -34,8 +34,8 @@ export class ExercisesApi {
     return this.http.get(`${environment.apiURL}/exercises/${exerciseId}`);
   }
 
-  loadTask(exerciseId: string, taskId: string) {
-    return this.http.get(`${environment.apiURL}/exercises/${exerciseId}/tasks/${taskId}`);
+  loadFirstTask(exerciseId: string) {
+    return this.http.get(`${environment.apiURL}/exercises/${exerciseId}/tasks/first`);
   }
 
   deleteExercise(exerciseId: string) {

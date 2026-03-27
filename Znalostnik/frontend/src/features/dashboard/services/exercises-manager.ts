@@ -68,6 +68,7 @@ export class ExercisesManager {
   editExercise(exerciseId: string) {
     this.api.loadExercise(exerciseId).subscribe({
       next: (json) => {
+        console.log(json);
         const exercise = ExerciseFactory.createFromJson(json);
         this.document.loadDocument(exercise);
       },
@@ -75,6 +76,10 @@ export class ExercisesManager {
         console.error(error);
       },
     });
+  }
+
+  loadFirstTask(exerciseId: string) {
+    return this.api.loadFirstTask(exerciseId);
   }
 
   deleteExercise(exerciseId: string) {

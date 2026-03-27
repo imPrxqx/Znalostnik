@@ -255,7 +255,8 @@ export class ExerciseFactory {
     exercise.settings.set(json.settings);
 
     json.tasks?.forEach((taskDef: any) => {
-      const task = Registry.createTask(taskDef.type, taskDef.content);
+      console.log(taskDef);
+      const task = ExerciseTaskFactory.createFromJson(taskDef);
       exercise.addTask(task);
     });
 
@@ -265,6 +266,8 @@ export class ExerciseFactory {
 
 export class ExerciseTaskFactory {
   static createFromJson(json: any): Task {
+    console.log(json.type);
+    console.log(json.content);
     const task = Registry.createTask(json.type, json.content);
     return task;
   }
