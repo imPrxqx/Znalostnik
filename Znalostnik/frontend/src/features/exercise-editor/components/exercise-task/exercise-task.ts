@@ -1,5 +1,5 @@
 import { Component, inject, input, model, ViewContainerRef } from '@angular/core';
-import { Registry, Task } from '@shared/models/format';
+import { Registry, Task, TaskAnswer } from '@shared/models/format';
 
 @Component({
   selector: 'app-exercise-task',
@@ -10,7 +10,7 @@ import { Registry, Task } from '@shared/models/format';
 export class ExerciseTask {
   viewContainer = inject(ViewContainerRef);
   task = input.required<Task>();
-  answer = model<any>();
+  answer = model<TaskAnswer | undefined>();
 
   ngOnChanges() {
     this.renderTask();
@@ -20,6 +20,6 @@ export class ExerciseTask {
     this.viewContainer.clear();
     const compRef = this.viewContainer.createComponent(Registry.components[this.task().type()]);
     compRef.setInput('model', this.task());
-    compRef.setInput('answer', this.answer);
+    compRef.setInput('answer', this.answer());
   }
 }

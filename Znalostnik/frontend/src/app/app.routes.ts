@@ -16,6 +16,7 @@ import { GetReady } from '@features/session/get-ready/get-ready';
 import { Join } from '@features/session/join/join';
 import { Participant } from '@features/session/participant/participant';
 import { Host } from '@features/session/host/host';
+import { Lobby } from '@features/session/lobby/lobby';
 export const routes: Routes = [
   {
     path: '',
@@ -53,7 +54,8 @@ export const routes: Routes = [
     path: 'session',
     children: [
       { path: '', redirectTo: 'join', pathMatch: 'full' },
-      { path: 'get-ready', component: GetReady },
+      { path: ':id/get-ready', component: GetReady },
+      { path: ':id/lobby', component: Lobby },
       { path: ':id/participant', component: Participant },
       { path: ':id/host', component: Host },
       { path: 'join', component: Join },

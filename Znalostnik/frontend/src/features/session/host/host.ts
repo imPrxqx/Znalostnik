@@ -8,6 +8,7 @@ import { ExerciseTask } from '@features/exercise-editor/components/exercise-task
 import { QuizTask, Task } from '@shared/models/format';
 import { SessionState } from '../services/session-state';
 import { ActivatedRoute, Route, Router } from '@angular/router';
+import { Timer } from '../timer/timer';
 
 @Component({
   selector: 'app-host',
@@ -18,6 +19,7 @@ import { ActivatedRoute, Route, Router } from '@angular/router';
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
+    Timer,
   ],
   templateUrl: './host.html',
   styleUrl: './host.scss',
@@ -29,6 +31,7 @@ export class Host {
   session = computed(() => this.state.session());
   task = computed(() => this.state.task());
   sessionUsers = computed(() => this.state.sessionUsers());
+  end = signal<Date>(new Date(new Date().getTime() + 30000));
 
   ngOnInit() {
     const sessionId = this.route.snapshot.paramMap.get('id');

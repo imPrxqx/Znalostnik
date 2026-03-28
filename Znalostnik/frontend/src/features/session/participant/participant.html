@@ -1,10 +1,12 @@
 <div class="participant-container">
-  <mat-toolbar-row class="top-toolbar">
-    <div>Nastavení</div>
+  <mat-toolbar-row>
+    <app-timer [targetTime]="end()"></app-timer>
   </mat-toolbar-row>
 
   <div class="task-container">
+    @if(task() !== undefined && answer() !== undefined) {
     <app-exercise-task [(answer)]="answer" [task]="task()!"></app-exercise-task>
+    }
   </div>
 
   <mat-toolbar-row class="bottom-toolbar">

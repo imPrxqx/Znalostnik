@@ -21,12 +21,20 @@ export class SessionApi {
     return this.http.get(`${environment.apiURL}/sessions/${sessionId}/me`);
   }
 
+  loadSessionUsers(sessionId: string) {
+    return this.http.get(`${environment.apiURL}/sessions/${sessionId}/joined`);
+  }
+
   loadSubmission(sessionId: string) {
     return this.http.get(`${environment.apiURL}/sessions/${sessionId}/submissions`);
   }
 
   loadAnswer(sessionId: string, submissionId: string) {
     return this.http.get(`${environment.apiURL}/sessions/${sessionId}/submissions/${submissionId}`);
+  }
+
+  loadCurrentAnswer(sessionId: string) {
+    return this.http.get(`${environment.apiURL}/sessions/${sessionId}/answers/current`);
   }
 
   joinSession(accessCode: string) {
@@ -49,11 +57,8 @@ export class SessionApi {
     return this.http.post(`${environment.apiURL}/sessions/${sessionId}/previous`, null);
   }
 
-  submitAnswer(sessionId: string, submissionId: string, answer: any) {
-    return this.http.post(
-      `${environment.apiURL}/sessions/${sessionId}/submissions/${submissionId}`,
-      answer,
-    );
+  submitAnswer(sessionId: string, answer: any) {
+    return this.http.post(`${environment.apiURL}/sessions/${sessionId}/answers`, answer);
   }
 
   deleteSession(sessionId: string) {

@@ -12,14 +12,13 @@ export class Hub {
 
   constructor() {
     effect(() => {
-      this.disconnect();
       this.connect();
     });
   }
 
   async connect() {
     if (this.connection) {
-      return;
+      this.disconnect();
     }
 
     this.connection = new signalR.HubConnectionBuilder()
@@ -39,9 +38,18 @@ export class Hub {
       console.log('Disconnected');
     });
 
-    this.connection.on('NotifySessionUpdated', (data) => {
+    this.connection.on('SessionUpdated', (data) => {
       console.log('Session Updated');
       this.sessionState.loadSession(this.sessionState.session()?.id!);
+    });
+
+    this.connection.on('JoinUpdated', (data) => {
+      console.log('Join Updated');
+      this.sessionState.loadSessionUsers(this.sessionState.session()?.id!);
+    });
+
+    this.connection.on('AnswerSubmitted', (data) => {
+      console.log('Answer Submitted');
     });
 
     await this.connection.start();
