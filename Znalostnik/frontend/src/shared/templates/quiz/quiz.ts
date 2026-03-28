@@ -2,17 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, input, model, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { QuizTask } from '@shared/models/format';
-
-interface QuizAnswer {
-  id: string;
-  created: string;
-  submit: Array<string>;
-  evaluation?: {
-    correct: Array<string>;
-    incorrect: Array<string>;
-  };
-}
+import { QuizAnswer, QuizTask } from '@shared/models/format';
 
 @Component({
   selector: 'app-quiz',
@@ -30,12 +20,12 @@ export class Quiz {
         return current;
       }
 
-      const submit = current.submit;
+      const submit = current.submit.selected;
 
       if (submit.includes(optionId)) {
-        current.submit = submit.filter((id) => id !== optionId);
+        current.submit.selected = submit.filter((id) => id !== optionId);
       } else {
-        current.submit = [...submit, optionId];
+        current.submit.selected = [...submit, optionId];
       }
 
       return current;
@@ -43,11 +33,18 @@ export class Quiz {
   }
 
   isSelected(optionId: string) {
-    if (this.answer()?.evaluation) {
-      return false;
+    return this.answer()?.submit?.selected.includes(optionId);
+  }
+
+  isSolution(optionId: string) {
+    const answer = this.answer();
+
+    if (answer) {
+      return undefined;
     }
 
-    return this.answer()?.submit?.includes(optionId);
+    const solution = this.model().solution();
+    return solution.includes(optionId);
   }
 
   isCorrect(optionId: string) {

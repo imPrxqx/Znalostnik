@@ -227,6 +227,47 @@ export class Text {
   }
 }
 
+export abstract class TaskAnswer {
+  id = crypto.randomUUID();
+  taskId: string = '';
+  abstract created: string;
+  abstract submit: any;
+  abstract evaluation?: any;
+}
+
+export class QuizAnswer extends TaskAnswer {
+  created = new Date().toLocaleString();
+  submit: {
+    selected: Array<string>;
+  } = { selected: [] };
+  evaluation:
+    | {
+        correct: Array<string>;
+        incorrect: Array<string>;
+      }
+    | undefined = undefined;
+
+  constructor(config?: any) {
+    super();
+
+    if (config?.created) {
+      this.created = config.created;
+    }
+
+    if (config?.submit) {
+      this.submit = config.submit;
+    }
+
+    if (config?.evaluation) {
+      this.evaluation = config.evaluation;
+    }
+
+    if (config?.taskId) {
+      this.taskId = config.task;
+    }
+  }
+}
+
 export class Registry {
   static components: Record<string, any> = {
     quiz: Quiz,
@@ -236,11 +277,20 @@ export class Registry {
     quiz: QuizTask,
   };
 
+  static answers: Record<string, any> = {
+    quiz: QuizAnswer,
+  };
+
   static commands: Type<any>[] = [UpdateTextCommandUi, UpdateMultiChoiceCommandUi];
 
   static createTask(key: any, config: any): Task {
     const TaskClass = this.tasks[key];
     return new TaskClass(config);
+  }
+
+  static createAnswer(key: any, config: any): TaskAnswer {
+    const TaskAnswerClass = this.answers[key];
+    return new TaskAnswerClass(config);
   }
 
   static getCommands(): any {
@@ -255,7 +305,6 @@ export class ExerciseFactory {
     exercise.settings.set(json.settings);
 
     json.tasks?.forEach((taskDef: any) => {
-      console.log(taskDef);
       const task = ExerciseTaskFactory.createFromJson(taskDef);
       exercise.addTask(task);
     });
@@ -266,8 +315,6 @@ export class ExerciseFactory {
 
 export class ExerciseTaskFactory {
   static createFromJson(json: any): Task {
-    console.log(json.type);
-    console.log(json.content);
     const task = Registry.createTask(json.type, json.content);
     return task;
   }

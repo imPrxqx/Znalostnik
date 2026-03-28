@@ -5,6 +5,7 @@
   height: 100%;
   box-sizing: border-box;
   padding: 32px;
+  font: var(--mat-sys-display-small);
 }
 
 .quiz-header {
@@ -30,6 +31,7 @@
 .quiz-choice {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 16px;
   padding: 16px;
   border-radius: var(--mat-sys-corner-medium);
@@ -38,12 +40,12 @@
 }
 
 .quiz-choice:hover {
-  background: var(--mat-sys-surface-container);
   border-color: var(--mat-sys-primary);
 }
 
 .selected {
-  background-color: var(--mat-sys-surface-variant);
+  color: var(--mat-sys-on-primary);
+  background-color: var(--mat-sys-secondary);
 }
 
 .correct {

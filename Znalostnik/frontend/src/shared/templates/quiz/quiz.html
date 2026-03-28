@@ -4,9 +4,12 @@
     @for(option of model().options().options; track option.id) {
     <div
       class="quiz-choice"
+      [class.correct]="isSolution(option.id)"
+      [class.incorrect]="isSolution(option.id)"
       [class.selected]="isSelected(option.id)"
       [class.correct]="isCorrect(option.id)"
       [class.incorrect]="isIncorrect(option.id)"
+      (click)="setAnswer(option.id)"
     >
       <label> {{ option.content }} </label>
     </div>
