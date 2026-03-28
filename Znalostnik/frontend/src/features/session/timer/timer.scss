@@ -1,0 +1,10 @@
+.container {
+  display: flex;
+  background-color: var(--mat-sys-secondary);
+  border-radius: var(--mat-sys-corner-large);
+  font: var(--mat-sys-headline-large);
+  color: var(--mat-sys-on-primary);
+  padding: 12px 24px;
+  justify-content: center;
+  align-items: center;
+}
