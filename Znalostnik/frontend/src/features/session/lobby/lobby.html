@@ -1,0 +1,17 @@
+<div class="container">
+  <mat-toolbar-row class="top-toolbar">
+    <h1 i18n>Lobby</h1>
+  </mat-toolbar-row>
+
+  <div class="grid">
+    @for(session of sessionUsers(); track session.id) {
+    <button matButton="elevated" class="cell">{{ session.userName }}</button>
+    }
+  </div>
+
+  <mat-toolbar-row class="bottom-toolbar">
+    <button mat-mini-fab class="start-button" (click)="startSession()">
+      <mat-icon>start</mat-icon>
+    </button>
+  </mat-toolbar-row>
+</div>
