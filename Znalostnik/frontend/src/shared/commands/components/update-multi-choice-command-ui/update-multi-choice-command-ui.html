@@ -1,7 +1,12 @@
 <div class="container">
   @for (option of task().options().options; track option.id) {
   <div class="option-content">
-    <input type="checkbox" class="option-checkbox" (change)="onCheckboxChange(option.id)" />
+    <input
+      type="checkbox"
+      class="option-checkbox"
+      [checked]="isChecked(option.id)"
+      (change)="onCheckboxChange(option.id)"
+    />
     <input
       type="text"
       [value]="option.content"

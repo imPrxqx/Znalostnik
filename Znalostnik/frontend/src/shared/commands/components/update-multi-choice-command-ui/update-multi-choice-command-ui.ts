@@ -26,6 +26,10 @@ export class UpdateMultiChoiceCommandUi {
     this.commandManager.execute(command);
   }
 
+  isChecked(optionId: string): boolean {
+    return this.task().solution().includes(optionId);
+  }
+
   static supports(item: any): boolean {
     if (!('options' in item)) {
       return false;
