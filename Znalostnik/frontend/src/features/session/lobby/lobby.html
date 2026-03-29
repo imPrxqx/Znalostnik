@@ -1,17 +1,57 @@
-<div class="container">
-  <mat-toolbar-row class="top-toolbar">
-    <h1 i18n>Lobby</h1>
-  </mat-toolbar-row>
+@if(loading() === true) {
+<div class="container-loading">
+  <mat-spinner></mat-spinner>
+</div>
+} @else {
 
-  <div class="grid">
-    @for(session of sessionUsers(); track session.id) {
-    <button matButton="elevated" class="cell">{{ session.userName }}</button>
+<div class="container">
+  @if(role() === "Participant") {
+
+  <div class="layout">
+    @if(sessionUser() !== undefined) {
+    <div>
+      <div class="team-label">{{ sessionUser()!.team ? sessionUser()!.team : "None" }}</div>
+      <button mat-raised-button>{{ sessionUser()!.userName }}</button>
+    </div>
+
     }
   </div>
 
+  <div class="layout">
+    @for(team of groupByTeam(); track team) {
+    <button mat-raised-button (click)="selectTeam(team)">{{ team }}</button>
+    }
+  </div>
+  @if(selectedTeam() !== undefined) {
+
+  <div class="layout">
+    @for(user of selectedTeam(); track user.id) {
+
+    <button mat-raised-button>{{ user.userName }}</button>
+    }
+  </div>
+
+  } } @if(role() === "Host") {
+
+  <mat-toolbar-row class="top-toolbar">
+    @if(session() !== undefined) {
+    <h1 i18n>Připojovací Kód: {{ session()!.accessCode }}</h1>
+    }
+  </mat-toolbar-row>
+  <div class="layout">
+    @for(session of sessionUsers(); track session.id) {
+    <div>
+      <div class="team-label">{{ session.team }}</div>
+      <button mat-raised-button>{{ session.userName }}</button>
+    </div>
+    }
+  </div>
   <mat-toolbar-row class="bottom-toolbar">
     <button mat-mini-fab class="start-button" (click)="startSession()">
       <mat-icon>start</mat-icon>
     </button>
   </mat-toolbar-row>
+
+  }
 </div>
+}

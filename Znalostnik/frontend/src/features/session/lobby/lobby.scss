@@ -9,21 +9,17 @@
   padding: 16px;
 }
 
-.grid {
+.layout {
   width: 90%;
-  gap: 32px;
+  height: 100%;
+  gap: 16px;
   display: flex;
   flex-wrap: wrap;
+  flex: auto;
   justify-content: center;
   align-content: center;
   overflow-y: auto;
   scrollbar-width: none;
-  flex: auto;
-}
-
-.cell {
-  width: 128px;
-  height: 64px;
 }
 
 .top-toolbar {
@@ -44,4 +40,19 @@
 .start-button {
   width: 20%;
   height: 80%;
+}
+
+.team-label {
+  font-weight: bold;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.container-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background: var(--mat-sys-surface-variant);
+  color: var(--mat-sys-on-surface);
 }

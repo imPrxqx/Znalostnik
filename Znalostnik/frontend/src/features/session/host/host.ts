@@ -9,6 +9,7 @@ import { QuizTask, Task } from '@shared/models/format';
 import { SessionState } from '../services/session-state';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { Timer } from '../timer/timer';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-host',
@@ -20,6 +21,7 @@ import { Timer } from '../timer/timer';
     MatIconModule,
     MatButtonModule,
     Timer,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './host.html',
   styleUrl: './host.scss',
@@ -32,6 +34,7 @@ export class Host {
   task = computed(() => this.state.task());
   sessionUsers = computed(() => this.state.sessionUsers());
   end = signal<Date>(new Date(new Date().getTime() + 30000));
+  loading = computed(() => this.state.loading());
 
   ngOnInit() {
     const sessionId = this.route.snapshot.paramMap.get('id');
@@ -41,7 +44,7 @@ export class Host {
       return;
     }
 
-    this.state.loadSession(sessionId);
+    this.state.ensureLoaded(sessionId);
   }
 
   previousTask() {

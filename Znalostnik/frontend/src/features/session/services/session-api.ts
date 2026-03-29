@@ -25,14 +25,6 @@ export class SessionApi {
     return this.http.get(`${environment.apiURL}/sessions/${sessionId}/joined`);
   }
 
-  loadSubmission(sessionId: string) {
-    return this.http.get(`${environment.apiURL}/sessions/${sessionId}/submissions`);
-  }
-
-  loadAnswer(sessionId: string, submissionId: string) {
-    return this.http.get(`${environment.apiURL}/sessions/${sessionId}/submissions/${submissionId}`);
-  }
-
   loadCurrentAnswer(sessionId: string) {
     return this.http.get(`${environment.apiURL}/sessions/${sessionId}/answers/current`);
   }

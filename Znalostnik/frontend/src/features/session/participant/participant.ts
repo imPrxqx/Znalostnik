@@ -9,6 +9,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { FormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
@@ -31,6 +32,7 @@ import { Timer } from '../timer/timer';
     MatMenuModule,
     MatToolbarModule,
     Timer,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './participant.html',
   styleUrl: './participant.scss',
@@ -42,9 +44,9 @@ export class Participant {
   session = computed(() => this.state.session());
   task = computed(() => this.state.task());
   answer = linkedSignal(() => this.state.answer());
-  submission = computed(() => this.state.submission());
   hub = inject(Hub);
   end = signal<Date>(new Date(new Date().getTime() + 30000));
+  loading = computed(() => this.state.loading());
 
   ngOnInit() {
     const sessionId = this.route.snapshot.paramMap.get('id');
@@ -54,8 +56,7 @@ export class Participant {
       return;
     }
 
-    this.state.loadSession(sessionId);
-    this.state.loadCurrentAnswer(sessionId);
+    this.state.ensureLoaded(sessionId);
   }
 
   submitAnswer() {
