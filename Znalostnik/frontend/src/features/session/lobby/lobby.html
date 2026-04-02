@@ -18,20 +18,23 @@
   </div>
 
   <div class="layout">
-    @for(team of groupByTeam(); track team) {
-    <button mat-raised-button (click)="selectTeam(team)">{{ team }}</button>
+    <button mat-raised-button (click)="createTeam()">Vytvořit tým</button>
+
+    @for(team of teams(); track team.id) {
+    <button mat-raised-button>{{ team.teamName }}</button>
     }
   </div>
-  @if(selectedTeam() !== undefined) {
+  <!-- @if(selectedTeam() !== undefined) {
 
   <div class="layout">
     @for(user of selectedTeam(); track user.id) {
 
     <button mat-raised-button>{{ user.userName }}</button>
-    }
+    } 
   </div>
 
-  } } @if(role() === "Host") {
+  }-->
+  } @if(role() === "Host") {
 
   <mat-toolbar-row class="top-toolbar">
     @if(session() !== undefined) {

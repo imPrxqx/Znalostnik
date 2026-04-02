@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SessionState, SessionUser } from '../services/session-state';
+import { SessionState, SessionUser, Team } from '../services/session-state';
 import { Hub } from '../services/hub';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -23,7 +23,7 @@ export class Lobby {
   session = computed(() => this.state.session());
   sessionUser = computed(() => this.state.sessionUser());
   loading = computed(() => this.state.loading());
-  selectedTeam = signal<SessionUser[] | undefined>(undefined);
+  teams = computed(() => this.state.teams());
 
   ngOnInit() {
     const sessionId = this.route.snapshot.paramMap.get('id');
@@ -46,11 +46,15 @@ export class Lobby {
     this.state.startSession(sessionId);
   }
 
+  createTeam() {
+    this.state.createSessionTeam(this.session()?.id!, 'New Team');
+  }
+
   joinTeam(team: string) {}
 
-  selectTeam(team: string) {
-    this.selectedTeam.set(this.sessionUsers()?.filter((user) => user.team === team));
-  }
+  // selectTeam(team: string) {
+  //   this.selectedTeam.set(this.sessionUsers()?.filter((user) => user.team === team));
+  // }
 
   groupByTeam() {
     const teams: string[] = [];

@@ -44,14 +44,14 @@
 }
 
 .selected {
-  color: var(--mat-sys-on-primary);
-  background-color: var(--mat-sys-secondary);
+  color: var(--mat-sys-on-primary) !important;
+  background-color: var(--mat-sys-secondary) !important;
 }
 
 .correct {
-  background-color: var(--mat-sys-primary);
+  background-color: var(--mat-sys-surface-container);
 }
 
 .incorrect {
-  background-color: var(--mat-sys-error);
+  background-color: var(--mat-sys-error-container);
 }

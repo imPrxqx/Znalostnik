@@ -18,6 +18,17 @@ export interface SessionUser {
   team: string | undefined;
 }
 
+export interface Team {
+  id: number;
+  teamName: string;
+  teamMembers: TeamMember[];
+}
+
+export interface TeamMember {
+  id: number;
+  userName: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -28,78 +39,41 @@ export class SessionState {
   role = signal<string | undefined>(undefined);
   task = signal<Task | undefined>(undefined);
   answer = signal<TaskAnswer | undefined>(undefined);
+  teams = signal<Team[]>([]);
   loading = signal<boolean>(false);
 
   api = inject(SessionApi);
   router = inject(Router);
 
-  startSession(sessionId: string) {
-    this.api.startSession(sessionId).subscribe({
-      next: (data: any) => {
-        console.log(data);
-      },
-      error: (error) => {
-        console.error(error);
-      },
-    });
-  }
-
-  loadSessionRole(sessionId: string) {
-    this.api.loadSessionRole(sessionId).subscribe({
-      next: (data: any) => {
-        console.log(data);
-        this.role.set(data);
-      },
-      error: (error) => {
-        console.error(error);
-      },
-    });
-  }
-
-  joinSession(accessCode: string) {
-    this.api.joinSession(accessCode).subscribe({
-      next: (id: any) => {
-        this.router.navigate([`/session/${id}/participant`]);
-      },
-      error: (error) => {
-        console.error(error);
-      },
-    });
-  }
-
-  loadSessionUser(sessionId: string) {
-    this.api.loadSessionUser(sessionId).subscribe({
-      next: (data: any) => {
-        console.log(data);
-        this.sessionUser.set(data);
-      },
-      error: (error) => {
-        console.error(error);
-      },
-    });
-  }
-
-  loadSessionUsers(sessionId: string) {
-    this.api.loadSessionUsers(sessionId).subscribe({
-      next: (data: any) => {
-        console.log(data);
-        this.sessionUsers.set(data);
-        console.log(this.sessionUsers());
-      },
-      error: (error) => {
-        console.error(error);
-      },
-    });
-  }
-
   ensureLoaded(sessionId: string) {
     const current = this.session();
 
     if (current && current.id === sessionId) {
+      this.ensureNavigate(sessionId);
       return;
     }
 
     this.loadSession(sessionId);
+  }
+
+  ensureNavigate(sessionId: string) {
+    const current = this.session();
+
+    if (current && current.id === sessionId) {
+      if (current?.status === 'Lobby') {
+        this.router.navigate([`/session/${sessionId}/lobby`], { replaceUrl: true });
+      } else if (current?.status === 'Active') {
+        if (this.role() === 'Participant') {
+          this.router.navigate([`/session/${sessionId}/participant`], { replaceUrl: true });
+        }
+
+        if (this.role() === 'Host') {
+          this.router.navigate([`/session/${sessionId}/host`], { replaceUrl: true });
+        }
+      } else if (current?.status === 'Ended') {
+        this.router.navigate([`/session/join`], { replaceUrl: true });
+      }
+    }
   }
 
   loadSession(sessionId: string) {
@@ -111,6 +85,7 @@ export class SessionState {
       return;
     }
 
+    this.loading.set(true);
     this.api
       .loadSession(sessionId)
       .pipe(
@@ -123,8 +98,18 @@ export class SessionState {
           this.session.set(session);
           const exerciseTask = ExerciseTaskFactory.createFromJson(session.currentExerciseTask);
           this.task.set(exerciseTask);
-
+          console.log('task', this.task());
           return forkJoin({
+            teams: this.api.loadSessionTeams(sessionId).pipe(
+              catchError((err) => {
+                return [];
+              }),
+            ),
+            answer: this.api.loadCurrentAnswer(sessionId).pipe(
+              catchError((err) => {
+                return of(undefined);
+              }),
+            ),
             sessionUsers: this.api.loadSessionUsers(sessionId).pipe(
               catchError((err) => {
                 return [];
@@ -141,22 +126,25 @@ export class SessionState {
       )
       .subscribe({
         next: (data) => {
+          console.log(data);
+          this.teams.set(data.teams as Team[]);
           this.sessionUsers.set(data.sessionUsers as SessionUser[]);
           this.sessionUser.set(data.sessionUser as SessionUser);
           this.role.set(data.sessionRole as string);
 
           if (this.session()?.status === 'Lobby') {
-            this.router.navigate([`/session/${sessionId}/lobby`]);
+            this.router.navigate([`/session/${sessionId}/lobby`], { replaceUrl: true });
           } else if (this.session()?.status === 'Active') {
             if (this.role() === 'Participant') {
-              this.router.navigate([`/session/${sessionId}/participant`]);
+              this.loadCurrentAnswer(sessionId);
+              this.router.navigate([`/session/${sessionId}/participant`], { replaceUrl: true });
             }
 
             if (this.role() === 'Host') {
-              this.router.navigate([`/session/${sessionId}/host`]);
+              this.router.navigate([`/session/${sessionId}/host`], { replaceUrl: true });
             }
           } else if (this.session()?.status === 'Ended') {
-            this.router.navigate([`/session/join`]);
+            this.router.navigate([`/session/join`], { replaceUrl: true });
           }
 
           this.loading.set(false);
@@ -166,6 +154,28 @@ export class SessionState {
           this.loading.set(false);
         },
       });
+  }
+
+  startSession(sessionId: string) {
+    this.api.startSession(sessionId).subscribe({
+      next: (data: any) => {
+        console.log(data);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
+  joinSession(accessCode: string) {
+    this.api.joinSession(accessCode).subscribe({
+      next: (id: any) => {
+        this.router.navigate([`/session/${id}/participant`]);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
   }
 
   nextTask(sessionId: string) {
@@ -197,7 +207,9 @@ export class SessionState {
   loadCurrentAnswer(sessionId: string) {
     this.api.loadCurrentAnswer(sessionId).subscribe({
       next: (data: any) => {
+        console.log(data);
         const answer = Registry.createAnswer(this.task()?.type(), data);
+        console.log('LOADED answer', answer);
         this.answer.set(answer);
       },
       error: (error) => {
@@ -211,11 +223,107 @@ export class SessionState {
     });
   }
 
+  loadSessionTeams(sessionId: string) {
+    this.api.loadSessionTeams(sessionId).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        this.teams.set(data);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
   submitAnswer(sessionId: string, answer: any) {
+    console.log(answer);
     this.api.submitAnswer(sessionId, answer).subscribe({
       next: (data: any) => {
         console.log(data);
         this.answer.set(data);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
+  joinSessionTeam(sessionId: string, teamId: string) {
+    this.api.joinSessionTeam(sessionId, teamId).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        this.teams.update((teams) => [...teams, data]);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
+  createSessionTeam(sessionId: string, teamName: string) {
+    this.api.createSessionTeam(sessionId, teamName).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        this.teams.update((teams) => [...teams, data]);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
+  confirmAnswer(sessionId: string) {
+    this.api.confirmCurrentAnswer(sessionId).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        this.answer.set(data);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
+  updateSession() {
+    this.api.loadSession(this.session()!.id).subscribe({
+      next: (data: any) => {
+        this.session.set(data);
+        const exerciseTask = ExerciseTaskFactory.createFromJson(data.currentExerciseTask);
+        this.task.set(exerciseTask);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
+  updateSessionUser() {
+    this.api.loadSessionUser(this.session()!.id).subscribe({
+      next: (data: any) => {
+        this.sessionUser.set(data);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
+  updateSessionUsers() {
+    this.api.loadSessionUsers(this.session()!.id).subscribe({
+      next: (data: any) => {
+        this.sessionUsers.set(data);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
+  updateAnswer() {
+    this.api.loadCurrentAnswer(this.session()!.id).subscribe({
+      next: (data: any) => {
+        const answer = Registry.createAnswer(this.task()?.type(), data);
+        this.answer.set(answer);
       },
       error: (error) => {
         console.error(error);

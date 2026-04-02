@@ -40,16 +40,17 @@ export class Hub {
 
     this.connection.on('SessionUpdated', (data) => {
       console.log('Session Updated');
-      this.sessionState.loadSession(this.sessionState.session()?.id!);
+      this.sessionState.updateSession();
     });
 
     this.connection.on('JoinUpdated', (data) => {
       console.log('Join Updated');
-      this.sessionState.loadSessionUsers(this.sessionState.session()?.id!);
+      this.sessionState.updateSessionUsers();
     });
 
     this.connection.on('AnswerSubmitted', (data) => {
       console.log('Answer Submitted');
+      this.sessionState.updateAnswer();
     });
 
     await this.connection.start();

@@ -59,6 +59,11 @@ export class Participant {
     this.state.ensureLoaded(sessionId);
   }
 
+  confirmAnswer() {
+    console.log('answer confirmed: ', this.answer());
+    this.state.confirmAnswer(this.session()?.id!);
+  }
+
   submitAnswer() {
     console.log('answer submitted: ', this.answer());
     this.state.submitAnswer(this.session()?.id!, this.answer()!);

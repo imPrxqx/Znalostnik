@@ -48,10 +48,10 @@ export class Quiz {
   }
 
   isCorrect(optionId: string) {
-    return this.answer()?.evaluation?.correct.includes(optionId);
+    return this.answer()?.evaluation?.correct?.includes(optionId);
   }
 
   isIncorrect(optionId: string) {
-    return this.answer()?.evaluation?.incorrect.includes(optionId);
+    return this.answer()?.evaluation?.incorrect?.includes(optionId);
   }
 }

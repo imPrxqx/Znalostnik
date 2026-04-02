@@ -21,12 +21,33 @@ export class SessionApi {
     return this.http.get(`${environment.apiURL}/sessions/${sessionId}/me`);
   }
 
+  loadSessionTeams(sessionId: string) {
+    return this.http.get(`${environment.apiURL}/sessions/${sessionId}/teams`);
+  }
+
   loadSessionUsers(sessionId: string) {
     return this.http.get(`${environment.apiURL}/sessions/${sessionId}/joined`);
   }
 
   loadCurrentAnswer(sessionId: string) {
     return this.http.get(`${environment.apiURL}/sessions/${sessionId}/answers/current`);
+  }
+
+  joinSessionTeam(sessionId: string, teamId: string) {
+    return this.http.post(`${environment.apiURL}/sessions/${sessionId}/teams/${teamId}/join`, null);
+  }
+
+  createSessionTeam(sessionId: string, teamName: string) {
+    return this.http.post(`${environment.apiURL}/sessions/${sessionId}/teams/create`, {
+      teamName: teamName,
+    });
+  }
+
+  confirmCurrentAnswer(sessionId: string) {
+    return this.http.post(
+      `${environment.apiURL}/sessions/${sessionId}/answers/confirm-current`,
+      null,
+    );
   }
 
   joinSession(accessCode: string) {

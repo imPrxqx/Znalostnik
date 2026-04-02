@@ -250,12 +250,20 @@ export class QuizAnswer extends TaskAnswer {
   constructor(config?: any) {
     super();
 
+    if (config?.id) {
+      this.id = config.id;
+    }
+
     if (config?.created) {
       this.created = config.created;
     }
 
     if (config?.submit) {
       this.submit = config.submit;
+
+      if (this.submit.selected == undefined) {
+        this.submit.selected = [];
+      }
     }
 
     if (config?.evaluation) {
@@ -263,7 +271,7 @@ export class QuizAnswer extends TaskAnswer {
     }
 
     if (config?.taskId) {
-      this.taskId = config.task;
+      this.taskId = config.taskId;
     }
   }
 }
@@ -344,7 +352,7 @@ export class ExportJsonVisitor implements Visitor {
       id: quizTask.id(),
       type: quizTask.type(),
       gameMode: quizTask.gameMode(),
-      respondType: quizTask.respondType(),
+      respondMode: quizTask.respondType(),
       order: quizTask.order(),
       content: {
         content: quizTask.content().content,
