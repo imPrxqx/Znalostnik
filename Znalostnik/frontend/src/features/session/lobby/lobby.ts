@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SessionState, SessionUser, Team } from '../services/session-state';
+import { SessionState, SessionUser, Team, TeamMember } from '../services/session-state';
 import { Hub } from '../services/hub';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -24,6 +24,7 @@ export class Lobby {
   sessionUser = computed(() => this.state.sessionUser());
   loading = computed(() => this.state.loading());
   teams = computed(() => this.state.teams());
+  selectedTeam = signal<Team | undefined>(undefined);
 
   ngOnInit() {
     const sessionId = this.route.snapshot.paramMap.get('id');
@@ -33,7 +34,7 @@ export class Lobby {
       return;
     }
 
-    this.state.ensureLoaded(sessionId);
+    this.state.loadSession(sessionId);
   }
 
   startSession() {
@@ -47,30 +48,21 @@ export class Lobby {
   }
 
   createTeam() {
+    this.selectedTeam.set(undefined);
     this.state.createSessionTeam(this.session()?.id!, 'New Team');
   }
 
-  joinTeam(team: string) {}
+  joinTeam(teamId: string) {
+    this.selectedTeam.set(undefined);
+    this.state.joinSessionTeam(this.session()?.id!, teamId);
+  }
 
-  // selectTeam(team: string) {
-  //   this.selectedTeam.set(this.sessionUsers()?.filter((user) => user.team === team));
-  // }
+  selectTeam(teamId: string) {
+    if (teamId === this.selectedTeam()?.id) {
+      this.selectedTeam.set(undefined);
+      return;
+    }
 
-  groupByTeam() {
-    const teams: string[] = [];
-
-    this.sessionUsers()?.forEach((user) => {
-      if (!user.team) {
-        user.team = 'No Team';
-      }
-
-      if (teams.includes(user.team)) {
-        return;
-      }
-
-      teams.push(user.team);
-    });
-
-    return teams;
+    this.selectedTeam.set(this.teams()?.filter((team) => team.id === teamId)[0]);
   }
 }

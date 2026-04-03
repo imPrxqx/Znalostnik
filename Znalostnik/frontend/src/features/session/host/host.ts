@@ -10,6 +10,7 @@ import { SessionState } from '../services/session-state';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { Timer } from '../timer/timer';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Hub } from '../services/hub';
 
 @Component({
   selector: 'app-host',
@@ -27,6 +28,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   styleUrl: './host.scss',
 })
 export class Host {
+  hub = inject(Hub);
   state = inject(SessionState);
   route = inject(ActivatedRoute);
   router = inject(Router);
@@ -44,7 +46,7 @@ export class Host {
       return;
     }
 
-    this.state.ensureLoaded(sessionId);
+    this.state.loadSession(sessionId);
   }
 
   previousTask() {

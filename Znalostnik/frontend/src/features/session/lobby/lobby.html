@@ -21,20 +21,23 @@
     <button mat-raised-button (click)="createTeam()">Vytvořit tým</button>
 
     @for(team of teams(); track team.id) {
-    <button mat-raised-button>{{ team.teamName }}</button>
+    <button mat-raised-button (click)="selectTeam(team.id)">{{ team.teamName }}</button>
     }
   </div>
-  <!-- @if(selectedTeam() !== undefined) {
+  @if(selectedTeam() !== undefined) {
 
   <div class="layout">
-    @for(user of selectedTeam(); track user.id) {
+    <button mat-raised-button (click)="joinTeam(selectedTeam()!.id)" i18n>
+      Připojit se k týmu
+    </button>
+
+    @for(user of selectedTeam()!.teamMembers; track user.id) {
 
     <button mat-raised-button>{{ user.userName }}</button>
-    } 
+    }
   </div>
 
-  }-->
-  } @if(role() === "Host") {
+  } } @if(role() === "Host") {
 
   <mat-toolbar-row class="top-toolbar">
     @if(session() !== undefined) {

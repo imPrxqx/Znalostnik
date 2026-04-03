@@ -49,10 +49,12 @@ export class Join {
 
   joinForm = new FormGroup({
     code: new FormControl('', [Validators.required]),
+    username: new FormControl('', [Validators.required]),
   });
 
   onSubmit() {
     const code = this.joinForm.value.code as string;
-    this.session.joinSession(code);
+    const username = this.joinForm.value.username as string;
+    this.session.joinSession(code, username);
   }
 }

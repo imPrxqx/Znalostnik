@@ -11,6 +11,10 @@
         <input matInput formControlName="code" type="code" />
       </mat-form-field>
 
+      <mat-form-field>
+        <mat-label i18n>UserName</mat-label>
+        <input matInput formControlName="username" type="username" />
+      </mat-form-field>
       <button mat-raised-button type="submit" class="join-submit" [disabled]="!joinForm.valid">
         Připojit se
       </button>

@@ -56,7 +56,7 @@ export class Participant {
       return;
     }
 
-    this.state.ensureLoaded(sessionId);
+    this.state.loadSession(sessionId);
   }
 
   confirmAnswer() {

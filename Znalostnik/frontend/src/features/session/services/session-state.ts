@@ -13,19 +13,19 @@ export interface Session {
 }
 
 export interface SessionUser {
-  id: number;
+  id: string;
   userName: string;
   team: string | undefined;
 }
 
 export interface Team {
-  id: number;
+  id: string;
   teamName: string;
   teamMembers: TeamMember[];
 }
 
 export interface TeamMember {
-  id: number;
+  id: string;
   userName: string;
 }
 
@@ -45,30 +45,19 @@ export class SessionState {
   api = inject(SessionApi);
   router = inject(Router);
 
-  ensureLoaded(sessionId: string) {
+  ensureNavigate() {
     const current = this.session();
 
-    if (current && current.id === sessionId) {
-      this.ensureNavigate(sessionId);
-      return;
-    }
-
-    this.loadSession(sessionId);
-  }
-
-  ensureNavigate(sessionId: string) {
-    const current = this.session();
-
-    if (current && current.id === sessionId) {
+    if (current) {
       if (current?.status === 'Lobby') {
-        this.router.navigate([`/session/${sessionId}/lobby`], { replaceUrl: true });
+        this.router.navigate([`/session/${current.id}/lobby`], { replaceUrl: true });
       } else if (current?.status === 'Active') {
         if (this.role() === 'Participant') {
-          this.router.navigate([`/session/${sessionId}/participant`], { replaceUrl: true });
+          this.router.navigate([`/session/${current.id}/participant`], { replaceUrl: true });
         }
 
         if (this.role() === 'Host') {
-          this.router.navigate([`/session/${sessionId}/host`], { replaceUrl: true });
+          this.router.navigate([`/session/${current.id}/host`], { replaceUrl: true });
         }
       } else if (current?.status === 'Ended') {
         this.router.navigate([`/session/join`], { replaceUrl: true });
@@ -126,26 +115,15 @@ export class SessionState {
       )
       .subscribe({
         next: (data) => {
-          console.log(data);
           this.teams.set(data.teams as Team[]);
+
+          const answer = Registry.createAnswer(this.task()?.type(), data.answer);
+          this.answer.set(answer);
           this.sessionUsers.set(data.sessionUsers as SessionUser[]);
           this.sessionUser.set(data.sessionUser as SessionUser);
           this.role.set(data.sessionRole as string);
 
-          if (this.session()?.status === 'Lobby') {
-            this.router.navigate([`/session/${sessionId}/lobby`], { replaceUrl: true });
-          } else if (this.session()?.status === 'Active') {
-            if (this.role() === 'Participant') {
-              this.loadCurrentAnswer(sessionId);
-              this.router.navigate([`/session/${sessionId}/participant`], { replaceUrl: true });
-            }
-
-            if (this.role() === 'Host') {
-              this.router.navigate([`/session/${sessionId}/host`], { replaceUrl: true });
-            }
-          } else if (this.session()?.status === 'Ended') {
-            this.router.navigate([`/session/join`], { replaceUrl: true });
-          }
+          this.ensureNavigate();
 
           this.loading.set(false);
         },
@@ -167,8 +145,8 @@ export class SessionState {
     });
   }
 
-  joinSession(accessCode: string) {
-    this.api.joinSession(accessCode).subscribe({
+  joinSession(accessCode: string, username: string) {
+    this.api.joinSession(accessCode, username).subscribe({
       next: (id: any) => {
         this.router.navigate([`/session/${id}/participant`]);
       },
@@ -239,8 +217,21 @@ export class SessionState {
     console.log(answer);
     this.api.submitAnswer(sessionId, answer).subscribe({
       next: (data: any) => {
-        console.log(data);
-        this.answer.set(data);
+        const answer = Registry.createAnswer(this.task()?.type(), data);
+        this.answer.set(answer);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
+  confirmAnswer(sessionId: string) {
+    this.api.confirmCurrentAnswer(sessionId).subscribe({
+      next: (data: any) => {
+        const answer = Registry.createAnswer(this.task()?.type(), data);
+        this.answer.set(answer);
+        console.log('answer confirmed', answer);
       },
       error: (error) => {
         console.error(error);
@@ -252,7 +243,6 @@ export class SessionState {
     this.api.joinSessionTeam(sessionId, teamId).subscribe({
       next: (data: any) => {
         console.log(data);
-        this.teams.update((teams) => [...teams, data]);
       },
       error: (error) => {
         console.error(error);
@@ -264,19 +254,6 @@ export class SessionState {
     this.api.createSessionTeam(sessionId, teamName).subscribe({
       next: (data: any) => {
         console.log(data);
-        this.teams.update((teams) => [...teams, data]);
-      },
-      error: (error) => {
-        console.error(error);
-      },
-    });
-  }
-
-  confirmAnswer(sessionId: string) {
-    this.api.confirmCurrentAnswer(sessionId).subscribe({
-      next: (data: any) => {
-        console.log(data);
-        this.answer.set(data);
       },
       error: (error) => {
         console.error(error);
@@ -312,6 +289,17 @@ export class SessionState {
     this.api.loadSessionUsers(this.session()!.id).subscribe({
       next: (data: any) => {
         this.sessionUsers.set(data);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
+  updateSessionTeams() {
+    this.api.loadSessionTeams(this.session()!.id).subscribe({
+      next: (data: any) => {
+        this.teams.set(data);
       },
       error: (error) => {
         console.error(error);

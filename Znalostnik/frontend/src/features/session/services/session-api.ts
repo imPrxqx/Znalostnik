@@ -50,8 +50,11 @@ export class SessionApi {
     );
   }
 
-  joinSession(accessCode: string) {
-    return this.http.post(`${environment.apiURL}/sessions/join?accessCode=${accessCode}`, null);
+  joinSession(accessCode: string, username: string) {
+    return this.http.post(`${environment.apiURL}/sessions/join`, {
+      accessCode: accessCode,
+      userName: username,
+    });
   }
 
   startSession(sessionId: string) {
