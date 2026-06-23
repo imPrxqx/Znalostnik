@@ -1,33 +1,35 @@
-<div class="auth-container">
-  <mat-card class="auth-card">
-    <div class="auth-header">
-      <img src="favicon.ico" />
-      <a [routerLink]="['/']"><h2>Znalostník</h2></a>
+<mat-card class="auth-card">
+  <div class="auth-header">
+    <img src="favicon.ico" />
+    <a [routerLink]="['/']"><h2>Znalostník</h2></a>
+  </div>
+
+  <h2 class="auth-title" i18n>Přihlášení</h2>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline">
+      <mat-label i18n>Email</mat-label>
+      <input matInput formControlName="email" type="email" autocomplete="username" />
+      <mat-icon matSuffix>email</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label i18n>Heslo</mat-label>
+      <input matInput formControlName="password" type="password" autocomplete="new-password" />
+      <mat-icon matSuffix>key</mat-icon>
+    </mat-form-field>
+
+    <div class="auth-register">
+      <a mat-button [routerLink]="['/authentication/register']">
+        <mat-icon>person_add</mat-icon>
+        <p i18n>Zaregistrovat se</p>
+      </a>
+      <a mat-button [routerLink]="['/authentication/forgot-password']">
+        <mat-icon>lock_reset</mat-icon>
+        <p i18n>Zapomenuté heslo?</p>
+      </a>
     </div>
 
-    <h2 class="auth-title" i18n>Přihlášení</h2>
-
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <mat-form-field>
-        <mat-label i18n>Email</mat-label>
-        <input matInput formControlName="email" type="email" />
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label i18n>Heslo</mat-label>
-        <input matInput formControlName="password" type="password" />
-      </mat-form-field>
-
-      <div class="auth-register">
-        <a mat-button color="primary" [routerLink]="['/authentication/register']">
-          <mat-icon>person_add</mat-icon>
-          <span i18n>Zaregistrovat se</span>
-        </a>
-      </div>
-
-      <button mat-raised-button type="submit" class="auth-submit" [disabled]="!loginForm.valid">
-        Přihlasit se
-      </button>
-    </form>
-  </mat-card>
-</div>
+    <button mat-flat-button type="submit" [disabled]="!loginForm.valid">Přihlasit se</button>
+  </form>
+</mat-card>

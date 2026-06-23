@@ -1,16 +1,10 @@
-.auth-container {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .auth-card {
   width: 416px;
   padding: 32px;
   border-radius: var(--mat-sys-corner-large);
   background: var(--mat-sys-surface-container);
-  border: 2px solid var(--mat-sys-outline-variant);
+  border: 1px solid var(--mat-sys-outline-variant);
+  box-shadow: var(--mat-sys-level5);
 }
 
 .auth-header {
@@ -19,7 +13,6 @@
   justify-content: center;
   align-items: center;
   gap: 16px;
-  margin-bottom: 16px;
 }
 
 .auth-title {
@@ -29,15 +22,8 @@
 }
 
 .auth-register {
-  width: 100%;
   display: flex;
   justify-content: center;
-}
-
-.auth-submit {
-  width: 100%;
-  font-size: 16px;
-  border-radius: var(--mat-sys-corner-medium);
 }
 
 form {
@@ -46,10 +32,12 @@ form {
   gap: 16px;
 }
 
-mat-form-field {
-  width: 100%;
-}
-
 a {
   text-decoration: none;
+}
+
+@media (max-width: 400px) {
+  .auth-card {
+    width: 345px;
+  }
 }
