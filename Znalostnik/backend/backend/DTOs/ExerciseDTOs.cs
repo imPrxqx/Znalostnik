@@ -6,23 +6,20 @@ namespace backend.DTOs
     public class CreateExerciseDto
     {
         public string Title { get; set; } = string.Empty;
-        public string Mode { get; set; } = string.Empty;
-        public JsonDocument Settings { get; set; } = JsonDocument.Parse("{}");
     }
 
     public class UpdateExerciseDto
     {
         public string Title { get; set; } = string.Empty;
-        public string Mode { get; set; } = string.Empty;
-        public JsonDocument Settings { get; set; } = JsonDocument.Parse("{}");
+        public List<CreateActivityDTO> Activities { get; set; } = new();
     }
 
     public class ExerciseDto
     {
         public Guid Id { get; set; }
         public string Title { get; set; } = string.Empty;
-        public string Mode { get; set; } = string.Empty;
-        public JsonDocument Settings { get; set; } = JsonDocument.Parse("{}");
+        public List<ActivityDTO> Activities { get; set; } = new();
+        public List<ExerciseTagDto> Tags { get; set; } = new();
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

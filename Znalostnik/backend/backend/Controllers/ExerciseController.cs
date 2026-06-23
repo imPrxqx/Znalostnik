@@ -1,9 +1,8 @@
 ﻿using backend.DTOs;
+using backend.Schemas;
 using backend.Services;
-using backend.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using static Microsoft.CodeAnalysis.CSharp.SyntaxTokenParser;
 
 namespace backend.Controllers
 {
@@ -12,62 +11,74 @@ namespace backend.Controllers
     [Authorize]
     public class ExerciseController : ControllerBase
     {
+        private readonly JsonSchemaValidator _jsonSchemaValidator;
         private readonly IExerciseService _exerciseService;
-        private readonly IExerciseTaskService _exerciseTaskService;
-        private readonly IExerciseTagService _exerciseTagService;
-
         private readonly IUserService _userService;
 
         public ExerciseController(
             IExerciseService exerciseService,
-            IExerciseTaskService exerciseTaskService,
-            IExerciseTagService exerciseTagService,
-            IUserService userService
+            IUserService userService,
+            JsonSchemaValidator jsonSchemaValidator
         )
         {
             _exerciseService = exerciseService;
-            _exerciseTaskService = exerciseTaskService;
-            _exerciseTagService = exerciseTagService;
             _userService = userService;
+            _jsonSchemaValidator = jsonSchemaValidator;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Exercises(
-            [FromQuery] int page = 1,
-            [FromQuery] int pageSize = 20
-        )
+        public async Task<IActionResult> GetExercises()
         {
             var user = await _userService.GetCurrentUserAsync(User);
 
             if (user.IsFailure)
             {
-                return NotFound();
+                return Unauthorized();
             }
 
-            var exercises = await _exerciseService.GetAllUserExercisesAsync(
-                user.Value,
-                page,
-                pageSize
-            );
+            var exercises = await _exerciseService.GetExercisesAsync(user.Value);
 
             return Ok(exercises.Value);
         }
 
         [HttpGet("{exerciseId}")]
-        public async Task<IActionResult> Exercise(Guid exerciseId)
+        public async Task<IActionResult> GetExercise(Guid exerciseId)
         {
             var user = await _userService.GetCurrentUserAsync(User);
 
             if (user.IsFailure)
             {
-                return NotFound();
+                return Unauthorized();
             }
 
-            var exercise = await _exerciseService.GetByIdAsync(user.Value, exerciseId);
+            var exercise = await _exerciseService.GetExerciseAsync(user.Value, exerciseId);
 
             if (exercise.IsFailure)
             {
-                return NotFound();
+                return NotFound($"{exercise.Error.Type}: {exercise.Error.Description}");
+            }
+
+            return Ok(exercise.Value);
+        }
+
+        [HttpGet("{exerciseId}/activities/first")]
+        public async Task<IActionResult> GetFirstExerciseActivity(Guid exerciseId)
+        {
+            var user = await _userService.GetCurrentUserAsync(User);
+
+            if (user.IsFailure)
+            {
+                return Unauthorized();
+            }
+
+            var exercise = await _exerciseService.GetFirstExerciseActivityAsync(
+                user.Value,
+                exerciseId
+            );
+
+            if (exercise.IsFailure)
+            {
+                return NotFound($"{exercise.Error.Type}: {exercise.Error.Description}");
             }
 
             return Ok(exercise.Value);
@@ -85,14 +96,14 @@ namespace backend.Controllers
 
             if (user.IsFailure)
             {
-                return NotFound();
+                return Unauthorized();
             }
 
-            var result = await _exerciseService.CreateAsync(user.Value, dto);
+            var result = await _exerciseService.CreateExerciseAsync(user.Value, dto);
 
             if (result.IsFailure)
             {
-                return NotFound();
+                return NotFound($"{result.Error.Type}: {result.Error.Description}");
             }
 
             return Ok(result.Value);
@@ -109,18 +120,52 @@ namespace backend.Controllers
                 return BadRequest(ModelState);
             }
 
+            bool isValid = true;
+
+            foreach (var activity in dto.Activities)
+            {
+                if (
+                    !_jsonSchemaValidator.Validate(
+                        "Activities",
+                        activity.Type,
+                        activity.Content.RootElement.GetRawText()
+                    )
+                )
+                {
+                    isValid = false;
+                    break;
+                }
+
+                if (
+                    !_jsonSchemaValidator.Validate(
+                        "Solutions",
+                        activity.Type,
+                        activity.Solution.RootElement.GetRawText()
+                    )
+                )
+                {
+                    isValid = false;
+                    break;
+                }
+            }
+
+            if (!isValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var user = await _userService.GetCurrentUserAsync(User);
 
             if (user.IsFailure)
             {
-                return NotFound();
+                return Unauthorized();
             }
 
-            var result = await _exerciseService.UpdateAsync(user.Value, exerciseId, dto);
+            var result = await _exerciseService.UpdateExerciseAsync(user.Value, exerciseId, dto);
 
             if (result.IsFailure)
             {
-                return NotFound();
+                return NotFound($"{result.Error.Type}: {result.Error.Description}");
             }
 
             return Ok();
@@ -133,238 +178,14 @@ namespace backend.Controllers
 
             if (user.IsFailure)
             {
-                return NotFound();
+                return Unauthorized();
             }
 
-            var result = await _exerciseService.DeleteAsync(user.Value, exerciseId);
+            var result = await _exerciseService.DeleteExerciseAsync(user.Value, exerciseId);
 
             if (result.IsFailure)
             {
-                return NotFound();
-            }
-
-            return Ok();
-        }
-
-        [HttpGet("{exerciseId}/tasks")]
-        public async Task<ActionResult<IEnumerable<ExerciseTaskDto>>> ExercisesTasks(
-            Guid exerciseId
-        )
-        {
-            var user = await _userService.GetCurrentUserAsync(User);
-
-            if (user.IsFailure)
-            {
-                return NotFound();
-            }
-
-            var exerciseTasks = await _exerciseTaskService.GetExerciseTasksAsync(
-                user.Value,
-                exerciseId
-            );
-            return Ok(exerciseTasks.Value);
-        }
-
-        // Tasks
-
-        [HttpGet("{exerciseId}/tasks/{taskId}")]
-        public async Task<ActionResult<ExerciseTaskDto>> ExerciseTask(Guid exerciseId, Guid taskId)
-        {
-            var user = await _userService.GetCurrentUserAsync(User);
-
-            if (user.IsFailure)
-            {
-                return NotFound();
-            }
-
-            var result = await _exerciseTaskService.GetExerciseTaskAsync(
-                user.Value,
-                exerciseId,
-                taskId
-            );
-
-            if (result.IsFailure)
-            {
-                return NotFound();
-            }
-
-            return Ok(result.Value);
-        }
-
-        [HttpPost("{exerciseId}/tasks")]
-        public async Task<ActionResult<ExerciseTaskDto>> CreateExerciseTask(
-            Guid exerciseId,
-            [FromBody] CreateExerciseTaskDto dto
-        )
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var user = await _userService.GetCurrentUserAsync(User);
-
-            if (user.IsFailure)
-            {
-                return NotFound();
-            }
-
-            Result<ExerciseTaskDto> result = await _exerciseTaskService.CreateAsync(
-                user.Value,
-                exerciseId,
-                dto
-            );
-
-            if (result.IsFailure)
-            {
-                return NotFound();
-            }
-
-            return Ok(result.Value);
-        }
-
-        [HttpPut("{exerciseId}/tasks/{taskId}")]
-        public async Task<IActionResult> UpdateExerciseTask(
-            Guid exerciseId,
-            Guid taskId,
-            [FromBody] UpdateExerciseTaskDto dto
-        )
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var user = await _userService.GetCurrentUserAsync(User);
-
-            if (user.IsFailure)
-            {
-                return NotFound();
-            }
-
-            var result = await _exerciseTaskService.UpdateAsync(
-                user.Value,
-                exerciseId,
-                taskId,
-                dto
-            );
-
-            if (result.IsFailure)
-            {
-                return NotFound();
-            }
-
-            return Ok();
-        }
-
-        [HttpDelete("{exerciseId}/tasks/{taskId}")]
-        public async Task<IActionResult> DeleteExerciseTask(Guid exerciseId, Guid taskId)
-        {
-            var user = await _userService.GetCurrentUserAsync(User);
-
-            if (user.IsFailure)
-            {
-                return NotFound();
-            }
-
-            var result = await _exerciseTaskService.DeleteAsync(user.Value, exerciseId, taskId);
-
-            if (result.IsFailure)
-            {
-                return NotFound();
-            }
-
-            return Ok();
-        }
-
-        // Tags
-
-        [HttpGet("{exerciseId}/tags")]
-        public async Task<IActionResult> ExerciseTags(Guid exerciseId)
-        {
-            var user = await _userService.GetCurrentUserAsync(User);
-
-            if (user.IsFailure)
-            {
-                return NotFound();
-            }
-
-            var tags = await _exerciseTagService.GetTagsAsync(user.Value, exerciseId);
-            return Ok(tags.Value);
-        }
-
-        [HttpPost("{exerciseId}/tags")]
-        public async Task<IActionResult> CreateExerciseTag(
-            Guid exerciseId,
-            [FromBody] CreateExerciseTagDto dto
-        )
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var user = await _userService.GetCurrentUserAsync(User);
-
-            if (user.IsFailure)
-            {
-                return NotFound();
-            }
-
-            var result = await _exerciseTagService.CreateTagAsync(user.Value, exerciseId, dto);
-
-            if (result.IsFailure)
-            {
-                return NotFound();
-            }
-
-            return Ok();
-        }
-
-        [HttpPut("{exerciseId}/tags/{tag}")]
-        public async Task<IActionResult> UpdateTag(
-            Guid exerciseId,
-            string tag,
-            [FromBody] UpdateExerciseTagDto dto
-        )
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var user = await _userService.GetCurrentUserAsync(User);
-
-            if (user.IsFailure)
-            {
-                return NotFound();
-            }
-
-            var result = await _exerciseTagService.UpdateTagAsync(user.Value, exerciseId, tag, dto);
-
-            if (result.IsFailure)
-            {
-                return NotFound();
-            }
-
-            return Ok();
-        }
-
-        [HttpDelete("{exerciseId}/tags/{tag}")]
-        public async Task<IActionResult> DeleteTag(Guid exerciseId, string tag)
-        {
-            var user = await _userService.GetCurrentUserAsync(User);
-
-            if (user.IsFailure)
-            {
-                return NotFound();
-            }
-
-            var result = await _exerciseTagService.DeleteTagAsync(user.Value, exerciseId, tag);
-
-            if (result.IsFailure)
-            {
-                return NotFound();
+                return NotFound($"{result.Error.Type}: {result.Error.Description}");
             }
 
             return Ok();

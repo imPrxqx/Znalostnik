@@ -1,4 +1,5 @@
-﻿using backend.Models;
+﻿using System.Text.Json;
+using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.DTOs
@@ -11,8 +12,11 @@ namespace backend.DTOs
             {
                 Id = exercise.Id,
                 Title = exercise.Title,
-                Mode = exercise.Mode,
-                Settings = exercise.Settings,
+                Activities = exercise
+                    .Activities.OrderBy(a => a.Order)
+                    .Select(a => a.ToActivityDto())
+                    .ToList(),
+                Tags = exercise.ExerciseTags.Select(et => et.ToExerciseTagDto()).ToList(),
                 CreatedAt = exercise.CreatedAt,
                 UpdatedAt = exercise.UpdatedAt,
             };

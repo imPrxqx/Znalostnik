@@ -5,20 +5,11 @@ namespace backend.Services
 {
     public interface IExerciseService
     {
-        Task<Result<ExerciseDto>> GetByIdAsync(UserDto user, Guid exerciseId);
-        Task<Result<IEnumerable<ExerciseDto>>> GetAllUserExercisesAsync(
-            UserDto user,
-            int page = 1,
-            int pageSize = 20
-        );
-        Task<Result<IEnumerable<ExerciseDto>>> GetAllUserExercisesByTagsAsync(
-            UserDto user,
-            string[] tags,
-            int page = 1,
-            int pageSize = 20
-        );
-        Task<Result<ExerciseDto>> CreateAsync(UserDto user, CreateExerciseDto dto);
-        Task<Result> UpdateAsync(UserDto user, Guid exerciseId, UpdateExerciseDto dto);
-        Task<Result> DeleteAsync(UserDto user, Guid exerciseId);
+        Task<Result<IEnumerable<ExerciseDto>>> GetExercisesAsync(UserDto user);
+        Task<Result<ExerciseDto>> GetExerciseAsync(UserDto user, Guid exerciseId);
+        Task<Result<ActivityDTO>> GetFirstExerciseActivityAsync(UserDto user, Guid exerciseId);
+        Task<Result<ExerciseDto>> CreateExerciseAsync(UserDto user, CreateExerciseDto dto);
+        Task<Result> UpdateExerciseAsync(UserDto user, Guid exerciseId, UpdateExerciseDto dto);
+        Task<Result> DeleteExerciseAsync(UserDto user, Guid exerciseId);
     }
 }
