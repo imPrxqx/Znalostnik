@@ -1,27 +1,12 @@
-import { RouterOutlet, RouterModule } from '@angular/router';
-import { Component, inject } from '@angular/core';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatMenuModule } from '@angular/material/menu';
+import { RouterModule } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
-import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-
-import {
-  ValidatorFn,
-  AbstractControl,
-  ValidationErrors,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Authentication } from '@core/services/authentication';
 
 @Component({
@@ -29,17 +14,11 @@ import { Authentication } from '@core/services/authentication';
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatSelectModule,
     MatInputModule,
     RouterModule,
-    MatGridListModule,
-    MatSidenavModule,
-    MatListModule,
-    MatMenuModule,
     MatIconModule,
     MatButtonModule,
     MatCardModule,
-    MatToolbarModule,
     CommonModule,
   ],
   templateUrl: './register.html',
@@ -50,11 +29,23 @@ export class Register {
 
   registerForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/),
+    ]),
     confirmPassword: new FormControl('', [Validators.required]),
   });
 
   onSubmit() {
-    this.auth.register(this.registerForm.value.email!, this.registerForm.value.password!);
+    const email = this.registerForm.value.email;
+    const password = this.registerForm.value.password;
+    const confirmPassword = this.registerForm.value.confirmPassword;
+
+    if (password !== confirmPassword) {
+      this.registerForm.get('confirmPassword')?.setErrors({ passwordMismatch: true });
+      return;
+    }
+
+    this.auth.register(email!, password!);
   }
 }
