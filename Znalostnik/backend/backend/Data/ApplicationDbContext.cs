@@ -7,14 +7,16 @@ namespace backend.Data
 {
     public class ApplicationDbContext : IdentityDbContext<User>
     {
+        public DbSet<Media> Medias { get; set; } = null!;
         public DbSet<Exercise> Exercises { get; set; } = null!;
-        public DbSet<ExerciseTask> ExerciseTasks { get; set; } = null!;
+        public DbSet<Activity> Activities { get; set; } = null!;
         public DbSet<Team> Teams { get; set; } = null!;
         public DbSet<TeamMember> TeamMembers { get; set; } = null!;
         public DbSet<Answer> Answers { get; set; } = null!;
         public DbSet<Submission> Submissions { get; set; } = null!;
         public DbSet<Session> Sessions { get; set; } = null!;
         public DbSet<SessionUser> SessionUsers { get; set; } = null!;
+        public DbSet<Tag> Tags { get; set; } = null!;
         public DbSet<ExerciseTag> ExerciseTags { get; set; } = null!;
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -25,25 +27,46 @@ namespace backend.Data
             base.OnModelCreating(builder);
 
             builder
+                .Entity<Media>()
+                .HasOne(m => m.CreatedByUser)
+                .WithMany(u => u.Medias)
+                .HasForeignKey(e => e.CreatedByUserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder
                 .Entity<Exercise>()
                 .HasOne(e => e.User)
                 .WithMany(u => u.Exercises)
                 .HasForeignKey(e => e.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder
-                .Entity<ExerciseTask>()
-                .HasOne(et => et.Exercise)
-                .WithMany(e => e.ExerciseTasks)
-                .HasForeignKey(et => et.ExerciseId)
-                .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Tag>().HasIndex(t => new { t.UserId, t.Name }).IsUnique();
 
-            builder.Entity<ExerciseTag>().HasKey(et => new { et.ExerciseId, et.Tag });
+            builder.Entity<ExerciseTag>().HasKey(et => new { et.ExerciseId, et.TagId });
 
             builder
                 .Entity<ExerciseTag>()
                 .HasOne(et => et.Exercise)
                 .WithMany(e => e.ExerciseTags)
+                .HasForeignKey(et => et.ExerciseId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder
+                .Entity<ExerciseTag>()
+                .HasOne(et => et.Tag)
+                .WithMany(t => t.ExerciseTags)
+                .HasForeignKey(et => et.TagId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder
+                .Entity<ExerciseTag>()
+                .HasIndex(et => new { et.ExerciseId, et.TagId })
+                .IsUnique();
+
+            builder
+                .Entity<Activity>()
+                .HasOne(et => et.Exercise)
+                .WithMany(e => e.Activities)
                 .HasForeignKey(et => et.ExerciseId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -115,18 +138,17 @@ namespace backend.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder
-                .Entity<Submission>()
-                .HasOne(s => s.SessionUser)
-                .WithMany(su => su.Submissions)
-                .HasForeignKey(s => s.SessionUserId)
+                .Entity<SessionUser>()
+                .HasOne(su => su.Submission)
+                .WithOne(s => s.SessionUser)
+                .HasForeignKey<Submission>(s => s.SessionUserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder
-                .Entity<Submission>()
-                .HasOne(s => s.Team)
-                .WithMany(t => t.Submissions)
-                .HasForeignKey(s => s.TeamId)
-                .IsRequired(false)
+                .Entity<Team>()
+                .HasOne(t => t.Submission)
+                .WithOne(s => s.Team)
+                .HasForeignKey<Submission>(s => s.TeamId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder
@@ -138,9 +160,9 @@ namespace backend.Data
 
             builder
                 .Entity<Answer>()
-                .HasOne(a => a.Task)
+                .HasOne(a => a.Activity)
                 .WithMany()
-                .HasForeignKey(a => a.TaskId)
+                .HasForeignKey(a => a.ActivityId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
