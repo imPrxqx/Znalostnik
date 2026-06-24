@@ -1,0 +1,101 @@
+﻿{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Quiz Activity Content",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [ "text", "style", "options" ],
+
+  "properties": {
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
+
+    "style": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "fontFamily": {
+          "type": "string"
+        },
+        "fontSize": {
+          "type": "number",
+          "minimum": 1
+        },
+        "color": {
+          "type": "string"
+        },
+        "bold": {
+          "type": "boolean"
+        },
+        "italic": {
+          "type": "boolean"
+        },
+        "underline": {
+          "type": "boolean"
+        }
+      }
+    },
+
+    "options": {
+      "type": "array",
+      "minItems": 2,
+
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+
+        "required": [ "id", "content" ],
+
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+
+          "content": {
+            "type": "string",
+          },
+
+          "media": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "contentType": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+
+
+          "style": {
+            "type": "object",
+            "additionalProperties": false,
+
+            "properties": {
+              "fontFamily": {
+                "type": "string"
+              },
+              "fontSize": {
+                "type": "number",
+                "minimum": 1
+              },
+              "color": {
+                "type": "string"
+              },
+              "backgroundColor": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

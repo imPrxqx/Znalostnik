@@ -1,0 +1,19 @@
+﻿{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Quiz Activity Answer",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [ "selected" ],
+
+  "properties": {
+    "selected": {
+      "type": "array",
+
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      }
+    }
+  }
+}
