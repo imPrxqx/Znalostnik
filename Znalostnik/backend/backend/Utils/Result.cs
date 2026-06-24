@@ -83,9 +83,56 @@ namespace backend.Utils
 
         public static Error NotFound = new Error("Errors.NotFound", "Value Not Found");
 
+        public static Error UserNotFound = new Error("Errors.UserNotFound", "User Not Found");
+
+        public static Error SessionNotFound = new Error(
+            "Errors.SessionNotFound",
+            "Session Not Found"
+        );
+
+        public static Error TagNotFound = new Error("Errors.TagNotFound", "Tag Not Found");
+
+        public static Error SessionNotOpen = new Error("Errors.SessionNotOpen", "Session Not Open");
+
+        public static Error SessionUserNotFound = new Error(
+            "Errors.SessionUserNotFound",
+            "Session User Not Found"
+        );
+
+        public static Error TeamNotFound = new Error("Errors.TeamNotFound", "Team Not Found");
+
+        public static Error SubmissionNotFound = new Error(
+            "Errors.SubmissionNotFound",
+            "Submission Not Found"
+        );
+
+        public static Error AnswerNotFound = new Error("Errors.AnswerNotFound", "Answer Not Found");
+
+        public static Error ExerciseNotFound = new Error(
+            "Errors.ExerciseNotFound",
+            "Exercise Not Found"
+        );
+
+        public static Error ExerciseActivityNotFound = new Error(
+            "Errors.ExerciseActivityNotFound",
+            "Exercise Activity Not Found"
+        );
+
         public static Error InvalidOperation = new Error(
             "Errors.InvalidOperation",
             "Operation Is Not Valid"
+        );
+
+        public static Error AnswerAlreadyConfirmed = new Error(
+            "Errors.AnswerAlreadyConfirmed",
+            "Answer Is Already Confirmed And Cannot Be Modified"
+        );
+
+        public static Error NotYourTurn = new Error("Errors.NotYourTurn", "Not Your Turn");
+
+        public static Error NotEnoughtParticipants = new Error(
+            "Errors.NotEnoughtParticipants",
+            "Not Enought Participants"
         );
     }
 }
