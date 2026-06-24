@@ -1,0 +1,34 @@
+﻿{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Match Up Activity Solution",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [ "correct" ],
+
+  "properties": {
+
+    "correct": {
+      "type": "array",
+
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+
+        "required": [ "leftId", "rightId" ],
+
+        "properties": {
+          "leftId": {
+            "type": "string",
+            "format": "uuid"
+          },
+
+          "rightId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      }
+    }
+  }
+}
