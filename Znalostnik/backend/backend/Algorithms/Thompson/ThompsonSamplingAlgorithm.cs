@@ -7,14 +7,14 @@ namespace backend.Algorithms
     {
         public string AlgorithmType => "thompson";
 
-        public RuntimeActivity SelectNextQuestion(
+        public RuntimeActivity SelectNextActivity(
             IReadOnlyList<RuntimeActivity> candidates,
             AlgorithmsState algorithmState
         )
         {
             var state = algorithmState.Thompson;
 
-            RuntimeActivity best = candidates[0];
+            RuntimeActivity bestActivity = candidates[0];
             double bestScore = double.NegativeInfinity;
 
             foreach (var activity in candidates)
@@ -28,11 +28,11 @@ namespace backend.Algorithms
                 if (sample > bestScore)
                 {
                     bestScore = sample;
-                    best = activity;
+                    bestActivity = activity;
                 }
             }
 
-            return best;
+            return bestActivity;
         }
 
         public void UpdatePlayerState(
@@ -62,15 +62,9 @@ namespace backend.Algorithms
                 return item;
             }
 
-            item = new ActivityThompsonKnowledge
-            {
-                Id = id,
-                Alpha = 1,
-                Beta = 1,
-            };
+            item = new ActivityThompsonKnowledge { Id = id };
 
             state.Knowledges.Add(item);
-
             return item;
         }
 

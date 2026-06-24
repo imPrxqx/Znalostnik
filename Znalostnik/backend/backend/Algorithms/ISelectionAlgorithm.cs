@@ -1,8 +1,4 @@
-﻿using System.Text.Json;
-using backend.DTOs;
-using backend.Models;
-using backend.Utils;
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using backend.Models;
 
 namespace backend.Algorithms
 {
@@ -10,7 +6,7 @@ namespace backend.Algorithms
     {
         string AlgorithmType { get; }
 
-        RuntimeActivity SelectNextQuestion(
+        RuntimeActivity SelectNextActivity(
             IReadOnlyList<RuntimeActivity> candidates,
             AlgorithmsState algorithmState
         );
