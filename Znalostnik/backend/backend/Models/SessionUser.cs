@@ -16,6 +16,6 @@
     {
         public Guid Id { get; } = Guid.NewGuid();
         public string UserId { get; set; } = string.Empty;
-        public string DisplayName { get; set; } = string.Empty;
+        public string Username { get; set; } = string.Empty;
     }
 }

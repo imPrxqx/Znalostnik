@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using backend.Runtime;
 
 namespace backend.Services
 {
@@ -35,8 +36,8 @@ namespace backend.Services
             {
                 var sessionService = scope.ServiceProvider.GetRequiredService<ISessionService>();
                 var runtimeSessionService =
-                    scope.ServiceProvider.GetRequiredService<RuntimeSessionService>();
-                var sessions = runtimeSessionService.sessions.Select(s => s.Value).ToList();
+                    scope.ServiceProvider.GetRequiredService<IRuntimeSessionStore>();
+                var sessions = runtimeSessionService.GetSessions();
 
                 foreach (var session in sessions)
                 {
