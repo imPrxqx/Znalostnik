@@ -1,0 +1,15 @@
+﻿{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Guess Activity Solution",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [ "correct" ],
+
+  "properties": {
+
+    "correct": {
+      "type": "string"
+    }
+  }
+}
