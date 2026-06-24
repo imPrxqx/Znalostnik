@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using Microsoft.AspNetCore.Mvc;
 
 namespace backend.DTOs
 {
@@ -7,26 +6,45 @@ namespace backend.DTOs
     {
         public Guid Id { get; set; }
         public string Title { get; set; } = string.Empty;
-        public bool IsPublic { get; set; }
         public string Status { get; set; } = string.Empty;
+        public string AccessCode { get; set; } = string.Empty;
+        public string RespondType { get; set; } = string.Empty;
+        public string GameMode { get; set; } = string.Empty;
+        public GameSetting GameSetting { get; set; } = null!;
+        public object GameState { get; set; } = JsonDocument.Parse("{}");
+        public string Role { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
         public Guid ExerciseId { get; set; }
     }
 
-    public class CreateSessionDto
-    {
-        public string Title { get; set; } = string.Empty;
-        public bool IsPublic { get; set; }
-        public string? AccessCode { get; set; }
-        public string Status { get; set; } = string.Empty;
-        public Guid ExerciseId { get; set; }
-    }
-
-    public class UpdateSessionDto
+    public class SessionReportDto
     {
         public Guid Id { get; set; }
         public string Title { get; set; } = string.Empty;
-        public bool IsPublic { get; set; }
-        public string Status { get; set; } = string.Empty;
+        public List<ActivityDTO> Activities { get; set; } = new List<ActivityDTO>();
+        public List<AnswerDto> Answers { get; set; } = new List<AnswerDto>();
+        public List<ParticipantDto> Participants { get; set; } = new List<ParticipantDto>();
+    }
+
+    public class CreateSessionDto
+    {
+        public Guid ExerciseId { get; set; }
+        public string Title { get; set; } = null!;
+        public string RespondType { get; set; } = null!;
+        public string GameMode { get; set; } = null!;
+        public GameSetting GameSetting { get; set; } = null!;
+    }
+
+    public class ParticipantDto
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+    }
+
+    public class GameSetting
+    {
+        public int RoundTime { get; set; } = 30;
+        public string SelectionAlgorithm { get; set; } = "random";
+        public string ScoringMode { get; set; } = "balanced";
     }
 }

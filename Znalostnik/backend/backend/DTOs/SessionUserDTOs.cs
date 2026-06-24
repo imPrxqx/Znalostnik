@@ -5,8 +5,13 @@ namespace backend.DTOs
     public class SessionUserDto
     {
         public Guid Id { get; set; }
-        public Guid SessionId { get; set; }
         public Guid? TeamId { get; set; }
-        public string UserName { get; set; } = string.Empty;
+        public string? UserName { get; set; } = string.Empty;
+    }
+
+    public class CreateSessionUserDto
+    {
+        public string AccessCode { get; set; } = null!;
+        public string UserName { get; set; } = null!;
     }
 }
