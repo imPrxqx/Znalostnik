@@ -1,5 +1,5 @@
-﻿using backend.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json;
+using backend.Models;
 
 namespace backend.DTOs
 {
@@ -10,11 +10,24 @@ namespace backend.DTOs
             return new AnswerDto
             {
                 Id = answer.Id,
-                AnswerSubmit = answer.AnswerSubmit,
-                AnswerEvaluation = answer.AnswerEvaluation,
-                CreatedAt = answer.CreatedAt,
                 SubmissionId = answer.SubmissionId,
-                TaskId = answer.TaskId,
+                Submit = JsonDocument.Parse(answer.Submit),
+                CreatedAt = answer.CreatedAt,
+                Status = answer.Status,
+                CorrectPercentage = answer.CorrectPercentage,
+                ActivityId = answer.ActivityId,
+            };
+        }
+
+        public static AnswerDto ToAnswerDto(this RuntimeAnswer answer)
+        {
+            return new AnswerDto
+            {
+                Id = answer.Id,
+                Submit = JsonDocument.Parse(answer.Submit),
+                Version = answer.Version,
+                CreatedAt = answer.CreatedAt,
+                ActivityId = answer.ActivityId,
             };
         }
     }

@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-using backend.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using backend.Models;
 
 namespace backend.DTOs
 {
