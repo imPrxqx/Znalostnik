@@ -27,7 +27,7 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTags()
         {
-            var user = await _userService.GetCurrentUserAsync(User);
+            var user = await _userService.GetUserAsync(User);
 
             if (user.IsFailure)
             {
@@ -47,7 +47,7 @@ namespace backend.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _userService.GetCurrentUserAsync(User);
+            var user = await _userService.GetUserAsync(User);
 
             if (user.IsFailure)
             {
@@ -67,12 +67,7 @@ namespace backend.Controllers
         [HttpDelete("{tagId}")]
         public async Task<IActionResult> DeleteTag(Guid tagId)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var user = await _userService.GetCurrentUserAsync(User);
+            var user = await _userService.GetUserAsync(User);
 
             if (user.IsFailure)
             {
@@ -92,7 +87,7 @@ namespace backend.Controllers
         [HttpGet("exercises/{exerciseId}")]
         public async Task<IActionResult> GetExerciseTags(Guid exerciseId)
         {
-            var user = await _userService.GetCurrentUserAsync(User);
+            var user = await _userService.GetUserAsync(User);
 
             if (user.IsFailure)
             {
@@ -107,7 +102,7 @@ namespace backend.Controllers
         [HttpPost("{tagId}/exercises/{exerciseId}")]
         public async Task<IActionResult> AddExerciseTag(Guid tagId, Guid exerciseId)
         {
-            var user = await _userService.GetCurrentUserAsync(User);
+            var user = await _userService.GetUserAsync(User);
 
             if (user.IsFailure)
             {
@@ -127,7 +122,7 @@ namespace backend.Controllers
         [HttpDelete("{tagId}/exercises/{exerciseId}")]
         public async Task<IActionResult> RemoveExerciseTag(Guid tagId, Guid exerciseId)
         {
-            var user = await _userService.GetCurrentUserAsync(User);
+            var user = await _userService.GetUserAsync(User);
 
             if (user.IsFailure)
             {

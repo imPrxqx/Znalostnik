@@ -1,6 +1,8 @@
 ﻿using System.Security.Claims;
+using backend.DTOs;
 using backend.Models;
 using backend.Services;
+using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
@@ -22,7 +24,7 @@ namespace backend.Controllers
 
         [HttpPost("guest")]
         [AllowAnonymous]
-        public async Task<IActionResult> Guest()
+        public async Task<IActionResult> CreateGuest()
         {
             var guestUser = await _userService.SignInAsGuestUser();
 
@@ -34,30 +36,78 @@ namespace backend.Controllers
             return Ok();
         }
 
-        [HttpGet("me")]
-        public async Task<IActionResult> Me()
+        [HttpPost("forgotPasswordV2")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword(UserForgotPasswordDto dto)
         {
-            var user = await _userService.GetCurrentUserAsync(User);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var request = HttpContext.Request;
+            var baseUrl = $"{request.Scheme}://{request.Host}";
+
+            var result = await _userService.ForgotPassword(dto, baseUrl);
+            return Ok();
+        }
+
+        [HttpGet("me")]
+        public async Task<IActionResult> GetUser()
+        {
+            var user = await _userService.GetUserAsync(User);
 
             if (user.IsFailure)
             {
-                return NotFound();
+                return Unauthorized();
             }
 
             return Ok(user.Value);
         }
 
-        [HttpGet("me/detail")]
-        public async Task<IActionResult> MeDetail()
+        [HttpDelete("me")]
+        public async Task<IActionResult> DeleteUser()
         {
-            var userDetail = await _userService.GetCurrentUserDetailAsync(User);
+            var user = await _userService.GetUserAsync(User);
 
-            if (userDetail.IsFailure)
+            if (user.IsFailure)
             {
-                return NotFound();
+                return Unauthorized();
             }
 
-            return Ok(userDetail.Value);
+            var result = await _userService.DeleteUser(user.Value);
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return Ok(user.Value);
+        }
+
+        [HttpPost("me/updatePassword")]
+        public async Task<IActionResult> UpdatePassword(UpdateUserPasswordDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userService.GetUserAsync(User);
+
+            if (user.IsFailure)
+            {
+                return Unauthorized();
+            }
+
+            var result = await _userService.UpdatePassword(user.Value, dto);
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
 
         [HttpPost("logout")]

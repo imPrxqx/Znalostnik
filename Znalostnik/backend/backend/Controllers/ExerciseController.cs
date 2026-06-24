@@ -29,7 +29,7 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetExercises()
         {
-            var user = await _userService.GetCurrentUserAsync(User);
+            var user = await _userService.GetUserAsync(User);
 
             if (user.IsFailure)
             {
@@ -44,7 +44,7 @@ namespace backend.Controllers
         [HttpGet("{exerciseId}")]
         public async Task<IActionResult> GetExercise(Guid exerciseId)
         {
-            var user = await _userService.GetCurrentUserAsync(User);
+            var user = await _userService.GetUserAsync(User);
 
             if (user.IsFailure)
             {
@@ -64,7 +64,7 @@ namespace backend.Controllers
         [HttpGet("{exerciseId}/activities/first")]
         public async Task<IActionResult> GetFirstExerciseActivity(Guid exerciseId)
         {
-            var user = await _userService.GetCurrentUserAsync(User);
+            var user = await _userService.GetUserAsync(User);
 
             if (user.IsFailure)
             {
@@ -92,7 +92,7 @@ namespace backend.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _userService.GetCurrentUserAsync(User);
+            var user = await _userService.GetUserAsync(User);
 
             if (user.IsFailure)
             {
@@ -154,7 +154,7 @@ namespace backend.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _userService.GetCurrentUserAsync(User);
+            var user = await _userService.GetUserAsync(User);
 
             if (user.IsFailure)
             {
@@ -174,7 +174,7 @@ namespace backend.Controllers
         [HttpDelete("{exerciseId}")]
         public async Task<IActionResult> DeleteExercise(Guid exerciseId)
         {
-            var user = await _userService.GetCurrentUserAsync(User);
+            var user = await _userService.GetUserAsync(User);
 
             if (user.IsFailure)
             {

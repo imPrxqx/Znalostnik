@@ -102,7 +102,6 @@ namespace backend.Services
 
             await _context.Tags.AddAsync(newTag);
             await _context.SaveChangesAsync();
-
             return Result<TagDto>.Success(newTag.ToTagDto());
         }
 

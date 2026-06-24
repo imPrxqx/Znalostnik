@@ -27,7 +27,7 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetMediasMetadata()
         {
-            var user = await _userService.GetCurrentUserAsync(User);
+            var user = await _userService.GetUserAsync(User);
 
             if (user.IsFailure)
             {
@@ -47,7 +47,7 @@ namespace backend.Controllers
         [HttpGet("{mediaId}")]
         public async Task<IActionResult> GetMediaFile(Guid mediaId)
         {
-            var user = await _userService.GetCurrentUserAsync(User);
+            var user = await _userService.GetUserAsync(User);
 
             if (user.IsFailure)
             {
@@ -81,7 +81,7 @@ namespace backend.Controllers
         [HttpDelete("{mediaId}")]
         public async Task<IActionResult> DeleteMedia(Guid mediaId)
         {
-            var user = await _userService.GetCurrentUserAsync(User);
+            var user = await _userService.GetUserAsync(User);
 
             if (user.IsFailure)
             {
@@ -102,7 +102,7 @@ namespace backend.Controllers
         [RequestSizeLimit(10000000)]
         public async Task<IActionResult> CreateMediaFile(IFormFile file)
         {
-            var user = await _userService.GetCurrentUserAsync(User);
+            var user = await _userService.GetUserAsync(User);
 
             if (user.IsFailure)
             {

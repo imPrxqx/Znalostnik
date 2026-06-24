@@ -14,16 +14,5 @@ namespace backend.DTOs
                 UserType = user.UserType,
             };
         }
-
-        public static UserDetailDto ToUserDetailDto(this User user)
-        {
-            return new UserDetailDto
-            {
-                Id = user.Id,
-                UserName = user.UserName,
-                Email = user.Email,
-                PhoneNumber = user.PhoneNumber,
-            };
-        }
     }
 }
