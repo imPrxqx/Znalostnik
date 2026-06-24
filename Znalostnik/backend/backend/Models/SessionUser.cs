@@ -7,8 +7,15 @@
         public Session Session { get; set; } = null!;
         public string? UserId { get; set; }
         public User? User { get; set; }
-        public string? DisplayUsername { get; set; }
-        public TeamMember? TeamMember { get; set; }
-        public ICollection<Submission> Submissions { get; set; } = new List<Submission>();
+        public string Username { get; set; } = string.Empty;
+        public TeamMember? TeamMember { get; set; } = null;
+        public Submission Submission { get; set; } = null!;
+    }
+
+    public class RuntimeSessionUser
+    {
+        public Guid Id { get; } = Guid.NewGuid();
+        public string UserId { get; set; } = string.Empty;
+        public string DisplayName { get; set; } = string.Empty;
     }
 }

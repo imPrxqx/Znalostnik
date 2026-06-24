@@ -11,7 +11,6 @@ namespace backend.Models
         public Team? Team { get; set; }
         public Guid? SessionUserId { get; set; }
         public SessionUser? SessionUser { get; set; }
-        public JsonDocument Data { get; set; } = JsonDocument.Parse("{}");
         public ICollection<Answer> Answers { get; set; } = new List<Answer>();
     }
 }
