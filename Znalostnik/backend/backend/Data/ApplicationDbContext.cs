@@ -65,9 +65,9 @@ namespace backend.Data
 
             builder
                 .Entity<Activity>()
-                .HasOne(et => et.Exercise)
+                .HasOne(a => a.Exercise)
                 .WithMany(e => e.Activities)
-                .HasForeignKey(et => et.ExerciseId)
+                .HasForeignKey(a => a.ExerciseId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Session>().HasIndex(s => s.AccessCode).IsUnique();
