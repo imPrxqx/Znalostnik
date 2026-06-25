@@ -10,7 +10,7 @@ import { interval } from 'rxjs';
 })
 export class Timer {
   targetTime = input.required<Date>();
-  remainingTime = signal<number | undefined>(undefined);
+  remainingTime = signal<number>(0);
 
   private scheduler = interval(1000).subscribe(() => {
     const seconds = this.calculateSeconds();
@@ -28,7 +28,7 @@ export class Timer {
 
   calculateSeconds(): number {
     const now = new Date().getTime();
-    const target = this.targetTime().getTime();
+    const target = new Date(this.targetTime()).getTime();
     return Math.max(Math.floor((target - now) / 1000), 0);
   }
 }
