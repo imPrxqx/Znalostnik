@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -8,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     /// <inheritdoc />
-    public partial class postgresqlcontainer_migration_390 : Migration
+    public partial class postgresqlcontainer_migration_288 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -224,8 +223,6 @@ namespace backend.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
-                    Mode = table.Column<string>(type: "text", nullable: false),
-                    Settings = table.Column<JsonDocument>(type: "jsonb", nullable: false),
                     UpdatedAt = table.Column<DateTime>(
                         type: "timestamp with time zone",
                         nullable: false
@@ -250,19 +247,26 @@ namespace backend.Migrations
             );
 
             migrationBuilder.CreateTable(
-                name: "ExerciseTags",
+                name: "Medias",
                 columns: table => new
                 {
-                    ExerciseId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Tag = table.Column<string>(type: "text", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FileName = table.Column<string>(type: "text", nullable: false),
+                    Path = table.Column<string>(type: "text", nullable: false),
+                    ContentType = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(
+                        type: "timestamp with time zone",
+                        nullable: false
+                    ),
+                    CreatedByUserId = table.Column<string>(type: "text", nullable: false),
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ExerciseTags", x => new { x.ExerciseId, x.Tag });
+                    table.PrimaryKey("PK_Medias", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ExerciseTags_Exercises_ExerciseId",
-                        column: x => x.ExerciseId,
-                        principalTable: "Exercises",
+                        name: "FK_Medias_AspNetUsers_CreatedByUserId",
+                        column: x => x.CreatedByUserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade
                     );
@@ -270,22 +274,43 @@ namespace backend.Migrations
             );
 
             migrationBuilder.CreateTable(
-                name: "ExerciseTasks",
+                name: "Tags",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Title = table.Column<string>(type: "text", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tags_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
+
+            migrationBuilder.CreateTable(
+                name: "Activities",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Type = table.Column<string>(type: "text", nullable: false),
-                    RespondMode = table.Column<string>(type: "text", nullable: false),
                     Order = table.Column<int>(type: "integer", nullable: false),
-                    Content = table.Column<JsonDocument>(type: "jsonb", nullable: false),
+                    Style = table.Column<string>(type: "jsonb", nullable: false),
+                    Content = table.Column<string>(type: "jsonb", nullable: false),
+                    Solution = table.Column<string>(type: "jsonb", nullable: false),
                     ExerciseId = table.Column<Guid>(type: "uuid", nullable: false),
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ExerciseTasks", x => x.Id);
+                    table.PrimaryKey("PK_Activities", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ExerciseTasks_Exercises_ExerciseId",
+                        name: "FK_Activities_Exercises_ExerciseId",
                         column: x => x.ExerciseId,
                         principalTable: "Exercises",
                         principalColumn: "Id",
@@ -300,15 +325,15 @@ namespace backend.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
-                    IsPublic = table.Column<bool>(type: "boolean", nullable: false),
                     Status = table.Column<string>(type: "text", nullable: false),
+                    RespondType = table.Column<string>(type: "text", nullable: false),
+                    GameMode = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTime>(
                         type: "timestamp with time zone",
                         nullable: false
                     ),
                     AccessCode = table.Column<string>(type: "text", nullable: true),
-                    CurrentTaskIndex = table.Column<int>(type: "integer", nullable: false),
-                    CurrentExerciseTaskId = table.Column<Guid>(type: "uuid", nullable: false),
+                    GameState = table.Column<string>(type: "text", nullable: false),
                     ExerciseId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedByUserId = table.Column<string>(type: "text", nullable: false),
                 },
@@ -323,16 +348,36 @@ namespace backend.Migrations
                         onDelete: ReferentialAction.Cascade
                     );
                     table.ForeignKey(
-                        name: "FK_Sessions_ExerciseTasks_CurrentExerciseTaskId",
-                        column: x => x.CurrentExerciseTaskId,
-                        principalTable: "ExerciseTasks",
+                        name: "FK_Sessions_Exercises_ExerciseId",
+                        column: x => x.ExerciseId,
+                        principalTable: "Exercises",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
+
+            migrationBuilder.CreateTable(
+                name: "ExerciseTags",
+                columns: table => new
+                {
+                    ExerciseId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TagId = table.Column<Guid>(type: "uuid", nullable: false),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExerciseTags", x => new { x.ExerciseId, x.TagId });
+                    table.ForeignKey(
+                        name: "FK_ExerciseTags_Exercises_ExerciseId",
+                        column: x => x.ExerciseId,
+                        principalTable: "Exercises",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade
                     );
                     table.ForeignKey(
-                        name: "FK_Sessions_Exercises_ExerciseId",
-                        column: x => x.ExerciseId,
-                        principalTable: "Exercises",
+                        name: "FK_ExerciseTags_Tags_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade
                     );
@@ -346,7 +391,7 @@ namespace backend.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     SessionId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<string>(type: "text", nullable: true),
-                    DisplayUsername = table.Column<string>(type: "text", nullable: true),
+                    Username = table.Column<string>(type: "text", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -373,8 +418,9 @@ namespace backend.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    TeamName = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
                     SessionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SubmissionId = table.Column<Guid>(type: "uuid", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -397,7 +443,6 @@ namespace backend.Migrations
                     SessionId = table.Column<Guid>(type: "uuid", nullable: false),
                     TeamId = table.Column<Guid>(type: "uuid", nullable: true),
                     SessionUserId = table.Column<Guid>(type: "uuid", nullable: true),
-                    Data = table.Column<JsonDocument>(type: "jsonb", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -458,22 +503,23 @@ namespace backend.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    AnswerSubmit = table.Column<JsonDocument>(type: "jsonb", nullable: false),
-                    AnswerEvaluation = table.Column<JsonDocument>(type: "jsonb", nullable: false),
+                    Submit = table.Column<string>(type: "jsonb", nullable: false),
+                    CorrectPercentage = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTime>(
                         type: "timestamp with time zone",
                         nullable: false
                     ),
                     SubmissionId = table.Column<Guid>(type: "uuid", nullable: false),
-                    TaskId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ActivityId = table.Column<Guid>(type: "uuid", nullable: false),
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Answers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Answers_ExerciseTasks_TaskId",
-                        column: x => x.TaskId,
-                        principalTable: "ExerciseTasks",
+                        name: "FK_Answers_Activities_ActivityId",
+                        column: x => x.ActivityId,
+                        principalTable: "Activities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade
                     );
@@ -488,15 +534,21 @@ namespace backend.Migrations
             );
 
             migrationBuilder.CreateIndex(
-                name: "IX_Answers_SubmissionId",
-                table: "Answers",
-                column: "SubmissionId"
+                name: "IX_Activities_ExerciseId",
+                table: "Activities",
+                column: "ExerciseId"
             );
 
             migrationBuilder.CreateIndex(
-                name: "IX_Answers_TaskId",
+                name: "IX_Answers_ActivityId",
                 table: "Answers",
-                column: "TaskId"
+                column: "ActivityId"
+            );
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Answers_SubmissionId",
+                table: "Answers",
+                column: "SubmissionId"
             );
 
             migrationBuilder.CreateIndex(
@@ -550,9 +602,22 @@ namespace backend.Migrations
             );
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExerciseTasks_ExerciseId",
-                table: "ExerciseTasks",
-                column: "ExerciseId"
+                name: "IX_ExerciseTags_ExerciseId_TagId",
+                table: "ExerciseTags",
+                columns: new[] { "ExerciseId", "TagId" },
+                unique: true
+            );
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExerciseTags_TagId",
+                table: "ExerciseTags",
+                column: "TagId"
+            );
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Medias_CreatedByUserId",
+                table: "Medias",
+                column: "CreatedByUserId"
             );
 
             migrationBuilder.CreateIndex(
@@ -566,12 +631,6 @@ namespace backend.Migrations
                 name: "IX_Sessions_CreatedByUserId",
                 table: "Sessions",
                 column: "CreatedByUserId"
-            );
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Sessions_CurrentExerciseTaskId",
-                table: "Sessions",
-                column: "CurrentExerciseTaskId"
             );
 
             migrationBuilder.CreateIndex(
@@ -602,13 +661,22 @@ namespace backend.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Submissions_SessionUserId",
                 table: "Submissions",
-                column: "SessionUserId"
+                column: "SessionUserId",
+                unique: true
             );
 
             migrationBuilder.CreateIndex(
                 name: "IX_Submissions_TeamId",
                 table: "Submissions",
-                column: "TeamId"
+                column: "TeamId",
+                unique: true
+            );
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tags_UserId_Name",
+                table: "Tags",
+                columns: new[] { "UserId", "Name" },
+                unique: true
             );
 
             migrationBuilder.CreateIndex(
@@ -642,19 +710,23 @@ namespace backend.Migrations
 
             migrationBuilder.DropTable(name: "ExerciseTags");
 
+            migrationBuilder.DropTable(name: "Medias");
+
             migrationBuilder.DropTable(name: "TeamMembers");
+
+            migrationBuilder.DropTable(name: "Activities");
 
             migrationBuilder.DropTable(name: "Submissions");
 
             migrationBuilder.DropTable(name: "AspNetRoles");
+
+            migrationBuilder.DropTable(name: "Tags");
 
             migrationBuilder.DropTable(name: "SessionUsers");
 
             migrationBuilder.DropTable(name: "Teams");
 
             migrationBuilder.DropTable(name: "Sessions");
-
-            migrationBuilder.DropTable(name: "ExerciseTasks");
 
             migrationBuilder.DropTable(name: "Exercises");
 
