@@ -38,8 +38,8 @@ namespace backend.Models
         public string GameState { get; set; } = "{}";
         public GameSetting GameSetting { get; set; } = null!;
         public List<RuntimeAnswer> Answers { get; set; } = new();
-        public Dictionary<Guid, RuntimeActivity> Activities { get; set; } = new();
-        public Dictionary<Guid, RuntimeSessionUser> SessionUsers { get; set; } = new();
-        public Dictionary<Guid, RuntimeTeam> Teams { get; set; } = new();
+        public List<RuntimeActivity> Activities { get; set; } = new();
+        public List<RuntimeSessionUser> SessionUsers { get; set; } = new();
+        public List<RuntimeTeam> Teams { get; set; } = new();
     }
 }

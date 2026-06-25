@@ -11,7 +11,7 @@ namespace backend.DTOs
 
         public static TeamDto ToTeamDto(
             this RuntimeTeam team,
-            IDictionary<Guid, RuntimeSessionUser> users
+            IEnumerable<RuntimeSessionUser> sessionUsers
         )
         {
             return new TeamDto
@@ -19,7 +19,9 @@ namespace backend.DTOs
                 Id = team.Id,
                 Name = team.Name,
                 TeamMembers = team
-                    .TeamMemberIds.Select(id => users[id].ToSessionUserDto())
+                    .TeamMemberIds.Select(id => sessionUsers.FirstOrDefault(su => su.Id == id))
+                    .Where(su => su != null)
+                    .Select(su => su!.ToSessionUserDto())
                     .ToList(),
             };
         }

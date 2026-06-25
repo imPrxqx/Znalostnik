@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using backend.Data.Repository;
 using backend.DTOs;
 using backend.Models;
 using backend.Services;
@@ -25,9 +24,14 @@ namespace backend.Hubs
             await Groups.AddToGroupAsync(Context.ConnectionId, sessionId.ToString());
         }
 
-        public async Task NotifySessionUpdated(Guid sessionId)
+        public async Task SessionUpdated(Guid sessionId)
         {
-            await Clients.Group(sessionId.ToString()).SendAsync("NotifySessionUpdated");
+            await Clients.Group(sessionId.ToString()).SendAsync("SessionUpdated");
+        }
+
+        public async Task JoinUpdated(Guid sessionId)
+        {
+            await Clients.Group(sessionId.ToString()).SendAsync("JoinUpdated");
         }
     }
 }

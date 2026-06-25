@@ -8,7 +8,7 @@ namespace backend.Algorithms
 
         private readonly Random _random = new Random();
 
-        public RuntimeActivity SelectNextQuestion(
+        public RuntimeActivity SelectNextActivity(
             IReadOnlyList<RuntimeActivity> candidates,
             AlgorithmsState state
         )
