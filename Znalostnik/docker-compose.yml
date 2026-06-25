@@ -32,6 +32,8 @@ services:
       dockerfile: ./backend/Dockerfile
     restart: unless-stopped
     environment:
+      - EMAIL=${GOOGLE_EMAIL}
+      - EMAIL_PASSWORD=${GOOGLE_EMAIL_APP_PASSWORD}
       - DATABASE_SERVER=${DATABASE_SERVER}
       - DATABASE_NAME=${DATABASE_NAME}
       - DATABASE_USER=${DATABASE_USER}
@@ -62,7 +64,7 @@ services:
       - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_PASSWORD=${DATABASE_PASS}
     ports:
-      - "5432:5432"
+      - "${DATABASE_HOST_PORT}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
