@@ -1,45 +1,95 @@
 <mat-sidenav-container class="container">
-  <mat-sidenav class="sidebar" mode="side" opened>
-    <div class="sidebar-header">
-      <img src="favicon.ico" />
-      <a [routerLink]="['/']" class="sidebar-title"><h2 i18n>Znalostník</h2></a>
+  <mat-sidenav class="sidebar" mode="side" [opened]="isOpened()">
+    <div class="sidebar-inner">
+      <div class="sidebar-top">
+        <div class="sidebar-header">
+          <img src="favicon.ico" />
+          <a [routerLink]="['/']">
+            <h1 i18n>Znalostník</h1>
+          </a>
+        </div>
+
+        <mat-nav-list class="sidebar-list">
+          <a mat-list-item [routerLink]="['home']" routerLinkActive="active" (click)="close()">
+            <mat-icon matListItemIcon>home</mat-icon>
+            <p i18n>Úvod</p>
+          </a>
+          <a
+            mat-list-item
+            [routerLink]="['my-exercises']"
+            routerLinkActive="active"
+            (click)="close()"
+          >
+            <mat-icon matListItemIcon>school</mat-icon>
+            <p i18n>Cvičení</p>
+          </a>
+
+          <a
+            mat-list-item
+            [routerLink]="['my-sessions']"
+            routerLinkActive="active"
+            (click)="close()"
+          >
+            <mat-icon matListItemIcon>emoji_events</mat-icon>
+            <p i18n>Relace</p>
+          </a>
+
+          <a
+            mat-list-item
+            [routerLink]="['my-statistics']"
+            routerLinkActive="active"
+            (click)="close()"
+          >
+            <mat-icon matListItemIcon>bar_chart</mat-icon>
+            <p i18n>Statistiky</p>
+          </a>
+        </mat-nav-list>
+      </div>
+
+      <div>
+        <mat-nav-list class="sidebar-list">
+          @if(auth.user()) {
+          <a mat-list-item (click)="logout()" (click)="close()">
+            <mat-icon matListItemIcon>logout</mat-icon>
+            <p i18n>Odhlásit se</p>
+          </a>
+          } @else {
+          <a mat-list-item routerLink="/authentication/login" (click)="close()">
+            <mat-icon matListItemIcon>logout</mat-icon>
+            <p i18n>Přihlásit se</p>
+          </a>
+          }
+
+          <a
+            mat-list-item
+            [routerLink]="['my-settings']"
+            routerLinkActive="active"
+            (click)="close()"
+          >
+            <mat-icon matListItemIcon>settings</mat-icon>
+            <p i18n>Nastavení</p>
+          </a>
+
+          <a mat-list-item [routerLink]="['guide']" routerLinkActive="active" (click)="close()">
+            <mat-icon matListItemIcon>menu_book</mat-icon>
+            <p i18n>Návod</p>
+          </a>
+        </mat-nav-list>
+      </div>
     </div>
-
-    <mat-nav-list class="sidebar-list">
-      <a mat-list-item [routerLink]="['my-exercises']" routerLinkActive="active">
-        <mat-icon matListItemIcon>person</mat-icon>
-        <span matListItemTitle i18n>Moje cvičení</span>
-      </a>
-
-      <a mat-list-item [routerLink]="['my-sessions']" routerLinkActive="active">
-        <mat-icon matListItemIcon>person</mat-icon>
-        <span matListItemTitle i18n>Moje relace</span>
-      </a>
-    </mat-nav-list>
   </mat-sidenav>
 
-  <mat-sidenav-content class="sidebar-content">
+  <mat-sidenav-content>
+    @if(isMobile()) {
     <mat-toolbar>
-      <div class="header-right">
-        @if(!auth.user()) {
-        <a routerLink="/authentication/login" i18n>Přihlásit se</a>
-        }
-
-        <button mat-icon-button [matMenuTriggerFor]="userMenu">
-          <mat-icon>account_circle</mat-icon>
-        </button>
-
-        <mat-menu #userMenu="matMenu">
-          @if(auth.user()) {
-          <button mat-menu-item (click)="logout()" i18n>
-            <mat-icon>logout</mat-icon>
-            Odhlásit se
-          </button>
-          }
-        </mat-menu>
-      </div>
+      <button mat-icon-button (click)="toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
     </mat-toolbar>
+    }
 
-    <router-outlet></router-outlet>
+    <div class="content-router">
+      <router-outlet></router-outlet>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
