@@ -249,34 +249,13 @@
       </mat-card>
 
       <div class="feature-list">
+        @for (gameMode of gameModes; track gameMode.key) {
         <mat-card class="feature-card">
-          <mat-icon>school</mat-icon>
-          <h4 i18n>Klasický</h4>
-          <p i18n>
-            Aktivity probíhají v předem nastaveném pořadí a každá má časový limit. Po dokončení kola
-            se účastníkům zobrazí výsledky a zpětná vazba.
-          </p>
+          <mat-icon>{{ gameMode.icon }}</mat-icon>
+          <h4>{{ gameMode.name }}</h4>
+          <p>{{ gameMode.longDescription }}</p>
         </mat-card>
-
-        <mat-card class="feature-card">
-          <mat-icon>bolt</mat-icon>
-          <h4 i18n>Horká brambora</h4>
-          <p i18n>
-            V každém kole jsou aktivním hráčům přiřazeny „brambory“, z nichž každá obsahuje jednu
-            aktivitu. Po uplynutí času jsou nejpomalejší hráči vyřazeni a hra pokračuje, dokud
-            nezůstane poslední vítěz.
-          </p>
-        </mat-card>
-
-        <mat-card class="feature-card">
-          <mat-icon>self_improvement</mat-icon>
-          <h4 i18n>Samostudium</h4>
-          <p i18n>
-            Účastníci postupují vlastním tempem. Systém jim adaptivně vybírá aktivity podle jejich
-            úspěšnosti. Při častých chybách se více tyto aktivity častěji opakují, při úspěchu se
-            méně opakují. Hostitel v reálném čase sleduje výsledky.
-          </p>
-        </mat-card>
+        }
       </div>
     </mat-expansion-panel>
 
@@ -294,29 +273,13 @@
       </mat-card>
 
       <div class="feature-list">
+        @for (activity of activities; track activity.key) {
         <mat-card class="feature-card">
-          <mat-icon>quiz</mat-icon>
-          <h4 i18n>Kvíz</h4>
-          <p i18n>Výběr jedné nebo více odpovědí pro rychlé ověření znalostí.</p>
+          <mat-icon>{{ activity.icon }}</mat-icon>
+          <h4>{{ activity.name }}</h4>
+          <p>{{ activity.longDescription }}</p>
         </mat-card>
-
-        <mat-card class="feature-card">
-          <mat-icon>edit_note</mat-icon>
-          <h4 i18n>Doplňovačka</h4>
-          <p i18n>Textové odpovědi, kde účastník doplňuje nebo hádá správné znění odpovědi.</p>
-        </mat-card>
-
-        <mat-card class="feature-card">
-          <mat-icon>sort</mat-icon>
-          <h4 i18n>Seřazení</h4>
-          <p i18n>Uspořádání položek do správného pořadí.</p>
-        </mat-card>
-
-        <mat-card class="feature-card">
-          <mat-icon>compare_arrows</mat-icon>
-          <h4 i18n>Přiřazování</h4>
-          <p i18n>Spojování položek do správných dvojic.</p>
-        </mat-card>
+        }
       </div>
     </mat-expansion-panel>
   </mat-accordion>
