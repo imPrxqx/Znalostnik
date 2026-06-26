@@ -1,0 +1,8 @@
+<div
+  class="activity-wrapper"
+  [style.background-color]="activity().style().backgroundColor"
+  [style.border-radius.px]="activity().style().borderRadius"
+  [style.border]="'1px solid ' + activity().style().borderColor"
+>
+  <ng-container #activityContainer></ng-container>
+</div>
