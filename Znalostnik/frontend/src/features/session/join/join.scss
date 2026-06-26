@@ -1,31 +1,33 @@
-.join-container {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .join-card {
-  width: 416px;
+  width: 100%;
+  box-sizing: border-box;
   padding: 32px;
   border-radius: var(--mat-sys-corner-large);
   background: var(--mat-sys-surface-container);
-  border: 2px solid var(--mat-sys-outline-variant);
+  border: 1px solid var(--mat-sys-outline-variant);
+  box-shadow: var(--mat-sys-level3);
 }
 
 .join-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 16px;
+  text-align: center;
+  margin-bottom: 24px;
 }
 
-.join-submit {
-  width: 100%;
-  font-size: 16px;
-  border-radius: var(--mat-sys-corner-medium);
+h1 {
+  font: var(--mat-sys-display-small);
+  font-weight: 600;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+.join-icon {
+  width: 64px;
+  height: 64px;
+  font-size: 64px;
+  color: var(--mat-sys-primary);
 }
 
 form {
@@ -34,10 +36,9 @@ form {
   gap: 16px;
 }
 
-mat-form-field {
-  width: 100%;
-}
-
-a {
-  text-decoration: none;
+.join-submit {
+  height: 48px;
+  font-weight: 600;
+  border-radius: var(--mat-sys-corner-medium);
+  font: var(--mat-sys-body-large);
 }
