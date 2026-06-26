@@ -111,7 +111,7 @@ namespace backend.Services
                 ActivityIds = activities.Select(a => a.Id).ToList(),
                 Activities = runtimeActivities.ToList(),
                 Title = dto.Title,
-                Status = "Lobby",
+                Status = "lobby",
                 RespondType = dto.RespondType,
                 GameMode = dto.GameMode,
                 GameSetting = dto.GameSetting,
@@ -352,7 +352,7 @@ namespace backend.Services
                 return Result<SessionDto>.Failure(validation.Error);
             }
 
-            session.Status = "Active";
+            session.Status = "active";
 
             var activityAssignments = mode.Start(session, participantIds);
 
@@ -377,7 +377,7 @@ namespace backend.Services
                 return Result<SessionDto>.Failure(Errors.UnauthorizedAccess);
             }
 
-            session.Status = "Finished";
+            session.Status = "finished";
 
             IGameMode mode;
 
@@ -641,7 +641,7 @@ namespace backend.Services
             var dto = session.ToSessionDto();
             dto.Role = role.Value;
 
-            if (session.Status == "Lobby")
+            if (session.Status == "lobby")
             {
                 return Result<SessionDto>.Success(dto);
             }
@@ -666,7 +666,7 @@ namespace backend.Services
                 return Result<SessionDto>.Failure(Errors.InvalidOperation);
             }
 
-            if (role.Value == "Participant")
+            if (role.Value == "participant")
             {
                 var participantId = GetParticipantIdAsync(session, sessionUser);
 
@@ -678,7 +678,7 @@ namespace backend.Services
                 dto.GameState = mode.GetGameState(session, role.Value, participantId);
             }
 
-            if (role.Value == "Host")
+            if (role.Value == "host")
             {
                 dto.GameState = mode.GetGameState(session, role.Value, null);
             }
@@ -697,14 +697,14 @@ namespace backend.Services
 
             if (session.CreatedByUserId == user.Id)
             {
-                return Result<string>.Success("Host");
+                return Result<string>.Success("host");
             }
 
             var sessionUser = session.SessionUsers.FirstOrDefault(su => su.UserId == user.Id);
 
             if (sessionUser != null)
             {
-                return Result<string>.Success("Participant");
+                return Result<string>.Success("participant");
             }
 
             return Result<string>.Failure(Errors.UnauthorizedAccess);
