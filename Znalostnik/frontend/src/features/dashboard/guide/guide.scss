@@ -1,0 +1,92 @@
+.container {
+  width: 80%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+h1 {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  font: var(--mat-sys-display-medium);
+}
+
+h4 {
+  margin: 8px 0 0;
+}
+
+p {
+  margin: 8px 0 0;
+  opacity: 0.75;
+}
+
+.guide-icon {
+  width: 64px;
+  height: 64px;
+  font-size: 64px;
+  color: var(--mat-sys-primary);
+}
+
+mat-icon {
+  color: var(--mat-sys-primary);
+}
+
+mat-expansion-panel {
+  margin-bottom: 8px;
+  background-color: var(--mat-sys-surface-container);
+  box-shadow: var(--mat-sys-level3);
+}
+
+mat-expansion-panel-header {
+  min-height: 64px;
+}
+
+mat-panel-title {
+  font-weight: 600;
+}
+
+.hint-box {
+  display: flex;
+  gap: 8px;
+  padding: 16px;
+  background: var(--mat-sys-secondary-container);
+}
+
+.feature-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.feature-card {
+  padding: 16px;
+  background: var(--mat-sys-surface-container);
+  border: 1px solid var(--mat-sys-outline-variant);
+  box-shadow: var(--mat-sys-level2);
+  border-radius: var(--mat-sys-corner-medium);
+}
+
+.step-list {
+  margin: 16px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  border-radius: var(--mat-sys-corner-medium);
+  background: var(--mat-sys-surface-container);
+  border: 1px solid var(--mat-sys-outline-variant);
+  box-shadow: var(--mat-sys-level2);
+}
