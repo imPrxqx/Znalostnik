@@ -1,19 +1,13 @@
 import { Component, computed, inject, linkedSignal, signal } from '@angular/core';
 import { SessionState } from '../services/session-state';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HotPotatoParticipant } from '../modes/hot-potato/hot-potato-participant/hot-potato-participant';
-import { ClassicParticipant } from '../modes/classic/classic-participant/classic-participant';
-import { SelfStudyParticipant } from '../modes/self-study/self-study-participant/self-study-participant';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Registry } from '@shared/models/registry';
+import { NgComponentOutlet } from '@angular/common';
 
 @Component({
   selector: 'app-participant',
-  imports: [
-    MatProgressSpinnerModule,
-    ClassicParticipant,
-    HotPotatoParticipant,
-    SelfStudyParticipant,
-  ],
+  imports: [MatProgressSpinnerModule, NgComponentOutlet],
   templateUrl: './participant.html',
   styleUrl: './participant.scss',
 })
@@ -23,6 +17,16 @@ export class Participant {
   router = inject(Router);
   session = computed(() => this.state.session());
   loading = computed(() => this.state.loading());
+  participantComponent = computed(() => {
+    const session = this.session();
+
+    if (session === undefined) {
+      return undefined;
+    }
+
+    const participantComponent = Registry.getParticipantComponent(session.gameMode as string);
+    return participantComponent;
+  });
 
   ngOnInit() {
     const sessionId = this.route.snapshot.paramMap.get('id');

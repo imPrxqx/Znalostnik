@@ -5,12 +5,8 @@
       <mat-spinner></mat-spinner>
       <p i18n>Načítání relace...</p>
     </div>
-    } @else { @if(session() !== undefined) { @if(session()!.gameMode === 'potato') {
-    <app-hot-potato-participant></app-hot-potato-participant>
-    } @if(session()!.gameMode === 'classic') {
-    <app-classic-participant></app-classic-participant>
-    } @if(session()!.gameMode === 'selfStudy') {
-    <app-self-study-participant></app-self-study-participant>
-    } } }
+    } @else { @if (participantComponent()) {
+    <ng-container *ngComponentOutlet="participantComponent()!"> </ng-container>
+    } }
   </div>
 </div>
