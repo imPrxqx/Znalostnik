@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { CommandManager } from './command-manager';
 
 describe('CommandManager', () => {

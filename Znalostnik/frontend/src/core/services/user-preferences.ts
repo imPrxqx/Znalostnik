@@ -11,7 +11,7 @@ export interface PreferenceData {
 export class UserPreferences {
   private userPreferences = signal<PreferenceData>({
     language: 'en',
-    theme: 'dark',
+    theme: 'light',
   });
 
   language = computed(() => this.userPreferences().language);
@@ -57,8 +57,6 @@ export class UserPreferences {
       body.classList.add('dark-mode');
     } else if (theme === 'light') {
       body.classList.add('light-mode');
-    } else {
-      body.classList.remove('dark-mode');
     }
   }
 

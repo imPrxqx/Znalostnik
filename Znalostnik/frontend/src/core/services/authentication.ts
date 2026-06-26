@@ -25,16 +25,21 @@ export class Authentication {
   router = inject(Router);
 
   register(email: string, password: string) {
-    this.http.post(`${environment.apiURL}/users/register`, { email, password }).subscribe({
-      next: () => {
-        this.router.navigate(['/authentication/login']);
-      },
-    });
+    this.http
+      .post(`${environment.apiURL}/users/register`, { email: email, password: password })
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/authentication/login']);
+        },
+      });
   }
 
   login(email: string, password: string) {
     this.http
-      .post(`${environment.apiURL}/users/login?useCookies=true`, { email, password })
+      .post(`${environment.apiURL}/users/login?useCookies=true`, {
+        email: email,
+        password: password,
+      })
       .subscribe({
         next: () => {
           this.loadUser();
@@ -62,11 +67,40 @@ export class Authentication {
           this.user.set(account);
         }
       },
-      error: () => this.user.set(null),
+      error: () => {
+        this.user.set(null);
+      },
     });
   }
 
   initGuest() {
     return this.http.post<User>(`${environment.apiURL}/users/guest`, null);
+  }
+
+  forgotPassword(email: string) {
+    return this.http.post(`${environment.apiURL}/users/forgotPasswordV2`, { email: email });
+  }
+
+  resetPassword(email: string, resetCode: string, newPassword: string) {
+    return this.http.post(`${environment.apiURL}/users/resetPassword`, {
+      email: email,
+      resetCode: resetCode,
+      newPassword: newPassword,
+    });
+  }
+
+  updatePassword(oldPassword: string, newPassword: string) {
+    return this.http.post(`${environment.apiURL}/users/me/updatePassword`, {
+      oldPassword: oldPassword,
+      newPassword: newPassword,
+    });
+  }
+
+  deleteAccount() {
+    return this.http.delete(`${environment.apiURL}/users/me`).subscribe({
+      next: () => {
+        this.logout();
+      },
+    });
   }
 }

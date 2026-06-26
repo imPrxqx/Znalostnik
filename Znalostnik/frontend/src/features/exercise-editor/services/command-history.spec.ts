@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { CommandHistory } from './command-history';
 
 describe('CommandHistory', () => {

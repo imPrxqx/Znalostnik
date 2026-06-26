@@ -31,7 +31,7 @@ export class ExerciseShortcuts {
   @HostListener('window:keydown.control.s', ['$event'])
   onSave(event: Event) {
     event.preventDefault();
-    const command = new SaveCommand(this.document, this.exercises);
+    const command = new SaveCommand(this.document, this.exercises, this.document.exerciseId());
     this.commandManager.execute(command);
   }
 }
