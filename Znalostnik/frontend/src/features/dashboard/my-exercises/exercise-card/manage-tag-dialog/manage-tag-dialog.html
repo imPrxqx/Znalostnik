@@ -1,0 +1,74 @@
+<h2 mat-dialog-title i18n>Správa tagů</h2>
+
+<mat-dialog-content>
+  <div>
+    <h3 i18n>Přiřazené tagy</h3>
+
+    <mat-chip-set>
+      @for (tag of exerciseTags(); track tag.id) {
+      <mat-chip-row (click)="removeExerciseTag(tag.id)">
+        {{ tag.name }}
+        <mat-icon matChipTrailingIcon>remove</mat-icon>
+      </mat-chip-row>
+      }
+    </mat-chip-set>
+
+    @if (exerciseTags().length === 0) {
+    <p i18n>Žádné přiřazené tagy</p>
+    }
+  </div>
+
+  <br />
+  <mat-divider></mat-divider>
+
+  <div>
+    <h3 i18n>Dostupné tagy</h3>
+
+    <mat-chip-set>
+      @for (tag of tags(); track tag.id) {
+
+      <mat-chip-row [class.active]="isAssigned(tag.id)">
+        {{ tag.name }}
+
+        <button
+          matChipTrailingIcon
+          (click)="addExerciseTag(tag.id); $event.stopPropagation()"
+          [disabled]="isAssigned(tag.id)"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+
+        <button matChipTrailingIcon (click)="deleteTag(tag.id); $event.stopPropagation()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-chip-row>
+
+      }
+    </mat-chip-set>
+
+    @if (tags().length === 0) {
+    <p i18n>Žádné další tagy</p>
+    }
+  </div>
+  <br />
+  <mat-divider></mat-divider>
+
+  <div>
+    <h3>Vytvořit nový tag</h3>
+
+    <mat-form-field class="full-width" appearance="outline">
+      <mat-label i18n>Název tagu</mat-label>
+      <input matInput [(ngModel)]="newTagName" />
+      <mat-icon matSuffix>tag</mat-icon>
+    </mat-form-field>
+    <br />
+    <button mat-flat-button (click)="createTag()" [disabled]="!newTagName">
+      <mat-icon>add</mat-icon>
+      Vytvořit
+    </button>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-flat-button (click)="onNoClick()" cdkFocusInitial i18n>Zavřít</button>
+</mat-dialog-actions>
