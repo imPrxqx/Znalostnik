@@ -1,0 +1,50 @@
+<h2 mat-dialog-title i18n>
+  <mat-icon>filter_list</mat-icon>
+  Filtrace cvičení
+</h2>
+
+<mat-dialog-content>
+  <div class="section">
+    <h3 i18n>Vyhledávání</h3>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label i18n>Název cvičení</mat-label>
+      <input matInput [(ngModel)]="filter().search" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="section">
+    <h3 i18n>Způsoby třídění</h3>
+    <mat-radio-group [(ngModel)]="filter().sortBy">
+      <mat-radio-button value="newest" i18n> Nejnovější </mat-radio-button>
+      <br />
+      <mat-radio-button value="oldest" i18n> Nejstarší </mat-radio-button>
+      <br />
+      <mat-radio-button value="title" i18n> Abecedně </mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="section">
+    <h3 i18n>Tagy</h3>
+    <mat-chip-set>
+      @for (tag of tags(); track tag.id) {
+      <mat-chip-row [class.selected]="isTagSelected(tag.id)" (click)="toggleTag(tag.id)">
+        {{ tag.name }}
+      </mat-chip-row>
+      }
+    </mat-chip-set>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()" i18n>Zrušit</button>
+
+  <button mat-flat-button [mat-dialog-close]="filter()" cdkFocusInitial i18n>
+    Aplikovat filtrační pravidla
+  </button>
+</mat-dialog-actions>
