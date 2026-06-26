@@ -1,0 +1,37 @@
+<h2 mat-dialog-title i18n>Nová aktivita</h2>
+
+<mat-dialog-content>
+  <br />
+  <p i18n>Vyberte typ aktivity, kterou chcete vytvořit pro toto cvičení.</p>
+
+  <div class="activity-list">
+    @for (activity of activities; track activity.key) {
+
+    <div
+      class="activity"
+      [class.selected]="selected() === activity.key"
+      (click)="selected.set(activity.key)"
+    >
+      <mat-icon class="icon"> {{ activity.icon }} </mat-icon>
+      <div class="content">
+        <p class="name">{{ activity.name }}</p>
+        <p class="description">{{ activity.shortDescription }}</p>
+      </div>
+    </div>
+    }
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()" i18n>Zrušit</button>
+
+  <button
+    mat-flat-button
+    [disabled]="!selected()"
+    [mat-dialog-close]="selected()"
+    cdkFocusInitial
+    i18n
+  >
+    Vytvořit aktivitu
+  </button>
+</mat-dialog-actions>
