@@ -30,10 +30,6 @@ export class CreateActivityDialog {
   selected = signal<string>(Registry.activities[0].key);
   activities = Registry.activities;
 
-  confirm() {
-    this.dialogRef.close(this.selected());
-  }
-
   onNoClick(): void {
     this.dialogRef.close();
   }

@@ -1,4 +1,4 @@
-import { Component, inject, model } from '@angular/core';
+import { Component, inject, model, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -8,28 +8,24 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
-  selector: 'app-create-exercise-dialog',
+  selector: 'app-create-team-dialog',
   imports: [
-    FormsModule,
-    MatFormFieldModule,
     MatInputModule,
+    FormsModule,
     MatButtonModule,
     MatDialogTitle,
     MatDialogContent,
     MatDialogActions,
     MatDialogClose,
-    MatIconModule,
   ],
-  templateUrl: './create-exercise-dialog.html',
-  styleUrl: './create-exercise-dialog.scss',
+  templateUrl: './create-team-dialog.html',
+  styleUrl: './create-team-dialog.scss',
 })
-export class CreateExerciseDialog {
-  readonly dialogRef = inject(MatDialogRef<CreateExerciseDialog>);
+export class CreateTeamDialog {
+  readonly dialogRef = inject(MatDialogRef<CreateTeamDialog>);
   name = model<string>('');
 
   onNoClick(): void {
