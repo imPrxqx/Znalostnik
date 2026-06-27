@@ -1,0 +1,121 @@
+<div class="container">
+  @if (mode() === 'view') {
+
+  <div class="top">
+    <app-text [content]="model().content().text" [style]="model().content().style"></app-text>
+  </div>
+
+  <div class="matchup-container" cdkDropList (cdkDropListDropped)="dropLeft($event)">
+    <div class="bottom">
+      @for (item of model().leftOptions().options; track item) {
+      <app-choice
+        [content]="item.content()"
+        [media]="item.media()"
+        [style]="item.style"
+      ></app-choice>
+      }
+    </div>
+
+    <div class="bottom" cdkDropList (cdkDropListDropped)="dropRight($event)">
+      @for (item of model().rightOptions().options; track item) {
+      <app-choice
+        [content]="item.content()"
+        [media]="item.media()"
+        [style]="item.style"
+      ></app-choice>
+      }
+    </div>
+  </div>
+  } @if (mode() === 'answering') {
+
+  <div class="top">
+    <app-text [content]="model().content().text" [style]="model().content().style"></app-text>
+  </div>
+
+  <div class="matchup-container" cdkDropList (cdkDropListDropped)="dropLeft($event)">
+    <div class="bottom">
+      @for (item of answer()!.submit!.selected; track item.leftId) {
+      <app-choice
+        [content]="getLeftOptionById(item.leftId)!.content()"
+        [media]="getLeftOptionById(item.leftId)!.media()"
+        [style]="getLeftOptionById(item.leftId)!.style"
+        cdkDrag
+      ></app-choice>
+      }
+    </div>
+
+    <div class="bottom" cdkDropList (cdkDropListDropped)="dropRight($event)">
+      @for (item of answer()!.submit!.selected; track item.rightId) {
+      <app-choice
+        [content]="getRightOptionById(item.rightId)!.content()"
+        [media]="getRightOptionById(item.rightId)!.media()"
+        [style]="getRightOptionById(item.rightId)!.style"
+        cdkDrag
+      ></app-choice>
+      }
+    </div>
+  </div>
+  } @if (mode() === 'feedback') {
+
+  <div class="top">
+    <app-text [content]="model().content().text" [style]="model().content().style"></app-text>
+  </div>
+
+  <div class="matchup-container">
+    @if (!hasAnswer()) {
+
+    <div class="bottom">
+      @for (item of model().solution()?.correct; track item.leftId) {
+
+      <app-choice
+        [isCorrect]="true"
+        [content]="getLeftOptionById(item.leftId)!.content()"
+        [media]="getLeftOptionById(item.leftId)!.media()"
+        [style]="getLeftOptionById(item.leftId)!.style"
+      ></app-choice>
+
+      }
+    </div>
+
+    <div class="bottom">
+      @for (item of model().solution()?.correct; track item.rightId) {
+      <app-choice
+        [isCorrect]="true"
+        [content]="getRightOptionById(item.rightId)!.content()"
+        [media]="getRightOptionById(item.rightId)!.media()"
+        [style]="getRightOptionById(item.rightId)!.style"
+      ></app-choice>
+      }
+    </div>
+
+    } @else {
+
+    <div class="bottom">
+      @for (item of answer()!.submit!.selected; track item.leftId) {
+      <app-choice
+        [isSelected]="true"
+        [isCorrect]="isCorrect($index)"
+        [content]="getLeftOptionById(item.leftId)!.content()"
+        [media]="getLeftOptionById(item.leftId)!.media()"
+        [style]="getLeftOptionById(item.leftId)!.style"
+      ></app-choice>
+      }
+    </div>
+
+    <div class="bottom">
+      @for (item of answer()!.submit!.selected; track item.rightId) {
+
+      <app-choice
+        [isSelected]="true"
+        [isCorrect]="isCorrect($index)"
+        [content]="getRightOptionById(item.rightId)!.content()"
+        [media]="getRightOptionById(item.rightId)!.media()"
+        [style]="getRightOptionById(item.rightId)!.style"
+      ></app-choice>
+      }
+    </div>
+
+    }
+  </div>
+  }
+</div>

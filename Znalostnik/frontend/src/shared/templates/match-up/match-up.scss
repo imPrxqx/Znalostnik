@@ -1,0 +1,58 @@
+:host {
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.top {
+  display: flex;
+  flex: 0 0 35%;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  flex-direction: column;
+  margin: auto;
+  justify-content: center;
+}
+
+.matchup-container {
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  min-height: 0;
+  height: 100%;
+}
+
+.bottom {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: repeat(auto-fill, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 12px;
+  padding: 12px;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.order-drag-handle {
+  cursor: grab;
+  opacity: 0.6;
+}
+
+.cdk-drag-preview {
+  border-radius: var(--mat-sys-corner-medium);
+  box-shadow: var(--mat-sys-level2);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.3;
+}
