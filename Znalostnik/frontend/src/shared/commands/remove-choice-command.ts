@@ -1,19 +1,20 @@
 import { ChoiceOption, MultiChoiceOption } from '@shared/models/format';
 
-export class AddChoiceCommand implements Command {
+export class RemoveChoiceCommand implements Command {
   private receiver: MultiChoiceOption;
+  private backup: ChoiceOption;
 
   constructor(receiver: MultiChoiceOption) {
     this.receiver = receiver;
+    this.backup = receiver.options[receiver.options.length - 1];
   }
 
   undo(): void {
-    this.receiver.removeOption();
+    this.receiver.addOption(this.backup);
   }
 
   execute(): boolean {
-    const newOption = new ChoiceOption(undefined);
-    this.receiver.addOption(newOption);
+    this.receiver.removeOption();
     return true;
   }
 }

@@ -8,7 +8,7 @@ export class UpdateTextCommand implements Command, MergeableCommand {
 
   constructor(receiver: Text, newText: string) {
     this.receiver = receiver;
-    this.backup = receiver.content;
+    this.backup = receiver.text;
     this.newText = newText;
   }
 

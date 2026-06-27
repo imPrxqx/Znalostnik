@@ -1,6 +1,5 @@
 import { CommandManager } from '@features/exercise-editor/services/command-manager';
 import { ExerciseDocumentManager } from '@features/exercise-editor/services/exercise-document-manager';
-import { Exercise } from '@shared/models/format';
 
 export class MoveCommand implements Command {
   private receiver: ExerciseDocumentManager;
@@ -14,11 +13,11 @@ export class MoveCommand implements Command {
   }
 
   undo(): void {
-    this.receiver.move(this.newIndex, this.backup);
+    this.receiver.moveActivity(this.newIndex, this.backup);
   }
 
   execute(): boolean {
-    this.receiver.move(this.backup, this.newIndex);
+    this.receiver.moveActivity(this.backup, this.newIndex);
     return true;
   }
 }

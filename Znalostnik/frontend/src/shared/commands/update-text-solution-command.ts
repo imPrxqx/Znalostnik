@@ -1,36 +1,36 @@
-import { ChoiceOption } from '@shared/models/format';
+import { TextSolution } from '@shared/models/guess';
 
-export class UpdateChoiceCommand implements Command {
+export class UpdateTextSolutionCommand implements Command, MergeableCommand {
   private mergeCount = 1;
-  private receiver: ChoiceOption;
+  private receiver: TextSolution;
   private backup: string;
   private newText: string;
 
-  constructor(receiver: ChoiceOption, newText: string) {
+  constructor(receiver: TextSolution, newText: string) {
     this.receiver = receiver;
-    this.backup = receiver.content();
+    this.backup = receiver.correct;
     this.newText = newText;
   }
 
   undo(): void {
-    this.receiver.setContent(this.backup);
+    this.receiver.setSolution(this.backup);
   }
 
   execute(): boolean {
-    this.receiver.setContent(this.newText);
+    this.receiver.setSolution(this.newText);
     return true;
   }
 
   canMergeWith(other: Command): boolean {
     return (
-      other instanceof UpdateChoiceCommand &&
+      other instanceof UpdateTextSolutionCommand &&
       other.receiver === this.receiver &&
       this.mergeCount < 5
     );
   }
 
   mergeWith(other: Command): void {
-    if (!(other instanceof UpdateChoiceCommand)) {
+    if (!(other instanceof UpdateTextSolutionCommand)) {
       return;
     }
 
