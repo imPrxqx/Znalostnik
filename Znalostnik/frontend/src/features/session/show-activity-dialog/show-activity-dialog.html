@@ -1,0 +1,9 @@
+<h2 mat-dialog-title i18n>Účastníkova aktivita</h2>
+
+<mat-dialog-content>
+  <app-exercise-activity [activity]="data.activity()" [mode]="'view'"></app-exercise-activity>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-flat-button (click)="onNoClick()" i18n>Zavřít</button>
+</mat-dialog-actions>
