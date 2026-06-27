@@ -1,13 +1,13 @@
 import { Component, input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { ExerciseTask } from '../exercise-task/exercise-task';
+import { ExerciseActivity } from '../exercise-activity/exercise-activity';
 
 @Component({
   selector: 'app-slide',
-  imports: [ExerciseTask, MatIconModule],
+  imports: [ExerciseActivity, MatIconModule],
   templateUrl: './slide.html',
   styleUrl: './slide.scss',
 })
 export class Slide {
-  task = input.required<any>();
+  activity = input.required<any>();
 }

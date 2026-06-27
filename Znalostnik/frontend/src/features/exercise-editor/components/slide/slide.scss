@@ -4,9 +4,7 @@
   height: 100%;
   user-select: none;
   pointer-events: none;
-  border-radius: var(--mat-shape-medium, 12px);
-  border: 2px solid var(--mat-sys-surface-container-highest);
-  background: var(--mat-sys-surface-variant);
+  box-sizing: border-box;
 }
 
 .slide-scaled {
