@@ -1,11 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  input,
-  model,
-  viewChild,
-  ViewContainerRef,
-} from '@angular/core';
+import { Component, input, model, viewChild, ViewContainerRef } from '@angular/core';
 import { Registry } from '@shared/models/registry';
 import { Activity } from '@shared/models/activity';
 import { ActivityAnswer } from '@shared/models/activity-answer';

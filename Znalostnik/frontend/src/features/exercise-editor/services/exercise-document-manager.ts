@@ -1,56 +1,59 @@
 import { Injectable, WritableSignal, computed, signal, inject } from '@angular/core';
-import { Exercise, Task, Registry } from '@shared/models/format';
-
+import { Exercise } from '@shared/models/exercise';
+import { Registry } from '@shared/models/registry';
+import { Activity } from '@shared/models/activity';
+import { v4 as uuidv4 } from 'uuid';
 @Injectable({
   providedIn: 'root',
 })
 export class ExerciseDocumentManager {
+  exerciseId = signal<string>(uuidv4());
   exercise = signal<Exercise>(new Exercise());
 
   loadDocument(exercise: Exercise) {
     this.exercise.set(exercise);
+
+    this.exercise()
+      .getActivities()()
+      .forEach((activity: Activity) => {
+        activity.ensureSolution();
+      });
   }
 
-  addTask(task: Task): void {
-    this.exercise().addTask(task);
+  addActivity(activity: Activity): void {
+    this.exercise().addActivity(activity);
   }
 
-  addTaskAt(task: Task, index: number): void {
-    this.exercise().addTaskAt(task, index);
+  addActivityAt(activity: Activity, index: number): void {
+    this.exercise().addActivityAt(activity, index);
   }
 
-  createTask(schema: string): Task {
-    const task = Registry.createTask(schema, undefined)!;
-    return task;
+  createActivity(schema: string): Activity {
+    const activity = Registry.createActivity(schema, undefined)!;
+    return activity;
   }
 
-  duplicateTask(indexAt: number, indexTo: number): void {}
-
-  move(index1: number, index2: number): void {
-    this.exercise().move(index1, index2);
+  moveActivity(from: number, to: number): void {
+    this.exercise().moveActivity(from, to);
   }
 
-  deleteTask(task: Task): void {
-    this.exercise().deleteTask(task);
+  deleteActivity(activity: Activity): void {
+    this.exercise().deleteActivity(activity);
   }
 
-  getTasks(): WritableSignal<Task[]> {
-    return this.exercise().getTasks();
+  getActivities(): WritableSignal<Activity[]> {
+    return this.exercise().getActivities();
   }
 
-  getTaskById(taskId: string): Task | undefined {
-    return this.exercise().getTaskById(taskId);
+  getActivityById(activityId: string): Activity | undefined {
+    return this.exercise().getActivityById(activityId);
   }
 
-  deleteTaskById(taskId: string): void {
-    this.exercise().deleteTaskById(taskId);
+  deleteActivityById(activityId: string): void {
+    this.exercise().deleteActivityById(activityId);
   }
 
-  getIndexOfTask(task: Task): number {
-    return this.exercise().getIndexOfTask(task);
-  }
-
-  getTaskIndexById(taskId: string): number {
-    return this.exercise().getTaskIndexById(taskId);
+  getActivityIndexById(activityId: string): number {
+    return this.exercise().getActivityIndexById(activityId);
   }
 }

@@ -1,6 +1,6 @@
-import { Component, ViewChild, ViewContainerRef, effect, inject, input } from '@angular/core';
-import { Task } from '@shared/models/format';
-import { Registry } from '@shared/models/format';
+import { Component, ViewContainerRef, inject, input } from '@angular/core';
+import { Registry } from '@shared/models/registry';
+import { Activity } from '@shared/models/activity';
 
 @Component({
   selector: 'app-exercise-toolbar',
@@ -9,7 +9,7 @@ import { Registry } from '@shared/models/format';
   styleUrl: './exercise-toolbar.scss',
 })
 export class ExerciseToolbar {
-  task = input<Task>();
+  activity = input.required<Activity>();
   viewContainer = inject(ViewContainerRef);
 
   ngOnChanges() {
@@ -19,18 +19,18 @@ export class ExerciseToolbar {
   renderCommands(): void {
     this.viewContainer.clear();
 
-    const suportedCommands = Registry.getCommands().filter(
-      (cmd: any) => cmd.supports && cmd.supports(this.task()),
-    );
+    const fields = this.activity().getFields();
+    const commands = Registry.getCommands();
 
-    suportedCommands.forEach((cmd: any, index: number) => {
-      const compRef = this.viewContainer.createComponent(cmd);
-      compRef.setInput('task', this.task());
+    fields.forEach((field) => {
+      commands.forEach((cmd: any) => {
+        if (!cmd.supports?.(field)) {
+          return;
+        }
 
-      if (index < suportedCommands.length - 1) {
-        const br = document.createElement('br');
-        compRef.location.nativeElement.appendChild(br);
-      }
+        const compRef = this.viewContainer.createComponent(cmd);
+        compRef.setInput('field', field);
+      });
     });
   }
 }
