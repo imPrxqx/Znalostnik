@@ -1,18 +1,51 @@
-<div class="quiz">
-  <div class="quiz-header"><h2 class="quiz-question">{{ model().content().content }}</h2></div>
-  <div class="quiz-choices">
+<div class="container">
+  @if (mode() === 'view') {
+  <div class="top">
+    <app-text [content]="model().content().text" [style]="model().content().style"></app-text>
+  </div>
+  <div class="bottom">
     @for(option of model().options().options; track option.id) {
-    <div
-      class="quiz-choice"
-      [class.selected]="isSelected(option.id)"
-      [class.correct]="isSolution(option.id)"
-      [class.incorrect]="!isSolution(option.id)"
-      [class.correct]="isCorrect(option.id)"
-      [class.incorrect]="isIncorrect(option.id)"
-      (click)="setAnswer(option.id)"
-    >
-      <label> {{ option.content }} </label>
-    </div>
+    <app-choice
+      [content]="option.content()"
+      [media]="option.media()"
+      [style]="option.style"
+    ></app-choice>
     }
   </div>
+
+  } @if (mode() === 'answering') {
+  <div class="top">
+    <app-text [content]="model().content().text" [style]="model().content().style"></app-text>
+  </div>
+  <div class="bottom">
+    @for(option of model().options().options; track option.id) {
+    <app-choice
+      [isSelected]="isSelected(option.id)"
+      (click)="setAnswer(option.id)"
+      [content]="option.content()"
+      [media]="option.media()"
+      [style]="option.style"
+    ></app-choice>
+    }
+  </div>
+
+  }@if (mode() === 'feedback') {
+  <div class="top">
+    <app-text [content]="model().content().text" [style]="model().content().style"> </app-text>
+  </div>
+
+  <div class="bottom">
+    @for (option of model().options().options; track option.id) {
+
+    <app-choice
+      [isSelected]="isSelected(option.id)"
+      [isCorrect]="isCorrect(option.id)"
+      [content]="option.content()"
+      [media]="option.media()"
+      [style]="option.style"
+    >
+    </app-choice>
+    }
+  </div>
+  }
 </div>

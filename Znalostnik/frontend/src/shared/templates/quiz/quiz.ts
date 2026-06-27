@@ -1,17 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, input, model, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-
-import { QuizAnswer, QuizTask } from '@shared/models/format';
+import { Component, input, model } from '@angular/core';
+import { Choice } from '@shared/media/choice/choice';
+import { Text } from '@shared/media/text/text';
+import { QuizAnswer, QuizActivity } from '@shared/models/quiz';
 
 @Component({
   selector: 'app-quiz',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, Text, Choice],
   templateUrl: './quiz.html',
   styleUrl: './quiz.scss',
 })
 export class Quiz {
-  model = input.required<QuizTask>();
+  mode = input.required<string>();
+  model = input.required<QuizActivity>();
   answer = model<QuizAnswer>();
 
   setAnswer(optionId: string) {
@@ -36,22 +37,14 @@ export class Quiz {
     return this.answer()?.submit?.selected.includes(optionId);
   }
 
-  isSolution(optionId: string) {
+  isCorrect(optionId: string) {
     const answer = this.answer();
+    const solution = this.model().solution();
 
-    if (answer) {
-      return undefined;
+    if (answer && !solution) {
+      return false;
     }
 
-    const solution = this.model().solution();
-    return solution.includes(optionId);
-  }
-
-  isCorrect(optionId: string) {
-    return this.answer()?.evaluation?.correct?.includes(optionId);
-  }
-
-  isIncorrect(optionId: string) {
-    return this.answer()?.evaluation?.incorrect?.includes(optionId);
+    return solution?.correct.includes(optionId);
   }
 }
