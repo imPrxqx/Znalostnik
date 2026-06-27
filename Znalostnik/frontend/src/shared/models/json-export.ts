@@ -1,0 +1,99 @@
+import { Exercise } from './exercise';
+import { GuessActivity } from './guess';
+import { MatchUpActivity } from './match-up';
+import { PutInOrderActivity } from './put-in-order';
+import { QuizActivity } from './quiz';
+import { Activity } from './activity';
+import { Visitor } from '../interfaces/visitor';
+
+export class ExportJsonVisitor implements Visitor {
+  private result: any = {};
+
+  visitExercise(exercise: Exercise) {
+    this.result = {
+      title: exercise.title(),
+      activities: [],
+    };
+
+    exercise.activities().forEach((activity: Activity, index: number) => {
+      const activityVisitor = new ExportJsonVisitor();
+      activity.accept(activityVisitor);
+      activityVisitor.result.order = activityVisitor.result.order ?? index;
+      this.result.activities.push(activityVisitor.result);
+    });
+  }
+
+  visitQuiz(quizActivity: QuizActivity): void {
+    this.result = {
+      type: quizActivity.type(),
+      order: quizActivity.order(),
+      style: quizActivity.style(),
+      content: {
+        text: quizActivity.content().text,
+        style: quizActivity.content().style,
+        options: quizActivity.options().options.map((option) => ({
+          id: option.id,
+          content: option.content(),
+          media: option.media(),
+          style: option.style,
+        })),
+      },
+      solution: quizActivity.solution(),
+    };
+  }
+
+  visitGuess(guessActivity: GuessActivity): void {
+    this.result = {
+      type: guessActivity.type(),
+      order: guessActivity.order(),
+      style: guessActivity.style(),
+      content: guessActivity.content(),
+      solution: guessActivity.solution(),
+    };
+  }
+
+  visitMatchUp(matchUpActivity: MatchUpActivity): void {
+    this.result = {
+      type: matchUpActivity.type(),
+      order: matchUpActivity.order(),
+      style: matchUpActivity.style(),
+      content: {
+        text: matchUpActivity.content().text,
+        leftOptions: matchUpActivity.leftOptions().options.map((option) => ({
+          id: option.id,
+          content: option.content(),
+          media: option.media(),
+          style: option.style,
+        })),
+        rightOptions: matchUpActivity.rightOptions().options.map((option) => ({
+          id: option.id,
+          content: option.content(),
+          style: option.style,
+        })),
+      },
+      solution: matchUpActivity.solution(),
+    };
+  }
+
+  visitPutInOrder(putInOrderActivity: PutInOrderActivity): void {
+    this.result = {
+      type: putInOrderActivity.type(),
+      order: putInOrderActivity.order(),
+      style: putInOrderActivity.style(),
+      content: {
+        text: putInOrderActivity.content().text,
+        options: putInOrderActivity.options().options.map((option) => ({
+          id: option.id,
+          content: option.content(),
+          media: option.media(),
+          style: option.style,
+        })),
+      },
+      solution: putInOrderActivity.solution(),
+    };
+  }
+
+  toJson(): string {
+    return JSON.stringify(this.result);
+  }
+}
