@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-
 import { environment } from '@environments/environment';
 
 @Injectable({
@@ -29,10 +28,6 @@ export class SessionApi {
     return this.http.get(`${environment.apiURL}/sessions/${sessionId}/joined`);
   }
 
-  loadCurrentAnswer(sessionId: string) {
-    return this.http.get(`${environment.apiURL}/sessions/${sessionId}/answers/current`);
-  }
-
   joinSessionTeam(sessionId: string, teamId: string) {
     return this.http.post(`${environment.apiURL}/sessions/${sessionId}/teams/${teamId}/join`, null);
   }
@@ -43,11 +38,13 @@ export class SessionApi {
     });
   }
 
-  confirmCurrentAnswer(sessionId: string) {
-    return this.http.post(
-      `${environment.apiURL}/sessions/${sessionId}/answers/confirm-current`,
-      null,
-    );
+  confirmCurrentAnswer(sessionId: string, answer: any) {
+    console.log('confirming answer: ', answer);
+    return this.http.post(`${environment.apiURL}/sessions/${sessionId}/answers/confirm`, answer);
+  }
+
+  submitAnswer(sessionId: string, answer: any) {
+    return this.http.post(`${environment.apiURL}/sessions/${sessionId}/answers`, answer);
   }
 
   joinSession(accessCode: string, username: string) {
@@ -65,16 +62,16 @@ export class SessionApi {
     return this.http.post(`${environment.apiURL}/sessions/${sessionId}/end`, null);
   }
 
-  nextTask(sessionId: string) {
+  endSessionRound(sessionId: string) {
+    return this.http.post(`${environment.apiURL}/sessions/${sessionId}/end-round`, null);
+  }
+
+  nextActivity(sessionId: string) {
     return this.http.post(`${environment.apiURL}/sessions/${sessionId}/next`, null);
   }
 
-  previousTask(sessionId: string) {
+  previousActivity(sessionId: string) {
     return this.http.post(`${environment.apiURL}/sessions/${sessionId}/previous`, null);
-  }
-
-  submitAnswer(sessionId: string, answer: any) {
-    return this.http.post(`${environment.apiURL}/sessions/${sessionId}/answers`, answer);
   }
 
   deleteSession(sessionId: string) {

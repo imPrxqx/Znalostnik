@@ -1,4 +1,4 @@
-import { computed, effect, inject, Injectable } from '@angular/core';
+import { effect, inject, Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { SessionState } from './session-state';
 import { environment } from '@environments/environment';
@@ -51,22 +51,7 @@ export class Hub {
 
     this.connection.on('SessionUpdated', () => {
       console.log('Session Updated');
-      this.sessionState.updateSession();
-    });
-
-    this.connection.on('TeamUpdated', () => {
-      console.log('Team Updated');
-      this.sessionState.updateSessionTeams();
-    });
-
-    this.connection.on('JoinUpdated', () => {
-      console.log('Join Updated');
-      this.sessionState.updateSessionUsers();
-    });
-
-    this.connection.on('AnswerSubmitted', () => {
-      console.log('Answer Submitted');
-      this.sessionState.updateAnswer();
+      this.sessionState.loadSession(this.sessionState.session()!.id);
     });
 
     await this.connection.start();
