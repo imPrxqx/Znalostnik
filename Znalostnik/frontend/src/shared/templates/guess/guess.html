@@ -1,0 +1,61 @@
+<div class="container">
+  @if (mode() === 'view') {
+  <div class="top">
+    <app-text [content]="model().content().text" [style]="model().content().style"></app-text>
+  </div>
+
+  <div class="bottom">
+    <input class="input" [disabled]="true" />
+  </div>
+
+  } @if (mode() === 'answering') {
+  <div class="top">
+    <app-text [content]="model().content().text" [style]="model().content().style"></app-text>
+  </div>
+
+  <div class="bottom">
+    <input
+      class="input"
+      [value]="answer()!.submit!.selected"
+      (input)="setAnswer($event.target.value)"
+    />
+  </div>
+  <div></div>
+  } @if (mode() === 'feedback') {
+
+  <div class="top">
+    <app-text [content]="model().content().text" [style]="model().content().style"></app-text>
+  </div>
+  @if (!hasAnswer()) {
+  <div class="bottom">
+    <div>
+      <mat-icon class="icon-correct">check_circle</mat-icon>
+      <input class="input" [value]="model().solution()?.correct" readonly />
+    </div>
+  </div>
+  } @else {
+
+  <div class="bottom">
+    <p i18n>Správná odpověď</p>
+    <div>
+      <mat-icon class="icon-correct">check_circle</mat-icon>
+      <input class="input" [value]="model().solution()?.correct" disabled />
+    </div>
+  </div>
+
+  <div class="bottom">
+    <p i18n>Tvá odpověď</p>
+    <div>
+      @if(isIncorrect(answer()!.submit!.selected)) {
+      <mat-icon class="icon-incorrect">cancel</mat-icon>
+
+      } @else if(!isIncorrect(answer()!.submit!.selected)) {
+      <mat-icon class="icon-correct">check_circle</mat-icon>
+      }
+
+      <input class="input" [value]="answer()!.submit!.selected" disabled />
+    </div>
+  </div>
+
+  } }
+</div>
