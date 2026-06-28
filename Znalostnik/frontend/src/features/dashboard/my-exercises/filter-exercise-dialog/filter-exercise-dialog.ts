@@ -16,6 +16,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatRadioModule } from '@angular/material/radio';
 import { TagsApi } from '@features/dashboard/services/tags-api';
+import { Tag } from '@shared/models/tag';
 
 export interface ExerciseFilter {
   search: string;
@@ -47,12 +48,12 @@ export class FilterExerciseDialog {
   private data = inject<ExerciseFilter>(MAT_DIALOG_DATA);
   tagsApi = inject(TagsApi);
   filter = signal<ExerciseFilter>({
-    search: this.data.search ?? '',
+    search: this.data?.search ?? '',
     tagIds: [...(this.data.tagIds ?? [])],
     sortBy: this.data.sortBy ?? 'newest',
   });
 
-  tags = signal<any[]>([]);
+  tags = signal<Tag[]>([]);
 
   constructor() {
     this.getTags();
@@ -60,20 +61,20 @@ export class FilterExerciseDialog {
 
   getTags() {
     this.tagsApi.loadTags().subscribe((result) => {
-      this.tags.set(result as any[]);
+      this.tags.set(result as Tag[]);
     });
   }
 
   isTagSelected(tagId: string): boolean {
+    console.log(this.filter());
+    console.log(this.tags());
     return this.filter().tagIds.includes(tagId);
   }
 
-  toggleTag(tagId: string): void {
-    this.filter.update((filter) => ({
-      ...filter,
-      tagIds: filter.tagIds.includes(tagId)
-        ? filter.tagIds.filter((id) => id !== tagId)
-        : [...filter.tagIds, tagId],
+  onTagsChange(event: any) {
+    this.filter.update((f) => ({
+      ...f,
+      tagIds: event.value,
     }));
   }
 

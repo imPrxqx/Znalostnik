@@ -8,8 +8,28 @@ import { environment } from '@environments/environment';
 export class SessionsApi {
   http = inject(HttpClient);
 
-  loadMySessions() {
-    return this.http.get(`${environment.apiURL}/sessions/my`);
+  createSession(
+    exerciseId: string,
+    title: string,
+    respondType: string,
+    gameMode: string,
+    gameSetting: any,
+  ) {
+    return this.http.post(`${environment.apiURL}/sessions`, {
+      exerciseId: exerciseId,
+      title: title,
+      respondType: respondType,
+      gameMode: gameMode,
+      gameSetting: gameSetting,
+    });
+  }
+
+  loadMyActiveSessions() {
+    return this.http.get(`${environment.apiURL}/sessions/active`);
+  }
+
+  loadMyFinishedSessions() {
+    return this.http.get(`${environment.apiURL}/sessions/finished`);
   }
 
   loadSession(sessionId: string) {

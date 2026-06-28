@@ -10,14 +10,43 @@ export interface Session {
   providedIn: 'root',
 })
 export class SessionsManager {
-  sessions = signal<Session[]>([]);
+  activeSessions = signal<Session[]>([]);
+  finishedSessions = signal<Session[]>([]);
   api = inject(SessionsApi);
   router = inject(Router);
 
-  loadMySessions() {
-    this.api.loadMySessions().subscribe({
+  createSession(
+    exerciseId: string,
+    title: string,
+    respondType: string,
+    gameMode: string,
+    gameSetting: any,
+  ) {
+    this.api.createSession(exerciseId, title, respondType, gameMode, gameSetting).subscribe({
+      next: (json) => {
+        console.log(json);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
+  loadMyActiveSessions() {
+    this.api.loadMyActiveSessions().subscribe({
       next: (json: any) => {
-        this.sessions.set(json);
+        this.activeSessions.set(json);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
+  loadMyFinishedSessions() {
+    this.api.loadMyFinishedSessions().subscribe({
+      next: (json: any) => {
+        this.finishedSessions.set(json);
       },
       error: (error) => {
         console.error(error);
@@ -28,7 +57,8 @@ export class SessionsManager {
   deleteSession(sessionId: string) {
     this.api.deleteSession(sessionId).subscribe({
       next: () => {
-        this.loadMySessions();
+        this.loadMyActiveSessions();
+        this.loadMyFinishedSessions();
       },
       error: (error) => {
         console.error(error);

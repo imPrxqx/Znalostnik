@@ -1,18 +1,13 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { ExerciseDocumentManager } from '@features/exercise-editor/services/exercise-document-manager';
 import { ExercisesApi } from './exercises-api';
-import { ExerciseFactory, ExerciseTaskFactory, Task } from '@shared/models/format';
 import { Router } from '@angular/router';
-
-export interface Exercise {
-  id: string;
-  title: string;
-  mode: string;
-  settings: string;
-  createdAt: string;
-  updatedAt: string;
-  tasks: Task[];
-}
+import { ExerciseFactory } from '@shared/models/exercise-factory';
+import { Activity } from '@shared/models/activity';
+import { ActivityFactory } from '@shared/models/activity-factory';
+import { Tag } from '@shared/models/tag';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Exercise } from '@shared/models/exercise';
 
 @Injectable({
   providedIn: 'root',
@@ -22,42 +17,30 @@ export class ExercisesManager {
   document = inject(ExerciseDocumentManager);
   api = inject(ExercisesApi);
   router = inject(Router);
+  snackBar = inject(MatSnackBar);
 
   loadMyExercises() {
     this.api.loadMyExercises().subscribe({
       next: (json: any) => {
-        const exercises = json.map((ex: any) => ({
-          ...ex,
-          tasks: ex.tasks.map((task: Task) => ExerciseTaskFactory.createFromJson(task)),
-        }));
-
+        const exercises = json.map((ex: any) => ExerciseFactory.createFromJson(ex));
+        this.exercises.set([]);
         this.exercises.set(exercises);
       },
       error: (error) => {
-        console.error(error);
+        this.exercises.set([]);
       },
     });
   }
 
-  createExercise(
-    title: string = 'Untitled Exercise',
-    mode: string = 'Interactive',
-    settings: string = '{}',
-  ) {
-    this.api.createExercise(title, mode, settings).subscribe({
+  createExercise(title: string = 'Untitled Exercise') {
+    this.api.createExercise(title).subscribe({
       next: () => {
         this.loadMyExercises();
-      },
-      error: (error) => {
-        console.error(error);
-      },
-    });
-  }
-
-  createSession(exerciseId: string) {
-    this.api.createSession(exerciseId).subscribe({
-      next: (json) => {
-        console.log(json);
+        this.snackBar.open(
+          $localize`:@@exercise.created:Cvičení bylo vytvořeno`,
+          $localize`:@@close:Zavřít`,
+          { duration: 3000 },
+        );
       },
       error: (error) => {
         console.error(error);
@@ -68,8 +51,8 @@ export class ExercisesManager {
   editExercise(exerciseId: string) {
     this.api.loadExercise(exerciseId).subscribe({
       next: (json) => {
-        console.log(json);
         const exercise = ExerciseFactory.createFromJson(json);
+        exercise.id.set(exerciseId);
         this.document.loadDocument(exercise);
       },
       error: (error) => {
@@ -78,14 +61,19 @@ export class ExercisesManager {
     });
   }
 
-  loadFirstTask(exerciseId: string) {
-    return this.api.loadFirstTask(exerciseId);
+  loadFirstActivity(exerciseId: string) {
+    return this.api.loadFirstActivity(exerciseId);
   }
 
   deleteExercise(exerciseId: string) {
     this.api.deleteExercise(exerciseId).subscribe({
       next: () => {
         this.loadMyExercises();
+        this.snackBar.open(
+          $localize`:@@exercise.deleted:Cvičení bylo odstraněno`,
+          $localize`:@@close:Zavřít`,
+          { duration: 3000 },
+        );
       },
       error: (error) => {
         console.error(error);
@@ -95,7 +83,13 @@ export class ExercisesManager {
 
   saveExercise(exerciseId: string, json: any) {
     this.api.saveExercise(exerciseId, json).subscribe({
-      next: () => {},
+      next: () => {
+        this.snackBar.open(
+          $localize`:@@exercise.saved:Cvičení bylo uloženo`,
+          $localize`:@@close:Zavřít`,
+          { duration: 3000 },
+        );
+      },
       error: (error) => {
         console.error(error);
       },

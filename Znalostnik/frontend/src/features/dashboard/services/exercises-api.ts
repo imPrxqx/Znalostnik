@@ -8,25 +8,13 @@ import { environment } from '@environments/environment';
 export class ExercisesApi {
   http = inject(HttpClient);
 
-  loadMyExercises(page: number = 1, pageSize: number = 200) {
-    return this.http.get(`${environment.apiURL}/exercises?page=${page}&pageSize=${pageSize}`);
+  loadMyExercises() {
+    return this.http.get(`${environment.apiURL}/exercises`);
   }
 
-  createExercise(
-    title: string = 'New Exercise',
-    mode: string = 'Interactive',
-    settings: string = '{}',
-  ) {
+  createExercise(title: string) {
     return this.http.post(`${environment.apiURL}/exercises`, {
       title: title,
-      mode: mode,
-      settings: settings,
-    });
-  }
-
-  createSession(exerciseId: string) {
-    return this.http.post(`${environment.apiURL}/sessions`, {
-      exerciseId: exerciseId,
     });
   }
 
@@ -34,8 +22,8 @@ export class ExercisesApi {
     return this.http.get(`${environment.apiURL}/exercises/${exerciseId}`);
   }
 
-  loadFirstTask(exerciseId: string) {
-    return this.http.get(`${environment.apiURL}/exercises/${exerciseId}/tasks/first`);
+  loadFirstActivity(exerciseId: string) {
+    return this.http.get(`${environment.apiURL}/exercises/${exerciseId}/activities/first`);
   }
 
   deleteExercise(exerciseId: string) {
