@@ -75,7 +75,7 @@ namespace backend.Controllers
                 useAsync: true
             );
 
-            return File(stream, result.Value.ContentType, result.Value.FileName);
+            return File(stream, result.Value.ContentType, result.Value.FileName, enableRangeProcessing: true);
         }
 
         [HttpDelete("{mediaId}")]

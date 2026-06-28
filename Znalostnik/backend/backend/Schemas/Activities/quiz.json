@@ -47,7 +47,7 @@
         "type": "object",
         "additionalProperties": false,
 
-        "required": [ "id", "content" ],
+        "required": [ "id", "text" ],
 
         "properties": {
           "id": {
@@ -55,8 +55,9 @@
             "format": "uuid"
           },
 
-          "content": {
+          "text": {
             "type": "string",
+            "minLength": 1
           },
 
           "media": {
@@ -91,6 +92,15 @@
               },
               "backgroundColor": {
                 "type": "string"
+              },
+              "bold": {
+                "type": "boolean"
+              },
+              "italic": {
+                "type": "boolean"
+              },
+              "underline": {
+                "type": "boolean"
               }
             }
           }
