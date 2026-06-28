@@ -2,27 +2,27 @@
   @if (mode() === 'view') {
 
   <div class="top">
-    <app-text [content]="model().content().text" [style]="model().content().style"></app-text>
+    <app-text [content]="model().content().text()" [style]="model().content().style()"></app-text>
   </div>
 
   <div class="bottom">
     @for (item of model().options().options; track item) {
 
-    <app-choice [content]="item.content()" [media]="item.media()" [style]="item.style"></app-choice>
+    <app-choice [content]="item.text()" [media]="item.media()" [style]="item.style()"></app-choice>
     }
   </div>
   } @if (mode() === 'answering') {
 
   <div class="top">
-    <app-text [content]="model().content().text" [style]="model().content().style"></app-text>
+    <app-text [content]="model().content().text()" [style]="model().content().style()"></app-text>
   </div>
 
   <div class="bottom" cdkDropList (cdkDropListDropped)="drop($event)">
     @for (item of answer()!.submit.selected; track item) {
     <app-choice
-      [content]="getOptionById(item)!.content()"
+      [content]="getOptionById(item)!.text()"
       [media]="getOptionById(item)!.media()"
-      [style]="getOptionById(item)!.style"
+      [style]="getOptionById(item)!.style()"
       cdkDrag
     ></app-choice>
 
@@ -31,7 +31,7 @@
   } @if (mode() === 'feedback') {
 
   <div class="top">
-    <app-text [content]="model().content().text" [style]="model().content().style"></app-text>
+    <app-text [content]="model().content().text()" [style]="model().content().style()"></app-text>
   </div>
 
   <div class="bottom">
@@ -39,9 +39,9 @@
 
     <app-choice
       [isCorrect]="true"
-      [content]="getOptionById(item)!.content()"
+      [content]="getOptionById(item)!.text()"
       [media]="getOptionById(item)!.media()"
-      [style]="getOptionById(item)!.style"
+      [style]="getOptionById(item)!.style()"
     ></app-choice>
 
     } } @else { @for (item of answer()!.submit.selected; track item) {
@@ -49,9 +49,9 @@
     <app-choice
       [isSelected]="true"
       [isCorrect]="isCorrect($index)"
-      [content]="getOptionById(item)!.content()"
+      [content]="getOptionById(item)!.text()"
       [media]="getOptionById(item)!.media()"
-      [style]="getOptionById(item)!.style"
+      [style]="getOptionById(item)!.style()"
     ></app-choice>
 
     } }

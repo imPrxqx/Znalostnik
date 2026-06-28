@@ -1,13 +1,13 @@
-import { ChoiceOption, Style } from '@shared/models/format';
+import { ChoiceOption, ChoiceStyle } from '@shared/models/format';
 
 export class UpdateChoiceStyleCommand implements Command {
   private receiver: ChoiceOption;
-  private backup: Style;
-  private newText: Style;
+  private backup: ChoiceStyle;
+  private newText: ChoiceStyle;
 
-  constructor(receiver: ChoiceOption, newText: Style) {
+  constructor(receiver: ChoiceOption, newText: ChoiceStyle) {
     this.receiver = receiver;
-    this.backup = receiver.style;
+    this.backup = receiver.style();
     this.newText = newText;
   }
 

@@ -1,6 +1,7 @@
 import { signal } from '@angular/core';
 import { FieldContext } from '../interfaces/field-context';
 import { randomWord, Activity } from './activity';
+import { Text } from './format';
 import { ActivityAnswer } from './activity-answer';
 import { Element, Visitor } from '../interfaces/visitor';
 

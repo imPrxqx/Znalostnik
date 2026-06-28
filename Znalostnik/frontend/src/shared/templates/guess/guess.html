@@ -1,7 +1,7 @@
 <div class="container">
   @if (mode() === 'view') {
   <div class="top">
-    <app-text [content]="model().content().text" [style]="model().content().style"></app-text>
+    <app-text [content]="model().content().text()" [style]="model().content().style()"></app-text>
   </div>
 
   <div class="bottom">
@@ -10,7 +10,7 @@
 
   } @if (mode() === 'answering') {
   <div class="top">
-    <app-text [content]="model().content().text" [style]="model().content().style"></app-text>
+    <app-text [content]="model().content().text()" [style]="model().content().style()"></app-text>
   </div>
 
   <div class="bottom">
@@ -24,7 +24,7 @@
   } @if (mode() === 'feedback') {
 
   <div class="top">
-    <app-text [content]="model().content().text" [style]="model().content().style"></app-text>
+    <app-text [content]="model().content().text()" [style]="model().content().style()"></app-text>
   </div>
   @if (!hasAnswer()) {
   <div class="bottom">

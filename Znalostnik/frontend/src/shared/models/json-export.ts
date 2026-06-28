@@ -29,13 +29,18 @@ export class ExportJsonVisitor implements Visitor {
       order: quizActivity.order(),
       style: quizActivity.style(),
       content: {
-        text: quizActivity.content().text,
-        style: quizActivity.content().style,
+        text: quizActivity.content().text(),
+        style: quizActivity.content().style(),
         options: quizActivity.options().options.map((option) => ({
           id: option.id,
-          content: option.content(),
-          media: option.media(),
-          style: option.style,
+          text: option.text(),
+          style: option.style(),
+          media: option.media()
+            ? {
+                id: option.media()!.id,
+                contentType: option.media()!.contentType,
+              }
+            : undefined,
         })),
       },
       solution: quizActivity.solution(),
@@ -47,7 +52,10 @@ export class ExportJsonVisitor implements Visitor {
       type: guessActivity.type(),
       order: guessActivity.order(),
       style: guessActivity.style(),
-      content: guessActivity.content(),
+      content: {
+        text: guessActivity.content().text(),
+        style: guessActivity.content().style(),
+      },
       solution: guessActivity.solution(),
     };
   }
@@ -58,17 +66,29 @@ export class ExportJsonVisitor implements Visitor {
       order: matchUpActivity.order(),
       style: matchUpActivity.style(),
       content: {
-        text: matchUpActivity.content().text,
+        text: matchUpActivity.content().text(),
+        style: matchUpActivity.content().style(),
         leftOptions: matchUpActivity.leftOptions().options.map((option) => ({
           id: option.id,
-          content: option.content(),
-          media: option.media(),
-          style: option.style,
+          text: option.text(),
+          style: option.style(),
+          media: option.media()
+            ? {
+                id: option.media()!.id,
+                contentType: option.media()!.contentType,
+              }
+            : undefined,
         })),
         rightOptions: matchUpActivity.rightOptions().options.map((option) => ({
           id: option.id,
-          content: option.content(),
-          style: option.style,
+          text: option.text(),
+          style: option.style(),
+          media: option.media()
+            ? {
+                id: option.media()!.id,
+                contentType: option.media()!.contentType,
+              }
+            : undefined,
         })),
       },
       solution: matchUpActivity.solution(),
@@ -81,12 +101,18 @@ export class ExportJsonVisitor implements Visitor {
       order: putInOrderActivity.order(),
       style: putInOrderActivity.style(),
       content: {
-        text: putInOrderActivity.content().text,
+        text: putInOrderActivity.content().text(),
+        style: putInOrderActivity.content().style(),
         options: putInOrderActivity.options().options.map((option) => ({
           id: option.id,
-          content: option.content(),
-          media: option.media(),
-          style: option.style,
+          text: option.text(),
+          style: option.style(),
+          media: option.media()
+            ? {
+                id: option.media()!.id,
+                contentType: option.media()!.contentType,
+              }
+            : undefined,
         })),
       },
       solution: putInOrderActivity.solution(),

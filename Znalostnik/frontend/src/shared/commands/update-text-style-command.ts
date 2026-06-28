@@ -7,7 +7,7 @@ export class UpdateTextStyleCommand implements Command {
 
   constructor(receiver: Text, newText: TextStyle) {
     this.receiver = receiver;
-    this.backup = receiver.style;
+    this.backup = receiver.style();
     this.newText = newText;
   }
 

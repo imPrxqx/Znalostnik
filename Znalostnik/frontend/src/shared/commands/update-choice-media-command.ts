@@ -1,23 +1,22 @@
-import { ChoiceOption, Style } from '@shared/models/format';
+import { ChoiceOption, Media } from '@shared/models/format';
 
 export class UpdateChoiceMediaCommand implements Command {
   private receiver: ChoiceOption;
-  private backup: any;
-  private newText: any;
+  private backup: Media | undefined;
+  private newMedia: Media;
 
-  constructor(receiver: ChoiceOption, newText: any) {
+  constructor(receiver: ChoiceOption, newMedia: Media) {
     this.receiver = receiver;
-    this.backup = receiver.media;
-    this.newText = newText;
+    this.backup = receiver.media();
+    this.newMedia = newMedia;
   }
 
   undo(): void {
-    this.receiver.setMedia(this.backup.id, this.backup.contentType);
+    this.receiver.setMedia(this.backup);
   }
 
   execute(): boolean {
-    this.receiver.setMedia(this.newText.id, this.newText.contentType);
-    console.log(this.receiver);
+    this.receiver.setMedia(this.newMedia);
     return true;
   }
 }

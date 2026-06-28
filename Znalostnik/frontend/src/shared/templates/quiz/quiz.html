@@ -1,37 +1,37 @@
 <div class="container">
   @if (mode() === 'view') {
   <div class="top">
-    <app-text [content]="model().content().text" [style]="model().content().style"></app-text>
+    <app-text [content]="model().content().text()" [style]="model().content().style()"></app-text>
   </div>
   <div class="bottom">
     @for(option of model().options().options; track option.id) {
     <app-choice
-      [content]="option.content()"
+      [content]="option.text()"
       [media]="option.media()"
-      [style]="option.style"
+      [style]="option.style()"
     ></app-choice>
     }
   </div>
 
   } @if (mode() === 'answering') {
   <div class="top">
-    <app-text [content]="model().content().text" [style]="model().content().style"></app-text>
+    <app-text [content]="model().content().text()" [style]="model().content().style()"></app-text>
   </div>
   <div class="bottom">
     @for(option of model().options().options; track option.id) {
     <app-choice
       [isSelected]="isSelected(option.id)"
       (click)="setAnswer(option.id)"
-      [content]="option.content()"
+      [content]="option.text()"
       [media]="option.media()"
-      [style]="option.style"
+      [style]="option.style()"
     ></app-choice>
     }
   </div>
 
   }@if (mode() === 'feedback') {
   <div class="top">
-    <app-text [content]="model().content().text" [style]="model().content().style"> </app-text>
+    <app-text [content]="model().content().text()" [style]="model().content().style()"> </app-text>
   </div>
 
   <div class="bottom">
@@ -40,9 +40,9 @@
     <app-choice
       [isSelected]="isSelected(option.id)"
       [isCorrect]="isCorrect(option.id)"
-      [content]="option.content()"
+      [content]="option.text()"
       [media]="option.media()"
-      [style]="option.style"
+      [style]="option.style()"
     >
     </app-choice>
     }

@@ -1,210 +1,37 @@
-import { Type, signal, WritableSignal } from '@angular/core';
-import { UpdateMultiChoiceCommandUi } from '@shared/commands/components/update-multi-choice-command-ui/update-multi-choice-command-ui';
-import { UpdateTextCommandUi } from '@shared/commands/components/update-text-command-ui/update-text-command-ui';
-import { Quiz } from '@shared/templates/quiz/quiz';
-import { sign } from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
+import { randomQuestion, randomWord } from './activity';
+import { signal } from '@angular/core';
 
-export interface Element {
-  accept(visitor: Visitor): void;
+export class Media {
+  id: string = '';
+  contentType: string = '';
 }
 
-export interface Visitor {
-  visitQuiz(quizTask: QuizTask): void;
-  visitExercise(exercise: Exercise): void;
+export class ChoiceStyle {
+  fontFamily: string = 'Arial';
+  fontSize: number = 32;
+  color: string = '#000000';
+  bold: boolean = false;
+  italic: boolean = false;
+  underline: boolean = false;
+  backgroundColor: string = `hsl(${Math.floor(Math.random() * 360)}, 70%, 85%)`;
 }
 
-export class Exercise implements Element {
-  id = signal<string>(crypto.randomUUID());
-  mode = signal<string>('interactive');
-  title = signal<string>('exercise');
-  tasks = signal<Task[]>([]);
-  settings = signal<undefined>(undefined);
-
-  deleteTask(task: Task): void {
-    const currentTasks = [...this.tasks()];
-    const index = currentTasks.indexOf(task);
-    if (index !== -1) {
-      currentTasks.splice(index, 1);
-      this.tasks.set(currentTasks);
-    }
-
-    this.reindex();
-  }
-
-  deleteTaskById(taskId: string): void {
-    const currentTasks = [...this.tasks()];
-    const index = currentTasks.findIndex((task) => task.id() === taskId);
-    if (index !== -1) {
-      currentTasks.splice(index, 1);
-      this.tasks.set(currentTasks);
-    }
-
-    this.reindex();
-  }
-
-  addTask(task: Task): void {
-    const currentTasks = [...this.tasks()];
-    currentTasks.push(task);
-    this.tasks.set(currentTasks);
-
-    this.reindex();
-  }
-
-  addTaskAt(task: Task, index: number): void {
-    const currentTasks = [...this.tasks()];
-    currentTasks.splice(index, 0, task);
-    this.tasks.set(currentTasks);
-
-    this.reindex();
-  }
-
-  move(index1: number, index2: number): void {
-    const currentTasks = [...this.tasks()];
-
-    const maxIndex = currentTasks.length - 1;
-    if (index1 < 0 || index1 > maxIndex) {
-      return;
-    }
-    if (index2 < 0) {
-      index2 = 0;
-    }
-    if (index2 > maxIndex) {
-      index2 = maxIndex;
-    }
-
-    const [taskToMove] = currentTasks.splice(index1, 1);
-
-    currentTasks.splice(index2, 0, taskToMove);
-
-    this.tasks.set(currentTasks);
-    this.reindex();
-  }
-
-  getTasks(): WritableSignal<Task[]> {
-    return this.tasks;
-  }
-
-  getTaskById(taskId: string): Task | undefined {
-    return this.tasks().find((task) => task.id() === taskId);
-  }
-
-  getIndexOfTask(task: Task): number {
-    return this.tasks().indexOf(task);
-  }
-
-  getTaskIndexById(taskId: string): number {
-    return this.tasks().findIndex((task) => task.id() === taskId);
-  }
-
-  accept(visitor: Visitor): void {
-    visitor.visitExercise(this);
-  }
-
-  private reindex() {
-    this.tasks().map((task, index) => {
-      task.order.set(index);
-      return task;
-    });
-  }
-}
-
-export abstract class Task implements Element {
-  id = signal(crypto.randomUUID());
-  abstract order: WritableSignal<number>;
-  abstract respondType: WritableSignal<string>;
-  abstract gameMode: WritableSignal<string>;
-  abstract type: WritableSignal<string>;
-  abstract settings: WritableSignal<undefined>;
-
-  abstract accept(visitor: Visitor): void;
-}
-
-export class QuizTask extends Task implements Element {
-  type = signal<string>('quiz');
-  order = signal<number>(0);
-  respondType = signal<string>('individual');
-  gameMode = signal<string>('classic');
-
-  content = signal<Text>(new Text());
-  options = signal<MultiChoiceOption>(new MultiChoiceOption());
-  solution = signal<string[]>([]);
-  settings = signal<undefined>(undefined);
-
-  constructor(config?: any) {
-    super();
-
-    if (config?.id) {
-      this.id.set(config.id);
-    }
-
-    if (config?.order) {
-      this.order.set(config.order);
-    }
-
-    if (config?.respondType) {
-      this.respondType.set(config.respondType);
-    }
-
-    if (config?.gameMode) {
-      this.gameMode.set(config.gameMode);
-    }
-
-    if (config?.settings) {
-      this.settings.set(config.settings);
-    }
-
-    if (config?.content) {
-      const text = new Text();
-      text.content = config.content;
-      this.content.set(text);
-    }
-
-    if (config?.options) {
-      const multiChoice = new MultiChoiceOption();
-      multiChoice.options = [];
-      config.options.forEach((opt: ChoiceOption) => {
-        const option = new ChoiceOption();
-        option.id = opt.id;
-        option.content = opt.content;
-        multiChoice.addOption(option);
-      });
-      this.options.set(multiChoice);
-    }
-
-    if (config?.solution) {
-      this.solution.set(config.solution);
-    }
-  }
-
-  setSolution(optionId: string) {
-    const index = this.solution().findIndex((id) => id === optionId);
-    if (index === -1) {
-      this.solution().push(optionId);
-    } else {
-      this.solution().splice(index, 1);
-    }
-  }
-
-  accept(visitor: Visitor): void {
-    visitor.visitQuiz(this);
-  }
-}
-
-export class ChoiceOption {
-  id: string = crypto.randomUUID();
-  content: string = 'Default Text';
-
-  setContent(newContent: string) {
-    this.content = newContent;
-  }
+export class TextStyle {
+  fontFamily: string = 'Arial';
+  fontSize: number = 64;
+  color: string = '#000000';
+  bold: boolean = false;
+  italic: boolean = false;
+  underline: boolean = false;
 }
 
 export class MultiChoiceOption {
   options: ChoiceOption[] = [
-    new ChoiceOption(),
-    new ChoiceOption(),
-    new ChoiceOption(),
-    new ChoiceOption(),
+    new ChoiceOption(undefined),
+    new ChoiceOption(undefined),
+    new ChoiceOption(undefined),
+    new ChoiceOption(undefined),
   ];
 
   addOption(newOption: ChoiceOption) {
@@ -217,156 +44,134 @@ export class MultiChoiceOption {
     }
     this.options.pop();
   }
+
+  removeOptionById(optionId: string) {
+    if (this.options.length === 0) {
+      return;
+    }
+    this.options = this.options.filter((o) => o.id !== optionId);
+  }
+}
+
+export class ChoiceOption {
+  id: string = uuidv4();
+  text = signal<string>(randomWord());
+  style = signal<ChoiceStyle>(new ChoiceStyle());
+  media = signal<Media | undefined>(undefined);
+
+  constructor(data: any) {
+    if (data?.id) {
+      this.id = data.id;
+    }
+
+    if (data?.text) {
+      this.text.set(data.text);
+    }
+
+    if (data?.media) {
+      const media = new Media();
+      media.id = data?.media?.id;
+      media.contentType = data?.media?.contentType;
+      this.media.set(media);
+    }
+
+    if (data?.style) {
+      const style = new ChoiceStyle();
+
+      if (data.style?.fontFamily) {
+        style.fontFamily = data.style.fontFamily;
+      }
+
+      if (data.style?.fontSize !== undefined) {
+        style.fontSize = data.style.fontSize;
+      }
+
+      if (data.style?.color) {
+        style.color = data.style.color;
+      }
+
+      if (data.style?.backgroundColor) {
+        style.backgroundColor = data.style.backgroundColor;
+      }
+
+      if (data.style?.bold) {
+        style.bold = data.style.bold;
+      }
+
+      if (data.style?.italic) {
+        style.italic = data.style.italic;
+      }
+
+      if (data.style?.underline) {
+        style.underline = data.style.underline;
+      }
+
+      this.style.set(style);
+    }
+  }
+
+  setContent(value: string) {
+    this.text.set(value);
+  }
+
+  setStyle(newStyle: ChoiceStyle) {
+    this.style.set(newStyle);
+  }
+
+  setMedia(newMedia: Media | undefined) {
+    if (newMedia === undefined) {
+      this.media.set(undefined);
+      return;
+    }
+
+    this.media.set(newMedia);
+  }
 }
 
 export class Text {
-  content: string = 'Default Text';
+  text = signal<string>(randomQuestion());
+  style = signal<TextStyle>(new TextStyle());
+  constructor(data: any) {
+    if (data?.text !== undefined) {
+      this.text.set(data.text);
+    }
+
+    if (data?.style) {
+      const style = new TextStyle();
+
+      if (data.style?.fontFamily) {
+        style.fontFamily = data.style.fontFamily;
+      }
+
+      if (data.style?.fontSize) {
+        style.fontSize = data.style.fontSize;
+      }
+
+      if (data.style?.color) {
+        style.color = data.style.color;
+      }
+
+      if (data.style?.bold) {
+        style.bold = data.style.bold;
+      }
+
+      if (data.style?.italic) {
+        style.italic = data.style.italic;
+      }
+
+      if (data.style?.underline) {
+        style.underline = data.style.underline;
+      }
+
+      this.style.set(style);
+    }
+  }
 
   setContent(newContent: string) {
-    this.content = newContent;
-  }
-}
-
-export abstract class TaskAnswer {
-  id = crypto.randomUUID();
-  taskId: string = '';
-  abstract created: string;
-  abstract submit: any;
-  abstract evaluation?: any;
-}
-
-export class QuizAnswer extends TaskAnswer {
-  created = new Date().toLocaleString();
-  submit: {
-    selected: Array<string>;
-  } = { selected: [] };
-  evaluation:
-    | {
-        correct: Array<string>;
-        incorrect: Array<string>;
-      }
-    | undefined = undefined;
-
-  constructor(config?: any) {
-    super();
-
-    if (config?.id) {
-      this.id = config.id;
-    }
-
-    if (config?.created) {
-      this.created = config.created;
-    }
-
-    if (config?.submit) {
-      this.submit = config.submit;
-
-      if (this.submit.selected == undefined) {
-        this.submit.selected = [];
-      }
-    }
-
-    if (config?.evaluation) {
-      this.evaluation = config.evaluation;
-    }
-
-    if (config?.taskId) {
-      this.taskId = config.taskId;
-    }
-  }
-}
-
-export class Registry {
-  static components: Record<string, any> = {
-    quiz: Quiz,
-  };
-
-  static tasks: Record<string, any> = {
-    quiz: QuizTask,
-  };
-
-  static answers: Record<string, any> = {
-    quiz: QuizAnswer,
-  };
-
-  static commands: Type<any>[] = [UpdateTextCommandUi, UpdateMultiChoiceCommandUi];
-
-  static createTask(key: any, config: any): Task {
-    const TaskClass = this.tasks[key];
-    return new TaskClass(config);
+    this.text.set(newContent);
   }
 
-  static createAnswer(key: any, config: any): TaskAnswer {
-    const TaskAnswerClass = this.answers[key];
-    return new TaskAnswerClass(config);
-  }
-
-  static getCommands(): any {
-    return this.commands;
-  }
-}
-
-export class ExerciseFactory {
-  static createFromJson(json: any): Exercise {
-    const exercise = new Exercise();
-    exercise.id.set(json.id);
-    exercise.settings.set(json.settings);
-
-    json.tasks?.forEach((taskDef: any) => {
-      const task = ExerciseTaskFactory.createFromJson(taskDef);
-      exercise.addTask(task);
-    });
-
-    return exercise;
-  }
-}
-
-export class ExerciseTaskFactory {
-  static createFromJson(json: any): Task {
-    const task = Registry.createTask(json.type, json.content);
-    return task;
-  }
-}
-
-export class ExportJsonVisitor implements Visitor {
-  private result: any = {};
-
-  visitExercise(exercise: Exercise) {
-    this.result = {
-      title: exercise.title(),
-      mode: exercise.mode(),
-      settings: exercise.settings(),
-      tasks: [],
-    };
-
-    exercise.tasks().forEach((task: Task, index: number) => {
-      const taskVisitor = new ExportJsonVisitor();
-      task.accept(taskVisitor);
-      taskVisitor.result.order = taskVisitor.result.order ?? index;
-      this.result.tasks.push(taskVisitor.result);
-    });
-  }
-
-  visitQuiz(quizTask: QuizTask): void {
-    this.result = {
-      id: quizTask.id(),
-      type: quizTask.type(),
-      gameMode: quizTask.gameMode(),
-      respondMode: quizTask.respondType(),
-      order: quizTask.order(),
-      content: {
-        content: quizTask.content().content,
-        options: quizTask.options().options.map((option) => ({
-          id: option.id,
-          content: option.content,
-        })),
-        solution: quizTask.solution(),
-        settings: quizTask.settings(),
-      },
-    };
-  }
-
-  toJson(): string {
-    return JSON.stringify(this.result);
+  setStyle(newStyle: TextStyle) {
+    this.style.set(newStyle);
   }
 }

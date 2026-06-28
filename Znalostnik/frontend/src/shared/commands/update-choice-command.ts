@@ -8,7 +8,7 @@ export class UpdateChoiceCommand implements Command {
 
   constructor(receiver: ChoiceOption, newText: string) {
     this.receiver = receiver;
-    this.backup = receiver.content();
+    this.backup = receiver.text();
     this.newText = newText;
   }
 

@@ -14,7 +14,7 @@
 .top {
   display: flex;
   flex: 0 0 50%;
-
+  width: 100%;
   overflow: hidden;
   flex-direction: column;
   margin: auto;
@@ -32,6 +32,6 @@
   overflow: hidden;
 }
 
-.bottom > .item:last-child:nth-child(odd) {
+.bottom > app-choice:last-child:nth-child(odd) {
   grid-column: 1 / -1;
 }
