@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { SessionState } from '../services/session-state';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -11,7 +11,7 @@ import { NgComponentOutlet } from '@angular/common';
   templateUrl: './host.html',
   styleUrl: './host.scss',
 })
-export class Host {
+export class Host implements OnInit {
   state = inject(SessionState);
   route = inject(ActivatedRoute);
   router = inject(Router);

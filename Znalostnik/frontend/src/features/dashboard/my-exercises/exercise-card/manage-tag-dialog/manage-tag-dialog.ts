@@ -17,6 +17,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
 import { TagsApi } from '@features/dashboard/services/tags-api';
+import { Tag } from '@shared/models/tag';
 
 @Component({
   selector: 'app-manage-tag-dialog',
@@ -42,8 +43,8 @@ export class ManageTagDialog {
   private dialogRef = inject(MatDialogRef<ManageTagDialog>);
   private exerciseId = inject<string>(MAT_DIALOG_DATA);
   tagsApi = inject(TagsApi);
-  tags = signal<any[]>([]);
-  exerciseTags = signal<any[]>([]);
+  tags = signal<Tag[]>([]);
+  exerciseTags = signal<Tag[]>([]);
   newTagName = '';
 
   constructor() {
@@ -53,13 +54,13 @@ export class ManageTagDialog {
 
   getTags() {
     this.tagsApi.loadTags().subscribe((res) => {
-      this.tags.set(res as any[]);
+      this.tags.set(res as Tag[]);
     });
   }
 
   getTagsFromExercise() {
     this.tagsApi.loadExerciseTags(this.exerciseId).subscribe((res) => {
-      this.exerciseTags.set(res as any[]);
+      this.exerciseTags.set(res as Tag[]);
     });
   }
 

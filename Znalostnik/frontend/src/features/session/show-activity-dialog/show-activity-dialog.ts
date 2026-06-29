@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, WritableSignal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MatDialogTitle,
@@ -9,6 +9,7 @@ import {
 } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { ExerciseActivity } from '@features/exercise-editor/components/exercise-activity/exercise-activity';
+import { Activity } from '@shared/models/activity';
 
 @Component({
   selector: 'app-show-activity-dialog',
@@ -25,7 +26,7 @@ import { ExerciseActivity } from '@features/exercise-editor/components/exercise-
 })
 export class ShowActivityDialog {
   readonly dialogRef = inject(MatDialogRef<ShowActivityDialog>);
-  readonly data = inject<any>(MAT_DIALOG_DATA);
+  readonly data = inject<WritableSignal<Activity>>(MAT_DIALOG_DATA);
 
   onNoClick() {
     this.dialogRef.close();

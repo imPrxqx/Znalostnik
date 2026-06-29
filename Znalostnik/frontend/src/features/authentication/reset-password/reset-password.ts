@@ -1,5 +1,5 @@
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -24,13 +24,13 @@ import { Authentication } from '@core/services/authentication';
   templateUrl: './reset-password.html',
   styleUrl: './reset-password.scss',
 })
-export class ResetPassword {
+export class ResetPassword implements OnInit {
   auth = inject(Authentication);
   route = inject(Router);
   routeActivated = inject(ActivatedRoute);
 
-  email: string = '';
-  resetCode: string = '';
+  email = '';
+  resetCode = '';
 
   resetForm = new FormGroup({
     newPassword: new FormControl('', [

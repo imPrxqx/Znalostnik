@@ -1,4 +1,4 @@
-import { Component, ViewContainerRef, inject, input } from '@angular/core';
+import { Component, ViewContainerRef, inject, input, OnChanges } from '@angular/core';
 import { Registry } from '@shared/models/registry';
 import { Activity } from '@shared/models/activity';
 
@@ -8,7 +8,7 @@ import { Activity } from '@shared/models/activity';
   templateUrl: './exercise-toolbar.html',
   styleUrl: './exercise-toolbar.scss',
 })
-export class ExerciseToolbar {
+export class ExerciseToolbar implements OnChanges {
   activity = input.required<Activity>();
   viewContainer = inject(ViewContainerRef);
 
@@ -23,12 +23,12 @@ export class ExerciseToolbar {
     const commands = Registry.getCommands();
 
     fields.forEach((field) => {
-      commands.forEach((cmd: any) => {
+      commands.forEach((cmd) => {
         if (!cmd.supports?.(field)) {
           return;
         }
 
-        const compRef = this.viewContainer.createComponent(cmd);
+        const compRef = this.viewContainer.createComponent(cmd.component);
         compRef.setInput('field', field);
       });
     });

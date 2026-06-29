@@ -51,12 +51,12 @@ export class SessionState {
     this.api
       .loadSession(sessionId)
       .pipe(
-        switchMap((session: any) => {
+        switchMap((session) => {
           if (!session) {
             this.router.navigate([`/home`]);
           }
 
-          this.session.set(session);
+          this.session.set(session as Session);
 
           if (this.session()?.gameState.activity) {
             const exerciseActivity = ActivityFactory.createFromJson(
@@ -70,8 +70,8 @@ export class SessionState {
 
             if (
               !this.answer() ||
-              this.answer()?.id !== sessionAnswer.id ||
-              this.answer()?.version !== sessionAnswer.version
+              this.answer()?.id !== sessionAnswer?.id ||
+              this.answer()?.version !== sessionAnswer?.version
             ) {
               const answer = Registry.createAnswer(
                 this.session()?.gameState.activity.type,
@@ -84,17 +84,17 @@ export class SessionState {
 
           return forkJoin({
             teams: this.api.loadSessionTeams(sessionId).pipe(
-              catchError((err) => {
+              catchError(() => {
                 return [];
               }),
             ),
             sessionUsers: this.api.loadSessionUsers(sessionId).pipe(
-              catchError((err) => {
+              catchError(() => {
                 return [];
               }),
             ),
             sessionUser: this.api.loadSessionUser(sessionId).pipe(
-              catchError((err) => {
+              catchError(() => {
                 return of(undefined);
               }),
             ),
@@ -145,7 +145,7 @@ export class SessionState {
 
   joinSession(accessCode: string, username: string) {
     this.api.joinSession(accessCode, username).subscribe({
-      next: (id: any) => {
+      next: (id) => {
         this.router.navigate([`/session/${id}/lobby`]);
       },
       error: (error) => {
@@ -172,8 +172,8 @@ export class SessionState {
 
   loadSessionTeams(sessionId: string) {
     this.api.loadSessionTeams(sessionId).subscribe({
-      next: (data: any) => {
-        this.teams.set(data);
+      next: (data) => {
+        this.teams.set(data as Team[]);
       },
       error: (error) => {
         console.error(error);
@@ -181,7 +181,7 @@ export class SessionState {
     });
   }
 
-  submitAnswer(sessionId: string, answer: any) {
+  submitAnswer(sessionId: string, answer: ActivityAnswer) {
     this.api.submitAnswer(sessionId, answer).subscribe({
       error: (error) => {
         console.error(error);
@@ -189,7 +189,7 @@ export class SessionState {
     });
   }
 
-  confirmAnswer(sessionId: string, answer: any) {
+  confirmAnswer(sessionId: string, answer: ActivityAnswer) {
     this.api.confirmCurrentAnswer(sessionId, answer).subscribe({
       error: (error) => {
         console.error(error);

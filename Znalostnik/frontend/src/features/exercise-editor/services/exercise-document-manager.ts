@@ -1,4 +1,4 @@
-import { Injectable, WritableSignal, computed, signal, inject } from '@angular/core';
+import { Injectable, WritableSignal, signal } from '@angular/core';
 import { Exercise } from '@shared/models/exercise';
 import { Registry } from '@shared/models/registry';
 import { Activity } from '@shared/models/activity';

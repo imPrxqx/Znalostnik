@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, input, model, viewChild, ViewContainerRef } from '@angular/core';
+import { Component, input, model, viewChild, ViewContainerRef, OnChanges } from '@angular/core';
 import { Registry } from '@shared/models/registry';
 import { Activity } from '@shared/models/activity';
 import { ActivityAnswer } from '@shared/models/activity-answer';
@@ -10,7 +10,7 @@ import { ActivityAnswer } from '@shared/models/activity-answer';
   templateUrl: './exercise-activity.html',
   styleUrl: './exercise-activity.scss',
 })
-export class ExerciseActivity {
+export class ExerciseActivity implements OnChanges {
   viewContainer = viewChild.required('activityContainer', {
     read: ViewContainerRef,
   });

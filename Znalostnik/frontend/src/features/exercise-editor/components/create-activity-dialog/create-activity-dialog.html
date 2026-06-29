@@ -7,7 +7,7 @@
   <div class="activity-list">
     @for (activity of activities; track activity.key) {
 
-    <div
+    <button
       class="activity"
       [class.selected]="selected() === activity.key"
       (click)="selected.set(activity.key)"
@@ -17,7 +17,7 @@
         <p class="name">{{ activity.name }}</p>
         <p class="description">{{ activity.shortDescription }}</p>
       </div>
-    </div>
+    </button>
     }
   </div>
 </mat-dialog-content>

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
+import { ActivityAnswer } from '@shared/models/activity-answer';
 
 @Injectable({
   providedIn: 'root',
@@ -38,12 +39,11 @@ export class SessionApi {
     });
   }
 
-  confirmCurrentAnswer(sessionId: string, answer: any) {
-    console.log('confirming answer: ', answer);
+  confirmCurrentAnswer(sessionId: string, answer: ActivityAnswer) {
     return this.http.post(`${environment.apiURL}/sessions/${sessionId}/answers/confirm`, answer);
   }
 
-  submitAnswer(sessionId: string, answer: any) {
+  submitAnswer(sessionId: string, answer: ActivityAnswer) {
     return this.http.post(`${environment.apiURL}/sessions/${sessionId}/answers`, answer);
   }
 

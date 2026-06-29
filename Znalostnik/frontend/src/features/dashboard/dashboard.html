@@ -3,7 +3,7 @@
     <div class="sidebar-inner">
       <div class="sidebar-top">
         <div class="sidebar-header">
-          <img src="favicon.ico" />
+          <img src="favicon.ico" alt="Favicon" />
           <a [routerLink]="['/']">
             <h1 i18n>Znalostník</h1>
           </a>
@@ -49,7 +49,7 @@
       <div>
         <mat-nav-list class="sidebar-list">
           @if(auth.user()) {
-          <a mat-list-item (click)="logout()" (click)="close()">
+          <a mat-list-item routerLink="/authentication/login" (click)="logout()" (click)="close()">
             <mat-icon matListItemIcon>logout</mat-icon>
             <p i18n>Odhlásit se</p>
           </a>

@@ -55,7 +55,6 @@ export class Authentication {
     this.http.post(`${environment.apiURL}/users/logout`, null).subscribe({
       next: () => {
         this.user.set(null);
-        this.router.navigate(['']);
       },
     });
   }
@@ -74,7 +73,7 @@ export class Authentication {
   }
 
   initGuest() {
-    return this.http.post<User>(`${environment.apiURL}/users/guest`, null);
+    return this.http.post(`${environment.apiURL}/users/guest`, null);
   }
 
   forgotPassword(email: string) {

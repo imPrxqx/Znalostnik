@@ -1,4 +1,4 @@
-import { Component, inject, model, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -12,7 +12,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { MatChipsModule } from '@angular/material/chips';
+import { MatChipListboxChange, MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatRadioModule } from '@angular/material/radio';
 import { TagsApi } from '@features/dashboard/services/tags-api';
@@ -71,7 +71,8 @@ export class FilterExerciseDialog {
     return this.filter().tagIds.includes(tagId);
   }
 
-  onTagsChange(event: any) {
+  onTagsChange(event: MatChipListboxChange) {
+    console.log(event);
     this.filter.update((f) => ({
       ...f,
       tagIds: event.value,

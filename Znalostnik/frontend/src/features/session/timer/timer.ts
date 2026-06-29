@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, input, signal } from '@angular/core';
+import { Component, input, signal, OnInit, OnDestroy } from '@angular/core';
 import { interval } from 'rxjs';
 
 @Component({
@@ -8,7 +8,7 @@ import { interval } from 'rxjs';
   templateUrl: './timer.html',
   styleUrl: './timer.scss',
 })
-export class Timer {
+export class Timer implements OnInit, OnDestroy {
   targetTime = input.required<Date>();
   remainingTime = signal<number>(0);
 
