@@ -1,3 +1,4 @@
+import { Command } from '@shared/interfaces/command.interface';
 import { MatchUpSolution } from '@shared/models/match-up';
 
 export class ReorderMatchUpCommand implements Command {

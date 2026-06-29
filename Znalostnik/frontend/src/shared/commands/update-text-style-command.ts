@@ -1,3 +1,4 @@
+import { Command } from '@shared/interfaces/command.interface';
 import { Text, TextStyle } from '@shared/models/format';
 
 export class UpdateTextStyleCommand implements Command {

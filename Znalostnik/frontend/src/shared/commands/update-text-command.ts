@@ -1,3 +1,4 @@
+import { Command, MergeableCommand } from '@shared/interfaces/command.interface';
 import { Text } from '@shared/models/format';
 
 export class UpdateTextCommand implements Command, MergeableCommand {

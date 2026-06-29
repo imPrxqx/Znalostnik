@@ -1,12 +1,14 @@
 import { ExerciseDocumentManager } from '@features/exercise-editor/services/exercise-document-manager';
+import { Command } from '@shared/interfaces/command.interface';
+import { Exercise, ExerciseConfiguration } from '@shared/models/exercise';
 import { ExerciseFactory } from '@shared/models/exercise-factory';
 
 export class LoadCommand implements Command {
   private receiver: ExerciseDocumentManager;
-  private backup: any;
-  private loadExercise: any;
+  private backup: Exercise;
+  private loadExercise: ExerciseConfiguration;
 
-  constructor(receiver: ExerciseDocumentManager, loadExercise: any) {
+  constructor(receiver: ExerciseDocumentManager, loadExercise: ExerciseConfiguration) {
     this.receiver = receiver;
     this.backup = receiver.exercise();
     this.loadExercise = loadExercise;

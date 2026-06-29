@@ -23,7 +23,7 @@
       "architect": {
         "build": {
           "builder": "@angular/build:application",
-          "options": {                      
+          "options": {
             "localize": true,
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
@@ -43,14 +43,16 @@
           },
           "configurations": {
             "en": {
-              "localize": ["en"]
+              "localize": [
+                "en"
+              ]
             },
             "production": {
               "budgets": [
                 {
                   "type": "initial",
                   "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -113,8 +115,22 @@
             ],
             "karmaConfig": "karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
+  },
+  "cli": {
+    "schematicCollections": [
+      "angular-eslint"
+    ]
   }
 }

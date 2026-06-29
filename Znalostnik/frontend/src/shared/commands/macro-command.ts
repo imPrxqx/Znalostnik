@@ -1,3 +1,5 @@
+import { Command } from '@shared/interfaces/command.interface';
+
 export class MacroCommand implements Command {
   private commands: Command[];
 

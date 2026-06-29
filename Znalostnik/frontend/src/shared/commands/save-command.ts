@@ -1,5 +1,6 @@
 import { ExercisesManager } from '@features/dashboard/services/exercises-manager';
 import { ExerciseDocumentManager } from '@features/exercise-editor/services/exercise-document-manager';
+import { Command } from '@shared/interfaces/command.interface';
 import { ExportJsonVisitor } from '@shared/models/json-export';
 
 export class SaveCommand implements Command {
@@ -13,7 +14,9 @@ export class SaveCommand implements Command {
     this.exerciseId = exerciseId;
   }
 
-  undo(): void {}
+  undo(): void {
+    return;
+  }
 
   execute(): boolean {
     const visitor = new ExportJsonVisitor();

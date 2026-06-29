@@ -1,13 +1,43 @@
 import { signal } from '@angular/core';
 import { FieldContext } from '../interfaces/field-context';
-import { MultiChoiceOption, ChoiceOption, Text } from './format';
+import {
+  MultiChoiceOption,
+  ChoiceOption,
+  Text,
+  ChoiceOptionConfiguration,
+  TextConfiguration,
+  TextStyle,
+} from './format';
 import { Activity } from './activity';
 import { ActivityAnswer } from './activity-answer';
 import { Element, Visitor } from '../interfaces/visitor';
 
-export type OrderedItem = {
+export interface OrderedItem {
   id: string;
-};
+}
+
+export interface PutInOrderConfiguration {
+  id: string;
+  order: number;
+  content: {
+    text: string;
+    style: TextStyle;
+    options: ChoiceOptionConfiguration[];
+  };
+  solution: PutInOrderSolution;
+}
+
+export interface PutInOrderAnswerConfiguration {
+  id: string;
+  created: string;
+  correctPercentage: number;
+  status: string | undefined;
+  version: number;
+  submit: {
+    selected: string[];
+  };
+  activityId: string;
+}
 
 export class PutInOrderActivity extends Activity implements Element {
   type = signal<string>('putInOrder');
@@ -16,8 +46,8 @@ export class PutInOrderActivity extends Activity implements Element {
   options = signal<MultiChoiceOption>(new MultiChoiceOption());
   solution = signal<PutInOrderSolution | undefined>(undefined);
 
-  constructor(config?: any) {
-    super(config);
+  constructor(config?: PutInOrderConfiguration) {
+    super();
 
     if (config?.id) {
       this.id.set(config.id);
@@ -28,12 +58,17 @@ export class PutInOrderActivity extends Activity implements Element {
     }
 
     if (config?.content) {
-      const text = new Text(config.content);
+      const textConfiguration: TextConfiguration = {
+        text: config.content.text,
+        style: config.content.style,
+      };
+
+      const text = new Text(textConfiguration);
       this.content.set(text);
 
       const multiChoice = new MultiChoiceOption();
       multiChoice.options = [];
-      config.content.options.forEach((opt: ChoiceOption) => {
+      config.content.options.forEach((opt) => {
         const option = new ChoiceOption(opt);
         multiChoice.options.push(option);
       });
@@ -91,13 +126,13 @@ export class PutInOrderActivity extends Activity implements Element {
 export class PutInOrderAnswer extends ActivityAnswer {
   created = new Date().toLocaleString();
   submit: {
-    selected: Array<string>;
+    selected: string[];
   } = { selected: [] };
 
-  correctPercentage: number = 0;
+  correctPercentage = 0;
   status: string | undefined = undefined;
 
-  constructor(config?: any) {
+  constructor(config?: PutInOrderAnswerConfiguration) {
     super();
 
     if (config?.id) {

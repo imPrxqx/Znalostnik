@@ -1,19 +1,51 @@
 import { signal } from '@angular/core';
 import { FieldContext } from '../interfaces/field-context';
-import { MultiChoiceOption, ChoiceOption, Text } from './format';
+import {
+  MultiChoiceOption,
+  ChoiceOption,
+  Text,
+  ChoiceOptionConfiguration,
+  TextConfiguration,
+  TextStyle,
+} from './format';
 import { Activity } from './activity';
 import { ActivityAnswer } from './activity-answer';
 import { Element, Visitor } from '../interfaces/visitor';
+
+export interface QuizConfiguration {
+  id: string;
+  order: number;
+  content: {
+    text: string;
+    style: TextStyle;
+    options: ChoiceOptionConfiguration[];
+  };
+  solution: QuizSolution;
+}
+
+export interface QuizAnswerConfiguration {
+  id: string;
+  created: string;
+  correctPercentage: number;
+  status: string | undefined;
+  version: number;
+  submit: {
+    selected: string[];
+  };
+  activityId: string;
+}
 
 export class QuizActivity extends Activity implements Element {
   type = signal<string>('quiz');
   order = signal<number>(0);
   content = signal<Text>(new Text(undefined));
   options = signal<MultiChoiceOption>(new MultiChoiceOption());
-  solution = signal<MultiChoiceSolution | undefined>(undefined);
+  solution = signal<QuizSolution | undefined>(undefined);
 
-  constructor(config?: any) {
-    super(config);
+  constructor(config?: QuizConfiguration) {
+    super();
+
+    console.log(config);
 
     if (config?.id) {
       this.id.set(config.id);
@@ -24,12 +56,17 @@ export class QuizActivity extends Activity implements Element {
     }
 
     if (config?.content) {
-      const text = new Text(config.content);
+      const textConfiguration: TextConfiguration = {
+        text: config.content.text,
+        style: config.content.style,
+      };
+
+      const text = new Text(textConfiguration);
       this.content.set(text);
 
       const multiChoice = new MultiChoiceOption();
       multiChoice.options = [];
-      config.content.options.forEach((opt: ChoiceOption) => {
+      config.content.options.forEach((opt) => {
         const option = new ChoiceOption(opt);
         multiChoice.addOption(option);
       });
@@ -38,7 +75,7 @@ export class QuizActivity extends Activity implements Element {
     }
 
     if (config?.solution) {
-      const multiChoiceSolution = new MultiChoiceSolution();
+      const multiChoiceSolution = new QuizSolution();
       multiChoiceSolution.correct = config.solution.correct;
 
       this.solution.set(multiChoiceSolution);
@@ -70,7 +107,7 @@ export class QuizActivity extends Activity implements Element {
 
   ensureSolution(): void {
     if (!this.solution()) {
-      this.solution.set(new MultiChoiceSolution());
+      this.solution.set(new QuizSolution());
     }
   }
 
@@ -82,12 +119,12 @@ export class QuizActivity extends Activity implements Element {
 export class QuizAnswer extends ActivityAnswer {
   created = new Date().toLocaleString();
   submit: {
-    selected: Array<string>;
+    selected: string[];
   } = { selected: [] };
-  correctPercentage: number = 0;
+  correctPercentage = 0;
   status: string | undefined = undefined;
 
-  constructor(config?: any) {
+  constructor(config: QuizAnswerConfiguration) {
     super();
 
     if (config?.id) {
@@ -123,7 +160,7 @@ export class QuizAnswer extends ActivityAnswer {
   }
 }
 
-export class MultiChoiceSolution {
+export class QuizSolution {
   correct: string[] = [];
 
   setSolution(optionId: string) {

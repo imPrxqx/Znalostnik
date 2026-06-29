@@ -1,4 +1,4 @@
-import { Component, input, model } from '@angular/core';
+import { Component, input, model, OnInit } from '@angular/core';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { MatchUpActivity, MatchUpAnswer } from '@shared/models/match-up';
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,7 @@ import { Choice } from '@shared/media/choice/choice';
   templateUrl: './match-up.html',
   styleUrl: './match-up.scss',
 })
-export class MatchUp {
+export class MatchUp implements OnInit {
   mode = input.required<string>();
   model = input.required<MatchUpActivity>();
   answer = model<MatchUpAnswer>();
@@ -51,7 +51,7 @@ export class MatchUp {
       .options.find((o) => o.id === id);
   }
 
-  dropLeft(event: CdkDragDrop<any[]>) {
+  dropLeft(event: CdkDragDrop<unknown[]>) {
     this.answer.update((current) => {
       if (!current) {
         return current;
@@ -68,7 +68,7 @@ export class MatchUp {
     });
   }
 
-  dropRight(event: CdkDragDrop<any[]>) {
+  dropRight(event: CdkDragDrop<unknown[]>) {
     this.answer.update((current) => {
       if (!current) {
         return current;

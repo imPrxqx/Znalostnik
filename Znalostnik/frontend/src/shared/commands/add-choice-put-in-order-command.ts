@@ -1,3 +1,4 @@
+import { Command } from '@shared/interfaces/command.interface';
 import { MultiChoiceOption, ChoiceOption } from '@shared/models/format';
 import { PutInOrderSolution } from '@shared/models/put-in-order';
 

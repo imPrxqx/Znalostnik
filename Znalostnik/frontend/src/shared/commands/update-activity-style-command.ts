@@ -1,3 +1,4 @@
+import { Command } from '@shared/interfaces/command.interface';
 import { Activity, ActivityStyle } from '@shared/models/activity';
 
 export class UpdateActivityStyleCommand implements Command {

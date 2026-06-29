@@ -1,5 +1,5 @@
-import { CommandManager } from '@features/exercise-editor/services/command-manager';
 import { ExerciseDocumentManager } from '@features/exercise-editor/services/exercise-document-manager';
+import { Command } from '@shared/interfaces/command.interface';
 
 export class MoveCommand implements Command {
   private receiver: ExerciseDocumentManager;

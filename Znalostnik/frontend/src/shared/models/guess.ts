@@ -1,9 +1,28 @@
 import { signal } from '@angular/core';
 import { FieldContext } from '../interfaces/field-context';
 import { randomWord, Activity } from './activity';
-import { Text } from './format';
+import { Text, TextConfiguration } from './format';
 import { ActivityAnswer } from './activity-answer';
 import { Element, Visitor } from '../interfaces/visitor';
+
+export interface GuessConfiguration {
+  id: string;
+  order: number;
+  content: TextConfiguration;
+  solution: TextSolution;
+}
+
+export interface GuessAnswerConfiguration {
+  id: string;
+  created: string;
+  correctPercentage: number;
+  status: string | undefined;
+  version: number;
+  submit: {
+    selected: string;
+  };
+  activityId: string;
+}
 
 export class GuessActivity extends Activity implements Element {
   type = signal<string>('guess');
@@ -11,8 +30,8 @@ export class GuessActivity extends Activity implements Element {
   content = signal<Text>(new Text(undefined));
   solution = signal<TextSolution | undefined>(undefined);
 
-  constructor(config?: any) {
-    super(config);
+  constructor(config?: GuessConfiguration) {
+    super();
 
     if (config?.id) {
       this.id.set(config.id);
@@ -68,10 +87,10 @@ export class GuessAnswer extends ActivityAnswer {
     selected: string;
   } = { selected: '' };
 
-  correctPercentage: number = 0;
+  correctPercentage = 0;
 
   status: string | undefined = undefined;
-  constructor(config?: any) {
+  constructor(config?: GuessAnswerConfiguration) {
     super();
 
     if (config?.id) {

@@ -1,4 +1,5 @@
 import { CommandManager } from '@features/exercise-editor/services/command-manager';
+import { Command } from '@shared/interfaces/command.interface';
 
 export class UndoCommand implements Command {
   private receiver: CommandManager;

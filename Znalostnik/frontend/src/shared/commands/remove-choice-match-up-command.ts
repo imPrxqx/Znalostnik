@@ -1,3 +1,4 @@
+import { Command } from '@shared/interfaces/command.interface';
 import { MultiChoiceOption, ChoiceOption } from '@shared/models/format';
 import { MatchUpSolution, PairItem } from '@shared/models/match-up';
 

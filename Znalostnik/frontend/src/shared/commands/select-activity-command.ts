@@ -1,4 +1,5 @@
 import { ExerciseActivityEdit } from '@features/exercise-editor/services/exercise-activity-edit';
+import { Command } from '@shared/interfaces/command.interface';
 
 export class SelectActivityCommand implements Command {
   private receiver: ExerciseActivityEdit;

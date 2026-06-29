@@ -3,27 +3,39 @@ import { randomQuestion, randomWord } from './activity';
 import { signal } from '@angular/core';
 
 export class Media {
-  id: string = '';
-  contentType: string = '';
+  id = '';
+  contentType = '';
+}
+
+export interface ChoiceOptionConfiguration {
+  id: string;
+  text: string;
+  media: Media;
+  style: ChoiceStyle;
 }
 
 export class ChoiceStyle {
-  fontFamily: string = 'Arial';
-  fontSize: number = 32;
-  color: string = '#000000';
-  bold: boolean = false;
-  italic: boolean = false;
-  underline: boolean = false;
-  backgroundColor: string = `hsl(${Math.floor(Math.random() * 360)}, 70%, 85%)`;
+  fontFamily = 'Arial';
+  fontSize = 32;
+  color = '#000000';
+  bold = false;
+  italic = false;
+  underline = false;
+  backgroundColor = `hsl(${Math.floor(Math.random() * 360)}, 70%, 85%)`;
+}
+
+export interface TextConfiguration {
+  text: string;
+  style: TextStyle;
 }
 
 export class TextStyle {
-  fontFamily: string = 'Arial';
-  fontSize: number = 64;
-  color: string = '#000000';
-  bold: boolean = false;
-  italic: boolean = false;
-  underline: boolean = false;
+  fontFamily = 'Arial';
+  fontSize = 64;
+  color = '#000000';
+  bold = false;
+  italic = false;
+  underline = false;
 }
 
 export class MultiChoiceOption {
@@ -59,7 +71,7 @@ export class ChoiceOption {
   style = signal<ChoiceStyle>(new ChoiceStyle());
   media = signal<Media | undefined>(undefined);
 
-  constructor(data: any) {
+  constructor(data?: ChoiceOptionConfiguration) {
     if (data?.id) {
       this.id = data.id;
     }
@@ -131,8 +143,8 @@ export class ChoiceOption {
 export class Text {
   text = signal<string>(randomQuestion());
   style = signal<TextStyle>(new TextStyle());
-  constructor(data: any) {
-    if (data?.text !== undefined) {
+  constructor(data?: TextConfiguration) {
+    if (data?.text) {
       this.text.set(data.text);
     }
 

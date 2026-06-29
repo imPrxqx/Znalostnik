@@ -1,6 +1,6 @@
-export interface FieldContext<T = any> {
+export interface FieldContext<T = unknown> {
   key: string;
   value: T;
-  signal: any;
+  signal: T;
   capabilities: string[];
 }

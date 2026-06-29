@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, input, model } from '@angular/core';
+import { Component, input, model, OnInit } from '@angular/core';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { PutInOrderAnswer, PutInOrderActivity } from '@shared/models/put-in-order';
 import { Text } from '@shared/media/text/text';
@@ -11,7 +11,7 @@ import { Choice } from '@shared/media/choice/choice';
   templateUrl: './put-in-order.html',
   styleUrl: './put-in-order.scss',
 })
-export class PutInOrder {
+export class PutInOrder implements OnInit {
   mode = input.required<string>();
   model = input.required<PutInOrderActivity>();
   answer = model<PutInOrderAnswer>();

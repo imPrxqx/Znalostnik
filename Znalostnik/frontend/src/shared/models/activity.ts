@@ -3,10 +3,17 @@ import { FieldContext } from '../interfaces/field-context';
 import { Visitor, Element } from '../interfaces/visitor';
 import { v4 as uuidv4 } from 'uuid';
 
+export interface ActivityConfiguration {
+  id: string;
+  style: ActivityStyle;
+  order: number;
+  type: string;
+}
+
 export class ActivityStyle {
-  borderRadius: number = 8;
-  borderColor: string = `hsl(${Math.floor(Math.random() * 360)}, 70%, 30%)`;
-  backgroundColor: string = `hsl(${Math.floor(Math.random() * 360)}, 70%, 85%)`;
+  borderRadius = 8;
+  borderColor = `hsl(${Math.floor(Math.random() * 360)}, 70%, 30%)`;
+  backgroundColor = `hsl(${Math.floor(Math.random() * 360)}, 70%, 85%)`;
 }
 
 export abstract class Activity implements Element {
@@ -18,7 +25,7 @@ export abstract class Activity implements Element {
   abstract getFields(): FieldContext[];
   abstract ensureSolution(): void;
 
-  constructor(config: any) {
+  constructor(config?: ActivityConfiguration) {
     if (config?.id) {
       this.id.set(config.id);
     }
@@ -62,7 +69,7 @@ const data = {
     $localize`:@@cloudQuestion:Jak se tvoří mraky?`,
     $localize`:@@soundQuestion:Proč slyšíme zvuk?`,
     $localize`:@@heartQuestion:Jak funguje srdce?`,
-  ],
+  ] as string[],
 
   words: [
     $localize`:@@rain:déšť`,
@@ -80,10 +87,10 @@ const data = {
     $localize`:@@clouds:mraky`,
     $localize`:@@sound:zvuk`,
     $localize`:@@heart:srdce`,
-  ],
+  ] as string[],
 } as const;
 
-function random(arr: any) {
+function random(arr: string[]) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 

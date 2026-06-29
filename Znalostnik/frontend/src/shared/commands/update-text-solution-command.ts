@@ -1,3 +1,4 @@
+import { Command, MergeableCommand } from '@shared/interfaces/command.interface';
 import { TextSolution } from '@shared/models/guess';
 
 export class UpdateTextSolutionCommand implements Command, MergeableCommand {

@@ -1,4 +1,5 @@
 import { ExerciseDocumentManager } from '@features/exercise-editor/services/exercise-document-manager';
+import { Command } from '@shared/interfaces/command.interface';
 import { Activity } from '@shared/models/activity';
 
 export class RemoveActivityCommand implements Command {

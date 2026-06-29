@@ -1,6 +1,7 @@
 import { ExerciseDocumentManager } from '@features/exercise-editor/services/exercise-document-manager';
 import { ExerciseActivityEdit } from '@features/exercise-editor/services/exercise-activity-edit';
 import { Activity } from '@shared/models/activity';
+import { Command } from '@shared/interfaces/command.interface';
 
 export class CreateSelectActivityCommand implements Command {
   private receiver1: ExerciseDocumentManager;

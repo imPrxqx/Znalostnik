@@ -1,3 +1,4 @@
+import { Command } from '@shared/interfaces/command.interface';
 import { ChoiceOption, ChoiceStyle } from '@shared/models/format';
 
 export class UpdateChoiceStyleCommand implements Command {

@@ -20,11 +20,12 @@ import { SelfStudyHost } from '@features/session/modes/self-study/self-study-hos
 import { ClassicParticipant } from '@features/session/modes/classic/classic-participant/classic-participant';
 import { HotPotatoParticipant } from '@features/session/modes/hot-potato/hot-potato-participant/hot-potato-participant';
 import { SelfStudyParticipant } from '@features/session/modes/self-study/self-study-participant/self-study-participant';
+import { FieldContext } from '@shared/interfaces/field-context';
 
 export interface ActivityDefinition {
   key: string;
   activity: Type<Activity>;
-  component: Type<any>;
+  component: Type<unknown>;
   answer: Type<ActivityAnswer>;
   icon: string;
   name: string;
@@ -34,8 +35,8 @@ export interface ActivityDefinition {
 
 export interface GameModeDefinition {
   key: string;
-  hostComponent: Type<any>;
-  participantComponent: Type<any>;
+  hostComponent: Type<unknown>;
+  participantComponent: Type<unknown>;
   icon: string;
   name: string;
   shortDescription: string;
@@ -50,6 +51,11 @@ export interface SessionStatusDefinition {
 export interface RespondTypeDefinition {
   key: string;
   name: string;
+}
+
+export interface CommandUiDefinition {
+  component: Type<unknown>;
+  supports: (field: FieldContext) => boolean;
 }
 
 export class Registry {
@@ -157,12 +163,27 @@ export class Registry {
     },
   ];
 
-  static commands: Type<any>[] = [
-    UpdateTextCommandUi,
-    UpdateMultiChoiceCommandUi,
-    UpdateTextSolutionCommandUi,
-    UpdatePutInOrderCommandUi,
-    UpdateMatchUpCommandUi,
+  static readonly commands: CommandUiDefinition[] = [
+    {
+      component: UpdateTextCommandUi,
+      supports: (f) => f.capabilities.includes('edit-text'),
+    },
+    {
+      component: UpdateMultiChoiceCommandUi,
+      supports: (f) => f.capabilities.includes('edit-choices'),
+    },
+    {
+      component: UpdateTextSolutionCommandUi,
+      supports: (f) => f.capabilities.includes('edit-text-solution'),
+    },
+    {
+      component: UpdatePutInOrderCommandUi,
+      supports: (f) => f.capabilities.includes('edit-put-in-order'),
+    },
+    {
+      component: UpdateMatchUpCommandUi,
+      supports: (f) => f.capabilities.includes('edit-match-up-choices'),
+    },
   ];
 
   static getActivity(key: string): ActivityDefinition {
@@ -205,31 +226,31 @@ export class Registry {
     return respondType;
   }
 
-  static createActivity(key: string, config: any): Activity {
+  static createActivity(key: string, config: unknown): Activity {
     const activityClass = this.getActivity(key).activity;
     return new activityClass(config);
   }
 
-  static createAnswer(key: string, config: any): ActivityAnswer {
+  static createAnswer(key: string, config: unknown): ActivityAnswer {
     const activityAnswer = this.getActivity(key).answer;
     return new activityAnswer(config);
   }
 
-  static getActivityComponent(key: string): Type<any> {
+  static getActivityComponent(key: string): Type<unknown> {
     return this.getActivity(key).component;
   }
 
-  static getHostComponent(key: string): Type<any> {
+  static getHostComponent(key: string): Type<unknown> {
     const hostComponent = this.getGameMode(key).hostComponent;
     return hostComponent;
   }
 
-  static getParticipantComponent(key: string): Type<any> {
+  static getParticipantComponent(key: string): Type<unknown> {
     const participantComponent = this.getGameMode(key).participantComponent;
     return participantComponent;
   }
 
-  static getCommands(): readonly Type<any>[] {
+  static getCommands(): CommandUiDefinition[] {
     return this.commands;
   }
 }

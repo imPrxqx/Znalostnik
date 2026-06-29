@@ -6,21 +6,36 @@ import { QuizActivity } from './quiz';
 import { Activity } from './activity';
 import { Visitor } from '../interfaces/visitor';
 
+export interface ExportedActivity {
+  type: string;
+  order: number;
+  style: unknown;
+  content: unknown;
+  solution: unknown;
+}
+
+interface ExportedExercise {
+  title: string;
+  activities: Activity[];
+}
+
 export class ExportJsonVisitor implements Visitor {
-  private result: any = {};
+  private result: unknown = {};
 
   visitExercise(exercise: Exercise) {
-    this.result = {
+    const result: ExportedExercise = {
       title: exercise.title(),
       activities: [],
     };
 
-    exercise.activities().forEach((activity: Activity, index: number) => {
+    exercise.activities().forEach((activity: Activity) => {
       const activityVisitor = new ExportJsonVisitor();
       activity.accept(activityVisitor);
-      activityVisitor.result.order = activityVisitor.result.order ?? index;
-      this.result.activities.push(activityVisitor.result);
+      result.activities.push(activityVisitor.result as Activity);
     });
+
+    this.result = result;
+    console.log(this.result);
   }
 
   visitQuiz(quizActivity: QuizActivity): void {

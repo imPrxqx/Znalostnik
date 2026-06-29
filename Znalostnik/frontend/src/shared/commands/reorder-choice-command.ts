@@ -1,3 +1,4 @@
+import { Command } from '@shared/interfaces/command.interface';
 import { PutInOrderSolution } from '@shared/models/put-in-order';
 
 export class ReorderChoiceCommand implements Command {

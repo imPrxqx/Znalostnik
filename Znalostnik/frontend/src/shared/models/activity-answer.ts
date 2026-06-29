@@ -1,9 +1,20 @@
 export abstract class ActivityAnswer {
-  id: any;
-  activityId: string = '';
-  version: number = 0;
+  id = '';
+  activityId = '';
+  version = 0;
   abstract created: string;
-  abstract submit: any;
-  abstract correctPercentage?: any;
-  abstract status?: any;
+  abstract submit: unknown;
+  abstract correctPercentage: number;
+  abstract status?: unknown;
+}
+
+
+export abstract class RuntimeActivityAnswer {
+  id = '';
+  activityId = '';
+  version = 0;
+  abstract created: string;
+  abstract submit: unknown;
+  abstract correctPercentage: number;
+  abstract status?: unknown;
 }

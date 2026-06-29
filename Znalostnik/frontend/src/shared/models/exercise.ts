@@ -1,8 +1,17 @@
 import { signal, WritableSignal } from '@angular/core';
-import { Activity } from './activity';
+import { Activity, ActivityConfiguration } from './activity';
 import { Visitor, Element } from '../interfaces/visitor';
 import { v4 as uuidv4 } from 'uuid';
 import { Tag } from './tag';
+
+export interface ExerciseConfiguration {
+  id: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  tags: Tag[];
+  activities: ActivityConfiguration[];
+}
 
 export class Exercise implements Element {
   id = signal<string>(uuidv4());

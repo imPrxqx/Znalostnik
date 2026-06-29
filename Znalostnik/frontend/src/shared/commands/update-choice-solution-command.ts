@@ -1,11 +1,12 @@
-import { MultiChoiceSolution } from '@shared/models/quiz';
+import { Command } from '@shared/interfaces/command.interface';
+import { QuizSolution } from '@shared/models/quiz';
 
 export class UpdateChoiceSolutionCommand implements Command {
-  private receiver: MultiChoiceSolution;
+  private receiver: QuizSolution;
   private backup: string;
   private newText: string;
 
-  constructor(receiver: MultiChoiceSolution, optionId: string) {
+  constructor(receiver: QuizSolution, optionId: string) {
     this.receiver = receiver;
     this.backup = optionId;
     this.newText = optionId;

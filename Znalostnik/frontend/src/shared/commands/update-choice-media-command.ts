@@ -1,3 +1,4 @@
+import { Command } from '@shared/interfaces/command.interface';
 import { ChoiceOption, Media } from '@shared/models/format';
 
 export class UpdateChoiceMediaCommand implements Command {
