@@ -11,6 +11,7 @@ import { Registry } from '@shared/models/registry';
   styleUrl: './guide.scss',
 })
 export class Guide {
+  respondTypes = Registry.respondTypes;
   gameModes = Registry.gameModes;
   activities = Registry.activities;
 }

@@ -212,24 +212,13 @@
       </mat-card>
 
       <div class="feature-list">
+        @for (respondType of respondTypes; track respondType.key) {
         <mat-card class="feature-card">
-          <mat-icon>person</mat-icon>
-          <h4 i18n>Individuální</h4>
-          <p i18n>
-            Každý účastník pracuje samostatně a odpovídá na jednotlivé aktivity sám za sebe.
-            Odpovědi nejsou sdílené a každý je vyhodnocen zvlášť.
-          </p>
+          <mat-icon>{{ respondType.icon }}</mat-icon>
+          <h4>{{ respondType.name }}</h4>
+          <p>{{ respondType.longDescription }}</p>
         </mat-card>
-
-        <mat-card class="feature-card">
-          <mat-icon>groups</mat-icon>
-          <h4 i18n>Týmové</h4>
-          <p i18n>
-            Účastníci pracují ve skupinách, kde společně tvoří jednu společnou odpověď. Každý člen
-            týmu může přidávat nebo upravovat rozpracovanou odpověď a sdílet její stav. Finální
-            odpověď poté potvrzuje vybraný člen týmu.
-          </p>
-        </mat-card>
+        }
       </div>
     </mat-expansion-panel>
     <mat-expansion-panel>

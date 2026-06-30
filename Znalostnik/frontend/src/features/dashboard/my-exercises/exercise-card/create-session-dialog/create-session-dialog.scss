@@ -1,0 +1,82 @@
+.full-width {
+  width: 100%;
+}
+
+.step-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 24px;
+}
+
+.choice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  height: 84px;
+  border-radius: var(--mat-sys-corner-medium);
+  background: var(--mat-sys-surface-container);
+  border: 1px solid var(--mat-sys-outline-variant);
+  cursor: pointer;
+}
+
+.choice.selected {
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+  border-color: var(--mat-sys-primary);
+}
+
+.choice:hover {
+  background: var(--mat-sys-surface-container-high);
+}
+
+.choice.selected {
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+  border-color: var(--mat-sys-primary);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 90%;
+}
+
+p {
+  margin: 0;
+  text-align: left;
+  white-space: normal;
+}
+
+.hint {
+  margin: 0 0 12px;
+  font: var(--mat-sys-body-small);
+}
+
+.name {
+  font: var(--mat-sys-title-medium);
+}
+
+.description {
+  font: var(--mat-sys-body-small);
+  opacity: 0.7;
+}
+
+.mat-mdc-dialog-title {
+  background-color: var(--mat-sys-primary-container);
+}
+
+mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  color: var(--mat-sys-primary);
+}

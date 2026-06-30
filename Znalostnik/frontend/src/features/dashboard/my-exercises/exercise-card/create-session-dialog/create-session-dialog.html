@@ -1,0 +1,130 @@
+<h2 mat-dialog-title i18n>Nová relace</h2>
+
+<mat-dialog-content>
+  <mat-stepper linear #stepper>
+    <mat-step [stepControl]="form.controls.title">
+      <p class="hint" i18n>Zadejte název relace</p>
+
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label i18n>Název relace</mat-label>
+        <mat-icon matSuffix>edit</mat-icon>
+        <input matInput [formControl]="form.controls.title" />
+      </mat-form-field>
+
+      <div class="step-actions">
+        <button mat-button matStepperNext [disabled]="!form.controls.respondType.value" i18n>
+          Pokračovat
+        </button>
+      </div>
+    </mat-step>
+
+    <mat-step [stepControl]="form.controls.respondType">
+      <p class="hint" i18n>Vyberte způsob odpovídání</p>
+
+      <div class="choice-list">
+        @for (type of respondTypes; track type.key) {
+
+        <button
+          class="choice"
+          [class.selected]="form.controls.respondType.value === type.key"
+          (click)="form.controls.respondType.setValue(type.key)"
+        >
+          <mat-icon>{{ type.icon }}</mat-icon>
+
+          <div class="content">
+            <p class="name">{{ type.name }}</p>
+            <p class="description">{{ type.shortDescription }}</p>
+          </div>
+        </button>
+
+        }
+      </div>
+
+      <div class="step-actions">
+        <button mat-button matStepperPrevious i18n>Zpět</button>
+        <button mat-button matStepperNext i18n>Pokračovat</button>
+      </div>
+    </mat-step>
+
+    <mat-step [stepControl]="form.controls.gameMode">
+      <p class="hint" i18n>Vyberte režim relace</p>
+
+      <div class="choice-list">
+        @for (mode of gameModes; track mode.key) {
+
+        <button
+          class="choice"
+          [class.selected]="form.controls.gameMode.value === mode.key"
+          (click)="form.controls.gameMode.setValue(mode.key)"
+        >
+          <mat-icon>{{ mode.icon }}</mat-icon>
+
+          <div class="content">
+            <p class="name">{{ mode.name }}</p>
+            <p class="description">{{ mode.shortDescription }}</p>
+          </div>
+        </button>
+
+        }
+      </div>
+
+      <div class="step-actions">
+        <button mat-button matStepperPrevious i18n>Zpět</button>
+        <button mat-button matStepperNext i18n>Pokračovat</button>
+      </div>
+    </mat-step>
+
+    <mat-step [stepControl]="form.controls.gameSetting">
+      <p class="hint" i18n>Nastavení parametrů režimu</p>
+
+      @for (setting of visibleSettings(); track setting.key) {
+
+      <h3>{{ setting.name }}</h3>
+      <p class="hint">{{ setting.shortDescription }}</p>
+
+      @if (setting.type === 'number') {
+
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>{{ setting.name }}</mat-label>
+        <mat-icon matSuffix>tune</mat-icon>
+        <input matInput type="number" [formControl]="getGameControl(setting.key)" />
+      </mat-form-field>
+
+      } @if (setting.type === 'select') {
+
+      <div class="choice-list">
+        @for (option of setting.options; track option.key) {
+
+        <button
+          class="choice"
+          [class.selected]="getGameControl(setting.key).value === option.key"
+          (click)="getGameControl(setting.key).setValue(option.key)"
+        >
+          @if (option.icon) {
+          <mat-icon>{{ option.icon }}</mat-icon>
+          }
+
+          <div class="content">
+            <p class="name">{{ option.name }}</p>
+            <p class="description">{{ option.shortDescription }}</p>
+          </div>
+        </button>
+
+        }
+      </div>
+
+      } }
+
+      <div class="step-actions">
+        <button mat-button matStepperPrevious i18n>Zpět</button>
+        <button mat-flat-button (click)="submit()" [disabled]="form.invalid" i18n>
+          Vytvořit relaci
+        </button>
+      </div>
+    </mat-step>
+  </mat-stepper>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()" i18n>Zrušit</button>
+</mat-dialog-actions>
