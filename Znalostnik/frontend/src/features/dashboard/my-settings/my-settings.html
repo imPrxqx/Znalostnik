@@ -1,0 +1,118 @@
+<form [formGroup]="newPreferenceForm" (ngSubmit)="updatePreferences()">
+  <mat-card>
+    <div>
+      <mat-icon>settings</mat-icon>
+      <div>
+        <h2 i18n>Předvolby</h2>
+        <p i18n>Přizpůsobte si jazyk aplikace a vzhled podle svých preferencí.</p>
+      </div>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label i18n>Jazyk</mat-label>
+      <mat-select formControlName="language">
+        <mat-option value="en" i18n>Angličtina</mat-option>
+        <mat-option value="cs" i18n>Čeština</mat-option>
+      </mat-select>
+      <mat-icon matSuffix>language</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label i18n>Motiv</mat-label>
+      <mat-select formControlName="theme">
+        <mat-option value="light" i18n>Světlý</mat-option>
+        <mat-option value="dark" i18n>Tmavý</mat-option>
+      </mat-select>
+      <mat-icon matSuffix>palette</mat-icon>
+    </mat-form-field>
+
+    <div class="actions">
+      <button mat-flat-button type="submit" i18n>
+        <mat-icon>save</mat-icon>
+        Uložit předvolby
+      </button>
+    </div>
+  </mat-card>
+</form>
+
+@if(auth.user()) {
+
+<form [formGroup]="newPasswordForm" (ngSubmit)="updatePassword()">
+  <mat-card>
+    <div>
+      <mat-icon>lock</mat-icon>
+      <div>
+        <h2 i18n>Změna hesla</h2>
+        <p i18n>Pro zvýšení bezpečnosti doporučujeme heslo pravidelně měnit.</p>
+      </div>
+    </div>
+
+    <input type="email" autocomplete="username" hidden />
+
+    <mat-form-field appearance="outline">
+      <mat-label i18n>Současné heslo</mat-label>
+      <input
+        matInput
+        type="password"
+        formControlName="currentPassword"
+        autocomplete="current-password"
+      />
+      <mat-icon matSuffix>key</mat-icon>
+
+      @if (newPasswordForm.get('currentPassword')?.hasError('currentPasswordInvalid')) {
+      <mat-error i18n>Současné heslo je neplatné</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label i18n>Nové heslo</mat-label>
+      <input matInput type="password" formControlName="newPassword" autocomplete="new-password" />
+      <mat-icon matSuffix>lock_reset</mat-icon>
+
+      @if (newPasswordForm.get('newPassword')?.hasError('pattern')) {
+      <mat-error i18n> Heslo musí obsahovat velké písmeno, číslo a speciální znak </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label i18n>Potvrzení nového hesla</mat-label>
+      <input
+        matInput
+        type="password"
+        formControlName="confirmNewPassword"
+        autocomplete="new-password"
+      />
+      <mat-icon matSuffix>verified_user</mat-icon>
+
+      @if (newPasswordForm.get('confirmNewPassword')?.hasError('passwordMismatch')) {
+      <mat-error i18n>Hesla se neshodují</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="actions">
+      <button mat-flat-button type="submit" i18n>
+        <mat-icon>lock_reset</mat-icon>
+        Změnit heslo
+      </button>
+    </div>
+  </mat-card>
+</form>
+
+}
+
+<mat-card class="danger">
+  <div>
+    <mat-icon class="warning">warning</mat-icon>
+    <div>
+      <h2 class="warning" i18n>Smazání @if(!auth.user()) { dočasného } účtu</h2>
+      <p i18n>Tato akce je nevratná. Všechna vaše data budou trvale odstraněna.</p>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button mat-flat-button (click)="deleteAccount()" i18n>
+      <mat-icon>delete_forever</mat-icon>
+      Smazat @if(!auth.user()) { dočasný }účet
+    </button>
+  </div>
+</mat-card>

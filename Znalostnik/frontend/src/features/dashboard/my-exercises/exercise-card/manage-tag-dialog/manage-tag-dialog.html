@@ -54,7 +54,7 @@
   <mat-divider></mat-divider>
 
   <div>
-    <h3>Vytvořit nový tag</h3>
+    <h3 i18n>Vytvořit nový tag</h3>
 
     <mat-form-field class="full-width" appearance="outline">
       <mat-label i18n>Název tagu</mat-label>
@@ -62,7 +62,7 @@
       <mat-icon matSuffix>tag</mat-icon>
     </mat-form-field>
     <br />
-    <button mat-flat-button (click)="createTag()" [disabled]="!newTagName">
+    <button mat-flat-button (click)="createTag()" [disabled]="!newTagName" i18n>
       <mat-icon>add</mat-icon>
       Vytvořit
     </button>

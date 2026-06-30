@@ -40,6 +40,13 @@
 
 p {
   margin: 0;
+  text-align: left;
+  white-space: normal;
+}
+
+.hint {
+  margin: 0 0 12px;
+  font: var(--mat-sys-body-small);
 }
 
 .name {
@@ -47,7 +54,8 @@ p {
 }
 
 .description {
-  font: var(--mat-sys-body-smallest);
+  font: var(--mat-sys-body-small);
+  opacity: 0.7;
 }
 
 .mat-mdc-dialog-title {
