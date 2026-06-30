@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
+import { GameSetting } from '@shared/models/dtos';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,7 @@ export class SessionsApi {
     title: string,
     respondType: string,
     gameMode: string,
-    gameSetting: any,
+    gameSetting: GameSetting,
   ) {
     return this.http.post(`${environment.apiURL}/sessions`, {
       exerciseId: exerciseId,

@@ -30,7 +30,7 @@ export class ExercisesApi {
     return this.http.delete(`${environment.apiURL}/exercises/${exerciseId}`);
   }
 
-  saveExercise(exerciseId: string, json: any) {
+  saveExercise(exerciseId: string, json: unknown) {
     return this.http.put(`${environment.apiURL}/exercises/${exerciseId}`, json, {
       headers: { 'Content-Type': 'application/json' },
     });

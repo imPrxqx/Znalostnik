@@ -19,6 +19,10 @@ import { MatChipsModule } from '@angular/material/chips';
 import { TagsApi } from '@features/dashboard/services/tags-api';
 import { Tag } from '@shared/models/tag';
 
+export interface ManageTagDataDialog {
+  exerciseId: string;
+}
+
 @Component({
   selector: 'app-manage-tag-dialog',
   imports: [
@@ -41,7 +45,8 @@ import { Tag } from '@shared/models/tag';
 })
 export class ManageTagDialog {
   private dialogRef = inject(MatDialogRef<ManageTagDialog>);
-  private exerciseId = inject<string>(MAT_DIALOG_DATA);
+  private data = inject<ManageTagDataDialog>(MAT_DIALOG_DATA);
+  exerciseId = this.data.exerciseId;
   tagsApi = inject(TagsApi);
   tags = signal<Tag[]>([]);
   exerciseTags = signal<Tag[]>([]);

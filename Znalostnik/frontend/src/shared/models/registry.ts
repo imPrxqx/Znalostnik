@@ -151,7 +151,7 @@ export class Registry {
       key: 'selfStudy',
       hostComponent: SelfStudyHost,
       participantComponent: SelfStudyParticipant,
-      availableGameSettingsKeys: ['roundTime', 'selectionAlgorithm'],
+      availableGameSettingsKeys: ['selectionAlgorithm'],
       icon: 'self_improvement',
       name: $localize`:@@gamemode.selfStudy.name:Samostudium`,
       shortDescription: $localize`:@@gamemode.selfStudy.short:Učení vlastním tempem s výběrem otázek podle vybraného algoritmu`,

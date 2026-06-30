@@ -1,24 +1,59 @@
 <mat-card>
   <mat-card-header>
-    <mat-card-title>{{ exercise().title }}</mat-card-title>
+    <mat-card-title> {{ exercise().title() }} </mat-card-title>
 
-    <button mat-mini-fab (click)="createSession()">
-      <mat-icon>bolt</mat-icon>
-    </button>
+    <div class="tags">
+      <mat-chip-set class="chip-set">
+        @for (tag of exerciseTags(); track tag.id) {
+        <mat-chip-row> {{ tag.name }} </mat-chip-row>
+        }
+      </mat-chip-set>
+
+      <button mat-icon-button (click)="openTagsDialog()">
+        <mat-icon>sell</mat-icon>
+      </button>
+    </div>
   </mat-card-header>
 
+  <mat-divider></mat-divider>
+
   <mat-card-content>
-    <app-slide [task]="task()"></app-slide>
+    @if(activity() !== undefined) {
+    <app-slide [activity]="activity()!" (click)="openEditor()"></app-slide>
+    } @else {
+    <div class="empty-state">
+      <mat-icon class="empty-icon">inbox</mat-icon>
+
+      <p class="empty-title" i18n>Žádná aktivita</p>
+
+      <p class="empty-subtitle" i18n>Toto cvičení zatím neobsahuje žádné aktivity.</p>
+
+      <button mat-raised-button (click)="openEditor()" i18n>
+        <mat-icon>add</mat-icon>
+        Přidat aktivitu
+      </button>
+    </div>
+    }
   </mat-card-content>
 
-  <mat-card-actions>
-    <button mat-mini-fab (click)="openEditor()">
-      <mat-icon>edit</mat-icon>
-    </button>
-    <p i18n>Aktualizováno: {{ exercise().updatedAt | date:'short' }}</p>
+  <mat-divider></mat-divider>
 
-    <button mat-mini-fab (click)="deleteExercise()">
-      <mat-icon>delete</mat-icon>
+  <mat-card-actions>
+    <div>
+      <button mat-icon-button (click)="openEditor()">
+        <mat-icon>edit</mat-icon>
+      </button>
+
+      <button mat-icon-button (click)="deleteExercise()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    @if(activity() !== undefined) {
+
+    <button mat-flat-button (click)="openCreateSessionDialog()" i18n>
+      <mat-icon>bolt</mat-icon>
+      Spustit relaci
     </button>
+    }
   </mat-card-actions>
 </mat-card>

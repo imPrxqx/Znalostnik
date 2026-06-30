@@ -3,11 +3,8 @@ import { ExerciseDocumentManager } from '@features/exercise-editor/services/exer
 import { ExercisesApi } from './exercises-api';
 import { Router } from '@angular/router';
 import { ExerciseFactory } from '@shared/models/exercise-factory';
-import { Activity } from '@shared/models/activity';
-import { ActivityFactory } from '@shared/models/activity-factory';
-import { Tag } from '@shared/models/tag';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Exercise } from '@shared/models/exercise';
+import { Exercise, ExerciseConfiguration } from '@shared/models/exercise';
 
 @Injectable({
   providedIn: 'root',
@@ -21,18 +18,21 @@ export class ExercisesManager {
 
   loadMyExercises() {
     this.api.loadMyExercises().subscribe({
-      next: (json: any) => {
-        const exercises = json.map((ex: any) => ExerciseFactory.createFromJson(ex));
+      next: (json) => {
+        const exercises = (json as ExerciseConfiguration[]).map((ex: ExerciseConfiguration) =>
+          ExerciseFactory.createFromJson(ex),
+        );
         this.exercises.set([]);
         this.exercises.set(exercises);
       },
       error: (error) => {
+        console.log(error);
         this.exercises.set([]);
       },
     });
   }
 
-  createExercise(title: string = 'Untitled Exercise') {
+  createExercise(title = 'Untitled Exercise') {
     this.api.createExercise(title).subscribe({
       next: () => {
         this.loadMyExercises();
@@ -51,7 +51,7 @@ export class ExercisesManager {
   editExercise(exerciseId: string) {
     this.api.loadExercise(exerciseId).subscribe({
       next: (json) => {
-        const exercise = ExerciseFactory.createFromJson(json);
+        const exercise = ExerciseFactory.createFromJson(json as ExerciseConfiguration);
         exercise.id.set(exerciseId);
         this.document.loadDocument(exercise);
       },
@@ -81,7 +81,7 @@ export class ExercisesManager {
     });
   }
 
-  saveExercise(exerciseId: string, json: any) {
+  saveExercise(exerciseId: string, json: unknown) {
     this.api.saveExercise(exerciseId, json).subscribe({
       next: () => {
         this.snackBar.open(
