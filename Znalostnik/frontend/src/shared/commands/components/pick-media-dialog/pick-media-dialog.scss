@@ -1,0 +1,65 @@
+.mat-mdc-dialog-title {
+  background-color: var(--mat-sys-primary-container);
+}
+
+mat-dialog-content {
+  min-height: 450px;
+}
+
+.tab-header {
+  margin: 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.media-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.media {
+  position: relative;
+  box-sizing: border-box;
+  padding: 8px;
+}
+
+.media-preview {
+  aspect-ratio: 1 / 1;
+  background: #000000;
+  border-radius: var(--mat-sys-corner-large);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.media-preview.selected {
+  outline: 4px solid var(--mat-sys-primary);
+}
+
+img,
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.media-delete {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  display: flex;
+  background-color: var(--mat-sys-primary-container);
+  border-radius: var(--mat-sys-corner-medium);
+  padding: 2px;
+  opacity: 0;
+  transition: 0.2s;
+  justify-content: center;
+  align-items: center;
+}
+
+.media:hover .media-delete {
+  opacity: 1;
+}

@@ -1,0 +1,98 @@
+<h2 mat-dialog-title i18n>Výběr média</h2>
+
+<mat-dialog-content>
+  <mat-tab-group>
+    <mat-tab label="Obrázky">
+      <div class="tab-header">
+        <input
+          type="file"
+          hidden
+          #imgInput
+          accept="image/*"
+          (change)="onFileSelected($event, 'image')"
+        />
+
+        <button mat-flat-button (click)="imgInput.click()" i18n>
+          <mat-icon>upload</mat-icon>
+          Nahrát obrázek
+        </button>
+      </div>
+
+      <div class="media-list">
+        @for (media of images(); track media.id) {
+
+        <div class="media">
+          <button
+            class="media-preview"
+            [class.selected]="selectedMedia()?.id === media.id"
+            (click)="selectedMedia.set(media)"
+            type="button"
+          >
+            <img [src]="getMediaUrl(media.id)" alt="Media preview" />
+          </button>
+
+          <button
+            mat-icon-button
+            class="media-delete"
+            (click)="deleteMedia(media.id); $event.stopPropagation()"
+            type="button"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+
+        }
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Videa">
+      <div class="tab-header">
+        <input
+          type="file"
+          hidden
+          #vidInput
+          accept="video/*"
+          (change)="onFileSelected($event, 'video')"
+        />
+
+        <button mat-flat-button (click)="vidInput.click()">
+          <mat-icon>upload</mat-icon>
+          Nahrát video
+        </button>
+      </div>
+
+      <div class="media-list">
+        @for (media of videos(); track media.id) {
+        <div class="media">
+          <button
+            class="media-preview"
+            [class.selected]="selectedMedia()?.id === media.id"
+            (click)="selectedMedia.set(media)"
+            type="button"
+          >
+            <video muted [src]="getMediaUrl(media.id)"></video>
+          </button>
+
+          <button
+            mat-icon-button
+            class="media-delete"
+            (click)="deleteMedia(media.id); $event.stopPropagation()"
+            type="button"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+
+        }
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()" i18n>Zrušit</button>
+
+  <button mat-flat-button [disabled]="!selectedMedia()" [mat-dialog-close]="selectedMedia()" i18n>
+    Vybrat
+  </button>
+</mat-dialog-actions>
