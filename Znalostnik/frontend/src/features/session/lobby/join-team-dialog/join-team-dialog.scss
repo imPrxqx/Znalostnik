@@ -1,0 +1,77 @@
+mat-dialog-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-mdc-dialog-title {
+  background-color: var(--mat-sys-primary-container);
+}
+
+.choice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  height: 64px;
+  border-radius: var(--mat-sys-corner-medium);
+  background: var(--mat-sys-surface-container);
+  border: 1px solid var(--mat-sys-outline-variant);
+  cursor: pointer;
+}
+
+.choice.selected {
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+  border-color: var(--mat-sys-primary);
+}
+
+.choice:hover {
+  background: var(--mat-sys-surface-container-high);
+}
+
+.choice.selected {
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+  border-color: var(--mat-sys-primary);
+}
+
+.team {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border-radius: var(--mat-sys-corner-large);
+  background: var(--mat-sys-surface-container);
+  border: 1px dashed var(--mat-sys-outline-variant);
+  justify-content: center;
+  flex: 1;
+}
+
+.group-icon {
+  color: var(--mat-sys-primary);
+}
+
+.empty-icon {
+  color: var(--mat-sys-primary);
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+}

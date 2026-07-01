@@ -1,0 +1,46 @@
+<h2 mat-dialog-title i18n>Připojit se k týmu</h2>
+
+<mat-dialog-content class="step-content">
+  <br />
+  @if (data.teams.length > 0) {
+  <p i18n>Vyberte tým, ke kterému se chceš připojit</p>
+  } @if (data.teams.length > 0) { @for (team of data.teams; track team.id) {
+  <div class="choice-list">
+    <button
+      class="choice"
+      [class.selected]="selectedTeamId() === team.id"
+      (click)="selectedTeamId.set(team.id)"
+    >
+      <div class="team">
+        <mat-icon class="group-icon">groups</mat-icon>
+        <p>{{ team.name }}</p>
+      </div>
+
+      <div class="content">
+        <p i18n>Počet členů: {{ team.teamMembers.length }}</p>
+      </div>
+    </button>
+  </div>
+
+  } } @else {
+
+  <div class="empty-state">
+    <mat-icon class="empty-icon">sentiment_dissatisfied</mat-icon>
+    <p i18n>Žádné týmy nejsou k dispozici</p>
+    <p i18n>Zatím nebyl vytvořen žádný tým. Můžeš dialog zavřít a zkusit to později.</p>
+    <button mat-flat-button (click)="onNoClick()" i18n>
+      <mat-icon>close</mat-icon>
+      Zavřít
+    </button>
+  </div>
+
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()" i18n>Zrušit</button>
+
+  <button mat-flat-button [mat-dialog-close]="selectedTeamId()" [disabled]="!selectedTeamId()" i18n>
+    Připojit se k týmu
+  </button>
+</mat-dialog-actions>

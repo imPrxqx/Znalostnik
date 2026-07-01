@@ -8,6 +8,7 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
@@ -20,6 +21,7 @@ import { MatInputModule } from '@angular/material/input';
     MatDialogContent,
     MatDialogActions,
     MatDialogClose,
+    MatIconModule,
   ],
   templateUrl: './create-team-dialog.html',
   styleUrl: './create-team-dialog.scss',

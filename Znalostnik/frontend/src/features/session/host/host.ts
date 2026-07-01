@@ -34,7 +34,7 @@ export class Host implements OnInit {
     const sessionId = this.route.snapshot.paramMap.get('id');
 
     if (!sessionId) {
-      this.router.navigate([`/session/join`]);
+      this.router.navigate([`/home`]);
       return;
     }
 
