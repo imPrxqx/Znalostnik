@@ -1,18 +1,22 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, AfterViewInit } from '@angular/core';
 import { SessionCard } from './session-card/session-card';
 import { SessionsManager } from '../services/sessions-manager';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-my-sessions',
-  imports: [SessionCard],
+  imports: [SessionCard, MatToolbarModule, MatIconModule, MatButtonModule, RouterLink],
   templateUrl: './my-sessions.html',
   styleUrl: './my-sessions.scss',
 })
-export class MySessions {
+export class MySessions implements AfterViewInit {
   manager = inject(SessionsManager);
-  sessions = computed(() => this.manager.sessions());
+  activeSessions = computed(() => this.manager.activeSessions());
 
   ngAfterViewInit() {
-    this.manager.loadMySessions();
+    this.manager.loadMyActiveSessions();
   }
 }

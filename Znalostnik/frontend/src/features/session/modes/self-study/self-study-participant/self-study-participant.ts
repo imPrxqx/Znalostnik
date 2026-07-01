@@ -50,7 +50,7 @@ export class SelfStudyParticipant {
       if (this.lastFeedbackId() === fingerprint) {
         return;
       }
-      
+
       this.lastFeedbackId.set(fingerprint);
 
       const activity = ActivityFactory.createFromJson(feedback.activity);

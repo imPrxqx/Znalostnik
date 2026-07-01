@@ -1,9 +1,23 @@
-<div>
-  <h1 i18n>Moje Relace</h1>
-
-  <div class="card-container">
-    @for(session of sessions(); track session.id) {
-    <app-session-card [session]="session"></app-session-card>
-    }
+<mat-toolbar-row>
+  <div class="left">
+    <h1 i18n>Aktivní Relace</h1>
   </div>
+</mat-toolbar-row>
+
+@if (activeSessions().length !== 0) {
+
+<div class="session-list">
+  @for(session of activeSessions(); track session.id) {
+  <app-session-card [session]="session"></app-session-card>
+  }
 </div>
+
+} @else {
+
+<div class="empty-state">
+  <mat-icon>fitness_center</mat-icon>
+  <h2 i18n>Žádné aktivní relace</h2>
+  <p i18n>Zatím nemáte spuštěné žádné relace.</p>
+  <button mat-flat-button [routerLink]="['/my-exercises']">Vytvořte relaci</button>
+</div>
+}
