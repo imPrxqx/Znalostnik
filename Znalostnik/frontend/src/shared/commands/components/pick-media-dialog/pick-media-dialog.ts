@@ -46,11 +46,6 @@ export class PickMediaDialog implements OnInit {
   loadMedia() {
     this.api.getUserMedia().subscribe((result) => {
       this.media.set(result as Media[]);
-      this.snackBar.open(
-        $localize`:@@media.created:Média bylo vytvořeno`,
-        $localize`:@@close:Zavřít`,
-        { duration: 3000 },
-      );
     });
   }
 
@@ -67,6 +62,11 @@ export class PickMediaDialog implements OnInit {
     formData.append('type', type);
     this.api.uploadMedia(formData).subscribe({
       next: () => {
+        this.snackBar.open(
+          $localize`:@@media.created:Média bylo vytvořeno`,
+          $localize`:@@close:Zavřít`,
+          { duration: 3000 },
+        );
         this.loadMedia();
         input.value = '';
       },

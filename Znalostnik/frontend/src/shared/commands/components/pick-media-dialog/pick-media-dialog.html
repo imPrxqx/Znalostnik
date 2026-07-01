@@ -2,7 +2,8 @@
 
 <mat-dialog-content>
   <mat-tab-group>
-    <mat-tab label="Obrázky">
+    <mat-tab>
+      <ng-template mat-tab-label i18n> Obrázky </ng-template>
       <div class="tab-header">
         <input
           type="file"
@@ -45,7 +46,8 @@
       </div>
     </mat-tab>
 
-    <mat-tab label="Videa">
+    <mat-tab>
+      <ng-template mat-tab-label i18n> Videa </ng-template>
       <div class="tab-header">
         <input
           type="file"

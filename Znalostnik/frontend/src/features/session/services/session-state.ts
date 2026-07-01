@@ -58,6 +58,7 @@ export class SessionState {
 
           this.session.set(session as Session);
 
+          console.log('session loaded: ', session);
           if (this.session()?.gameState.activity) {
             const exerciseActivity = ActivityFactory.createFromJson(
               this.session()?.gameState.activity,

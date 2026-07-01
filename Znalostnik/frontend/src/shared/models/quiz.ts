@@ -8,13 +8,14 @@ import {
   TextConfiguration,
   TextStyle,
 } from './format';
-import { Activity } from './activity';
+import { Activity, ActivityStyle } from './activity';
 import { ActivityAnswer } from './activity-answer';
 import { Element, Visitor } from '../interfaces/visitor';
 
 export interface QuizConfiguration {
   id: string;
   order: number;
+  style: ActivityStyle;
   content: {
     text: string;
     style: TextStyle;
@@ -53,6 +54,24 @@ export class QuizActivity extends Activity implements Element {
 
     if (config?.order) {
       this.order.set(config.order);
+    }
+
+    if (config?.style) {
+      const style = new ActivityStyle();
+
+      if (config?.style?.borderRadius) {
+        style.borderRadius = config?.style.borderRadius;
+      }
+
+      if (config?.style?.borderColor) {
+        style.borderColor = config?.style.borderColor;
+      }
+
+      if (config?.style?.backgroundColor) {
+        style.backgroundColor = config?.style.backgroundColor;
+      }
+
+      this.style.set(style);
     }
 
     if (config?.content) {

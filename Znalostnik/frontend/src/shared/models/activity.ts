@@ -25,30 +25,6 @@ export abstract class Activity implements Element {
   abstract getFields(): FieldContext[];
   abstract ensureSolution(): void;
 
-  constructor(config?: ActivityConfiguration) {
-    if (config?.id) {
-      this.id.set(config.id);
-    }
-
-    if (config?.style) {
-      const style = new ActivityStyle();
-
-      if (config?.style?.borderRadius) {
-        style.borderRadius = config?.style.borderRadius;
-      }
-
-      if (config?.style?.borderColor) {
-        style.borderColor = config?.style.borderColor;
-      }
-
-      if (config?.style?.backgroundColor) {
-        style.backgroundColor = config?.style.backgroundColor;
-      }
-
-      this.style.set(style);
-    }
-  }
-
   setStyle(newStyle: ActivityStyle) {
     this.style.set(newStyle);
   }

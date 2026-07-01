@@ -8,7 +8,6 @@ export abstract class ActivityAnswer {
   abstract status?: unknown;
 }
 
-
 export abstract class RuntimeActivityAnswer {
   id = '';
   activityId = '';

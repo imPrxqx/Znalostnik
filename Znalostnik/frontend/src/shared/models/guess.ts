@@ -1,6 +1,6 @@
 import { signal } from '@angular/core';
 import { FieldContext } from '../interfaces/field-context';
-import { randomWord, Activity } from './activity';
+import { randomWord, Activity, ActivityStyle } from './activity';
 import { Text, TextConfiguration } from './format';
 import { ActivityAnswer } from './activity-answer';
 import { Element, Visitor } from '../interfaces/visitor';
@@ -8,6 +8,7 @@ import { Element, Visitor } from '../interfaces/visitor';
 export interface GuessConfiguration {
   id: string;
   order: number;
+  style: ActivityStyle;
   content: TextConfiguration;
   solution: TextSolution;
 }
@@ -39,6 +40,24 @@ export class GuessActivity extends Activity implements Element {
 
     if (config?.order) {
       this.order.set(config.order);
+    }
+
+    if (config?.style) {
+      const style = new ActivityStyle();
+
+      if (config?.style?.borderRadius) {
+        style.borderRadius = config?.style.borderRadius;
+      }
+
+      if (config?.style?.borderColor) {
+        style.borderColor = config?.style.borderColor;
+      }
+
+      if (config?.style?.backgroundColor) {
+        style.backgroundColor = config?.style.backgroundColor;
+      }
+
+      this.style.set(style);
     }
 
     if (config?.content) {
