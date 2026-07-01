@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="header">
+    <div class="header-left">
+      <mat-icon>person</mat-icon>
+      <p>{{ sessionUser()?.userName }}</p>
+    </div>
+
+    @if(timer() !== undefined) {
+    <div class="header-timer">
+      <app-timer [targetTime]="timer()!"></app-timer>
+    </div>
+    }
+
+    <div class="header-right">
+      <p>{{ score()?.score ?? 0 }}</p>
+      <mat-icon>emoji_events</mat-icon>
+    </div>
+  </div>
+
+  @if (status() === 'get_ready') {
+  <div class="center">
+    <mat-icon class="status-icon pulse">sports_esports</mat-icon>
+    <h1 i18n>Připrav se</h1>
+    <p i18n>Další aktivita začne za chvíli</p>
+  </div>
+  } @if (status() === 'waiting') {
+  <div class="center">
+    <mat-icon class="status-icon pulse">hourglass_empty</mat-icon>
+    <h1 i18n>Čekání</h1>
+    <p i18n>Ostatní ještě odpovídají na aktivitu</p>
+  </div>
+  } @if (status() === 'answering') {
+
+  <div class="activity">
+    <app-exercise-activity [(answer)]="answer" [activity]="activity()!" [mode]="'answering'">
+    </app-exercise-activity>
+  </div>
+
+  <div class="action-bar">
+    <button mat-flat-button (click)="confirmAnswer()">
+      <mat-icon>check</mat-icon>
+      <p i18n>Potvrdit</p>
+    </button>
+
+    <button mat-stroked-button (click)="submitAnswer()">
+      <mat-icon>send</mat-icon>
+      <p i18n>Odeslat</p>
+    </button>
+  </div>
+  } @if (status() === 'results') {
+  <div class="activity">
+    <app-exercise-activity [(answer)]="answer" [activity]="activity()!" [mode]="'feedback'">
+    </app-exercise-activity>
+  </div>
+  }
+</div>

@@ -1,0 +1,81 @@
+<div class="container">
+  <div class="header">
+    <div class="header-left">
+      <p i18n>Aktivita</p>
+      <small> {{ activityIndex() }} / {{ totalActivities() }}</small>
+    </div>
+    @if (timer() !== undefined) {
+    <div class="header-timer">
+      <app-timer [targetTime]="timer()!"></app-timer>
+    </div>
+    } @if (status() === 'answering') {
+    <div class="header-right">
+      <p i18n>Odpovědělo</p>
+      <small>{{ totalAnsweredParticipants() }} / {{ totalParticipants() }}</small>
+    </div>
+    }
+  </div>
+
+  @if (status() === 'get_ready') {
+
+  <div class="center">
+    <mat-icon class="status-icon pulse">hourglass_empty</mat-icon>
+    <h1 i18n>Připravte se</h1>
+    <p i18n>Další aktivita začne za okamžik</p>
+  </div>
+
+  } @if (status() === 'answering') {
+
+  <div class="activity">
+    <app-exercise-activity [activity]="activity()!" [mode]="'view'"> </app-exercise-activity>
+  </div>
+
+  <div class="action-bar">
+    <button mat-flat-button (click)="endRound()" i18n>
+      <mat-icon>skip_next</mat-icon>
+      Ukončit kolo
+    </button>
+  </div>
+
+  } @if (status() === 'results') {
+
+  <div class="leaderboard-header">
+    <mat-icon>emoji_events</mat-icon>
+    <h1 i18n>Žebříček</h1>
+  </div>
+
+  <div class="header-row">
+    <p i18n>Pořadí</p>
+    <p i18n>Skóre</p>
+  </div>
+
+  <div class="leaderboard-container">
+    @for (player of leaderboard(); track player.participantId) {
+    <div class="row">
+      <p>{{ $index + 1}}. {{ getUserName(player.participantId) }}</p>
+      <p>{{ player.score }}</p>
+    </div>
+    }
+  </div>
+
+  <div class="action-bar">
+    @if (hasPreviousActivity()) {
+    <button mat-flat-button (click)="previousActivity()" i18n>
+      <mat-icon>arrow_back</mat-icon>
+      Předchozí aktivita
+    </button>
+    } @if (hasNextActivity()) {
+    <button mat-flat-button (click)="nextActivity()" i18n>
+      <mat-icon>arrow_forward</mat-icon>
+      Následující aktivita
+    </button>
+    } @if (isLastActivity()) {
+    <button mat-flat-button (click)="endSession()" i18n>
+      <mat-icon>stop</mat-icon>
+      Ukončit relaci
+    </button>
+    }
+  </div>
+
+  }
+</div>
