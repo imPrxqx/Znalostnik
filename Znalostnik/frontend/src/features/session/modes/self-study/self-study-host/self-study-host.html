@@ -1,0 +1,42 @@
+<div class="container">
+  @if (status() === 'answering') {
+
+  <div class="leaderboard-header">
+    <mat-icon>emoji_events</mat-icon>
+    <h1 i18n>Žebříček</h1>
+  </div>
+
+  <div class="header-row">
+    <p i18n>Pořadí</p>
+    <p></p>
+    <p i18n>Vyřešeno</p>
+    <p i18n>Úspěšnost</p>
+    <p i18n>Zobrazit aktivitu</p>
+  </div>
+
+  <div class="leaderboard-container">
+    @for (participant of leaderboardSorted(); track participant.participantId) {
+    <div class="row">
+      <p>{{ $index + 1}}. {{ getParticipantName(participant.participantId) }}</p>
+      <p></p>
+      <p>{{ participant.completedCount }}</p>
+      <p>{{ participant.accuracy }}</p>
+      <p>
+        <button mat-icon-button (click)="openParticipantDetail(participant.participantId)">
+          <mat-icon>visibility</mat-icon>
+        </button>
+      </p>
+    </div>
+
+    }
+  </div>
+
+  <div class="action-bar">
+    <button mat-flat-button (click)="endSession()" i18n>
+      <mat-icon>stop</mat-icon>
+      Ukončit relaci
+    </button>
+  </div>
+
+  }
+</div>

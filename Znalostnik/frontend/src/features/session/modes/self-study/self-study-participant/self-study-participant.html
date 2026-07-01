@@ -1,0 +1,48 @@
+<div class="container">
+  <div class="header">
+    <div class="header-left">
+      <mat-icon>person</mat-icon>
+      <p>{{ sessionUser()?.userName }}</p>
+    </div>
+
+    <div class="header-center">
+      <p i18n>Vyřešeno</p>
+      <small i18n>{{ score().completedCount }}</small>
+    </div>
+
+    <div class="header-right">
+      <p i18n>Správnost</p>
+      <small i18n> {{ getCorrectPercent(score()) | number:'1.0-0' }} %</small>
+    </div>
+  </div>
+
+  @if (status() === 'answering') {
+
+  <div class="activity">
+    <app-exercise-activity [(answer)]="answer" [activity]="activity()!" [mode]="'answering'">
+    </app-exercise-activity>
+  </div>
+
+  <div class="action-bar">
+    <button mat-flat-button (click)="confirmAnswer()">
+      <mat-icon>check</mat-icon>
+      <p i18n>Potvrdit</p>
+    </button>
+
+    <button mat-stroked-button (click)="submitAnswer()">
+      <mat-icon>send</mat-icon>
+      <p i18n>Odeslat</p>
+    </button>
+  </div>
+
+  } @if (status() === 'feedback') { @if(feedbackActivity() !== undefined && feedbackAnswer() !==
+  undefined) {
+  <div class="activity">
+    <app-exercise-activity
+      [(answer)]="feedbackAnswer"
+      [activity]="feedbackActivity()!"
+      [mode]="'feedback'"
+    ></app-exercise-activity>
+  </div>
+  } }
+</div>

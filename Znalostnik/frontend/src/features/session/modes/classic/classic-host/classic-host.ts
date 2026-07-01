@@ -60,7 +60,7 @@ export class ClassicHost {
     }
   }
 
-  getUserName(participantId: string) {
+  getParticipantName(participantId: string) {
     const sessionUser = this.sessionUsers()?.find((u) => u.id === participantId);
 
     if (sessionUser) {

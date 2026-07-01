@@ -50,10 +50,10 @@
   </div>
 
   <div class="leaderboard-container">
-    @for (player of leaderboard(); track player.participantId) {
+    @for (participant of leaderboard(); track participant.participantId) {
     <div class="row">
-      <p>{{ $index + 1}}. {{ getUserName(player.participantId) }}</p>
-      <p>{{ player.score }}</p>
+      <p>{{ $index + 1}}. {{ getParticipantName(participant.participantId) }}</p>
+      <p>{{ participant.score }}</p>
     </div>
     }
   </div>
