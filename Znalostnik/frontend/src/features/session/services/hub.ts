@@ -55,7 +55,7 @@ export class Hub {
     });
 
     await this.connection.start();
-    await this.connection.invoke('JoinSessionAsync', this.sessionState.session()?.id);
+    await this.connection.invoke('JoinSessionAsync', sessionId);
     this.connectedSessionId = sessionId;
     console.log('Hub connected');
   }

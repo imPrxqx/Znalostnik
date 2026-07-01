@@ -33,9 +33,9 @@ export class SessionApi {
     return this.http.post(`${environment.apiURL}/sessions/${sessionId}/teams/${teamId}/join`, null);
   }
 
-  createSessionTeam(sessionId: string, teamName: string) {
+  createSessionTeam(sessionId: string, name: string) {
     return this.http.post(`${environment.apiURL}/sessions/${sessionId}/teams/create`, {
-      teamName: teamName,
+      name: name,
     });
   }
 

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Registry } from '@shared/models/registry';
 import { NgComponentOutlet } from '@angular/common';
+import { Hub } from '../services/hub';
 
 @Component({
   selector: 'app-participant',
@@ -12,6 +13,7 @@ import { NgComponentOutlet } from '@angular/common';
   styleUrl: './participant.scss',
 })
 export class Participant implements OnInit {
+  hub = inject(Hub);
   state = inject(SessionState);
   route = inject(ActivatedRoute);
   router = inject(Router);

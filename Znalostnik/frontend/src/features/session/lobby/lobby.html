@@ -1,63 +1,140 @@
-@if(loading() === true) {
-<div class="container-loading">
-  <mat-spinner></mat-spinner>
-</div>
-} @else {
-
 <div class="container">
-  @if(role() === "Participant") {
+  @if (loading()) {
+  <div class="loading">
+    <mat-spinner></mat-spinner>
+    <p i18n>Načítání relace...</p>
+  </div>
+  } @else {
 
-  <div class="layout">
-    @if(sessionUser() !== undefined) {
-    <div>
-      <div class="team-label">{{ sessionUser()!.team ? sessionUser()!.team : "None" }}</div>
-      <button mat-raised-button>{{ sessionUser()!.userName }}</button>
+  <div class="lobby">
+    @if (role() === "host") {
+
+    <div class="host-layout">
+      <div class="host-top">
+        <div class="host-top-left">
+          <div class="host-code">
+            <mat-icon>key</mat-icon>
+            <h3>{{ session()?.accessCode }}</h3>
+          </div>
+
+          <div class="host-status" i18n>
+            <mat-icon>groups</mat-icon>
+            Počet účástníků {{ sessionUsers().length }}
+          </div>
+        </div>
+
+        <div>
+          <button mat-flat-button (click)="startSession()" i18n>
+            <mat-icon>play_arrow</mat-icon>
+            Spustit relaci
+          </button>
+        </div>
+      </div>
+
+      <div class="host-bottom">
+        <mat-card class="host-participant-card">
+          <h1 i18n>
+            <mat-icon class="icon">person</mat-icon>
+            Účastníci v místnosti
+          </h1>
+
+          <div class="list">
+            @for (session of sessionUsers(); track session.id) {
+
+            <div class="item">
+              <div class="avatar">{{ session.userName[0] }}</div>
+
+              <div>
+                <div class="name">
+                  @if (respondType() === "team") {
+                  <mat-icon inline>account_circle</mat-icon>
+                  } {{ session.userName }}
+                </div>
+
+                @if (respondType() === "team") {
+                <div class="name">
+                  <mat-icon inline>groups</mat-icon>
+                  {{ getTeamName(session.id) ?? "Bez týmu" }}
+                </div>
+                }
+              </div>
+            </div>
+
+            }
+          </div>
+        </mat-card>
+
+        @if (respondType() === "team") {
+
+        <mat-card class="host-participant-card">
+          <h1 i18n>
+            <mat-icon class="icon">groups</mat-icon>
+            Týmy
+          </h1>
+
+          <div class="list">
+            @for (session of teams(); track session.id) {
+
+            <div class="item">
+              <div class="icon">
+                <mat-icon inline>group</mat-icon>
+              </div>
+
+              <div>
+                <p class="name">{{ session.name }}</p>
+                <p class="name count" i18n>{{ session.teamMembers.length }} členů</p>
+              </div>
+            </div>
+
+            }
+          </div>
+        </mat-card>
+
+        }
+      </div>
     </div>
 
-    }
-  </div>
+    } @if (role() === "participant") {
 
-  <div class="layout">
-    <button mat-raised-button (click)="createTeam()">Vytvořit tým</button>
+    <div class="participant-layout">
+      <mat-card class="participant-card">
+        <h1 i18n>Čekáš na začátek relace</h1>
 
-    @for(team of teams(); track team.id) {
-    <button mat-raised-button (click)="selectTeam(team.id)">{{ team.teamName }}</button>
-    }
-  </div>
-  @if(selectedTeam() !== undefined) {
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 
-  <div class="layout">
-    <button mat-raised-button (click)="joinTeam(selectedTeam()!.id)" i18n>
-      Připojit se k týmu
-    </button>
+        <p i18n>
+          <mat-icon inline>person</mat-icon>
+          Připojen jako <strong>{{ sessionUser()?.userName }}</strong>
+        </p>
 
-    @for(user of selectedTeam()!.teamMembers; track user.id) {
+        @if (respondType() === "team") {
 
-    <button mat-raised-button>{{ user.userName }}</button>
-    }
-  </div>
+        <div class="team-box" i18n>
+          <mat-icon inline>groups</mat-icon>
+          Připojen v týmu: @if(getTeamName(sessionUser()?.id) === undefined) {
+          <p><strong>Bez týmu</strong></p>
+          } @else {
+          <p><strong>{{ getTeamName(sessionUser()?.id) }}</strong></p>
+          }
+        </div>
 
-  } } @if(role() === "Host") {
+        <div class="team-actions">
+          <button mat-raised-button (click)="openCreateTeamDialog()" i18n>
+            <mat-icon>add</mat-icon>
+            Vytvořit tým
+          </button>
 
-  <mat-toolbar-row class="top-toolbar">
-    @if(session() !== undefined) {
-    <h1 i18n>Připojovací Kód: {{ session()!.accessCode }}</h1>
-    }
-  </mat-toolbar-row>
-  <div class="layout">
-    @for(session of sessionUsers(); track session.id) {
-    <div>
-      <div class="team-label">{{ session.team }}</div>
-      <button mat-raised-button>{{ session.userName }}</button>
+          <button mat-flat-button (click)="openJoinTeamDialog()" i18n>
+            <mat-icon>groups</mat-icon>
+            Připojit se k týmu
+          </button>
+        </div>
+
+        }
+      </mat-card>
     </div>
     }
   </div>
-  <mat-toolbar-row class="bottom-toolbar">
-    <button mat-mini-fab class="start-button" (click)="startSession()">
-      <mat-icon>start</mat-icon>
-    </button>
-  </mat-toolbar-row>
 
   }
 </div>
-}

@@ -205,8 +205,8 @@ export class SessionState {
     });
   }
 
-  createSessionTeam(sessionId: string, teamName: string) {
-    this.api.createSessionTeam(sessionId, teamName).subscribe({
+  createSessionTeam(sessionId: string, name: string) {
+    this.api.createSessionTeam(sessionId, name).subscribe({
       error: (error) => {
         console.error(error);
       },

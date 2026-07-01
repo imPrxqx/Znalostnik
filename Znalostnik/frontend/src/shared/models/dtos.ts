@@ -42,7 +42,7 @@ export interface Participant {
 
 export interface Team {
   id: string;
-  teamName: string;
+  name: string;
   teamMembers: TeamMember[];
 }
 

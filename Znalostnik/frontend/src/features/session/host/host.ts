@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Registry } from '@shared/models/registry';
 import { NgComponentOutlet } from '@angular/common';
+import { Hub } from '../services/hub';
 
 @Component({
   selector: 'app-host',
@@ -12,6 +13,7 @@ import { NgComponentOutlet } from '@angular/common';
   styleUrl: './host.scss',
 })
 export class Host implements OnInit {
+  hub = inject(Hub);
   state = inject(SessionState);
   route = inject(ActivatedRoute);
   router = inject(Router);

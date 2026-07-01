@@ -1,36 +1,51 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SessionState, SessionUser, Team, TeamMember } from '../services/session-state';
-import { Hub } from '../services/hub';
+import { SessionState } from '../services/session-state';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CreateTeamDialog } from './create-team-dialog/create-team-dialog';
+import { MatDialog } from '@angular/material/dialog';
+import { JoinTeamDialog } from './join-team-dialog/join-team-dialog';
+import { MatCardModule } from '@angular/material/card';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { Hub } from '../services/hub';
 
 @Component({
   selector: 'app-lobby',
-  imports: [MatButtonModule, MatToolbarModule, MatIconModule, MatProgressSpinnerModule],
+  imports: [
+    MatButtonModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatCardModule,
+    MatSliderModule,
+    MatProgressBarModule,
+  ],
   templateUrl: './lobby.html',
   styleUrl: './lobby.scss',
 })
-export class Lobby {
+export class Lobby implements OnInit {
   hub = inject(Hub);
   route = inject(ActivatedRoute);
   router = inject(Router);
   state = inject(SessionState);
+  loading = computed(() => this.state.loading());
   role = computed(() => this.state.role());
-  sessionUsers = computed(() => this.state.sessionUsers());
+  respondType = computed(() => this.state.session()?.respondType);
   session = computed(() => this.state.session());
   sessionUser = computed(() => this.state.sessionUser());
-  loading = computed(() => this.state.loading());
+  sessionUsers = computed(() => this.state.sessionUsers());
   teams = computed(() => this.state.teams());
-  selectedTeam = signal<Team | undefined>(undefined);
+  dialog = inject(MatDialog);
 
   ngOnInit() {
     const sessionId = this.route.snapshot.paramMap.get('id');
 
     if (!sessionId) {
-      this.router.navigate([`/session/join`]);
+      this.router.navigate([`/home`]);
       return;
     }
 
@@ -38,31 +53,43 @@ export class Lobby {
   }
 
   startSession() {
-    const sessionId = this.route.snapshot.paramMap.get('id');
-
-    if (!sessionId) {
+    if (!this.session()) {
       return;
     }
 
-    this.state.startSession(sessionId);
+    this.state.startSession(this.session()!.id);
   }
 
-  createTeam() {
-    this.selectedTeam.set(undefined);
-    this.state.createSessionTeam(this.session()?.id!, 'New Team');
+  openCreateTeamDialog(): void {
+    const dialogRef = this.dialog.open(CreateTeamDialog, {
+      width: '500px',
+      maxWidth: '500px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result !== undefined) {
+        this.state.createSessionTeam(this.session()!.id, result);
+      }
+    });
   }
 
-  joinTeam(teamId: string) {
-    this.selectedTeam.set(undefined);
-    this.state.joinSessionTeam(this.session()?.id!, teamId);
+  openJoinTeamDialog(): void {
+    const dialogRef = this.dialog.open(JoinTeamDialog, {
+      width: '500px',
+      height: '500px',
+      data: {
+        teams: this.teams(),
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result !== undefined) {
+        this.state.joinSessionTeam(this.session()!.id, result);
+      }
+    });
   }
 
-  selectTeam(teamId: string) {
-    if (teamId === this.selectedTeam()?.id) {
-      this.selectedTeam.set(undefined);
-      return;
-    }
-
-    this.selectedTeam.set(this.teams()?.filter((team) => team.id === teamId)[0]);
+  getTeamName(sessionUserId: string | undefined) {
+    return this.teams().find((t) => t.teamMembers.find((tm) => tm.id == sessionUserId))?.name;
   }
 }
