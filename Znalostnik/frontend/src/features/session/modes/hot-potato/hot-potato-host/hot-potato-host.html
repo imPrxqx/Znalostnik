@@ -1,0 +1,102 @@
+<div class="container">
+  <div class="header">
+    <div class="header-left">
+      <p i18n>Ve hře</p>
+      <small>{{ aliveParticipants().length }} / {{ participants().length }}</small>
+    </div>
+
+    @if (timer() !== undefined) {
+    <div class="header-timer">
+      <app-timer [targetTime]="timer()!"></app-timer>
+    </div>
+    }
+  </div>
+
+  @if (status() === 'get_ready') {
+
+  <div class="center">
+    <mat-icon class="status-icon pulse">sports_esports</mat-icon>
+    <h1 i18n>Připravte se</h1>
+    <p i18n>Horká brambora se připraví za okamžik</p>
+  </div>
+
+  } @if (status() === 'answering') {
+
+  <div class="leaderboard-header">
+    <mat-icon>local_fire_department</mat-icon>
+    <h1 i18n>Aktivní Horké Brambory</h1>
+  </div>
+
+  <div class="header-row">
+    <p i18n>Účastník</p>
+    <p i18n>Zobrazit aktivitu</p>
+  </div>
+
+  <div class="leaderboard-container">
+    @for (potato of potatoes(); track potato.potatoId) {
+    <div class="row">
+      <p>{{ getParticipantName(potato.currentParticipantId) }}</p>
+      <button mat-icon-button (click)="openParticipantDetail(potato.potatoId)">
+        <mat-icon>visibility</mat-icon>
+      </button>
+    </div>
+    }
+  </div>
+
+  <div class="action-bar">
+    <button mat-flat-button (click)="endRound()" i18n>
+      <mat-icon>skip_next</mat-icon>
+      Ukončit kolo
+    </button>
+  </div>
+
+  } @if (status() === 'results') {
+
+  <div class="leaderboard-header">
+    <mat-icon>emoji_events</mat-icon>
+    <h1 i18n>Žebříček</h1>
+  </div>
+
+  <div class="header-row">
+    <p i18n>Pořadí</p>
+    <p i18n></p>
+  </div>
+
+  <div class="leaderboard-container">
+    @for (alive of aliveParticipants(); track alive) {
+
+    <div class="row">
+      <p>{{ $index + 1 }}. {{ getParticipantName(alive) }}</p>
+    </div>
+
+    } @for (dead of deadParticipants(); track dead) {
+
+    <div class="row elimininated">
+      <p class="elimininated">
+        {{ $index + 1 + aliveParticipants().length }}. {{ getParticipantName(dead) }}
+      </p>
+    </div>
+
+    }
+  </div>
+
+  <div class="action-bar">
+    @if (hasNextRound()) {
+
+    <button mat-flat-button (click)="nextRound()" i18n>
+      <mat-icon>arrow_right</mat-icon>
+      Následující kolo
+    </button>
+
+    } @else {
+
+    <button mat-flat-button (click)="endSession()" i18n>
+      <mat-icon>stop</mat-icon>
+      Ukončit relaci
+    </button>
+
+    }
+  </div>
+
+  }
+</div>
