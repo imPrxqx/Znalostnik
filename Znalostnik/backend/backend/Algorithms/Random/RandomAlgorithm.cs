@@ -17,7 +17,7 @@ namespace backend.Algorithms
             return activity;
         }
 
-        public void UpdatePlayerState(
+        public void UpdateParticipantState(
             AlgorithmsState state,
             RuntimeActivity activity,
             int correctPercentile

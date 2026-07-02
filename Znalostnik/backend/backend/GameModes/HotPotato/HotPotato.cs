@@ -1,20 +1,11 @@
-﻿using System.Diagnostics;
-using System.Text.Json;
+﻿using System.Text.Json;
 using backend.Algorithms;
 using backend.DTOs;
 using backend.Models;
 using backend.Utils;
-using Microsoft.AspNetCore.Routing.Matching;
 
 namespace backend.GameModes
 {
-    public enum StatusPotato
-    {
-        GetReady,
-        Answering,
-        Results,
-    }
-
     public class HotPotato : IGameMode
     {
         public string GameModeType => "hotPotato";
@@ -63,11 +54,7 @@ namespace backend.GameModes
                 var activity = algorithm.SelectNextActivity(activities, participantState);
 
                 state.PotatoInstances.Add(
-                    new PotatoInstance
-                    {
-                        CurrentParticipantId = participantId,
-                        CurrentActivityId = activity.Id,
-                    }
+                    new PotatoInstance { ParticipantId = participantId, ActivityId = activity.Id }
                 );
             }
 
@@ -96,8 +83,8 @@ namespace backend.GameModes
                 assignments.Add(
                     new ActivityAssignment
                     {
-                        ParticipantId = participant.CurrentParticipantId,
-                        ActivityId = participant.CurrentActivityId,
+                        ParticipantId = participant.ParticipantId,
+                        ActivityId = participant.ActivityId,
                     }
                 );
             }
@@ -121,7 +108,7 @@ namespace backend.GameModes
             }
 
             var potato = state.PotatoInstances.FirstOrDefault(p =>
-                p.CurrentParticipantId == participantId
+                p.ParticipantId == participantId
             );
 
             if (potato == null)
@@ -137,14 +124,12 @@ namespace backend.GameModes
             }
 
             var algorithm = _algorithms.Resolve(state.SelectionAlgorithm);
-            var participantState = state.ParticipantsState.First(p =>
-                p.Id == potato.CurrentParticipantId
-            );
-            var currentActivity = session.Activities.First(a => a.Id == potato.CurrentActivityId);
-            algorithm.UpdatePlayerState(participantState, currentActivity, correctPercentile);
-            potato.PreviousActivityId = potato.CurrentActivityId;
+            var participantState = state.ParticipantsState.First(p => p.Id == potato.ParticipantId);
+            var currentActivity = session.Activities.First(a => a.Id == potato.ActivityId);
+            algorithm.UpdateParticipantState(participantState, currentActivity, correctPercentile);
+            potato.PreviousActivityId = potato.ActivityId;
             ;
-            potato.CurrentActivityId = algorithm
+            potato.ActivityId = algorithm
                 .SelectNextActivity(session.Activities, participantState)
                 .Id;
 
@@ -154,7 +139,7 @@ namespace backend.GameModes
             {
                 var newParticipantId = SelectRandomParticipant(state, participantId);
                 activePotato = state.PotatoInstances.First(pi =>
-                    pi.CurrentParticipantId == newParticipantId
+                    pi.ParticipantId == newParticipantId
                 );
                 activePotato.PreviousActivityId = null;
                 activePotato.IsActive = true;
@@ -171,8 +156,8 @@ namespace backend.GameModes
 
             var newActivityAssignemnt = new ActivityAssignment
             {
-                ParticipantId = activePotato.CurrentParticipantId,
-                ActivityId = activePotato.CurrentActivityId,
+                ParticipantId = activePotato.ParticipantId,
+                ActivityId = activePotato.ActivityId,
             };
 
             assignments.Add(newActivityAssignemnt);
@@ -203,11 +188,7 @@ namespace backend.GameModes
                 var activity = algorithm.SelectNextActivity(activities, participantState);
 
                 state.PotatoInstances.Add(
-                    new PotatoInstance
-                    {
-                        CurrentParticipantId = participantId,
-                        CurrentActivityId = activity.Id,
-                    }
+                    new PotatoInstance { ParticipantId = participantId, ActivityId = activity.Id }
                 );
             }
 
@@ -236,8 +217,8 @@ namespace backend.GameModes
                 assignments.Add(
                     new ActivityAssignment
                     {
-                        ParticipantId = participant.CurrentParticipantId,
-                        ActivityId = participant.CurrentActivityId,
+                        ParticipantId = participant.ParticipantId,
+                        ActivityId = participant.ActivityId,
                     }
                 );
             }
@@ -263,7 +244,7 @@ namespace backend.GameModes
             {
                 if (potato.IsActive)
                 {
-                    state.AliveParticipants.Remove(potato.CurrentParticipantId);
+                    state.AliveParticipants.Remove(potato.ParticipantId);
                 }
             }
 
@@ -309,7 +290,7 @@ namespace backend.GameModes
             var state = LoadState(session);
 
             var potato = state.PotatoInstances.FirstOrDefault(pi =>
-                pi.CurrentParticipantId == participantId
+                pi.ParticipantId == participantId
             );
 
             if (potato == null)
@@ -317,7 +298,7 @@ namespace backend.GameModes
                 return null;
             }
 
-            return potato.CurrentActivityId;
+            return potato.ActivityId;
         }
 
         public object GetGameState(RuntimeSession session, string role, Guid? participantId)
@@ -388,7 +369,7 @@ namespace backend.GameModes
                 .AliveParticipants.Where(p =>
                     (excludeParticipantId == null || p != excludeParticipantId)
                     && !state.PotatoInstances.Any(pi =>
-                        pi.CurrentParticipantId == p && pi.IsActive == true
+                        pi.ParticipantId == p && pi.IsActive == true
                     )
                 )
                 .ToList();
@@ -437,8 +418,8 @@ namespace backend.GameModes
                     activePotatoes = state.PotatoInstances.Select(p => new
                     {
                         potatoId = p.PotatoId,
-                        activity = GetActivity(session, p.CurrentActivityId).ToActivityDto(),
-                        currentParticipantId = p.CurrentParticipantId,
+                        activity = GetActivity(session, p.ActivityId).ToActivityDto(),
+                        ParticipantId = p.ParticipantId,
                     }),
                 };
             }
@@ -502,9 +483,7 @@ namespace backend.GameModes
 
             if (state.Status == StatusPotato.Answering)
             {
-                var potato = state.PotatoInstances.First(pi =>
-                    pi.CurrentParticipantId == participantId
-                );
+                var potato = state.PotatoInstances.First(pi => pi.ParticipantId == participantId);
 
                 var lastAnswer = session
                     .Answers.Where(a =>
@@ -527,7 +506,9 @@ namespace backend.GameModes
                 if (potato.IsActive)
                 {
                     var currentAnswer = session
-                        .Answers.Where(a => a.ActivityId == potato.CurrentActivityId)
+                        .Answers.Where(a =>
+                            a.ActivityId == potato.ActivityId && a.OwnerId == potato.ParticipantId
+                        )
                         .OrderByDescending(a => a.CreatedAt)
                         .FirstOrDefault();
 
@@ -545,7 +526,7 @@ namespace backend.GameModes
                         participants = state.Participants,
                         aliveParticipants = state.AliveParticipants,
                         feedback = lastFeedback,
-                        activity = GetActivity(session, potato.CurrentActivityId)
+                        activity = GetActivity(session, potato.ActivityId)
                             .ToActivityWithoutSolutionDto(),
                         answer = currentAnswer.ToAnswerDto(),
                     };

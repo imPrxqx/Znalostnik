@@ -41,7 +41,7 @@ namespace backend.Algorithms
             return candidates[candidates.Count - 1];
         }
 
-        public void UpdatePlayerState(
+        public void UpdateParticipantState(
             AlgorithmsState algorithmState,
             RuntimeActivity activity,
             int correctPercentile

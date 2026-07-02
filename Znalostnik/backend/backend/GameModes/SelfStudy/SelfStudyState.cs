@@ -7,7 +7,8 @@ namespace backend.GameModes
         public int TimerRound { get; set; } = 0;
         public string SelectionAlgorithm { get; set; } = "random";
         public List<Guid> Participants { get; set; } = new List<Guid>();
-        public List<PlayerSelfStudyScore> Scores { get; set; } = new List<PlayerSelfStudyScore>();
+        public List<ParticipantSelfStudyScore> Scores { get; set; } =
+            new List<ParticipantSelfStudyScore>();
         public List<AlgorithmsState> ParticipantsState { get; set; } = new List<AlgorithmsState>();
 
         public List<ActivityInstance> ActivityInstances { get; set; } =
@@ -15,7 +16,7 @@ namespace backend.GameModes
         public List<Guid> AvailableActivities { get; set; } = new List<Guid>();
     }
 
-    public class PlayerSelfStudyScore
+    public class ParticipantSelfStudyScore
     {
         public Guid ParticipantId { get; set; }
         public double CorrectCount { get; set; } = 0;
@@ -25,8 +26,8 @@ namespace backend.GameModes
     public class ActivityInstance
     {
         public Guid ActivityInstanceId { get; set; }
-        public Guid CurrentParticipantId { get; set; }
+        public Guid ParticipantId { get; set; }
         public Guid? PreviousActivityId { get; set; }
-        public Guid CurrentActivityId { get; set; }
+        public Guid ActivityId { get; set; }
     }
 }

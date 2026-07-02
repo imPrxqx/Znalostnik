@@ -19,8 +19,15 @@ namespace backend.GameModes
     {
         public Guid PotatoId { get; set; } = Guid.NewGuid();
         public bool IsActive { get; set; } = false;
-        public Guid CurrentParticipantId { get; set; }
-        public Guid CurrentActivityId { get; set; }
+        public Guid ParticipantId { get; set; }
+        public Guid ActivityId { get; set; }
         public Guid? PreviousActivityId { get; set; } = null;
+    }
+
+    public enum StatusPotato
+    {
+        GetReady,
+        Answering,
+        Results,
     }
 }

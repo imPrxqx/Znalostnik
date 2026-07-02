@@ -35,7 +35,7 @@ namespace backend.Algorithms
             return bestActivity;
         }
 
-        public void UpdatePlayerState(
+        public void UpdateParticipantState(
             AlgorithmsState algorithmState,
             RuntimeActivity activity,
             int correctPercentile

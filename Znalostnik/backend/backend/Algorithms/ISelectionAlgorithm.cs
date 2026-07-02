@@ -10,7 +10,7 @@ namespace backend.Algorithms
             IReadOnlyList<RuntimeActivity> candidates,
             AlgorithmsState algorithmState
         );
-        void UpdatePlayerState(
+        void UpdateParticipantState(
             AlgorithmsState algorithmState,
             RuntimeActivity activity,
             int correctPercentile

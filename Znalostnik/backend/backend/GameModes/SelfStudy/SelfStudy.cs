@@ -36,7 +36,7 @@ namespace backend.GameModes
             state.Participants = new List<Guid>(participantIds);
             state.AvailableActivities = new List<Guid>(session.ActivityIds);
             state.Scores = participantIds
-                .Select(p => new PlayerSelfStudyScore
+                .Select(p => new ParticipantSelfStudyScore
                 {
                     ParticipantId = p,
                     CompletedCount = 0,
@@ -59,9 +59,9 @@ namespace backend.GameModes
                 state.ActivityInstances.Add(
                     new ActivityInstance
                     {
-                        CurrentParticipantId = participantId,
+                        ParticipantId = participantId,
                         PreviousActivityId = null,
-                        CurrentActivityId = activity.Id,
+                        ActivityId = activity.Id,
                     }
                 );
             }
@@ -75,8 +75,8 @@ namespace backend.GameModes
                 newParticipants.Add(
                     new ActivityAssignment
                     {
-                        ParticipantId = participant.CurrentParticipantId,
-                        ActivityId = participant.CurrentActivityId,
+                        ParticipantId = participant.ParticipantId,
+                        ActivityId = participant.ActivityId,
                     }
                 );
             }
@@ -111,7 +111,7 @@ namespace backend.GameModes
             var state = LoadState(session);
 
             var activityInstance = state.ActivityInstances.Find(p =>
-                p.CurrentParticipantId == participantId
+                p.ParticipantId == participantId
             );
 
             if (activityInstance == null)
@@ -121,7 +121,7 @@ namespace backend.GameModes
                 );
             }
 
-            return activityInstance.CurrentActivityId;
+            return activityInstance.ActivityId;
         }
 
         public List<ActivityAssignment> OnAnswer(
@@ -143,7 +143,7 @@ namespace backend.GameModes
             score.CorrectCount += correctPercentile / 100.0;
 
             var instance = state.ActivityInstances.FirstOrDefault(a =>
-                a.CurrentParticipantId == participantId
+                a.ParticipantId == participantId
             );
 
             if (instance == null)
@@ -151,14 +151,14 @@ namespace backend.GameModes
                 throw new InvalidOperationException("Activity instance not found");
             }
 
-            instance.PreviousActivityId = instance.CurrentActivityId;
+            instance.PreviousActivityId = instance.ActivityId;
 
             var participantState = state.ParticipantsState.First(p => p.Id == participantId);
             var algorithm = _algorithms.Resolve(state.SelectionAlgorithm);
-            var currentActivity = session.Activities.First(a => a.Id == instance.CurrentActivityId);
-            algorithm.UpdatePlayerState(participantState, currentActivity, correctPercentile);
+            var currentActivity = session.Activities.First(a => a.Id == instance.ActivityId);
+            algorithm.UpdateParticipantState(participantState, currentActivity, correctPercentile);
             var next = algorithm.SelectNextActivity(session.Activities, participantState);
-            instance.CurrentActivityId = next.Id;
+            instance.ActivityId = next.Id;
             SaveState(session, state);
 
             var assignments = new List<ActivityAssignment>();
@@ -253,7 +253,7 @@ namespace backend.GameModes
         )
         {
             var instance = state.ActivityInstances.FirstOrDefault(a =>
-                a.CurrentParticipantId == participantId
+                a.ParticipantId == participantId
             );
 
             if (instance == null)
@@ -272,7 +272,7 @@ namespace backend.GameModes
 
             var currentAnswer = session
                 .Answers.Where(a =>
-                    a.ActivityId == instance.CurrentActivityId && a.OwnerId == participantId
+                    a.ActivityId == instance.ActivityId && a.OwnerId == participantId
                 )
                 .OrderByDescending(a => a.CreatedAt)
                 .FirstOrDefault();
@@ -312,8 +312,7 @@ namespace backend.GameModes
                     completedCount = score.CompletedCount,
                 },
                 feedback = lastFeedback,
-                activity = GetActivity(session, instance.CurrentActivityId)
-                    .ToActivityWithoutSolutionDto(),
+                activity = GetActivity(session, instance.ActivityId).ToActivityWithoutSolutionDto(),
                 answer = currentAnswer.ToAnswerDto(),
             };
         }

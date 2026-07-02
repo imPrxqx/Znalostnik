@@ -1,13 +1,17 @@
-using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
+using backend.Algorithms;
 using backend.Data;
-using backend.Data.Repository;
+using backend.Evaluators;
+using backend.GameModes;
 using backend.Hubs;
 using backend.Middleware;
 using backend.Models;
+using backend.Runtime;
+using backend.Schemas;
 using backend.Services;
+using backend.Services.EmailSender;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend
@@ -32,7 +36,9 @@ namespace backend
                     ? "Server=host.docker.internal;Database=postgres;Username=postgres;Password=example"
                     : builder.Configuration.GetConnectionString("DatabaseConnection");
 
-            Console.WriteLine(connectionString);
+            //var connectionString =
+            //        $"Host={server};Database={database};Username={username};Password={password}";
+
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(connectionString)
             );
@@ -64,7 +70,10 @@ namespace backend
                 .AddCookie(IdentityConstants.ApplicationScheme)
                 .AddBearerToken(IdentityConstants.BearerScheme);
             builder
-                .Services.AddIdentityCore<User>()
+                .Services.AddIdentityCore<User>(options =>
+                {
+                    options.SignIn.RequireConfirmedEmail = true;
+                })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddApiEndpoints();
             builder.Services.ConfigureApplicationCookie(options =>
@@ -106,32 +115,33 @@ namespace backend
             builder.Logging.AddConsole();
 
             // Services
-            builder.Services.AddScoped<IAnswerService, AnswerService>();
+            builder.Services.AddScoped<IMediaService, MediaService>();
             builder.Services.AddScoped<IExerciseService, ExerciseService>();
-            builder.Services.AddScoped<IExerciseTagService, ExerciseTagService>();
-            builder.Services.AddScoped<IExerciseTaskService, ExerciseTaskService>();
             builder.Services.AddScoped<ISessionService, SessionService>();
-            builder.Services.AddScoped<ISessionUserService, SessionUserService>();
-            builder.Services.AddScoped<ISubmissionService, SubmissionService>();
-            builder.Services.AddScoped<ITeamService, TeamService>();
-            builder.Services.AddScoped<ITeamMemberService, TeamMemberService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ITagService, TagService>();
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
+            builder.Services.AddHostedService<TimerSchedulerService>();
 
-            // Repositories
-            builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();
-            builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
-            builder.Services.AddScoped<IExerciseTagRepository, ExerciseTagRepository>();
-            builder.Services.AddScoped<IExerciseTaskRepository, ExerciseTaskRepository>();
-            builder.Services.AddScoped<ISessionRepository, SessionRepository>();
-            builder.Services.AddScoped<ISessionUserRepository, SessionUserRepository>();
-            builder.Services.AddScoped<ISubmissionRepository, SubmissionRepository>();
-            builder.Services.AddScoped<ITeamRepository, TeamRepository>();
+            // Game Modes
+            builder.Services.AddSingleton<IRuntimeSessionStore, RuntimeSessionStore>();
+            builder.Services.AddScoped<IGameMode, HotPotato>();
+            builder.Services.AddScoped<IGameMode, Classic>();
+            builder.Services.AddScoped<IGameMode, SelfStudy>();
+            builder.Services.AddScoped<IGameModeResolver, GameModeResolver>();
 
-            builder.Services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
+            // Evaluators
+            builder.Services.AddScoped<IAnswerEvaluator, QuizEvaluator>();
+            builder.Services.AddScoped<IAnswerEvaluator, GuessEvaluator>();
+            builder.Services.AddScoped<IAnswerEvaluator, MatchUpEvaluator>();
+            builder.Services.AddScoped<IAnswerEvaluator, PutInOrderEvaluator>();
+            builder.Services.AddScoped<IEvaluatorResolver, EvaluatorResolver>();
 
-            // Background
-            //builder.Services.AddHostedService<RoomMonitor>();
-            //builder.Services.AddSingleton<RoomManager>();
+            // Algorithms
+            builder.Services.AddScoped<ISelectionAlgorithm, RandomAlgorithm>();
+            builder.Services.AddScoped<ISelectionAlgorithm, BayesianKnowledgeTracingAlgorithm>();
+            builder.Services.AddScoped<ISelectionAlgorithm, ThompsonSamplingAlgorithm>();
+            builder.Services.AddScoped<ISelectionAlgorithmResolver, SelectionAlgorithmResolver>();
 
             // Global Exception Handler
             builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
@@ -139,6 +149,15 @@ namespace backend
 
             // SignalR
             builder.Services.AddSignalR();
+
+            // Json Schemas
+            builder.Services.AddSingleton(sp =>
+            {
+                var env = sp.GetRequiredService<IWebHostEnvironment>();
+                var schemaPath = Path.Combine(env.ContentRootPath, "Schemas");
+
+                return new JsonSchemaValidator(schemaPath);
+            });
 
             var app = builder.Build();
 
