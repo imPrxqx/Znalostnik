@@ -13,7 +13,7 @@
 
     <div class="header-right">
       <p i18n>Ve hře</p>
-      <small>5</small>
+      <small>{{ aliveParticipants().length }} / {{ participants().length }}</small>
     </div>
   </div>
 
@@ -25,21 +25,31 @@
     <p i18n>Připrav se, brzy to začne</p>
   </div>
 
-  } @if (status() === 'waiting') {
+  } @if (status() === 'results') {
 
   <div class="center">
     <mat-icon class="status-icon pulse"> sports_esports </mat-icon>
-    <h1 i18n>Brambora se ohřívá</h1>
-    <p i18n>Za chvíli letí do hry</p>
+    <h1 i18n>Přežil jsi kolo</h1>
+    <p i18n>Brambora se ohřívá, další kolo začne každou chvíli</p>
   </div>
   } @if (status() === 'idle') {
 
+    @if (statusFeedback() === 'feedback') { @if(feedbackActivity() !== undefined && feedbackAnswer()
+  !== undefined) {
+  <div class="activity">
+    <app-exercise-activity
+      [(answer)]="feedbackAnswer"
+      [activity]="feedbackActivity()!"
+      [mode]="'feedback'"
+    ></app-exercise-activity>
+  </div>
+  } } @else {
   <div class="center">
     <mat-icon class="status-icon pulse"> sports_esports </mat-icon>
     <h1 i18n>Jsi v bezpečí</h1>
     <p i18n>Horkou bramboru právě drží někdo jiný</p>
   </div>
-
+  }
   } @if (status() === 'eliminated') {
   <div class="center">
     <mat-icon class="status-icon pulse">cancel</mat-icon>

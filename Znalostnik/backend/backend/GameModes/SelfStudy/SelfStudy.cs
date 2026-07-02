@@ -175,11 +175,6 @@ namespace backend.GameModes
 
         public void End(RuntimeSession session) { }
 
-        public bool IsFinished(RuntimeSession session)
-        {
-            return false;
-        }
-
         public List<ActivityAssignment> OnNextRoundStart(RuntimeSession session)
         {
             return new List<ActivityAssignment>();
