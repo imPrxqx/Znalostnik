@@ -1,17 +1,38 @@
-mat-card {
-  height: 100%;
+.header {
+  display: flex;
+  justify-content: space-between;
   width: 100%;
+}
+
+mat-card-subtitle {
+  font: var(--mat-sys-body-small);
+  margin-bottom: 4px;
 }
 
 mat-card-content {
   display: flex;
-  justify-content: center;
-  text-align: center;
-  height: 100%;
   flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+  margin-bottom: 16px;
 }
 
 mat-card-actions {
-  margin-top: auto;
   justify-content: space-between;
+  display: flex;
+}
+
+.item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.name {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.value {
+  font-weight: 500;
 }
