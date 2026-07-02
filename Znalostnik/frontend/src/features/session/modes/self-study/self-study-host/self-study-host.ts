@@ -19,7 +19,6 @@ export class SelfStudyHost {
   sessionId = computed(() => this.state.session()?.id);
   sessionUsers = computed(() => this.state.sessionUsers());
   teams = computed(() => this.state.teams());
-  status = computed(() => this.state.session()?.gameState.status);
   leaderboard = computed(() => this.state.session()?.gameState.leaderboard);
   dialog = inject(MatDialog);
   openedParticipantId: string | undefined = undefined;
@@ -58,6 +57,21 @@ export class SelfStudyHost {
     const activityWeight = Math.log1p(completed);
 
     return qualityWeight * activityWeight;
+  }
+
+  getCorrectPercent(participant: { completedCount: number; correctCount: number }): number {
+    const completed = participant.completedCount;
+    const correct = participant.correctCount;
+
+    if (completed == 0) {
+      return 100;
+    }
+
+    if (correct == 0) {
+      return 0;
+    }
+
+    return (correct / completed) * 100;
   }
 
   endSession() {

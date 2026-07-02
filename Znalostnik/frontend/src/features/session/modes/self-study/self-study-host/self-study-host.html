@@ -1,6 +1,4 @@
 <div class="container">
-  @if (status() === 'answering') {
-
   <div class="leaderboard-header">
     <mat-icon>emoji_events</mat-icon>
     <h1 i18n>Žebříček</h1>
@@ -20,7 +18,7 @@
       <p>{{ $index + 1}}. {{ getParticipantName(participant.participantId) }}</p>
       <p></p>
       <p>{{ participant.completedCount }}</p>
-      <p>{{ participant.accuracy }}</p>
+      <p i18n>{{ getCorrectPercent(participant) | number:'1.0-0' }} %</p>
       <p>
         <button mat-icon-button (click)="openParticipantDetail(participant.participantId)">
           <mat-icon>visibility</mat-icon>
@@ -37,6 +35,4 @@
       Ukončit relaci
     </button>
   </div>
-
-  }
 </div>
