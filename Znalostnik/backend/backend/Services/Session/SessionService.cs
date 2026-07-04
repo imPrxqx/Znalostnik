@@ -668,6 +668,11 @@ namespace backend.Services
 
             if (role.Value == "participant")
             {
+                if(sessionUser == null)
+                {
+                    return Result<SessionDto>.Failure(Errors.UnauthorizedAccess);
+                }
+
                 var participantId = GetParticipantIdAsync(session, sessionUser);
 
                 if (participantId == null)

@@ -5,8 +5,17 @@
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
     "types": [
-      "jasmine"
-    ]
+      "jasmine",
+      "@angular/localize"
+    ]    
+    ,"baseUrl": "src",
+    "paths": {
+      "@core/*": ["core/*"],
+      "@features/*": ["features/*"],
+      "@shared/*": ["shared/*"],
+      "@environments/*": ["environments/*"],
+      "@pages/*": ["pages/*"]
+    }
   },
   "include": [
     "src/**/*.ts"

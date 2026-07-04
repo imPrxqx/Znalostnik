@@ -1,53 +1,115 @@
 <div class="container">
-  <mat-toolbar class="toolbar">
-    <div class="toolbar-items">
-      <a [routerLink]="['/']">
-        <img src="favicon.ico" />
-      </a>
-      <button mat-button [matMenuTriggerFor]="fileMenu" i18n>Soubor</button>
-      <button mat-button [matMenuTriggerFor]="editMenu" i18n>Úpravy</button>
+  <mat-toolbar>
+    <a [routerLink]="['/']">
+      <img src="favicon.ico" alt="Favicon" />
+    </a>
 
-      <mat-menu #fileMenu="matMenu">
-        <input type="file" #fileInput accept=".json" class="none" (change)="import($event)" />
-        <button mat-menu-item (click)="fileInput.click()" i18n>Import</button>
-        <button mat-menu-item (click)="export()" i18n>Export</button>
-        <button mat-menu-item (click)="save()" i18n>Save</button>
-      </mat-menu>
+    <button mat-button [matMenuTriggerFor]="fileMenu" i18n>Soubor</button>
+    <button mat-button [matMenuTriggerFor]="editMenu" i18n>Úpravy</button>
 
-      <mat-menu #editMenu="matMenu">
-        <button mat-menu-item (click)="undo()">Undo</button>
-        <button mat-menu-item (click)="redo()">Redo</button>
-      </mat-menu>
-    </div>
+    <mat-menu #fileMenu="matMenu">
+      <input type="file" #fileInput accept=".json" hidden (change)="import($event)" />
+      <button mat-menu-item (click)="fileInput.click()" i18n>Import</button>
+      <button mat-menu-item (click)="export()" i18n>Export</button>
+      <button mat-menu-item (click)="save()" i18n>Uložit</button>
+    </mat-menu>
+
+    <mat-menu #editMenu="matMenu">
+      <button mat-menu-item (click)="undo()">Vrátit zpět</button>
+      <button mat-menu-item (click)="redo()">Udělat znova</button>
+    </mat-menu>
   </mat-toolbar>
 
-  <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav class="sidenav-left" mode="side" position="start" opened>
-      <mat-nav-list class="sidenav-list">
-        <button mat-stroked-button class="task-button" [matMenuTriggerFor]="taskMenu" i18n>
-          Nová úloha
-        </button>
+  <ng-template #emptyState>
+    <div class="empty-activity-state">
+      <mat-icon>add_task</mat-icon>
+      <h2 i18n>Žádná aktivita</h2>
+      <p i18n>Vytvořte první aktivitu pro toto cvičení.</p>
+      <button mat-flat-button (click)="openActivityDialog()" i18n>Vytvořit aktivitu</button>
+    </div>
+  </ng-template>
 
-        <mat-menu #taskMenu="matMenu">
-          @for (document of documentSchemas; track document) {
-          <button mat-menu-item (click)="addNewTask(document.key)">{{ document.alias }}</button>
-          }
-        </mat-menu>
+  <ng-template #activityContent>
+    @if (edit.activity() !== undefined) {
+    <div class="sidenav-content-container">
+      <app-exercise-activity [activity]="edit.activity()!" [mode]='"feedback"'>
+      </app-exercise-activity>
+    </div>
+    } @else {
+    <ng-container *ngTemplateOutlet="emptyState"></ng-container>
+    }
+  </ng-template>
+
+  <ng-template #toolbarContent>
+    @if (edit.activity() !== undefined) {
+    <app-exercise-toolbar [activity]="edit.activity()!"> </app-exercise-toolbar>
+    } @else {
+    <ng-container *ngTemplateOutlet="emptyState"></ng-container>
+    }
+  </ng-template>
+
+  <ng-template #backgroundEditor>
+    @if (edit.activity() !== undefined) {
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label i18n>Barva pozadí</mat-label>
+
+      <input
+        matInput
+        type="color"
+        [value]="edit.activity()!.style().backgroundColor"
+        (blur)="setBackgroundColor($any($event.target).value)"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label i18n>Barva rámečku</mat-label>
+      <input
+        matInput
+        type="color"
+        [value]="edit.activity()!.style().borderColor"
+        (blur)="setBorderColor($any($event.target).value)"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label i18n>Zaoblení rámečku (px)</mat-label>
+      <input
+        matInput
+        type="number"
+        min="0"
+        max="32"
+        step="1"
+        [value]="edit.activity()!.style().borderRadius"
+        (blur)="setBorderRadius($any($event.target).valueAsNumber)"
+      />
+    </mat-form-field>
+
+    } @else {
+    <ng-container *ngTemplateOutlet="emptyState"></ng-container>
+    }
+  </ng-template>
+
+  <mat-sidenav-container class="sidenav-container desktop">
+    <mat-sidenav class="sidenav-left" mode="side" position="start" opened>
+      <mat-nav-list>
+        <button mat-flat-button (click)="openActivityDialog()" i18n>Nová aktivita</button>
+
         <div class="scroll-container">
           <div cdkDropList (cdkDropListDropped)="drop($event)">
-            @for (task of document.getTasks()(); track task.id()) {
+            @for (activity of document.getActivities()(); track activity.id()) {
             <div
               cdkDrag
               [cdkDragBoundary]="'.scroll-container'"
               class="slide-container"
-              [class.selected]="edit.task()?.id() === task.id()"
+              [class.selected]="edit.activity()?.id() === activity.id()"
             >
               <div class="vertical-line"></div>
 
               <div class="sidenav-slide-content">
-                <span class="slide-index">{{ $index + 1 }}</span>
+                <p>{{ $index + 1 }}</p>
 
-                <button class="delete-button" (click)="remove(task.id())">
+                <button class="delete-button" (click)="remove(activity.id())">
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
@@ -55,8 +117,8 @@
               <app-slide
                 cdkDragHandle
                 class="slide"
-                [task]="task"
-                (click)="edit.editTask(task.id())"
+                [activity]="activity"
+                (click)="edit.editActivity(activity.id())"
               >
               </app-slide>
 
@@ -70,18 +132,93 @@
       </mat-nav-list>
     </mat-sidenav>
 
-    <mat-sidenav-content class="sidenav-content">
-      @if (edit.task() !== undefined) {
-      <div class="sidenav-content-container">
-        <app-exercise-task [task]="edit.task()!"></app-exercise-task>
-      </div>
-      }
+    <mat-sidenav-content class="sidenav-content desktop">
+      <ng-container *ngTemplateOutlet="activityContent"></ng-container>
     </mat-sidenav-content>
 
     <mat-sidenav class="sidenav-right" mode="side" position="end" opened>
-      @if (edit.task() !== undefined) {
-      <app-exercise-toolbar [task]="edit.task()!"></app-exercise-toolbar>
-      }
+      <mat-tab-group class="sidenav-tabs">
+        <mat-tab>
+          <ng-template mat-tab-label i18n> Obsah </ng-template>
+          <ng-container *ngTemplateOutlet="toolbarContent"></ng-container>
+        </mat-tab>
+
+        <mat-tab>
+          <ng-template mat-tab-label i18n> Pozadí </ng-template>
+          <div class="tab-content">
+            <ng-container *ngTemplateOutlet="backgroundEditor"></ng-container>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
     </mat-sidenav>
   </mat-sidenav-container>
+
+  <mat-tab-group class="mobile" animationDuration="0">
+    <mat-tab>
+      <ng-template mat-tab-label i18n> Aktivity </ng-template>
+      <div class="tab-page">
+        <div class="scroll-container">
+          <button mat-stroked-button (click)="openActivityDialog()" i18n>Nová aktivita</button>
+
+          <div
+            cdkDropList
+            cdkDropListOrientation="mixed"
+            class="activity-flex"
+            (cdkDropListDropped)="drop($event)"
+          >
+            @for (activity of document.getActivities()(); track activity.id()) {
+            <div
+              cdkDrag
+              class="slide-container"
+              [class.selected]="edit.activity()?.id() === activity.id()"
+            >
+              <div class="sidenav-slide-content">
+                <p class="slide-index">{{ $index + 1 }}</p>
+
+                <button class="delete-button" (click)="remove(activity.id())">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+
+              <app-slide
+                cdkDragHandle
+                class="slide"
+                [activity]="activity"
+                (click)="edit.editActivity(activity.id())"
+              >
+              </app-slide>
+
+              <ng-template cdkDragPreview>
+                <div></div>
+              </ng-template>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label i18n> Přehled </ng-template>
+      <div class="tab-page">
+        <div class="sidenav-content">
+          <ng-container *ngTemplateOutlet="activityContent"></ng-container>
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label i18n> Editace </ng-template>
+      <div class="tab-page">
+        <ng-container *ngTemplateOutlet="toolbarContent"></ng-container>
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label i18n> Pozadí </ng-template>
+      <div class="tab-page tab-content">
+        <ng-container *ngTemplateOutlet="backgroundEditor"></ng-container>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
 </div>
