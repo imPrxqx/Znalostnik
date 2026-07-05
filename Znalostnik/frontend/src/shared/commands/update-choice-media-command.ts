@@ -4,9 +4,9 @@ import { ChoiceOption, Media } from '@shared/models/format';
 export class UpdateChoiceMediaCommand implements Command {
   private receiver: ChoiceOption;
   private backup: Media | undefined;
-  private newMedia: Media;
+  private newMedia: Media | undefined;
 
-  constructor(receiver: ChoiceOption, newMedia: Media) {
+  constructor(receiver: ChoiceOption, newMedia: Media | undefined) {
     this.receiver = receiver;
     this.backup = receiver.media();
     this.newMedia = newMedia;
