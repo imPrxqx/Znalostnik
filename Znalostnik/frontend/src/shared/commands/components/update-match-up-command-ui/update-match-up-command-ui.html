@@ -1,0 +1,72 @@
+<div class="container">
+  <div class="header">
+    <mat-icon class="icon">link</mat-icon>
+    <h3 i18n>Nastavení správných párů pořadí</h3>
+  </div>
+
+  <div class="sub-header">
+    <mat-icon class="sub-icon">west</mat-icon>
+    <h3 i18n>Nastavení levé strany</h3>
+  </div>
+
+  @for (option of field().value.solution.correct; track option.leftId; let i = $index) {
+
+  <div class="item">
+    <div class="option-actions">
+      <h3 class="title" i18n>{{ $index + 1 }}. Možnost</h3>
+
+      <div>
+        <button mat-icon-button (click)="moveUp($index, 'left')">
+          <mat-icon>keyboard_arrow_up</mat-icon>
+        </button>
+
+        <button mat-icon-button (click)="moveDown($index,'left')">
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <app-edit-choice [choice]="getOptionById(option.leftId)!"></app-edit-choice>
+  </div>
+
+  }
+
+  <div class="sub-header">
+    <mat-icon class="sub-icon">east</mat-icon>
+    <h3 i18n>Nastavení pravé strany</h3>
+  </div>
+
+  @for (option of field().value.solution.correct; track option.rightId) {
+
+  <div class="item">
+    <div class="option-actions">
+      <h3 class="title" i18n>{{ $index + 1 }}. Možnost</h3>
+
+      <div>
+        <button mat-icon-button (click)="moveUp($index, 'right')">
+          <mat-icon>keyboard_arrow_up</mat-icon>
+        </button>
+
+        <button mat-icon-button (click)="moveDown($index,'right')">
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <app-edit-choice [choice]="getOptionById(option.rightId)!"></app-edit-choice>
+  </div>
+
+  }
+
+  <div class="actions">
+    <button mat-flat-button (click)="addOption()" i18n>
+      <mat-icon>add</mat-icon>
+      Přidat
+    </button>
+
+    <button mat-stroked-button (click)="removeLastOption()" i18n>
+      <mat-icon>remove</mat-icon>
+      Odebrat
+    </button>
+  </div>
+</div>
