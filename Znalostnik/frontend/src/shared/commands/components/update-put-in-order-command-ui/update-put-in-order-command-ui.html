@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="header">
+    <mat-icon class="icon">playlist_add_check</mat-icon>
+    <h3 i18n>Nastavení správného pořadí</h3>
+  </div>
+
+  @for (option of field().value.solution.correct; track option) {
+
+  <div class="item">
+    <div class="option-actions">
+      <h3 class="title" i18n>{{ $index + 1 }}. Možnost</h3>
+
+      <div>
+        <button mat-icon-button (click)="moveUp($index)">
+          <mat-icon>keyboard_arrow_up</mat-icon>
+        </button>
+
+        <button mat-icon-button (click)="moveDown($index)">
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <app-edit-choice [choice]="getOptionById(option)!"></app-edit-choice>
+  </div>
+  }
+
+  <div class="actions">
+    <button mat-flat-button (click)="addOption()" i18n>
+      <mat-icon>add</mat-icon>
+      Přidat
+    </button>
+
+    <button mat-stroked-button (click)="removeLastOption()" i18n>
+      <mat-icon>remove</mat-icon>
+      Odebrat
+    </button>
+  </div>
+</div>
