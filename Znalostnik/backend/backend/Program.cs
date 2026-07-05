@@ -27,17 +27,12 @@ namespace backend
             builder.Services.AddSwaggerGen();
 
             // Database
-            //string server = Environment.GetEnvironmentVariable("DATABASE_SERVER")!;
-            //string database = Environment.GetEnvironmentVariable("DATABASE_NAME")!;
-            //string username = Environment.GetEnvironmentVariable("DATABASE_USER")!;
-            //string password = Environment.GetEnvironmentVariable("DATABASE_PASS")!;
-            var connectionString =
-                Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true"
-                    ? "Server=host.docker.internal;Database=postgres;Username=postgres;Password=example"
-                    : builder.Configuration.GetConnectionString("DatabaseConnection");
+            var server = builder.Configuration["DATABASE_SERVER"];
+            var database = builder.Configuration["DATABASE_NAME"];
+            var username = builder.Configuration["DATABASE_USER"];
+            var password = builder.Configuration["DATABASE_PASS"];
 
-            //var connectionString =
-            //        $"Host={server};Database={database};Username={username};Password={password}";
+            var connectionString = $"Host={server};Database={database};Username={username};Password={password}";
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(connectionString)

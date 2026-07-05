@@ -53,6 +53,7 @@ export class ExportJsonVisitor implements Visitor {
           media: option.media()
             ? {
                 id: option.media()!.id,
+                fileName: option.media()!.fileName,
                 contentType: option.media()!.contentType,
               }
             : undefined,
@@ -90,6 +91,7 @@ export class ExportJsonVisitor implements Visitor {
           media: option.media()
             ? {
                 id: option.media()!.id,
+                fileName: option.media()!.fileName,
                 contentType: option.media()!.contentType,
               }
             : undefined,
@@ -101,6 +103,7 @@ export class ExportJsonVisitor implements Visitor {
           media: option.media()
             ? {
                 id: option.media()!.id,
+                fileName: option.media()!.fileName,
                 contentType: option.media()!.contentType,
               }
             : undefined,
@@ -125,6 +128,7 @@ export class ExportJsonVisitor implements Visitor {
           media: option.media()
             ? {
                 id: option.media()!.id,
+                fileName: option.media()!.fileName,
                 contentType: option.media()!.contentType,
               }
             : undefined,

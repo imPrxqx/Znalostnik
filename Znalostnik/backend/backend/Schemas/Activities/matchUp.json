@@ -67,6 +67,9 @@
                 "type": "string",
                 "format": "uuid"
               },
+              "fileName": {
+                "type": "string"
+              },
               "contentType": {
                 "type": "string"
               }
@@ -133,6 +136,9 @@
               "id": {
                 "type": "string",
                 "format": "uuid"
+              },
+              "fileName": {
+                "type": "string"
               },
               "contentType": {
                 "type": "string"

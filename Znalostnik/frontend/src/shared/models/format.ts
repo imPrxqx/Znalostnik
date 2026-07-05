@@ -4,6 +4,7 @@ import { signal } from '@angular/core';
 
 export class Media {
   id = '';
+  fileName = '';
   contentType = '';
 }
 
@@ -83,6 +84,7 @@ export class ChoiceOption {
     if (data?.media) {
       const media = new Media();
       media.id = data?.media?.id;
+      media.fileName = data?.media?.fileName;
       media.contentType = data?.media?.contentType;
       this.media.set(media);
     }
