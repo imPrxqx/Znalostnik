@@ -1,0 +1,13 @@
+<div
+  #container
+  class="container"
+  [style.font-family]="style().fontFamily"
+  [style.color]="style().color"
+  [style.font-weight]="style().bold ? 600 : 400"
+  [style.font-style]="style().italic ? 'italic' : 'normal'"
+  [style.text-decoration]="style().underline ? 'underline' : 'none'"
+  [style.font-size.px]="currentFontSize()"
+  style="line-height: 1"
+>
+  <p #text>{{ content() }}</p>
+</div>

@@ -1,0 +1,90 @@
+<div class="container">
+  <div class="item">
+    <h3 i18n>Obsah možnosti</h3>
+
+    <div class="text">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label i18n>Text možnosti</mat-label>
+        <input matInput [value]="text().text()" (input)="onTextChange($any($event.target).value)" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="item">
+    <button class="advanced-settings" (click)="toggleAdvanced()">
+      <h3 i18n>Pokročilé nastavení</h3>
+
+      @if(advancedOpen()) {
+      <mat-icon iconPositionEnd>expand_less</mat-icon>
+      } @else {
+      <mat-icon iconPositionEnd>expand_more</mat-icon>
+      }
+    </button>
+
+    @if (advancedOpen()) {
+
+    <div class="styles">
+      <mat-form-field appearance="outline">
+        <mat-label i18n>Písmo</mat-label>
+        <mat-select [value]="text().style().fontFamily" (selectionChange)="setFont($event.value)">
+          <mat-option value="Arial">Arial</mat-option>
+          <mat-option value="Roboto">Roboto</mat-option>
+          <mat-option value="Georgia">Georgia</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="style-row">
+        <mat-form-field appearance="outline">
+          <mat-label i18n>Velikost</mat-label>
+          <mat-select
+            [value]="text().style().fontSize"
+            (selectionChange)="setFontSize($event.value)"
+          >
+            <mat-option [value]="32">32</mat-option>
+            <mat-option [value]="48">48</mat-option>
+            <mat-option [value]="64">64</mat-option>
+            <mat-option [value]="80">80</mat-option>
+            <mat-option [value]="96">96</mat-option>
+            <mat-option [value]="112">112</mat-option>
+            <mat-option [value]="128">128</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="offset">
+          <button
+            mat-icon-button
+            type="button"
+            [class.active]="text().style().bold"
+            (click)="toggleBold()"
+          >
+            <div>
+              <mat-icon>format_bold</mat-icon>
+            </div>
+          </button>
+
+          <button
+            mat-icon-button
+            type="button"
+            [class.active]="text().style().italic"
+            (click)="toggleItalic()"
+          >
+            <div>
+              <mat-icon>format_italic</mat-icon>
+            </div>
+          </button>
+
+          <button
+            mat-icon-button
+            type="button"
+            [class.active]="text().style().underline"
+            (click)="toggleUnderline()"
+          >
+            <div>
+              <mat-icon>format_underlined</mat-icon>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+</div>
