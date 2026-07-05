@@ -1,22 +1,37 @@
 <div class="container">
-  @for (option of task().options().options; track option.id) {
-  <div class="option-content">
-    <input
-      type="checkbox"
-      class="option-checkbox"
-      [checked]="isChecked(option.id)"
-      (change)="onCheckboxChange(option.id)"
-    />
-    <input
-      type="text"
-      [value]="option.content"
-      (input)="onInputChange($index, $event.target.value)"
-    />
+  <div class="header">
+    <mat-icon class="icon">playlist_add_check</mat-icon>
+    <h3 i18n>Nastavení správných odpovědí</h3>
   </div>
+
+  @for (option of field().value.choices.options; track option.id) {
+
+  <div class="item">
+    <div class="option-actions">
+      <mat-checkbox
+        class="option-checkbox"
+        [checked]="isChecked(option.id)"
+        (change)="onCheckboxChange(option.id)"
+      >
+      </mat-checkbox>
+
+      <h3 class="title" i18n>{{ $index + 1 }}. Možnost</h3>
+    </div>
+
+    <app-edit-choice [choice]="option"></app-edit-choice>
+  </div>
+
   }
 
-  <div class="option-footer">
-    <button class="footer-button add-button" (click)="addOption()">+</button>
-    <button class="footer-button remove-button" (click)="removeLastOption()">-</button>
+  <div class="actions">
+    <button mat-flat-button (click)="addOption()" i18n>
+      <mat-icon>add</mat-icon>
+      Přidat
+    </button>
+
+    <button mat-stroked-button (click)="removeLastOption()" i18n>
+      <mat-icon>remove</mat-icon>
+      Odebrat
+    </button>
   </div>
 </div>
