@@ -1,0 +1,137 @@
+<div class="container">
+  <div class="item">
+    @if (!choice().media()) {
+    <h3 i18n>Obsah možnosti</h3>
+
+    <div class="text">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label i18n>Text možnosti</mat-label>
+        <input
+          matInput
+          [value]="choice().text()"
+          (input)="onTextChange($any($event.target).value)"
+        />
+      </mat-form-field>
+      <button matIconButton class="offset" type="button" (click)="openMediaDialog()">
+        <mat-icon>perm_media</mat-icon>
+      </button>
+    </div>
+    } @else {
+    <h3>{{ choice().media()?.fileName }}</h3>
+
+    <div class="media">
+      <button mat-icon-button (click)="openMediaDialog()">
+        <mat-icon>edit</mat-icon>
+      </button>
+
+      <button mat-icon-button color="warn" (click)="removeMedia()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+
+    }
+  </div>
+
+  @if (!choice().media()) {
+
+  <div class="item">
+    <button class="advanced-settings" (click)="toggleAdvanced()">
+      <h3 i18n>Pokročilé nastavení</h3>
+
+      @if(advancedOpen()) {
+      <mat-icon iconPositionEnd>expand_less</mat-icon>
+      } @else {
+      <mat-icon iconPositionEnd>expand_more</mat-icon>
+      }
+    </button>
+
+    @if (advancedOpen()) {
+
+    <div class="styles">
+      <mat-form-field appearance="outline">
+        <mat-label i18n>Písmo</mat-label>
+        <mat-select [value]="choice().style().fontFamily" (selectionChange)="setFont($event.value)">
+          <mat-option value="Arial">Arial</mat-option>
+          <mat-option value="Roboto">Roboto</mat-option>
+          <mat-option value="Georgia">Georgia</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="style-row">
+        <mat-form-field appearance="outline">
+          <mat-label i18n>Velikost</mat-label>
+          <mat-select
+            [value]="choice().style().fontSize"
+            (selectionChange)="setFontSize($event.value)"
+          >
+            <mat-option [value]="12">12</mat-option>
+            <mat-option [value]="16">16</mat-option>
+            <mat-option [value]="24">24</mat-option>
+            <mat-option [value]="32">32</mat-option>
+            <mat-option [value]="48">48</mat-option>
+            <mat-option [value]="64">64</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="offset">
+          <button
+            mat-icon-button
+            type="button"
+            [class.active]="choice().style().bold"
+            (click)="toggleBold()"
+          >
+            <div>
+              <mat-icon>format_bold</mat-icon>
+            </div>
+          </button>
+
+          <button
+            mat-icon-button
+            type="button"
+            [class.active]="choice().style().italic"
+            (click)="toggleItalic()"
+          >
+            <div>
+              <mat-icon>format_italic</mat-icon>
+            </div>
+          </button>
+
+          <button
+            mat-icon-button
+            type="button"
+            [class.active]="choice().style().underline"
+            (click)="toggleUnderline()"
+          >
+            <div>
+              <mat-icon>format_underlined</mat-icon>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="styles">
+      <div class="color">
+        <label for="color-text" i18n>Barva textu</label>
+        <input
+          type="color"
+          id="color-text"
+          [value]="choice().style().color"
+          (change)="setColor($any($event.target).value)"
+        />
+      </div>
+
+      <div class="color">
+        <label for="color-background" i18n>Barva pozadí</label>
+        <input
+          type="color"
+          id="color-background"
+          [value]="choice().style().backgroundColor"
+          (change)="setBackgroundColor($any($event.target).value)"
+        />
+      </div>
+    </div>
+
+    }
+  </div>
+
+  }
+</div>

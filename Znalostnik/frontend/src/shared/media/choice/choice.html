@@ -1,0 +1,40 @@
+<div
+  class="choice"
+  [style.font-family]="style().fontFamily"
+  [style.color]="style().color"
+  [style.font-weight]="style().bold ? 600 : 400"
+  [style.font-style]="style().italic ? 'italic' : 'normal'"
+  [style.text-decoration]="style().underline ? 'underline' : 'none'"
+  [class.selected]="isSelected()"
+  [style.background]="style().backgroundColor"
+  [style.font-size.px]="currentFontSize()"
+  style="line-height: 1"
+>
+  <div #container class="left">
+    @if (media() === undefined) {
+    <p #text class="choice-text">{{ content() }}</p>
+    } @else if (media()!.contentType.startsWith('image/')) {
+    <img
+      class="media"
+      [src]="getMediaUrl()"
+      [style.width.cqw]="mediaSize()"
+      alt="Image is not available"
+    />
+    } @else if (media()!.contentType.startsWith('video/')) {
+    <video
+      class="media"
+      [src]="getMediaUrl()"
+      [style.width.cqw]="mediaSize()"
+      controls
+      muted
+    ></video>
+    }
+  </div>
+  <div class="right">
+    @if(isCorrect() !== undefined) { @if(isCorrect()) {
+    <mat-icon class="icon-correct">check_circle</mat-icon>
+    } @else {
+    <mat-icon class="icon-incorrect">cancel</mat-icon>
+    } }
+  </div>
+</div>
