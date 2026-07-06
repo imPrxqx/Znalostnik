@@ -38,6 +38,10 @@
       </mat-chip-option>
       }
     </mat-chip-listbox>
+
+    @if (tags().length === 0) {
+    <p i18n>Žadné tagy k dispozici</p>
+    }
   </div>
 </mat-dialog-content>
 

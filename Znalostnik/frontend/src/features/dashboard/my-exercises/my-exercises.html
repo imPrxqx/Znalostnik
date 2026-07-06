@@ -1,10 +1,38 @@
-<div>
-  <h1 i18n>Moje Cvičení</h1>
-
-  <button mat-flat-button (click)="createExercise()" i18n>Nové Cvičení</button>
-  <div class="card-container">
-    @for(exercise of exercises(); track exercise.id) {
-    <app-exercise-card [exercise]="exercise"></app-exercise-card>
-    }
+<mat-toolbar-row>
+  <div class="left">
+    <h1 i18n>Cvičení</h1>
   </div>
+
+  <div class="right">
+    <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
+      <mat-icon matPrefix>search</mat-icon>
+      <mat-label i18n>Hledat cvičení...</mat-label>
+      <input matInput [ngModel]="filter().search" (change)="setSearch($any($event.target).value)" />
+    </mat-form-field>
+
+    <button mat-icon-button (click)="filterExercise()">
+      <mat-icon>filter_list</mat-icon>
+    </button>
+
+    <button matFab extended (click)="createExercise()" i18n>
+      <mat-icon>add_circle</mat-icon>
+      Nové cvičení
+    </button>
+  </div>
+</mat-toolbar-row>
+
+@if (filteredExercises().length !== 0) {
+<div class="exercise-list">
+  @for(exercise of filteredExercises(); track exercise.id()) {
+  <app-exercise-card [exercise]="exercise"></app-exercise-card>
+  }
 </div>
+} @else {
+
+<div class="empty-state">
+  <mat-icon>fitness_center</mat-icon>
+  <h2 i18n>Žádná cvičení</h2>
+  <p i18n>Zatím nemáte vytvořené žádné cvičení.</p>
+  <button mat-flat-button (click)="createExercise()" i18n>Vytvořit první cvičení</button>
+</div>
+}
