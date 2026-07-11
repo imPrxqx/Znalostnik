@@ -35,11 +35,14 @@
   } @if (status() === 'idle') { @if (statusFeedback() === 'feedback') { @if(feedbackActivity() !==
   undefined && feedbackAnswer() !== undefined) {
   <div class="activity">
+    @if(activity() !== undefined) {
+
     <app-exercise-activity
       [(answer)]="feedbackAnswer"
       [activity]="feedbackActivity()!"
       [mode]="'feedback'"
     ></app-exercise-activity>
+    }
   </div>
   } } @else {
   <div class="center">
@@ -62,8 +65,11 @@
   } @if (status() === 'answering') { @if (statusFeedback() === 'answering') {
 
   <div class="activity">
+    @if(activity() !== undefined) {
+
     <app-exercise-activity [(answer)]="answer" [activity]="activity()!" [mode]="'answering'">
     </app-exercise-activity>
+    }
   </div>
 
   <div class="action-bar">
@@ -81,11 +87,14 @@
   } @if (statusFeedback() === 'feedback') { @if(feedbackActivity() !== undefined && feedbackAnswer()
   !== undefined) {
   <div class="activity">
+    @if(activity() !== undefined) {
+
     <app-exercise-activity
       [(answer)]="feedbackAnswer"
       [activity]="feedbackActivity()!"
       [mode]="'feedback'"
     ></app-exercise-activity>
+    }
   </div>
   } } }
 </div>

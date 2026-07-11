@@ -27,7 +27,9 @@
   } @if (status() === 'answering') {
 
   <div class="activity">
+    @if(activity() !== undefined) {
     <app-exercise-activity [activity]="activity()!" [mode]="'view'"> </app-exercise-activity>
+    }
   </div>
 
   <div class="action-bar">
