@@ -2,6 +2,16 @@ import { signal, WritableSignal } from '@angular/core';
 import { FieldContext } from '../interfaces/field-context';
 import { Visitor, Element } from '../interfaces/visitor';
 import { v4 as uuidv4 } from 'uuid';
+import { Signal } from '@angular/core';
+import { ActivityAnswer } from './activity-answer';
+
+export type ActivityMode = 'view' | 'answering' | 'feedback';
+
+export interface ActivityComponent {
+  mode: Signal<ActivityMode>;
+  model: Signal<Activity>;
+  answer: Signal<ActivityAnswer | undefined>;
+}
 
 export interface ActivityConfiguration {
   id: string;

@@ -26,7 +26,7 @@ namespace backend.Services
                 .Exercises.Include(e => e.Activities)
                 .Include(e => e.ExerciseTags)
                 .ThenInclude(et => et.Tag)
-                .FirstOrDefaultAsync(e => e.Id == exerciseId);
+                .FirstOrDefaultAsync(e => e.Id == exerciseId && e.IsSnapshot == false);
 
             if (exercise == null)
             {
@@ -69,7 +69,7 @@ namespace backend.Services
             var exercises = await _context
                 .Exercises.Include(e => e.ExerciseTags)
                 .ThenInclude(et => et.Tag)
-                .Where(e => e.UserId == user.Id)
+                .Where(e => e.UserId == user.Id && e.IsSnapshot == false) 
                 .ToListAsync();
 
             return Result<IEnumerable<ExerciseDto>>.Success(
@@ -103,7 +103,7 @@ namespace backend.Services
         {
             var exercise = await _context
                 .Exercises.Include(e => e.Activities)
-                .FirstOrDefaultAsync(e => e.Id == exerciseId);
+                .FirstOrDefaultAsync(e => e.Id == exerciseId && e.IsSnapshot == false);
 
             if (exercise == null)
             {

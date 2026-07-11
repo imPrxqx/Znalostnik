@@ -37,7 +37,6 @@ export interface SessionUser {
 export interface Participant {
   id: string;
   name: string;
-  team: string | undefined;
 }
 
 export interface Team {

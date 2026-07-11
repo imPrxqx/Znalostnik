@@ -30,7 +30,7 @@ export interface PutInOrderConfiguration {
 
 export interface PutInOrderAnswerConfiguration {
   id: string;
-  created: string;
+  createdAt: string;
   correctPercentage: number;
   status: string | undefined;
   version: number;
@@ -38,6 +38,7 @@ export interface PutInOrderAnswerConfiguration {
     selected: string[];
   };
   activityId: string;
+  submissionId: string;
 }
 
 export class PutInOrderActivity extends Activity implements Element {
@@ -142,7 +143,7 @@ export class PutInOrderActivity extends Activity implements Element {
 }
 
 export class PutInOrderAnswer extends ActivityAnswer {
-  created = new Date().toLocaleString();
+  createdAt = new Date().toLocaleString();
   submit: {
     selected: string[];
   } = { selected: [] };
@@ -161,8 +162,8 @@ export class PutInOrderAnswer extends ActivityAnswer {
       this.version = config.version;
     }
 
-    if (config?.created) {
-      this.created = config.created;
+    if (config?.createdAt) {
+      this.createdAt = config.createdAt;
     }
 
     if (config?.submit) {
@@ -183,6 +184,10 @@ export class PutInOrderAnswer extends ActivityAnswer {
 
     if (config?.activityId) {
       this.activityId = config.activityId;
+    }
+
+    if (config?.submissionId) {
+      this.submissionId = config.submissionId;
     }
   }
 }

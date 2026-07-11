@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, input, model } from '@angular/core';
 import { Choice } from '@shared/media/choice/choice';
 import { Text } from '@shared/media/text/text';
+import { ActivityComponent, ActivityMode } from '@shared/models/activity';
 import { QuizAnswer, QuizActivity } from '@shared/models/quiz';
 
 @Component({
@@ -10,8 +11,8 @@ import { QuizAnswer, QuizActivity } from '@shared/models/quiz';
   templateUrl: './quiz.html',
   styleUrl: './quiz.scss',
 })
-export class Quiz {
-  mode = input.required<string>();
+export class Quiz implements ActivityComponent {
+  mode = input.required<ActivityMode>();
   model = input.required<QuizActivity>();
   answer = model<QuizAnswer>();
 

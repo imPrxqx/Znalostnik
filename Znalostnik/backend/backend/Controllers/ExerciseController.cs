@@ -127,6 +127,18 @@ namespace backend.Controllers
                 if (
                     !_jsonSchemaValidator.Validate(
                         "Activities",
+                        "activity",
+                        activity.Style.RootElement.GetRawText()
+                    )
+                )
+                {
+                    isValid = false;
+                    break;
+                }
+
+                if (
+                    !_jsonSchemaValidator.Validate(
+                        "Activities",
                         activity.Type,
                         activity.Content.RootElement.GetRawText()
                     )

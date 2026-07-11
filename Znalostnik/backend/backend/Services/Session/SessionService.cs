@@ -45,9 +45,9 @@ namespace backend.Services
             }
 
             var activities = await _context
-                .Activities.Where(a => a.ExerciseId == session.ExerciseId)
+                .Activities.Where(a => a.ExerciseId == session.ExerciseId).OrderBy(a => a.Order)
                 .ToListAsync();
-            var activityIds = activities.Select(a => a.Id).ToList();
+
             var submissions = await _context
                 .Submissions.Include(s => s.Answers)
                 .Include(s => s.SessionUser)
@@ -55,7 +55,7 @@ namespace backend.Services
                 .Where(s => s.SessionId == sessionId)
                 .ToListAsync();
 
-            var answers = submissions.SelectMany(s => s.Answers).ToList();
+            var answers = submissions.SelectMany(s => s.Answers).OrderBy(a => a.CreatedAt).ToList();
 
             var participantsSessionUsers = submissions
                 .Where(s => s.SessionUser != null)
@@ -78,7 +78,7 @@ namespace backend.Services
         {
             var exercise = await _context
                 .Exercises.Include(e => e.Activities)
-                .FirstOrDefaultAsync(e => e.Id == dto.ExerciseId && e.UserId == user.Id);
+                .FirstOrDefaultAsync(e => e.Id == dto.ExerciseId && e.UserId == user.Id && e.IsSnapshot == false);
 
             if (exercise == null)
             {
@@ -97,7 +97,7 @@ namespace backend.Services
 
             var runtimeActivities = activities.Select(a => new RuntimeActivity
             {
-                Id = a.Id,
+                Id = Guid.NewGuid(),
                 Type = a.Type,
                 Content = a.Content,
                 Style = a.Style,
@@ -108,7 +108,7 @@ namespace backend.Services
             var session = new RuntimeSession
             {
                 ExerciseId = dto.ExerciseId,
-                ActivityIds = activities.Select(a => a.Id).ToList(),
+                ActivityIds = runtimeActivities.Select(a => a.Id).ToList(),
                 Activities = runtimeActivities.ToList(),
                 Title = dto.Title,
                 Status = "lobby",
@@ -392,6 +392,33 @@ namespace backend.Services
 
             mode.End(session);
 
+            var snapShotExercise = new Exercise
+            {
+                UserId = session.CreatedByUserId,
+                Title = session.Title,
+                IsSnapshot = true,
+            };
+
+            await _context.Exercises.AddAsync(snapShotExercise);
+
+
+            foreach(var activity in session.Activities)
+            {
+                var snapShopActivity = new Activity
+                {
+                    Id = activity.Id,
+                    Type = activity.Type,
+                    Order = activity.Order,
+                    Style = activity.Style,
+                    Content = activity.Content,
+                    Solution = activity.Solution,
+                    ExerciseId = snapShotExercise.Id
+                };
+
+                await _context.AddAsync(snapShopActivity);
+            }
+
+
             var newSession = new Session
             {
                 Id = session.Id,
@@ -401,7 +428,7 @@ namespace backend.Services
                 GameMode = session.GameMode,
                 AccessCode = session.AccessCode,
                 GameState = session.GameState,
-                ExerciseId = session.ExerciseId,
+                ExerciseId = snapShotExercise.Id,
                 CreatedByUserId = session.CreatedByUserId,
             };
 

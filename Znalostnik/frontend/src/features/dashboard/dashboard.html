@@ -1,5 +1,5 @@
 <mat-sidenav-container class="container">
-  <mat-sidenav class="sidebar" mode="side" [opened]="isOpened()">
+  <mat-sidenav class="sidebar" [mode]="isMobile() ? 'over' : 'side'" [opened]="isOpened()">
     <div class="sidebar-inner">
       <div class="sidebar-top">
         <div class="sidebar-header">

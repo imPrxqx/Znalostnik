@@ -1,0 +1,166 @@
+.container {
+  border-radius: var(--mat-sys-corner-medium);
+  color: var(--mat-sys-on-surface);
+  min-height: 100vh;
+}
+
+mat-toolbar {
+  background: var(--mat-sys-surface-container);
+  border: 1px solid var(--mat-sys-outline-variant);
+  box-shadow: var(--mat-sys-level1);
+  border-radius: var(--mat-sys-corner-medium);
+}
+
+mat-toolbar div {
+  display: flex;
+  gap: 8px;
+}
+
+p {
+  margin: 0;
+}
+
+.globalCharts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.participantCharts {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.participant-pick {
+  position: sticky;
+  top: 10px;
+  z-index: 100;
+  background: var(--mat-sys-surface-container);
+  border: 1px solid var(--mat-sys-outline-variant);
+  box-shadow: var(--mat-sys-level1);
+  border-radius: var(--mat-sys-corner-medium);
+  color: var(--mat-sys-on-surface);
+  padding: 12px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.activities {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.activity {
+  background: var(--mat-sys-surface-container);
+  border: 1px solid var(--mat-sys-outline-variant);
+  box-shadow: var(--mat-sys-level1);
+  border-radius: var(--mat-sys-corner-medium);
+  overflow: hidden;
+}
+
+.activity-open {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px;
+  cursor: pointer;
+  align-items: center;
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  appearance: none;
+}
+
+.activity-opened {
+  padding: 12px;
+}
+
+.stats {
+  display: flex;
+  gap: 16px;
+}
+
+.stat {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  width: 50px;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: var(--mat-sys-secondary);
+}
+
+.chart {
+  background: var(--mat-sys-surface-container);
+  border: 1px solid var(--mat-sys-outline-variant);
+  box-shadow: var(--mat-sys-level1);
+  border-radius: var(--mat-sys-corner-medium);
+  padding: 12px;
+}
+
+canvas {
+  width: 100% !important;
+  height: 500px !important;
+}
+
+.metadata {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.correct-icon {
+  color: #77e97b;
+}
+
+.partial-icon {
+  color: #e4b56e;
+}
+
+.wrong-icon {
+  color: #f4857d;
+}
+
+app-exercise-activity {
+  height: 800px;
+}
+
+mat-icon {
+  color: var(--mat-sys-primary);
+}
+
+a {
+  text-decoration: none;
+}
+
+@media (max-width: 900px) {
+  .participant-pick {
+    top: 60px;
+  }
+
+  .stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+
+  .activity-open {
+    flex-direction: column;
+  }
+
+  .globalCharts,
+  .participantCharts {
+    grid-template-columns: 1fr;
+  }
+
+  .metadata {
+    width: 100%;
+    text-align: center;
+  }
+}

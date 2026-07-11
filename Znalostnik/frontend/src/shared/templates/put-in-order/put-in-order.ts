@@ -4,6 +4,7 @@ import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk
 import { PutInOrderAnswer, PutInOrderActivity } from '@shared/models/put-in-order';
 import { Text } from '@shared/media/text/text';
 import { Choice } from '@shared/media/choice/choice';
+import { ActivityComponent, ActivityMode } from '@shared/models/activity';
 
 @Component({
   selector: 'app-put-in-order',
@@ -11,8 +12,8 @@ import { Choice } from '@shared/media/choice/choice';
   templateUrl: './put-in-order.html',
   styleUrl: './put-in-order.scss',
 })
-export class PutInOrder implements OnInit {
-  mode = input.required<string>();
+export class PutInOrder implements OnInit, ActivityComponent {
+  mode = input.required<ActivityMode>();
   model = input.required<PutInOrderActivity>();
   answer = model<PutInOrderAnswer>();
 

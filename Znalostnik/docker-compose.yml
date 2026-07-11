@@ -33,7 +33,7 @@ services:
     restart: unless-stopped
     environment:
       - EMAIL=${GOOGLE_EMAIL}
-      - EMAIL_PASSWORD=${GOOGLE_EMAIL_APP_PASSWORD}
+      - EMAIL_PASSWORD=${GOOGLE_EMAIL_APP_PASS}
       - DATABASE_SERVER=${DATABASE_SERVER}
       - DATABASE_NAME=${DATABASE_NAME}
       - DATABASE_USER=${DATABASE_USER}

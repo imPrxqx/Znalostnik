@@ -10,6 +10,7 @@ namespace backend.Models
         public string Title { get; set; } = string.Empty;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public bool IsSnapshot { get; set; }
         public string UserId { get; set; } = string.Empty;
         public User User { get; set; } = null!;
         public ICollection<Session> Sessions { get; set; } = new List<Session>();

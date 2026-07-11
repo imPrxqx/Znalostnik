@@ -3,6 +3,7 @@ import { Component, input, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { Text } from '@shared/media/text/text';
+import { ActivityComponent, ActivityMode } from '@shared/models/activity';
 import { GuessActivity, GuessAnswer } from '@shared/models/guess';
 
 @Component({
@@ -11,8 +12,8 @@ import { GuessActivity, GuessAnswer } from '@shared/models/guess';
   templateUrl: './guess.html',
   styleUrl: './guess.scss',
 })
-export class Guess {
-  mode = input.required<string>();
+export class Guess implements ActivityComponent {
+  mode = input.required<ActivityMode>();
   model = input.required<GuessActivity>();
   answer = model<GuessAnswer>();
 

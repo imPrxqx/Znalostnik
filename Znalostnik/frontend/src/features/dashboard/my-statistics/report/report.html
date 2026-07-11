@@ -1,0 +1,146 @@
+<mat-toolbar>
+  <div>
+    <mat-icon>chevron_left</mat-icon>
+    <a routerLink="/my-statistics" i18n>Zpět</a>
+  </div>
+</mat-toolbar>
+<br />
+
+<mat-toolbar>
+  <div>
+    <mat-icon>analytics</mat-icon>
+    <p i18n>Přehled výsledků relace</p>
+  </div>
+</mat-toolbar>
+
+<div class="container">
+  <br />
+  <div class="globalCharts">
+    <div class="chart">
+      <p class="subtitle" i18n>Rozložení úšpěšnosti odpovědí</p>
+      <br />
+      <canvas #answerDistributionChart></canvas>
+    </div>
+
+    <div class="chart">
+      <p class="subtitle" i18n>Rozložení úšpěšnosti odpovědí do skupin</p>
+      <canvas #answerStatusChart></canvas>
+    </div>
+
+    <div class="chart">
+      <p class="subtitle" i18n>Průměrná procentuální správnost podle typů aktivity</p>
+      <br />
+      <canvas #activityTypeSuccessChart></canvas>
+    </div>
+  </div>
+  <br />
+
+  <div class="participant-pick">
+    <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+      <mat-label i18n>Vyberte účastníka</mat-label>
+
+      <mat-select
+        [value]="selectedParticipantId()"
+        (selectionChange)="selectParticipant($event.value)"
+      >
+        <mat-option [value]="undefined" i18n>Nikdo</mat-option>
+
+        @for (participant of participants(); track participant.id) {
+        <mat-option [value]="participant.id"> {{ participant.name }} </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <br />
+
+  @if(selectedParticipantId() !== undefined) {
+
+  <mat-toolbar>
+    <div>
+      <mat-icon>person</mat-icon>
+      <p i18n>Přehled účastníka</p>
+    </div>
+  </mat-toolbar>
+  <br />
+
+  <div class="participantCharts">
+    <div class="chart">
+      <p class="subtitle" i18n>Průměrná úspěšnost odpovědí podle typu aktivity</p>
+      <br />
+      <canvas #participantActivitySuccessChart></canvas>
+    </div>
+
+    <div class="chart">
+      <p class="subtitle" i18n>Historie odpovědí v průběhu odpovídání na všechny aktivity</p>
+      <br />
+      <canvas #participantFullHistoryChart></canvas>
+    </div>
+  </div>
+  <br />
+
+  }
+
+  <mat-toolbar>
+    <div>
+      <mat-icon>monitoring</mat-icon>
+      <p i18n>Přehled aktivit</p>
+    </div>
+  </mat-toolbar>
+  <br />
+
+  <div class="activities">
+    @for(item of activities(); track item.id()) {
+
+    <mat-card class="activity">
+      <button class="activity-open" (click)="selectActivity(item.id())">
+        <div class="metadata">
+          <p i18n>Aktivita {{ $index + 1 }}</p>
+          <p class="subtitle" i18n>{{ getActivityDefinition(item.id()).name }}</p>
+        </div>
+
+        <div class="stats">
+          <p class="stat">
+            <mat-icon class="correct-icon">check_circle</mat-icon>
+            {{ getCountCorrectAnswers(item.id()) }}
+          </p>
+
+          <p class="stat">
+            <mat-icon class="partial-icon">remove_circle</mat-icon>
+            {{ getCountPartialAnswers(item.id()) }}
+          </p>
+
+          <p class="stat">
+            <mat-icon class="wrong-icon">cancel</mat-icon>
+            {{ getCountWrongAnswers(item.id()) }}
+          </p>
+
+          <p class="stat accuracy">
+            <mat-icon>insights</mat-icon>
+            {{ getAccuracyCorrectAnswers(item.id()) }}%
+          </p>
+        </div>
+      </button>
+
+      @if(expandedActivityId() === item.id()) {
+
+      <div class="activity-opened">
+        <app-exercise-activity [activity]="getActivity(item.id())" [mode]="'view'">
+        </app-exercise-activity>
+
+        @if(selectedParticipantId() !== undefined) {
+
+        <div class="chart">
+          <p class="subtitle" i18n>Historie odpovědí na danou aktivitu</p>
+          <br />
+          <canvas #participantActivityHistoryChart></canvas>
+        </div>
+
+        }
+      </div>
+
+      }
+    </mat-card>
+
+    }
+  </div>
+</div>

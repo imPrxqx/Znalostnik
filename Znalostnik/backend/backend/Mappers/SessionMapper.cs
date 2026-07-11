@@ -14,7 +14,7 @@ namespace backend.DTOs
                 CreatedAt = session.CreatedAt,
                 RespondType = session.RespondType,
                 GameMode = session.GameMode,
-                AccessCode = session.AccessCode ?? string.Empty,
+                AccessCode = session.AccessCode,
                 ExerciseId = session.ExerciseId,
             };
         }

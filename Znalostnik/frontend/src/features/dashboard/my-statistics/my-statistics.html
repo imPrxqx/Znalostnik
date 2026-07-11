@@ -1,0 +1,30 @@
+@if (!sessionId()) {
+
+<mat-toolbar-row>
+  <div class="left">
+    <h1 i18n>Ukončené Relace</h1>
+  </div>
+</mat-toolbar-row>
+
+@if (finishedSessions().length !== 0) {
+
+<div class="session-list">
+  @for(session of finishedSessions(); track session.id) {
+  <app-session-card [session]="session"></app-session-card>
+  }
+</div>
+
+} @else {
+
+<div class="empty-state">
+  <mat-icon>fitness_center</mat-icon>
+  <h2 i18n>Žádné ukončené relace</h2>
+  <p i18n>Zatím nemáte ukončené relace.</p>
+  <button mat-flat-button [routerLink]="['/my-exercises']">Vytvořte relaci</button>
+</div>
+
+} } @if (sessionId()) {
+
+<app-report [sessionId]="sessionId()!"></app-report>
+
+}

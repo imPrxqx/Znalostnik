@@ -4,6 +4,7 @@ import { MatchUpActivity, MatchUpAnswer } from '@shared/models/match-up';
 import { CommonModule } from '@angular/common';
 import { Text } from '@shared/media/text/text';
 import { Choice } from '@shared/media/choice/choice';
+import { ActivityComponent, ActivityMode } from '@shared/models/activity';
 
 @Component({
   selector: 'app-match-up',
@@ -11,8 +12,8 @@ import { Choice } from '@shared/media/choice/choice';
   templateUrl: './match-up.html',
   styleUrl: './match-up.scss',
 })
-export class MatchUp implements OnInit {
-  mode = input.required<string>();
+export class MatchUp implements OnInit, ActivityComponent {
+  mode = input.required<ActivityMode>();
   model = input.required<MatchUpActivity>();
   answer = model<MatchUpAnswer>();
 

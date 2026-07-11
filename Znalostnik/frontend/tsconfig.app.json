@@ -13,8 +13,7 @@
       "@core/*": ["core/*"],
       "@features/*": ["features/*"],
       "@shared/*": ["shared/*"],
-      "@environments/*": ["environments/*"],
-      "@pages/*": ["pages/*"]
+      "@environments/*": ["environments/*"]
     }
   },
   "include": [

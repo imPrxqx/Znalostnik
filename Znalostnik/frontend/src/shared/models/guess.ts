@@ -15,7 +15,7 @@ export interface GuessConfiguration {
 
 export interface GuessAnswerConfiguration {
   id: string;
-  created: string;
+  createdAt: string;
   correctPercentage: number;
   status: string | undefined;
   version: number;
@@ -23,6 +23,7 @@ export interface GuessAnswerConfiguration {
     selected: string;
   };
   activityId: string;
+  submissionId: string;
 }
 
 export class GuessActivity extends Activity implements Element {
@@ -101,7 +102,7 @@ export class GuessActivity extends Activity implements Element {
 }
 
 export class GuessAnswer extends ActivityAnswer {
-  created = new Date().toLocaleString();
+  createdAt = new Date().toLocaleString();
   submit: {
     selected: string;
   } = { selected: '' };
@@ -120,8 +121,8 @@ export class GuessAnswer extends ActivityAnswer {
       this.version = config.version;
     }
 
-    if (config?.created) {
-      this.created = config.created;
+    if (config?.createdAt) {
+      this.createdAt = config.createdAt;
     }
 
     if (config?.submit) {
@@ -142,6 +143,10 @@ export class GuessAnswer extends ActivityAnswer {
 
     if (config?.activityId) {
       this.activityId = config.activityId;
+    }
+
+    if (config?.submissionId) {
+      this.submissionId = config.submissionId;
     }
   }
 }

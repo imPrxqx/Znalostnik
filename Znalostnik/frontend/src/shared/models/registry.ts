@@ -9,7 +9,7 @@ import { GuessActivity, GuessAnswer } from './guess';
 import { MatchUpActivity, MatchUpAnswer } from './match-up';
 import { PutInOrderActivity, PutInOrderAnswer } from './put-in-order';
 import { QuizActivity, QuizAnswer } from './quiz';
-import { Activity } from './activity';
+import { Activity, ActivityComponent } from './activity';
 import { ActivityAnswer } from './activity-answer';
 import { UpdateTextSolutionCommandUi } from '@shared/commands/components/update-text-solution-command-ui/update-text-solution-command-ui';
 import { UpdatePutInOrderCommandUi } from '@shared/commands/components/update-put-in-order-command-ui/update-put-in-order-command-ui';
@@ -26,7 +26,7 @@ import { GameSetting } from './dtos';
 export interface ActivityDefinition {
   key: string;
   activity: Type<Activity>;
-  component: Type<unknown>;
+  component: Type<ActivityComponent>;
   answer: Type<ActivityAnswer>;
   icon: string;
   name: string;

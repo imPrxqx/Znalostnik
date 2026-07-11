@@ -12,7 +12,7 @@ namespace backend.Models
         public string RespondType { get; set; } = string.Empty;
         public string GameMode { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public string? AccessCode { get; set; }
+        public string AccessCode { get; set; } = string.Empty;
         public string GameState { get; set; } = "{}";
         public Guid ExerciseId { get; set; }
         public Exercise Exercise { get; set; } = null!;
