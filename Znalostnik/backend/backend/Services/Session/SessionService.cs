@@ -45,7 +45,8 @@ namespace backend.Services
             }
 
             var activities = await _context
-                .Activities.Where(a => a.ExerciseId == session.ExerciseId).OrderBy(a => a.Order)
+                .Activities.Where(a => a.ExerciseId == session.ExerciseId)
+                .OrderBy(a => a.Order)
                 .ToListAsync();
 
             var submissions = await _context
@@ -78,7 +79,9 @@ namespace backend.Services
         {
             var exercise = await _context
                 .Exercises.Include(e => e.Activities)
-                .FirstOrDefaultAsync(e => e.Id == dto.ExerciseId && e.UserId == user.Id && e.IsSnapshot == false);
+                .FirstOrDefaultAsync(e =>
+                    e.Id == dto.ExerciseId && e.UserId == user.Id && e.IsSnapshot == false
+                );
 
             if (exercise == null)
             {
@@ -401,8 +404,7 @@ namespace backend.Services
 
             await _context.Exercises.AddAsync(snapShotExercise);
 
-
-            foreach(var activity in session.Activities)
+            foreach (var activity in session.Activities)
             {
                 var snapShopActivity = new Activity
                 {
@@ -412,12 +414,11 @@ namespace backend.Services
                     Style = activity.Style,
                     Content = activity.Content,
                     Solution = activity.Solution,
-                    ExerciseId = snapShotExercise.Id
+                    ExerciseId = snapShotExercise.Id,
                 };
 
                 await _context.AddAsync(snapShopActivity);
             }
-
 
             var newSession = new Session
             {
@@ -695,7 +696,7 @@ namespace backend.Services
 
             if (role.Value == "participant")
             {
-                if(sessionUser == null)
+                if (sessionUser == null)
                 {
                     return Result<SessionDto>.Failure(Errors.UnauthorizedAccess);
                 }

@@ -69,7 +69,7 @@ namespace backend.Services
             var exercises = await _context
                 .Exercises.Include(e => e.ExerciseTags)
                 .ThenInclude(et => et.Tag)
-                .Where(e => e.UserId == user.Id && e.IsSnapshot == false) 
+                .Where(e => e.UserId == user.Id && e.IsSnapshot == false)
                 .ToListAsync();
 
             return Result<IEnumerable<ExerciseDto>>.Success(

@@ -32,7 +32,8 @@ namespace backend
             var username = builder.Configuration["DATABASE_USER"];
             var password = builder.Configuration["DATABASE_PASS"];
 
-            var connectionString = $"Host={server};Database={database};Username={username};Password={password}";
+            var connectionString =
+                $"Host={server};Database={database};Username={username};Password={password}";
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(connectionString)
