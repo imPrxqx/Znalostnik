@@ -7,6 +7,7 @@ USER root
 RUN apt-get update
 RUN apt-get install -y iputils-ping
 RUN mkdir -p /app/keys && chown -R $APP_UID:$APP_UID /app/keys
+RUN mkdir -p /app/uploads && chown -R $APP_UID:$APP_UID /app/uploads
 
 USER $APP_UID
 WORKDIR /app

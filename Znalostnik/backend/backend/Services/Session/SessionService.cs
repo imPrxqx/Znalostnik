@@ -106,7 +106,7 @@ namespace backend.Services
                 Style = a.Style,
                 Solution = a.Solution,
                 Order = a.Order,
-            });
+            }).ToList();
 
             var session = new RuntimeSession
             {
