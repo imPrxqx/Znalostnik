@@ -15,6 +15,7 @@ CREATE TABLE "AspNetRoles" (
 
 CREATE TABLE "AspNetUsers" (
     "Id" text NOT NULL,
+    "UserType" integer NOT NULL,
     "UserName" character varying(256),
     "NormalizedUserName" character varying(256),
     "Email" character varying(256),
@@ -30,12 +31,6 @@ CREATE TABLE "AspNetUsers" (
     "LockoutEnabled" boolean NOT NULL,
     "AccessFailedCount" integer NOT NULL,
     CONSTRAINT "PK_AspNetUsers" PRIMARY KEY ("Id")
-);
-
-CREATE TABLE "Exercises" (
-    "Id" text NOT NULL,
-    "Content" jsonb NOT NULL,
-    CONSTRAINT "PK_Exercises" PRIMARY KEY ("Id")
 );
 
 CREATE TABLE "AspNetRoleClaims" (
@@ -82,6 +77,128 @@ CREATE TABLE "AspNetUserTokens" (
     CONSTRAINT "FK_AspNetUserTokens_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE
 );
 
+CREATE TABLE "Exercises" (
+    "Id" uuid NOT NULL,
+    "Title" text NOT NULL,
+    "UpdatedAt" timestamp with time zone NOT NULL,
+    "CreatedAt" timestamp with time zone NOT NULL,
+    "UserId" text NOT NULL,
+    CONSTRAINT "PK_Exercises" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_Exercises_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE
+);
+
+CREATE TABLE "Medias" (
+    "Id" uuid NOT NULL,
+    "FileName" text NOT NULL,
+    "Path" text NOT NULL,
+    "ContentType" text NOT NULL,
+    "CreatedAt" timestamp with time zone NOT NULL,
+    "CreatedByUserId" text NOT NULL,
+    CONSTRAINT "PK_Medias" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_Medias_AspNetUsers_CreatedByUserId" FOREIGN KEY ("CreatedByUserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE
+);
+
+CREATE TABLE "Tags" (
+    "Id" uuid NOT NULL,
+    "UserId" text NOT NULL,
+    "Name" text NOT NULL,
+    CONSTRAINT "PK_Tags" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_Tags_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE
+);
+
+CREATE TABLE "Activities" (
+    "Id" uuid NOT NULL,
+    "Type" text NOT NULL,
+    "Order" integer NOT NULL,
+    "Style" jsonb NOT NULL,
+    "Content" jsonb NOT NULL,
+    "Solution" jsonb NOT NULL,
+    "ExerciseId" uuid NOT NULL,
+    CONSTRAINT "PK_Activities" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_Activities_Exercises_ExerciseId" FOREIGN KEY ("ExerciseId") REFERENCES "Exercises" ("Id") ON DELETE CASCADE
+);
+
+CREATE TABLE "Sessions" (
+    "Id" uuid NOT NULL,
+    "Title" text NOT NULL,
+    "Status" text NOT NULL,
+    "RespondType" text NOT NULL,
+    "GameMode" text NOT NULL,
+    "CreatedAt" timestamp with time zone NOT NULL,
+    "AccessCode" text,
+    "GameState" text NOT NULL,
+    "ExerciseId" uuid NOT NULL,
+    "CreatedByUserId" text NOT NULL,
+    CONSTRAINT "PK_Sessions" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_Sessions_AspNetUsers_CreatedByUserId" FOREIGN KEY ("CreatedByUserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE,
+    CONSTRAINT "FK_Sessions_Exercises_ExerciseId" FOREIGN KEY ("ExerciseId") REFERENCES "Exercises" ("Id") ON DELETE CASCADE
+);
+
+CREATE TABLE "ExerciseTags" (
+    "ExerciseId" uuid NOT NULL,
+    "TagId" uuid NOT NULL,
+    CONSTRAINT "PK_ExerciseTags" PRIMARY KEY ("ExerciseId", "TagId"),
+    CONSTRAINT "FK_ExerciseTags_Exercises_ExerciseId" FOREIGN KEY ("ExerciseId") REFERENCES "Exercises" ("Id") ON DELETE CASCADE,
+    CONSTRAINT "FK_ExerciseTags_Tags_TagId" FOREIGN KEY ("TagId") REFERENCES "Tags" ("Id") ON DELETE CASCADE
+);
+
+CREATE TABLE "SessionUsers" (
+    "Id" uuid NOT NULL,
+    "SessionId" uuid NOT NULL,
+    "UserId" text,
+    "Username" text NOT NULL,
+    CONSTRAINT "PK_SessionUsers" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_SessionUsers_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE,
+    CONSTRAINT "FK_SessionUsers_Sessions_SessionId" FOREIGN KEY ("SessionId") REFERENCES "Sessions" ("Id") ON DELETE CASCADE
+);
+
+CREATE TABLE "Teams" (
+    "Id" uuid NOT NULL,
+    "Name" text NOT NULL,
+    "SessionId" uuid NOT NULL,
+    "SubmissionId" uuid NOT NULL,
+    CONSTRAINT "PK_Teams" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_Teams_Sessions_SessionId" FOREIGN KEY ("SessionId") REFERENCES "Sessions" ("Id") ON DELETE CASCADE
+);
+
+CREATE TABLE "Submissions" (
+    "Id" uuid NOT NULL,
+    "SessionId" uuid NOT NULL,
+    "TeamId" uuid,
+    "SessionUserId" uuid,
+    CONSTRAINT "PK_Submissions" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_Submissions_SessionUsers_SessionUserId" FOREIGN KEY ("SessionUserId") REFERENCES "SessionUsers" ("Id") ON DELETE CASCADE,
+    CONSTRAINT "FK_Submissions_Sessions_SessionId" FOREIGN KEY ("SessionId") REFERENCES "Sessions" ("Id") ON DELETE CASCADE,
+    CONSTRAINT "FK_Submissions_Teams_TeamId" FOREIGN KEY ("TeamId") REFERENCES "Teams" ("Id") ON DELETE CASCADE
+);
+
+CREATE TABLE "TeamMembers" (
+    "TeamId" uuid NOT NULL,
+    "SessionUserId" uuid NOT NULL,
+    CONSTRAINT "PK_TeamMembers" PRIMARY KEY ("TeamId", "SessionUserId"),
+    CONSTRAINT "FK_TeamMembers_SessionUsers_SessionUserId" FOREIGN KEY ("SessionUserId") REFERENCES "SessionUsers" ("Id") ON DELETE CASCADE,
+    CONSTRAINT "FK_TeamMembers_Teams_TeamId" FOREIGN KEY ("TeamId") REFERENCES "Teams" ("Id") ON DELETE CASCADE
+);
+
+CREATE TABLE "Answers" (
+    "Id" uuid NOT NULL,
+    "Submit" jsonb NOT NULL,
+    "CorrectPercentage" integer NOT NULL,
+    "Status" text NOT NULL,
+    "CreatedAt" timestamp with time zone NOT NULL,
+    "SubmissionId" uuid NOT NULL,
+    "ActivityId" uuid NOT NULL,
+    CONSTRAINT "PK_Answers" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_Answers_Activities_ActivityId" FOREIGN KEY ("ActivityId") REFERENCES "Activities" ("Id") ON DELETE CASCADE,
+    CONSTRAINT "FK_Answers_Submissions_SubmissionId" FOREIGN KEY ("SubmissionId") REFERENCES "Submissions" ("Id") ON DELETE CASCADE
+);
+
+CREATE INDEX "IX_Activities_ExerciseId" ON "Activities" ("ExerciseId");
+
+CREATE INDEX "IX_Answers_ActivityId" ON "Answers" ("ActivityId");
+
+CREATE INDEX "IX_Answers_SubmissionId" ON "Answers" ("SubmissionId");
+
 CREATE INDEX "IX_AspNetRoleClaims_RoleId" ON "AspNetRoleClaims" ("RoleId");
 
 CREATE UNIQUE INDEX "RoleNameIndex" ON "AspNetRoles" ("NormalizedName");
@@ -96,8 +213,50 @@ CREATE INDEX "EmailIndex" ON "AspNetUsers" ("NormalizedEmail");
 
 CREATE UNIQUE INDEX "UserNameIndex" ON "AspNetUsers" ("NormalizedUserName");
 
+CREATE INDEX "IX_Exercises_UserId" ON "Exercises" ("UserId");
+
+CREATE UNIQUE INDEX "IX_ExerciseTags_ExerciseId_TagId" ON "ExerciseTags" ("ExerciseId", "TagId");
+
+CREATE INDEX "IX_ExerciseTags_TagId" ON "ExerciseTags" ("TagId");
+
+CREATE INDEX "IX_Medias_CreatedByUserId" ON "Medias" ("CreatedByUserId");
+
+CREATE UNIQUE INDEX "IX_Sessions_AccessCode" ON "Sessions" ("AccessCode");
+
+CREATE INDEX "IX_Sessions_CreatedByUserId" ON "Sessions" ("CreatedByUserId");
+
+CREATE INDEX "IX_Sessions_ExerciseId" ON "Sessions" ("ExerciseId");
+
+CREATE UNIQUE INDEX "IX_SessionUsers_SessionId_UserId" ON "SessionUsers" ("SessionId", "UserId");
+
+CREATE INDEX "IX_SessionUsers_UserId" ON "SessionUsers" ("UserId");
+
+CREATE INDEX "IX_Submissions_SessionId" ON "Submissions" ("SessionId");
+
+CREATE UNIQUE INDEX "IX_Submissions_SessionUserId" ON "Submissions" ("SessionUserId");
+
+CREATE UNIQUE INDEX "IX_Submissions_TeamId" ON "Submissions" ("TeamId");
+
+CREATE UNIQUE INDEX "IX_Tags_UserId_Name" ON "Tags" ("UserId", "Name");
+
+CREATE UNIQUE INDEX "IX_TeamMembers_SessionUserId" ON "TeamMembers" ("SessionUserId");
+
+CREATE INDEX "IX_Teams_SessionId" ON "Teams" ("SessionId");
+
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20250806170430_InitialCreate', '9.0.6');
+VALUES ('20260625141736_postgresql.container_migration_288', '10.0.9');
+
+COMMIT;
+
+START TRANSACTION;
+UPDATE "Sessions" SET "AccessCode" = '' WHERE "AccessCode" IS NULL;
+ALTER TABLE "Sessions" ALTER COLUMN "AccessCode" SET NOT NULL;
+ALTER TABLE "Sessions" ALTER COLUMN "AccessCode" SET DEFAULT '';
+
+ALTER TABLE "Exercises" ADD "IsSnapshot" boolean NOT NULL DEFAULT FALSE;
+
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20260708195253_postgresql.container_migration_134', '10.0.9');
 
 COMMIT;
 
