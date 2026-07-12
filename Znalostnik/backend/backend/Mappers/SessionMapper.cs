@@ -30,6 +30,7 @@ namespace backend.DTOs
             {
                 Id = session.Id,
                 Title = session.Title,
+                RespondType = session.RespondType,
                 Activities = activities.Select(a => a.ToActivityDto()).ToList(),
                 Answers = answers.Select(a => a.ToAnswerDto()).ToList(),
                 Participants = participants,

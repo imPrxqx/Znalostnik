@@ -101,6 +101,11 @@ namespace backend.Utils
 
         public static Error TeamNotFound = new Error("Errors.TeamNotFound", "Team Not Found");
 
+        public static Error NotEverybodyHaveTeam = new Error(
+            "Errors.NotEverybodyHaveTeam",
+            "Not Everybody Have Team"
+        );
+
         public static Error SubmissionNotFound = new Error(
             "Errors.SubmissionNotFound",
             "Submission Not Found"

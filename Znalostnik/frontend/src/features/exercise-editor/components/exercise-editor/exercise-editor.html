@@ -1,8 +1,6 @@
 <div class="container">
   <mat-toolbar>
-    <a [routerLink]="['/']">
-      <img src="favicon.ico" alt="Favicon" />
-    </a>
+    <a [routerLink]="['/']" i18n> Zpět </a>
 
     <button mat-button [matMenuTriggerFor]="fileMenu" i18n>Soubor</button>
     <button mat-button [matMenuTriggerFor]="editMenu" i18n>Úpravy</button>
@@ -11,12 +9,12 @@
       <input type="file" #fileInput accept=".json" hidden (change)="import($event)" />
       <button mat-menu-item (click)="fileInput.click()" i18n>Import</button>
       <button mat-menu-item (click)="export()" i18n>Export</button>
-      <button mat-menu-item (click)="save()" i18n>Uložit</button>
+      <button mat-menu-item (click)="save()" i18n>Uložit - Ctrl+S</button>
     </mat-menu>
 
     <mat-menu #editMenu="matMenu">
-      <button mat-menu-item (click)="undo()">Vrátit zpět</button>
-      <button mat-menu-item (click)="redo()">Udělat znova</button>
+      <button mat-menu-item (click)="undo()">Vrátit zpět - Ctrl+Z</button>
+      <button mat-menu-item (click)="redo()">Udělat znova - Ctrl+Y</button>
     </mat-menu>
   </mat-toolbar>
 
@@ -93,8 +91,12 @@
   <mat-sidenav-container class="sidenav-container desktop">
     <mat-sidenav class="sidenav-left" mode="side" position="start" opened>
       <mat-nav-list>
-        <button mat-flat-button (click)="openActivityDialog()" i18n>Nová aktivita</button>
-
+        <div class="center">
+          <button mat-flat-button (click)="openActivityDialog()" i18n>
+            <mat-icon class="icon-add">add_task</mat-icon>
+            Nová aktivita
+          </button>
+        </div>
         <div class="scroll-container">
           <div cdkDropList (cdkDropListDropped)="drop($event)">
             @for (activity of document.getActivities()(); track activity.id()) {

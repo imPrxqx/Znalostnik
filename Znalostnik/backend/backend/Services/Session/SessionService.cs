@@ -58,17 +58,22 @@ namespace backend.Services
 
             var answers = submissions.SelectMany(s => s.Answers).OrderBy(a => a.CreatedAt).ToList();
 
-            var participantsSessionUsers = submissions
-                .Where(s => s.SessionUser != null)
-                .Select(s => new ParticipantDto { Id = s.Id, Name = s.SessionUser!.Username })
-                .ToList();
+            List<ParticipantDto> participants;
 
-            var participantsTeams = submissions
-                .Where(s => s.Team != null)
-                .Select(s => new ParticipantDto { Id = s.Id, Name = s.Team!.Name })
-                .ToList();
-
-            var participants = participantsSessionUsers.Concat(participantsTeams).ToList();
+            if (session.RespondType == "team")
+            {
+                participants = submissions
+                    .Where(s => s.Team != null)
+                    .Select(s => new ParticipantDto { Id = s.Id, Name = s.Team!.Name })
+                    .ToList();
+            }
+            else
+            {
+                participants = submissions
+                    .Where(s => s.SessionUser != null)
+                    .Select(s => new ParticipantDto { Id = s.Id, Name = s.SessionUser!.Username })
+                    .ToList();
+            }
 
             var report = session.ToSessionReportDto(participants, activities, answers);
 
@@ -98,15 +103,17 @@ namespace backend.Services
                 return Result<SessionDto>.Failure(Errors.InvalidOperation);
             }
 
-            var runtimeActivities = activities.Select(a => new RuntimeActivity
-            {
-                Id = Guid.NewGuid(),
-                Type = a.Type,
-                Content = a.Content,
-                Style = a.Style,
-                Solution = a.Solution,
-                Order = a.Order,
-            }).ToList();
+            var runtimeActivities = activities
+                .Select(a => new RuntimeActivity
+                {
+                    Id = Guid.NewGuid(),
+                    Type = a.Type,
+                    Content = a.Content,
+                    Style = a.Style,
+                    Solution = a.Solution,
+                    Order = a.Order,
+                })
+                .ToList();
 
             var session = new RuntimeSession
             {
@@ -344,6 +351,18 @@ namespace backend.Services
             catch (InvalidOperationException)
             {
                 return Result<SessionDto>.Failure(Errors.InvalidOperation);
+            }
+
+            if (session.RespondType == "team")
+            {
+                var teamMemberIds = session.Teams.SelectMany(t => t.TeamMemberIds).ToList();
+
+                var hasEveryoneTeam = session.SessionUsers.All(su => teamMemberIds.Contains(su.Id));
+
+                if (hasEveryoneTeam == false)
+                {
+                    return Result<SessionDto>.Failure(Errors.NotEverybodyHaveTeam);
+                }
             }
 
             var participantIds = GetParticipantIdsAsync(session);
@@ -1129,7 +1148,7 @@ namespace backend.Services
 
             if (respondMode == "team")
             {
-                return session.Teams.Select(su => su.Id).ToList();
+                return session.Teams.Select(t => t.Id).ToList();
             }
 
             return new List<Guid>();

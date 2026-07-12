@@ -4,8 +4,10 @@
   <br />
   @if (data.teams.length > 0) {
   <p i18n>Vyberte tým, ke kterému se chceš připojit</p>
-  } @if (data.teams.length > 0) { @for (team of data.teams; track team.id) {
+  } @if (data.teams.length > 0) {
   <div class="choice-list">
+    @for (team of data.teams; track team.id) {
+
     <button
       class="choice"
       [class.selected]="selectedTeamId() === team.id"
@@ -20,9 +22,10 @@
         <p i18n>Počet členů: {{ team.teamMembers.length }}</p>
       </div>
     </button>
-  </div>
 
-  } } @else {
+    }
+  </div>
+  } @else {
 
   <div class="empty-state">
     <mat-icon class="empty-icon">sentiment_dissatisfied</mat-icon>

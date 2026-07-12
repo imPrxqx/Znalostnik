@@ -19,6 +19,7 @@ export class UserPreferences {
 
   constructor() {
     this.loadLocal();
+    this.applyLanguageRouting(this.userPreferences().language);
     this.applyTheme(this.userPreferences().theme);
   }
 
@@ -60,11 +61,27 @@ export class UserPreferences {
     }
   }
 
+  applyLanguageRouting(language: 'cs' | 'en') {
+    const pathParts = window.location.pathname.split('/').filter((x) => x !== '');
+    const urlLanguage = pathParts[0];
+
+    if (urlLanguage !== 'cs' && urlLanguage !== 'en') {
+      return;
+    }
+
+    if (urlLanguage === language) {
+      return;
+    }
+
+    const newPath = pathParts.slice(1).join('/');
+    window.location.assign(`/${language}/${newPath}`);
+  }
+
   getPreferences(): PreferenceData {
     return this.userPreferences();
   }
 
-  private loadLocal() {
+  loadLocal() {
     const preferences = localStorage.getItem('preferences');
 
     if (!preferences) {
@@ -75,7 +92,7 @@ export class UserPreferences {
     this.userPreferences.set(prefs);
   }
 
-  private saveLocal() {
+  saveLocal() {
     localStorage.setItem('preferences', JSON.stringify(this.userPreferences()));
   }
 }

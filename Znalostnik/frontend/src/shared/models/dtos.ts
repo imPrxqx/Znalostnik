@@ -17,6 +17,7 @@ export interface Session {
 export interface SessionReport {
   id: string;
   title: string;
+  respondType: string;
   activities: Activity[];
   answers: ActivityAnswer[];
   participants: Participant[];

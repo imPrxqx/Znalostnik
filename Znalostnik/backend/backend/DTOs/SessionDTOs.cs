@@ -21,6 +21,7 @@ namespace backend.DTOs
     {
         public Guid Id { get; set; }
         public string Title { get; set; } = string.Empty;
+        public string RespondType { get; set; } = string.Empty;
         public List<ActivityDTO> Activities { get; set; } = new List<ActivityDTO>();
         public List<AnswerDto> Answers { get; set; } = new List<AnswerDto>();
         public List<ParticipantDto> Participants { get; set; } = new List<ParticipantDto>();

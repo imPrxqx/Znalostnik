@@ -98,6 +98,21 @@ mat-sidenav.sidenav-left {
   display: none;
 }
 
+a {
+  text-decoration: none;
+}
+
+.center {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-add {
+  color: var(--mat-sys-inverse-on-surface);
+}
+
 @media (max-width: 1000px) {
   .desktop {
     display: none;
