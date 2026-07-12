@@ -7,8 +7,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { SessionsManager } from '@features/dashboard/services/sessions-manager';
-import { Session } from '@shared/models/dtos';
-import { Registry } from '@shared/models/registry';
+import { Session } from '@shared/models/session';
+import { RegistrySession } from '@shared/models/registry-session';
 
 @Component({
   selector: 'app-session-card',
@@ -29,17 +29,17 @@ export class SessionCard {
   router = inject(Router);
   status = computed(() => {
     const session = this.session();
-    const status = Registry.getSessionStatus(session.status).name;
+    const status = RegistrySession.getSessionStatus(session.status).name;
     return status;
   });
   gameMode = computed(() => {
     const session = this.session();
-    const gameMode = Registry.getGameMode(session.gameMode).name;
+    const gameMode = RegistrySession.getGameMode(session.gameMode).name;
     return gameMode;
   });
   respondType = computed(() => {
     const session = this.session();
-    const respondType = Registry.getRespondType(session.respondType).name;
+    const respondType = RegistrySession.getRespondType(session.respondType).name;
     return respondType;
   });
 

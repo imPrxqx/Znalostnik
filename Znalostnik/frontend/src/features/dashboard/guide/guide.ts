@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
-import { Registry } from '@shared/models/registry';
+import { RegistryActivity } from '@shared/models/registry-activity';
+import { RegistrySession } from '@shared/models/registry-session';
 
 @Component({
   selector: 'app-guide',
@@ -11,7 +12,7 @@ import { Registry } from '@shared/models/registry';
   styleUrl: './guide.scss',
 })
 export class Guide {
-  respondTypes = Registry.respondTypes;
-  gameModes = Registry.gameModes;
-  activities = Registry.activities;
+  respondTypes = RegistrySession.respondTypes;
+  gameModes = RegistrySession.gameModes;
+  activities = RegistryActivity.activities;
 }

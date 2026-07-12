@@ -2,11 +2,11 @@ import { inject, Injectable, signal } from '@angular/core';
 import { SessionApi } from './session-api';
 import { Router } from '@angular/router';
 import { catchError, forkJoin, switchMap, of } from 'rxjs';
-import { Registry } from '@shared/models/registry';
+import { RegistryActivity } from '@shared/models/registry-activity';
 import { Activity } from '@shared/models/activity';
 import { ActivityAnswer } from '@shared/models/activity-answer';
 import { ActivityFactory } from '@shared/models/activity-factory';
-import { Session, SessionUser, Team } from '@shared/models/dtos';
+import { Session, SessionUser, Team } from '@shared/models/session';
 
 @Injectable({
   providedIn: 'root',
@@ -74,7 +74,7 @@ export class SessionState {
               this.answer()?.id !== sessionAnswer?.id ||
               this.answer()?.version !== sessionAnswer?.version
             ) {
-              const answer = Registry.createAnswer(
+              const answer = RegistryActivity.createAnswer(
                 this.session()?.gameState.activity.type,
                 sessionAnswer,
               );

@@ -37,8 +37,11 @@
 
   <div class="participant-pick">
     <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+      @if(respondType() === 'team') {
+      <mat-label i18n>Vyberte tým</mat-label>
+      } @else {
       <mat-label i18n>Vyberte účastníka</mat-label>
-
+      }
       <mat-select
         [value]="selectedParticipantId()"
         (selectionChange)="selectParticipant($event.value)"
@@ -58,7 +61,12 @@
   <mat-toolbar>
     <div>
       <mat-icon>person</mat-icon>
+      @if(respondType() === 'team') {
+      <p i18n>Přehled týmu</p>
+
+      } @else {
       <p i18n>Přehled účastníka</p>
+      }
     </div>
   </mat-toolbar>
   <br />

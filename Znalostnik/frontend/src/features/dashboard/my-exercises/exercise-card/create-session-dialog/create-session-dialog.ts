@@ -16,8 +16,8 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatStepperModule } from '@angular/material/stepper';
-import { Registry } from '@shared/models/registry';
-import { GameSetting } from '@shared/models/dtos';
+import { GameSetting } from '@shared/models/session';
+import { RegistrySession } from '@shared/models/registry-session';
 
 export interface CreateSessionDataDialog {
   exerciseId: string;
@@ -47,9 +47,9 @@ export class CreateSessionDialog {
   readonly dialogRef = inject(MatDialogRef<CreateSessionDialog>);
   readonly data = inject<CreateSessionDataDialog>(MAT_DIALOG_DATA);
   exerciseId = this.data.exerciseId;
-  respondTypes = Registry.respondTypes;
-  gameModes = Registry.gameModes;
-  gameParameters = Registry.gameParameters;
+  respondTypes = RegistrySession.respondTypes;
+  gameModes = RegistrySession.gameModes;
+  gameParameters = RegistrySession.gameParameters;
 
   form = new FormGroup({
     title: new FormControl<string>('', {

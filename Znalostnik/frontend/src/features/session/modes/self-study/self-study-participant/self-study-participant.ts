@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ExerciseActivity } from '@features/exercise-editor/components/exercise-activity/exercise-activity';
 import { SessionState } from '@features/session/services/session-state';
-import { Registry } from '@shared/models/registry';
+import { RegistryActivity } from '@shared/models/registry-activity';
 import { Activity } from '@shared/models/activity';
 import { ActivityAnswer } from '@shared/models/activity-answer';
 import { ActivityFactory } from '@shared/models/activity-factory';
@@ -57,7 +57,7 @@ export class SelfStudyParticipant {
       this.feedbackActivity.set(activity);
 
       if (feedback.answer) {
-        const answer = Registry.createAnswer(feedback.activity.type, feedback.answer);
+        const answer = RegistryActivity.createAnswer(feedback.activity.type, feedback.answer);
         this.feedbackAnswer.set(answer);
       }
 

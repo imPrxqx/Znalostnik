@@ -2,9 +2,9 @@ import { Component, computed, inject, OnInit } from '@angular/core';
 import { SessionState } from '../services/session-state';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Registry } from '@shared/models/registry';
 import { NgComponentOutlet } from '@angular/common';
 import { Hub } from '../services/hub';
+import { RegistrySession } from '@shared/models/registry-session';
 
 @Component({
   selector: 'app-host',
@@ -26,7 +26,7 @@ export class Host implements OnInit {
       return undefined;
     }
 
-    const hostComponent = Registry.getHostComponent(session.gameMode as string);
+    const hostComponent = RegistrySession.getHostComponent(session.gameMode as string);
     return hostComponent;
   });
 

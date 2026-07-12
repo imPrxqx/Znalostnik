@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { SessionState } from '@features/session/services/session-state';
 import { ShowActivityDialog } from '../../../show-activity-dialog/show-activity-dialog';
 import { MatDialog } from '@angular/material/dialog';
-import { Registry } from '@shared/models/registry';
+import { RegistryActivity } from '@shared/models/registry-activity';
 import { Activity } from '@shared/models/activity';
 
 @Component({
@@ -33,7 +33,10 @@ export class SelfStudyHost {
         );
 
       if (this.openedParticipantId !== undefined) {
-        const activity = Registry.createActivity(participant.activity.type, participant.activity);
+        const activity = RegistryActivity.createActivity(
+          participant.activity.type,
+          participant.activity,
+        );
         this.openedActivity.set(activity);
       }
     });
@@ -100,7 +103,7 @@ export class SelfStudyHost {
     const json = this.leaderboard().find(
       (p: { participantId: string }) => p.participantId === participantId,
     ).activity;
-    const activity = Registry.createActivity(json.type, json);
+    const activity = RegistryActivity.createActivity(json.type, json);
     this.openedParticipantId = participantId;
     this.openedActivity.set(activity);
 

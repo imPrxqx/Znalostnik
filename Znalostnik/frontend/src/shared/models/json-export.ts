@@ -35,7 +35,6 @@ export class ExportJsonVisitor implements Visitor {
     });
 
     this.result = result;
-    console.log(this.result);
   }
 
   visitQuiz(quizActivity: QuizActivity): void {

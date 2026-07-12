@@ -35,7 +35,7 @@
   <div class="leaderboard-container">
     @for (potato of potatoes(); track potato.potatoId) {
     <div class="row">
-      <p>{{ getParticipantName(potato.currentParticipantId) }}</p>
+      <p>{{ getParticipantName(potato.participantId) }}</p>
       <button mat-icon-button (click)="openParticipantDetail(potato.potatoId)">
         <mat-icon>visibility</mat-icon>
       </button>

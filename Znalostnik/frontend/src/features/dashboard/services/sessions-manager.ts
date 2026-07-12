@@ -1,7 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { SessionsApi } from './sessions-api';
 import { Router } from '@angular/router';
-import { GameSetting, Session } from '@shared/models/dtos';
+import { GameSetting, Session } from '@shared/models/session';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({

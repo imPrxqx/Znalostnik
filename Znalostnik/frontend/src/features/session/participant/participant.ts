@@ -2,9 +2,9 @@ import { Component, computed, inject, OnInit } from '@angular/core';
 import { SessionState } from '../services/session-state';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Registry } from '@shared/models/registry';
 import { NgComponentOutlet } from '@angular/common';
 import { Hub } from '../services/hub';
+import { RegistrySession } from '@shared/models/registry-session';
 
 @Component({
   selector: 'app-participant',
@@ -26,7 +26,9 @@ export class Participant implements OnInit {
       return undefined;
     }
 
-    const participantComponent = Registry.getParticipantComponent(session.gameMode as string);
+    const participantComponent = RegistrySession.getParticipantComponent(
+      session.gameMode as string,
+    );
     return participantComponent;
   });
 

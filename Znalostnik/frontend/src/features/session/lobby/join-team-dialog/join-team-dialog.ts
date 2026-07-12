@@ -10,7 +10,7 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { Team } from '@shared/models/dtos';
+import { Team } from '@shared/models/session';
 
 export interface JoinTeamDialogData {
   teams: Team[];

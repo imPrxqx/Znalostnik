@@ -9,7 +9,7 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { Registry } from '@shared/models/registry';
+import { RegistryActivity } from '@shared/models/registry-activity';
 
 @Component({
   selector: 'app-create-activity-dialog',
@@ -27,8 +27,8 @@ import { Registry } from '@shared/models/registry';
 })
 export class CreateActivityDialog {
   readonly dialogRef = inject(MatDialogRef<CreateActivityDialog>);
-  selected = signal<string>(Registry.activities[0].key);
-  activities = Registry.activities;
+  selected = signal<string>(RegistryActivity.activities[0].key);
+  activities = RegistryActivity.activities;
 
   onNoClick(): void {
     this.dialogRef.close();

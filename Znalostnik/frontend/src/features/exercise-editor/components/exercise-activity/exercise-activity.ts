@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, model, viewChild, ViewContainerRef, OnChanges } from '@angular/core';
-import { Registry } from '@shared/models/registry';
+import { RegistryActivity } from '@shared/models/registry-activity';
 import { Activity } from '@shared/models/activity';
 import { ActivityAnswer } from '@shared/models/activity-answer';
 
@@ -26,7 +26,7 @@ export class ExerciseActivity implements OnChanges {
     this.viewContainer().clear();
 
     const compRef = this.viewContainer().createComponent(
-      Registry.getActivityComponent(this.activity().type()),
+      RegistryActivity.getActivityComponent(this.activity().type()),
     );
 
     compRef.setInput('mode', this.mode());

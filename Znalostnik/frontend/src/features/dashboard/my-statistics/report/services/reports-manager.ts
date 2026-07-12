@@ -2,9 +2,9 @@ import { inject, Injectable, signal } from '@angular/core';
 import { ReportsApi } from './reports-api';
 import { Router } from '@angular/router';
 import { ActivityAnswer } from '@shared/models/activity-answer';
-import { Registry } from '@shared/models/registry';
+import { RegistryActivity } from '@shared/models/registry-activity';
 import { Activity } from '@shared/models/activity';
-import { Participant, SessionReport } from '@shared/models/dtos';
+import { Participant, SessionReport } from '@shared/models/session';
 import { ActivityFactory } from '@shared/models/activity-factory';
 
 @Injectable({
@@ -15,6 +15,7 @@ export class ReportsManager {
   router = inject(Router);
   id = signal<string>('');
   title = signal<string>('');
+  respondType = signal<string>('individual');
   answers = signal<ActivityAnswer[]>([]);
   activities = signal<Activity[]>([]);
   participants = signal<Participant[]>([]);
@@ -26,12 +27,13 @@ export class ReportsManager {
         const data = json as SessionReport;
         this.id.set(data.id);
         this.title.set(data.title);
+        this.respondType.set(data.respondType);
         this.participants.set(data.participants);
         this.activities.set(data.activities.map((a) => ActivityFactory.createFromJson(a)));
 
         this.answers.set(
           data.answers.map((a) =>
-            Registry.createAnswer(
+            RegistryActivity.createAnswer(
               this.activities()
                 .find((at) => at.id() === a.activityId)!
                 .type(),

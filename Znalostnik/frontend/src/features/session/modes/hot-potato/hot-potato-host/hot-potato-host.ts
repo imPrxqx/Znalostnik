@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { SessionState } from '@features/session/services/session-state';
 import { Timer } from '@features/session/timer/timer';
-import { Registry } from '@shared/models/registry';
+import { RegistryActivity } from '@shared/models/registry-activity';
 import { ShowActivityDialog } from '../../../show-activity-dialog/show-activity-dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { Activity } from '@shared/models/activity';
@@ -44,7 +44,10 @@ export class HotPotatoHost {
         );
 
       if (this.openedPotatoId !== undefined) {
-        const activity = Registry.createActivity(participant.activity.type, participant.activity);
+        const activity = RegistryActivity.createActivity(
+          participant.activity.type,
+          participant.activity,
+        );
         this.openedActivity.set(activity);
       }
     });
@@ -88,7 +91,7 @@ export class HotPotatoHost {
     const json = this.potatoes().find(
       (p: { potatoId: string }) => p.potatoId === potatoId,
     ).activity;
-    const activity = Registry.createActivity(json.type, json);
+    const activity = RegistryActivity.createActivity(json.type, json);
 
     this.openedPotatoId = potatoId;
     this.openedActivity.set(activity);

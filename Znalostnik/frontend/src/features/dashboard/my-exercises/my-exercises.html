@@ -7,7 +7,7 @@
     <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
       <mat-icon matPrefix>search</mat-icon>
       <mat-label i18n>Hledat cvičení...</mat-label>
-      <input matInput [ngModel]="filter().search" (change)="setSearch($any($event.target).value)" />
+      <input matInput [ngModel]="filter().search" (input)="setSearch($any($event.target).value)" />
     </mat-form-field>
 
     <button mat-icon-button (click)="filterExercise()">

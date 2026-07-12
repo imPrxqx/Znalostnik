@@ -22,7 +22,7 @@ import { ReportsManager } from './services/reports-manager';
 import { ExerciseActivity } from '@features/exercise-editor/components/exercise-activity/exercise-activity';
 import { Activity } from '@shared/models/activity';
 import { ActivityAnswer } from '@shared/models/activity-answer';
-import { Registry } from '@shared/models/registry';
+import { RegistryActivity } from '@shared/models/registry-activity';
 
 @Component({
   selector: 'app-report',
@@ -52,6 +52,7 @@ export class Report implements OnInit {
 
   id = computed(() => this.reports.id());
   title = computed(() => this.reports.title());
+  respondType = computed(() => this.reports.respondType());
   answers = computed(() => this.reports.answers());
   activities = computed(() => this.reports.activities());
   participants = computed(() => this.reports.participants());
@@ -206,7 +207,7 @@ export class Report implements OnInit {
         return;
       }
 
-      const type = Registry.getActivity(act.type()).name;
+      const type = RegistryActivity.getActivity(act.type()).name;
       const success = answers.map((a) => a.correctPercentage);
 
       let exists = grouped.get(type);
@@ -484,7 +485,7 @@ export class Report implements OnInit {
 
   getActivityDefinition(activityId: string) {
     const activity = this.getActivity(activityId);
-    return Registry.getActivity(activity.type());
+    return RegistryActivity.getActivity(activity.type());
   }
 
   getCountCorrectAnswers(activityId: string) {

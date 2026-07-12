@@ -1,5 +1,5 @@
 import { Component, ViewContainerRef, inject, input, OnChanges } from '@angular/core';
-import { Registry } from '@shared/models/registry';
+import { RegistryActivity } from '@shared/models/registry-activity';
 import { Activity } from '@shared/models/activity';
 
 @Component({
@@ -20,7 +20,7 @@ export class ExerciseToolbar implements OnChanges {
     this.viewContainer.clear();
 
     const fields = this.activity().getFields();
-    const commands = Registry.getCommands();
+    const commands = RegistryActivity.getCommands();
 
     fields.forEach((field) => {
       commands.forEach((cmd) => {
