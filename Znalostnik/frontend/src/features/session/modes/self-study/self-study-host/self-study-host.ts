@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { SessionState } from '@features/session/services/session-state';
 import { ShowActivityDialog } from '../../../show-activity-dialog/show-activity-dialog';
 import { MatDialog } from '@angular/material/dialog';
-import { RegistryActivity } from '@shared/models/registry-activity';
+import { RegistryActivity } from '@shared/registry/registry-activity';
 import { Activity } from '@shared/models/activity';
 
 @Component({

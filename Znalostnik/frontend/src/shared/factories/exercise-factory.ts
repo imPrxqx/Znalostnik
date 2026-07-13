@@ -1,4 +1,4 @@
-import { Exercise, ExerciseConfiguration } from './exercise';
+import { Exercise, ExerciseConfiguration } from '../models/exercise';
 import { ActivityFactory } from './activity-factory';
 
 export class ExerciseFactory {

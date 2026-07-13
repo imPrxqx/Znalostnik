@@ -1,7 +1,7 @@
 import { ExerciseDocumentManager } from '@features/exercise-editor/services/exercise-document-manager';
 import { Command } from '@shared/interfaces/command.interface';
 import { Exercise, ExerciseConfiguration } from '@shared/models/exercise';
-import { ExerciseFactory } from '@shared/models/exercise-factory';
+import { ExerciseFactory } from '@shared/factories/exercise-factory';
 
 export class LoadCommand implements Command {
   private receiver: ExerciseDocumentManager;

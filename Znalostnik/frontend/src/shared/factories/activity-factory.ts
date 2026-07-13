@@ -1,5 +1,5 @@
-import { RegistryActivity } from './registry-activity';
-import { Activity } from './activity';
+import { RegistryActivity } from '@shared/registry/registry-activity';
+import { Activity } from '../models/activity';
 
 export class ActivityFactory {
   static createFromJson(json: unknown): Activity {

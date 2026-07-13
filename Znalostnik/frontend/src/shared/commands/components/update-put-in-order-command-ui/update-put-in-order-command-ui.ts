@@ -6,9 +6,9 @@ import { AddChoicePutInOrderCommand } from '@shared/commands/add-choice-put-in-o
 import { RemoveChoicePutInOrderCommand } from '@shared/commands/remove-choice-put-in-order-command';
 import { ReorderChoiceCommand } from '@shared/commands/reorder-choice-command';
 import { FieldContext } from '@shared/interfaces/field-context';
-import { MultiChoiceOption, ChoiceOption } from '@shared/models/format';
+import { MultiChoiceOption, ChoiceOption } from '@shared/models/blocks';
 import { PutInOrderSolution } from '@shared/models/put-in-order';
-import { EditChoice } from '@shared/media/edit-choice/edit-choice';
+import { EditChoice } from '@shared/blocks/edit-choice/edit-choice';
 
 @Component({
   selector: 'app-update-put-in-order-command-ui',

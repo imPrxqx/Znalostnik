@@ -2,10 +2,10 @@ import { inject, Injectable, signal } from '@angular/core';
 import { ReportsApi } from './reports-api';
 import { Router } from '@angular/router';
 import { ActivityAnswer } from '@shared/models/activity-answer';
-import { RegistryActivity } from '@shared/models/registry-activity';
+import { RegistryActivity } from '@shared/registry/registry-activity';
 import { Activity } from '@shared/models/activity';
 import { Participant, SessionReport } from '@shared/models/session';
-import { ActivityFactory } from '@shared/models/activity-factory';
+import { ActivityFactory } from '@shared/factories/activity-factory';
 
 @Injectable({
   providedIn: 'root',

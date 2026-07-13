@@ -6,9 +6,9 @@ import { AddChoiceMatchUpCommand } from '@shared/commands/add-choice-match-up-co
 import { RemoveChoiceMatchUpCommand } from '@shared/commands/remove-choice-match-up-command';
 import { ReorderMatchUpCommand } from '@shared/commands/reorder-match-up-command';
 import { FieldContext } from '@shared/interfaces/field-context';
-import { MultiChoiceOption } from '@shared/models/format';
+import { MultiChoiceOption } from '@shared/models/blocks';
 import { MatchUpSolution } from '@shared/models/match-up';
-import { EditChoice } from '@shared/media/edit-choice/edit-choice';
+import { EditChoice } from '@shared/blocks/edit-choice/edit-choice';
 
 @Component({
   selector: 'app-update-match-up-command-ui',

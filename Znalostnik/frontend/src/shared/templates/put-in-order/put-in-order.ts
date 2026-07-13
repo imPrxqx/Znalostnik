@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, input, model, OnInit } from '@angular/core';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { PutInOrderAnswer, PutInOrderActivity } from '@shared/models/put-in-order';
-import { Text } from '@shared/media/text/text';
-import { Choice } from '@shared/media/choice/choice';
+import { Text } from '@shared/blocks/text/text';
+import { Choice } from '@shared/blocks/choice/choice';
 import { ActivityComponent, ActivityMode } from '@shared/models/activity';
 
 @Component({

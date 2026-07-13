@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, input, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { Text } from '@shared/media/text/text';
+import { Text } from '@shared/blocks/text/text';
 import { ActivityComponent, ActivityMode } from '@shared/models/activity';
 import { GuessActivity, GuessAnswer } from '@shared/models/guess';
 

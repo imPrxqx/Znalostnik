@@ -4,7 +4,7 @@ import { SelfStudyHost } from '@features/session/modes/self-study/self-study-hos
 import { ClassicParticipant } from '@features/session/modes/classic/classic-participant/classic-participant';
 import { HotPotatoParticipant } from '@features/session/modes/hot-potato/hot-potato-participant/hot-potato-participant';
 import { SelfStudyParticipant } from '@features/session/modes/self-study/self-study-participant/self-study-participant';
-import { GameSetting } from './session';
+import { GameSetting } from '../models/session';
 import { Type } from '@angular/core';
 
 export interface GameModeDefinition {

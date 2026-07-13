@@ -9,7 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { CommandManager } from '@features/exercise-editor/services/command-manager';
 import { UpdateTextCommand } from '@shared/commands/update-text-command';
 import { UpdateTextStyleCommand } from '@shared/commands/update-text-style-command';
-import { Text, TextStyle } from '@shared/models/format';
+import { Text, TextStyle } from '@shared/models/blocks';
 
 @Component({
   selector: 'app-edit-text',

@@ -2,7 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { ExerciseDocumentManager } from '@features/exercise-editor/services/exercise-document-manager';
 import { ExercisesApi } from './exercises-api';
 import { Router } from '@angular/router';
-import { ExerciseFactory } from '@shared/models/exercise-factory';
+import { ExerciseFactory } from '@shared/factories/exercise-factory';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Exercise, ExerciseConfiguration } from '@shared/models/exercise';
 

@@ -9,7 +9,7 @@ import {
   AfterViewInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TextStyle } from '@shared/models/format';
+import { TextStyle } from '@shared/models/blocks';
 
 @Component({
   selector: 'app-text',

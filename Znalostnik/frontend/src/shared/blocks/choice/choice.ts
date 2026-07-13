@@ -12,7 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { environment } from '@environments/environment';
-import { ChoiceStyle, Media } from '@shared/models/format';
+import { ChoiceStyle, Media } from '@shared/models/blocks';
 
 @Component({
   selector: 'app-choice',

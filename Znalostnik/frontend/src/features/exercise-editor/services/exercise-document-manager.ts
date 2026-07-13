@@ -1,6 +1,6 @@
 import { Injectable, WritableSignal, signal } from '@angular/core';
 import { Exercise } from '@shared/models/exercise';
-import { RegistryActivity } from '@shared/models/registry-activity';
+import { RegistryActivity } from '@shared/registry/registry-activity';
 import { Activity } from '@shared/models/activity';
 import { v4 as uuidv4 } from 'uuid';
 @Injectable({

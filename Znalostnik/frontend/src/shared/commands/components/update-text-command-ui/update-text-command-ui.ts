@@ -1,9 +1,9 @@
 import { Component, inject, input } from '@angular/core';
 import { CommandManager } from '@features/exercise-editor/services/command-manager';
 import { FieldContext } from '@shared/interfaces/field-context';
-import { Text } from '@shared/models/format';
+import { Text } from '@shared/models/blocks';
 import { MatIconModule } from '@angular/material/icon';
-import { EditText } from '@shared/media/edit-text/edit-text';
+import { EditText } from '@shared/blocks/edit-text/edit-text';
 
 @Component({
   selector: 'app-update-text-command-ui',

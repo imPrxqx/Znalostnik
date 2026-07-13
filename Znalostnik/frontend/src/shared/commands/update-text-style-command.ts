@@ -1,5 +1,5 @@
 import { Command } from '@shared/interfaces/command.interface';
-import { Text, TextStyle } from '@shared/models/format';
+import { Text, TextStyle } from '@shared/models/blocks';
 
 export class UpdateTextStyleCommand implements Command {
   private receiver: Text;

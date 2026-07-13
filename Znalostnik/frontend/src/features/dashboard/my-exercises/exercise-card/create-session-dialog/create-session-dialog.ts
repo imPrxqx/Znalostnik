@@ -17,7 +17,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatStepperModule } from '@angular/material/stepper';
 import { GameSetting } from '@shared/models/session';
-import { RegistrySession } from '@shared/models/registry-session';
+import { RegistrySession } from '@shared/registry/registry-session';
 
 export interface CreateSessionDataDialog {
   exerciseId: string;

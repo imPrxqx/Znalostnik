@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { SessionState } from '@features/session/services/session-state';
 import { Timer } from '@features/session/timer/timer';
-import { RegistryActivity } from '@shared/models/registry-activity';
+import { RegistryActivity } from '@shared/registry/registry-activity';
 import { ShowActivityDialog } from '../../../show-activity-dialog/show-activity-dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { Activity } from '@shared/models/activity';

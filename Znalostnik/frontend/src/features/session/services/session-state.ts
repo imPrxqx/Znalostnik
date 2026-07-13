@@ -2,10 +2,10 @@ import { inject, Injectable, signal } from '@angular/core';
 import { SessionApi } from './session-api';
 import { Router } from '@angular/router';
 import { catchError, forkJoin, switchMap, of } from 'rxjs';
-import { RegistryActivity } from '@shared/models/registry-activity';
+import { RegistryActivity } from '@shared/registry/registry-activity';
 import { Activity } from '@shared/models/activity';
 import { ActivityAnswer } from '@shared/models/activity-answer';
-import { ActivityFactory } from '@shared/models/activity-factory';
+import { ActivityFactory } from '@shared/factories/activity-factory';
 import { Session, SessionUser, Team } from '@shared/models/session';
 
 @Injectable({

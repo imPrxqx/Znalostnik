@@ -6,10 +6,10 @@ import { AddChoiceCommand } from '@shared/commands/add-choice-command';
 import { RemoveChoiceCommand } from '@shared/commands/remove-choice-command';
 import { UpdateChoiceSolutionCommand } from '@shared/commands/update-choice-solution-command';
 import { FieldContext } from '@shared/interfaces/field-context';
-import { MultiChoiceOption } from '@shared/models/format';
+import { MultiChoiceOption } from '@shared/models/blocks';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { QuizSolution } from '@shared/models/quiz';
-import { EditChoice } from '@shared/media/edit-choice/edit-choice';
+import { EditChoice } from '@shared/blocks/edit-choice/edit-choice';
 
 @Component({
   selector: 'app-update-multi-choice-command-ui',

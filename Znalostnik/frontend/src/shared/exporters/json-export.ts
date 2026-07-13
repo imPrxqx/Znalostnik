@@ -1,9 +1,9 @@
-import { Exercise } from './exercise';
-import { GuessActivity } from './guess';
-import { MatchUpActivity } from './match-up';
-import { PutInOrderActivity } from './put-in-order';
-import { QuizActivity } from './quiz';
-import { Activity } from './activity';
+import { Exercise } from '../models/exercise';
+import { GuessActivity } from '../models/guess';
+import { MatchUpActivity } from '../models/match-up';
+import { PutInOrderActivity } from '../models/put-in-order';
+import { QuizActivity } from '../models/quiz';
+import { Activity } from '../models/activity';
 import { Visitor } from '../interfaces/visitor';
 
 export interface ExportedActivity {

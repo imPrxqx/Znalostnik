@@ -1,5 +1,5 @@
 import { Command } from '@shared/interfaces/command.interface';
-import { MultiChoiceOption, ChoiceOption } from '@shared/models/format';
+import { MultiChoiceOption, ChoiceOption } from '@shared/models/blocks';
 import { MatchUpSolution, PairItem } from '@shared/models/match-up';
 
 export class AddChoiceMatchUpCommand implements Command {

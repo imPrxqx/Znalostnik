@@ -13,7 +13,7 @@ import { PickMediaDialog } from '@shared/commands/components/pick-media-dialog/p
 import { UpdateChoiceCommand } from '@shared/commands/update-choice-command';
 import { UpdateChoiceMediaCommand } from '@shared/commands/update-choice-media-command';
 import { UpdateChoiceStyleCommand } from '@shared/commands/update-choice-style-command';
-import { ChoiceOption, ChoiceStyle } from '@shared/models/format';
+import { ChoiceOption, ChoiceStyle } from '@shared/models/blocks';
 
 @Component({
   selector: 'app-edit-choice',

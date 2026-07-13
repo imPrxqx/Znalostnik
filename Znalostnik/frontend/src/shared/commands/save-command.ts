@@ -1,7 +1,7 @@
 import { ExercisesManager } from '@features/dashboard/services/exercises-manager';
 import { ExerciseDocumentManager } from '@features/exercise-editor/services/exercise-document-manager';
 import { Command } from '@shared/interfaces/command.interface';
-import { ExportJsonVisitor } from '@shared/models/json-export';
+import { ExportJsonVisitor } from '@shared/exporters/json-export';
 
 export class SaveCommand implements Command {
   private receiver: ExerciseDocumentManager;

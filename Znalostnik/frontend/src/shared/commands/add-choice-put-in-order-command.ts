@@ -1,5 +1,5 @@
 import { Command } from '@shared/interfaces/command.interface';
-import { MultiChoiceOption, ChoiceOption } from '@shared/models/format';
+import { MultiChoiceOption, ChoiceOption } from '@shared/models/blocks';
 import { PutInOrderSolution } from '@shared/models/put-in-order';
 
 export class AddChoicePutInOrderCommand implements Command {

@@ -5,16 +5,16 @@ import { Guess } from '@shared/templates/guess/guess';
 import { MatchUp } from '@shared/templates/match-up/match-up';
 import { PutInOrder } from '@shared/templates/put-in-order/put-in-order';
 import { Quiz } from '@shared/templates/quiz/quiz';
-import { GuessActivity, GuessAnswer } from './guess';
-import { MatchUpActivity, MatchUpAnswer } from './match-up';
-import { PutInOrderActivity, PutInOrderAnswer } from './put-in-order';
-import { QuizActivity, QuizAnswer } from './quiz';
-import { Activity, ActivityComponent } from './activity';
-import { ActivityAnswer } from './activity-answer';
 import { UpdateTextSolutionCommandUi } from '@shared/commands/components/update-text-solution-command-ui/update-text-solution-command-ui';
 import { UpdatePutInOrderCommandUi } from '@shared/commands/components/update-put-in-order-command-ui/update-put-in-order-command-ui';
 import { UpdateMatchUpCommandUi } from '@shared/commands/components/update-match-up-command-ui/update-match-up-command-ui';
 import { FieldContext } from '@shared/interfaces/field-context';
+import { Activity, ActivityComponent } from '@shared/models/activity';
+import { ActivityAnswer } from '@shared/models/activity-answer';
+import { GuessActivity, GuessAnswer } from '@shared/models/guess';
+import { MatchUpActivity, MatchUpAnswer } from '@shared/models/match-up';
+import { PutInOrderActivity, PutInOrderAnswer } from '@shared/models/put-in-order';
+import { QuizActivity, QuizAnswer } from '@shared/models/quiz';
 
 export interface ActivityDefinition {
   key: string;

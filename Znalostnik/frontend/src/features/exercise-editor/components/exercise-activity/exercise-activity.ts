@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, model, viewChild, ViewContainerRef, OnChanges } from '@angular/core';
-import { RegistryActivity } from '@shared/models/registry-activity';
+import { RegistryActivity } from '@shared/registry/registry-activity';
 import { Activity } from '@shared/models/activity';
 import { ActivityAnswer } from '@shared/models/activity-answer';
 

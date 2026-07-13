@@ -8,7 +8,7 @@ import { ExercisesManager } from '@features/dashboard/services/exercises-manager
 import { Slide } from '@features/exercise-editor/components/slide/slide';
 import { MatDialog } from '@angular/material/dialog';
 import { Activity } from '@shared/models/activity';
-import { ActivityFactory } from '@shared/models/activity-factory';
+import { ActivityFactory } from '@shared/factories/activity-factory';
 import { OnInit } from '@angular/core';
 import { CreateSessionDialog } from './create-session-dialog/create-session-dialog';
 import { MatDivider } from '@angular/material/list';

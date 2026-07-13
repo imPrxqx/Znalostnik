@@ -22,7 +22,7 @@ import { ReportsManager } from './services/reports-manager';
 import { ExerciseActivity } from '@features/exercise-editor/components/exercise-activity/exercise-activity';
 import { Activity } from '@shared/models/activity';
 import { ActivityAnswer } from '@shared/models/activity-answer';
-import { RegistryActivity } from '@shared/models/registry-activity';
+import { RegistryActivity } from '@shared/registry/registry-activity';
 
 @Component({
   selector: 'app-report',

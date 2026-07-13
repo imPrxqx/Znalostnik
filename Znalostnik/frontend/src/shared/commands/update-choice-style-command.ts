@@ -1,5 +1,5 @@
 import { Command } from '@shared/interfaces/command.interface';
-import { ChoiceOption, ChoiceStyle } from '@shared/models/format';
+import { ChoiceOption, ChoiceStyle } from '@shared/models/blocks';
 
 export class UpdateChoiceStyleCommand implements Command {
   private receiver: ChoiceOption;

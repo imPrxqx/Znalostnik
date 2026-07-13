@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgComponentOutlet } from '@angular/common';
 import { Hub } from '../services/hub';
-import { RegistrySession } from '@shared/models/registry-session';
+import { RegistrySession } from '@shared/registry/registry-session';
 
 @Component({
   selector: 'app-participant',

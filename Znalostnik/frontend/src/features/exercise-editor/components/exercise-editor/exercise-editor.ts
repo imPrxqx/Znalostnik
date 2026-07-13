@@ -23,7 +23,7 @@ import { RemoveActivityCommand } from '@shared/commands/remove-activity-command'
 import { LoadCommand } from '@shared/commands/load-command';
 import { ExercisesManager } from '@features/dashboard/services/exercises-manager';
 import { SaveCommand } from '@shared/commands/save-command';
-import { ExportJsonVisitor } from '@shared/models/json-export';
+import { ExportJsonVisitor } from '@shared/exporters/json-export';
 import { Activity } from '@shared/models/activity';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';

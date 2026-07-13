@@ -1,5 +1,5 @@
 import { Command } from '@shared/interfaces/command.interface';
-import { ChoiceOption, MultiChoiceOption } from '@shared/models/format';
+import { ChoiceOption, MultiChoiceOption } from '@shared/models/blocks';
 
 export class RemoveChoiceCommand implements Command {
   private receiver: MultiChoiceOption;

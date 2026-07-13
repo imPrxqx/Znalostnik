@@ -12,7 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MediaApi } from '../services/media-api';
 import { MatTabsModule } from '@angular/material/tabs';
 import { environment } from '@environments/environment';
-import { Media } from '@shared/models/format';
+import { Media } from '@shared/models/blocks';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({

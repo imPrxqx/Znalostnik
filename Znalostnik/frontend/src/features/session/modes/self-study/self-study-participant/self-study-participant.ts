@@ -4,10 +4,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ExerciseActivity } from '@features/exercise-editor/components/exercise-activity/exercise-activity';
 import { SessionState } from '@features/session/services/session-state';
-import { RegistryActivity } from '@shared/models/registry-activity';
+import { RegistryActivity } from '@shared/registry/registry-activity';
 import { Activity } from '@shared/models/activity';
 import { ActivityAnswer } from '@shared/models/activity-answer';
-import { ActivityFactory } from '@shared/models/activity-factory';
+import { ActivityFactory } from '@shared/factories/activity-factory';
 
 @Component({
   selector: 'app-self-study-participant',

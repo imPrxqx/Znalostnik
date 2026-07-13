@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { SessionsManager } from '@features/dashboard/services/sessions-manager';
 import { Session } from '@shared/models/session';
-import { RegistrySession } from '@shared/models/registry-session';
+import { RegistrySession } from '@shared/registry/registry-session';
 
 @Component({
   selector: 'app-session-card',

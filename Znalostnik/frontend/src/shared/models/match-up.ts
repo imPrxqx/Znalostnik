@@ -7,7 +7,7 @@ import {
   ChoiceOptionConfiguration,
   TextConfiguration,
   TextStyle,
-} from './format';
+} from './blocks';
 import { Activity, ActivityStyle } from './activity';
 import { ActivityAnswer } from './activity-answer';
 import { Element, Visitor } from '../interfaces/visitor';

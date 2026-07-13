@@ -1,5 +1,5 @@
 import { Component, ViewContainerRef, inject, input, OnChanges } from '@angular/core';
-import { RegistryActivity } from '@shared/models/registry-activity';
+import { RegistryActivity } from '@shared/registry/registry-activity';
 import { Activity } from '@shared/models/activity';
 
 @Component({

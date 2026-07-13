@@ -1,5 +1,5 @@
 import { Command } from '@shared/interfaces/command.interface';
-import { ChoiceOption } from '@shared/models/format';
+import { ChoiceOption } from '@shared/models/blocks';
 
 export class UpdateChoiceCommand implements Command {
   private mergeCount = 1;

@@ -1,5 +1,5 @@
 import { Command } from '@shared/interfaces/command.interface';
-import { ChoiceOption, Media } from '@shared/models/format';
+import { ChoiceOption, Media } from '@shared/models/blocks';
 
 export class UpdateChoiceMediaCommand implements Command {
   private receiver: ChoiceOption;
