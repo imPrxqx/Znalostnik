@@ -45,7 +45,7 @@ namespace backend.GameModes
 
             if (
                 session.GameSetting.ScoringMode != "balanced"
-                || session.GameSetting.ScoringMode != "fast"
+                && session.GameSetting.ScoringMode != "fast"
             )
             {
                 throw new InvalidOperationException(
