@@ -25,7 +25,9 @@ namespace backend.DTOs
             {
                 Id = answer.Id,
                 Submit = JsonDocument.Parse(answer.Submit),
+                Status = answer.Status,
                 Version = answer.Version,
+                CorrectPercentage = answer.CorrectPercentage,
                 CreatedAt = answer.CreatedAt,
                 ActivityId = answer.ActivityId,
             };

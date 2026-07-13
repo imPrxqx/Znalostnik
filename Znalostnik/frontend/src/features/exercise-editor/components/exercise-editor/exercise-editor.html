@@ -49,39 +49,42 @@
   <ng-template #backgroundEditor>
     @if (edit.activity() !== undefined) {
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label i18n>Barva pozadí</mat-label>
+    <div class="item">
+      <h3 i18n>Dostupné možnosti pozadí</h3>
 
-      <input
-        matInput
-        type="color"
-        [value]="edit.activity()!.style().backgroundColor"
-        (blur)="setBackgroundColor($any($event.target).value)"
-      />
-    </mat-form-field>
+      <div class="styles">
+        <div class="color">
+          <label for="color-background" i18n>Barva pozadí</label>
+          <input
+            type="color"
+            id="color-background"
+            [value]="edit.activity()!.style().backgroundColor"
+            (change)="setBackgroundColor($any($event.target).value)"
+          />
+        </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label i18n>Barva rámečku</mat-label>
-      <input
-        matInput
-        type="color"
-        [value]="edit.activity()!.style().borderColor"
-        (blur)="setBorderColor($any($event.target).value)"
-      />
-    </mat-form-field>
+        <div class="color">
+          <label for="color-border" i18n>Barva rámečku</label>
+          <input
+            type="color"
+            id="color-border"
+            [value]="edit.activity()!.style().borderColor"
+            (change)="setBorderColor($any($event.target).value)"
+          />
+        </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label i18n>Zaoblení rámečku (px)</mat-label>
-      <input
-        matInput
-        type="number"
-        min="0"
-        max="32"
-        step="1"
-        [value]="edit.activity()!.style().borderRadius"
-        (blur)="setBorderRadius($any($event.target).valueAsNumber)"
-      />
-    </mat-form-field>
+        <div class="color">
+          <label for="number-background" i18n>Zaoblení rámečku</label>
+          <input
+            type="number"
+            class="number"
+            id="number-background"
+            [value]="edit.activity()!.style().borderRadius"
+            (change)="setBorderRadius($any($event.target).valueAsNumber)"
+          />
+        </div>
+      </div>
+    </div>
 
     } @else {
     <ng-container *ngTemplateOutlet="emptyState"></ng-container>

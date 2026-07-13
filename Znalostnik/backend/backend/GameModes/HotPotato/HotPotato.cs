@@ -128,7 +128,6 @@ namespace backend.GameModes
             var currentActivity = session.Activities.First(a => a.Id == potato.ActivityId);
             algorithm.UpdateParticipantState(participantState, currentActivity, correctPercentile);
             potato.PreviousActivityId = potato.ActivityId;
-            ;
             potato.ActivityId = algorithm
                 .SelectNextActivity(session.Activities, participantState)
                 .Id;
@@ -415,12 +414,14 @@ namespace backend.GameModes
                     timerEnd = state.TimerEnd,
                     participants = state.Participants,
                     aliveParticipants = state.AliveParticipants,
-                    activePotatoes = state.PotatoInstances.Select(p => new
-                    {
-                        potatoId = p.PotatoId,
-                        activity = GetActivity(session, p.ActivityId).ToActivityDto(),
-                        ParticipantId = p.ParticipantId,
-                    }),
+                    activePotatoes = state
+                        .PotatoInstances.Where(p => p.IsActive == true)
+                        .Select(p => new
+                        {
+                            potatoId = p.PotatoId,
+                            activity = GetActivity(session, p.ActivityId).ToActivityDto(),
+                            participantId = p.ParticipantId,
+                        }),
                 };
             }
 
@@ -487,7 +488,9 @@ namespace backend.GameModes
 
                 var lastAnswer = session
                     .Answers.Where(a =>
-                        a.OwnerId == participantId && potato.PreviousActivityId == a.ActivityId
+                        a.OwnerId == participantId
+                        && potato.PreviousActivityId == a.ActivityId
+                        && a.Status == "Submitted"
                     )
                     .OrderByDescending(a => a.CreatedAt)
                     .FirstOrDefault();

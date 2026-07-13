@@ -15,8 +15,8 @@ namespace backend.Services.EmailSender
 
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            var emailFrom = _configuration["EMAIL"];
-            var emailPassword = _configuration["EMAIL_PASSWORD"];
+            var emailFrom = _configuration["EMAIL"]!;
+            var emailPassword = _configuration["EMAIL_PASSWORD"]!;
 
             using var client = new SmtpClient("smtp.gmail.com", 587)
             {
