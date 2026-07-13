@@ -1,15 +1,18 @@
-﻿using System.Text.Json;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.DTOs
 {
     public class CreateExerciseDto
     {
+        [Required]
         public string Title { get; set; } = string.Empty;
     }
 
     public class UpdateExerciseDto
     {
+        [Required]
         public string Title { get; set; } = string.Empty;
         public List<CreateActivityDTO> Activities { get; set; } = new();
     }

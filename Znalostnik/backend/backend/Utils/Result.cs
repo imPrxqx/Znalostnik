@@ -150,9 +150,16 @@
 
         public static Error AnswerNotFound = new Error("Errors.AnswerNotFound", "Answer Not Found");
 
+        public static Error AnswerNotValid = new Error("Errors.AnswerNotValid", "Answer Not Valid");
+
         public static Error ExerciseNotFound = new Error(
             "Errors.ExerciseNotFound",
             "Exercise Not Found"
+        );
+
+        public static Error ExerciseNotValid = new Error(
+            "Errors.ExerciseNotValid",
+            "Exercise Not Valid"
         );
 
         public static Error ExerciseActivityNotFound = new Error(

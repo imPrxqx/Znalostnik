@@ -6,6 +6,7 @@ using backend.GameModes;
 using backend.Hubs;
 using backend.Models;
 using backend.Runtime;
+using backend.Schemas;
 using backend.Utils;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ namespace backend.Services
     public class SessionService : ISessionService
     {
         private readonly ApplicationDbContext _context;
+        private readonly JsonSchemaValidator _jsonSchemaValidator;
         private readonly IEvaluatorResolver _evaluators;
         private readonly IHubContext<SessionHub> _sessionHubContext;
         private readonly IGameModeResolver _gameModes;
@@ -25,7 +27,8 @@ namespace backend.Services
             IHubContext<SessionHub> sessionHubContext,
             IGameModeResolver gameModes,
             IEvaluatorResolver evaluators,
-            IRuntimeSessionStore runtimeSessionStore
+            IRuntimeSessionStore runtimeSessionStore,
+            JsonSchemaValidator jsonSchemaValidator
         )
         {
             _sessionHubContext = sessionHubContext;
@@ -33,6 +36,7 @@ namespace backend.Services
             _gameModes = gameModes;
             _evaluators = evaluators;
             _runtimeSessionStore = runtimeSessionStore;
+            _jsonSchemaValidator = jsonSchemaValidator;
         }
 
         public async Task<Result<SessionReportDto>> GetSessionReport(UserDto user, Guid sessionId)
@@ -92,6 +96,8 @@ namespace backend.Services
             {
                 return Result<SessionDto>.Failure(Errors.ExerciseNotFound);
             }
+
+            IGameMode mode = _gameModes.Resolve(dto.GameMode);
 
             var activities = await _context
                 .Activities.Where(et => et.ExerciseId == dto.ExerciseId)
@@ -173,6 +179,28 @@ namespace backend.Services
             CreateAnswerDto dto
         )
         {
+            var activityToValid = await GetSessionExerciseActivityAsync(
+                user,
+                sessionId,
+                dto.ActivityId
+            );
+
+            if (activityToValid.IsFailure)
+            {
+                return Result<AnswerDto>.Failure(Errors.ExerciseActivityNotFound);
+            }
+
+            if (
+                !_jsonSchemaValidator.Validate(
+                    "Answers",
+                    activityToValid.Value.Type,
+                    dto.Submit.RootElement.GetRawText()
+                )
+            )
+            {
+                return Result<AnswerDto>.Failure(Errors.AnswerNotValid);
+            }
+
             var session = _runtimeSessionStore.GetSession(sessionId);
 
             if (session == null)
@@ -196,14 +224,7 @@ namespace backend.Services
 
             IGameMode mode;
 
-            try
-            {
-                mode = _gameModes.Resolve(session.GameMode);
-            }
-            catch (InvalidOperationException)
-            {
-                return Result<AnswerDto>.Failure(Errors.InvalidOperation);
-            }
+            mode = _gameModes.Resolve(session.GameMode);
 
             Guid? activeActivityId = null;
 
@@ -242,6 +263,28 @@ namespace backend.Services
             CreateAnswerDto dto
         )
         {
+            var activityToValid = await GetSessionExerciseActivityAsync(
+                user,
+                sessionId,
+                dto.ActivityId
+            );
+
+            if (activityToValid.IsFailure)
+            {
+                return Result<AnswerDto>.Failure(Errors.ExerciseActivityNotFound);
+            }
+
+            if (
+                !_jsonSchemaValidator.Validate(
+                    "Answers",
+                    activityToValid.Value.Type,
+                    dto.Submit.RootElement.GetRawText()
+                )
+            )
+            {
+                return Result<AnswerDto>.Failure(Errors.AnswerNotValid);
+            }
+
             var session = _runtimeSessionStore.GetSession(sessionId);
 
             if (session == null)
@@ -263,16 +306,7 @@ namespace backend.Services
                 return Result<AnswerDto>.Failure(Errors.NotFound);
             }
 
-            IGameMode mode;
-
-            try
-            {
-                mode = _gameModes.Resolve(session.GameMode);
-            }
-            catch (InvalidOperationException)
-            {
-                return Result<AnswerDto>.Failure(Errors.InvalidOperation);
-            }
+            IGameMode mode = _gameModes.Resolve(session.GameMode);
 
             Guid? activeActivityId = null;
             activeActivityId = mode.GetParticipantActivityId(participantId.Value, session);
@@ -342,16 +376,7 @@ namespace backend.Services
                 return Result<SessionDto>.Failure(Errors.UnauthorizedAccess);
             }
 
-            IGameMode mode;
-
-            try
-            {
-                mode = _gameModes.Resolve(session.GameMode);
-            }
-            catch (InvalidOperationException)
-            {
-                return Result<SessionDto>.Failure(Errors.InvalidOperation);
-            }
+            IGameMode mode = _gameModes.Resolve(session.GameMode);
 
             if (session.RespondType == "team")
             {
@@ -401,16 +426,7 @@ namespace backend.Services
 
             session.Status = "finished";
 
-            IGameMode mode;
-
-            try
-            {
-                mode = _gameModes.Resolve(session.GameMode);
-            }
-            catch (InvalidOperationException)
-            {
-                return Result<SessionDto>.Failure(Errors.InvalidOperation);
-            }
+            IGameMode mode = _gameModes.Resolve(session.GameMode);
 
             mode.End(session);
 
@@ -557,16 +573,7 @@ namespace backend.Services
                 return Result<SessionDto>.Failure(Errors.UnauthorizedAccess);
             }
 
-            IGameMode mode;
-
-            try
-            {
-                mode = _gameModes.Resolve(session.GameMode);
-            }
-            catch (InvalidOperationException)
-            {
-                return Result<SessionDto>.Failure(Errors.InvalidOperation);
-            }
+            IGameMode mode = _gameModes.Resolve(session.GameMode);
 
             var activityAssignments = mode.OnNextRoundStart(session);
             InitializeAnswersAsync(session, activityAssignments);
@@ -590,16 +597,7 @@ namespace backend.Services
                 return Result<SessionDto>.Failure(Errors.UnauthorizedAccess);
             }
 
-            IGameMode mode;
-
-            try
-            {
-                mode = _gameModes.Resolve(session.GameMode);
-            }
-            catch (InvalidOperationException)
-            {
-                return Result<SessionDto>.Failure(Errors.InvalidOperation);
-            }
+            IGameMode mode = _gameModes.Resolve(session.GameMode);
 
             var activityAssignments = mode.OnPreviousRoundStart(session);
             InitializeAnswersAsync(session, activityAssignments);
@@ -619,16 +617,7 @@ namespace backend.Services
                 return Result.Failure(Errors.SessionNotFound);
             }
 
-            IGameMode mode;
-
-            try
-            {
-                mode = _gameModes.Resolve(session.GameMode);
-            }
-            catch (InvalidOperationException)
-            {
-                return Result<SessionDto>.Failure(Errors.InvalidOperation);
-            }
+            IGameMode mode = _gameModes.Resolve(session.GameMode);
 
             mode.ProcessStateTransition(session);
             await _sessionHubContext
@@ -651,17 +640,7 @@ namespace backend.Services
                 return Result<SessionDto>.Failure(Errors.UnauthorizedAccess);
             }
 
-            IGameMode mode;
-
-            try
-            {
-                mode = _gameModes.Resolve(session.GameMode);
-            }
-            catch (InvalidOperationException)
-            {
-                return Result<SessionDto>.Failure(Errors.InvalidOperation);
-            }
-
+            IGameMode mode = _gameModes.Resolve(session.GameMode);
             mode.OnRoundEnd(session);
             await _sessionHubContext
                 .Clients.Group(session.Id.ToString())
@@ -702,16 +681,7 @@ namespace backend.Services
 
             var activeActivities = new List<ActivityDTO>();
 
-            IGameMode mode;
-
-            try
-            {
-                mode = _gameModes.Resolve(session.GameMode);
-            }
-            catch (InvalidOperationException)
-            {
-                return Result<SessionDto>.Failure(Errors.InvalidOperation);
-            }
+            IGameMode mode = _gameModes.Resolve(session.GameMode);
 
             if (role.Value == "participant")
             {
@@ -785,16 +755,7 @@ namespace backend.Services
                 return Result<ActivityDTO?>.Failure(Errors.NotFound);
             }
 
-            IGameMode mode;
-
-            try
-            {
-                mode = _gameModes.Resolve(session.GameMode);
-            }
-            catch (InvalidOperationException)
-            {
-                return Result<ActivityDTO?>.Failure(Errors.InvalidOperation);
-            }
+            IGameMode mode = _gameModes.Resolve(session.GameMode);
 
             Guid? activeActivityId = null;
 

@@ -1,4 +1,5 @@
-﻿using backend.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.DTOs
@@ -12,12 +13,16 @@ namespace backend.DTOs
 
     public class UserForgotPasswordDto
     {
+        [Required]
         public string Email { get; set; } = string.Empty;
     }
 
     public class UpdateUserPasswordDto
     {
+        [Required]
         public string OldPassword { get; set; } = string.Empty;
+
+        [Required]
         public string NewPassword { get; set; } = string.Empty;
     }
 }

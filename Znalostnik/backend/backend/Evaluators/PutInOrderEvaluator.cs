@@ -5,7 +5,7 @@ using backend.Models;
 namespace backend.Evaluators
 {
     /// <summary>
-    /// Evaluator for put in order activity
+    /// Implements evaluator for put in order activity
     /// </summary>
     public class PutInOrderEvaluator : IAnswerEvaluator
     {

@@ -11,7 +11,7 @@ namespace backend.GameModes
         /// Returns a game mode for selected game mode.
         /// </summary>
         /// <param name="key"></param>
-        /// <returns></returns>
+        /// <returns>Evaluator</returns>
         IGameMode Resolve(string key);
     }
 }

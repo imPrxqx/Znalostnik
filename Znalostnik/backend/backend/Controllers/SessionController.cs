@@ -18,7 +18,6 @@ namespace backend.Controllers
     {
         private readonly ISessionService _sessionService;
         private readonly IUserService _userService;
-        private readonly JsonSchemaValidator _jsonSchemaValidator;
 
         public SessionController(
             ISessionService sessionService,
@@ -28,7 +27,6 @@ namespace backend.Controllers
         {
             _sessionService = sessionService;
             _userService = userService;
-            _jsonSchemaValidator = jsonSchemaValidator;
         }
 
         /// <summary>
@@ -488,28 +486,6 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            var activity = await _sessionService.GetSessionExerciseActivityAsync(
-                user.Value,
-                sessionId,
-                dto.ActivityId
-            );
-
-            if (activity.IsFailure)
-            {
-                return NotFound($"{user.Error.Type}: {user.Error.Description}");
-            }
-
-            if (
-                !_jsonSchemaValidator.Validate(
-                    "Answers",
-                    activity.Value.Type,
-                    dto.Submit.RootElement.GetRawText()
-                )
-            )
-            {
-                return BadRequest(ModelState);
-            }
-
             var result = await _sessionService.ConfirmAnswerAsync(user.Value, sessionId, dto);
 
             if (result.IsFailure)
@@ -542,28 +518,6 @@ namespace backend.Controllers
             if (user.IsFailure)
             {
                 return Unauthorized();
-            }
-
-            var activity = await _sessionService.GetSessionExerciseActivityAsync(
-                user.Value,
-                sessionId,
-                dto.ActivityId
-            );
-
-            if (activity.IsFailure)
-            {
-                return NotFound($"{user.Error.Type}: {user.Error.Description}");
-            }
-
-            if (
-                !_jsonSchemaValidator.Validate(
-                    "Answers",
-                    activity.Value.Type,
-                    dto.Submit.RootElement.GetRawText()
-                )
-            )
-            {
-                return BadRequest(ModelState);
             }
 
             var result = await _sessionService.UpdateAnswerAsync(user.Value, sessionId, dto);

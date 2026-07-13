@@ -5,7 +5,7 @@ using backend.Models;
 namespace backend.Evaluators
 {
     /// <summary>
-    /// Evaluator for guess activity
+    /// Implements evaluator for guess activity
     /// </summary>
     public class GuessEvaluator : IAnswerEvaluator
     {

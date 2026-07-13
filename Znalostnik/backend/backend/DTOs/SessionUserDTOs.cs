@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace backend.DTOs
 {
@@ -11,7 +12,10 @@ namespace backend.DTOs
 
     public class CreateSessionUserDto
     {
+        [Required]
         public string AccessCode { get; set; } = null!;
+
+        [Required]
         public string UserName { get; set; } = null!;
     }
 }

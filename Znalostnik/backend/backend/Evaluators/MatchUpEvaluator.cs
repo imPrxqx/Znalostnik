@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis;
 namespace backend.Evaluators
 {
     /// <summary>
-    /// Evaluator for match up activity
+    /// Implements evaluator for match up activity
     /// </summary>
     public class MatchUpEvaluator : IAnswerEvaluator
     {

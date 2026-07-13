@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis;
 namespace backend.Evaluators
 {
     /// <summary>
-    /// Evaluator for quiz activity
+    /// Implements evaluator for quiz activity
     /// </summary>
     public class QuizEvaluator : IAnswerEvaluator
     {

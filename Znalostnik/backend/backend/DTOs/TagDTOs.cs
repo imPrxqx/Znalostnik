@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.DTOs
@@ -11,6 +12,7 @@ namespace backend.DTOs
 
     public class CreateTagDto
     {
+        [Required]
         public string Name { get; set; } = string.Empty;
     }
 

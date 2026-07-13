@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 
 namespace backend.DTOs
 {
@@ -29,10 +30,19 @@ namespace backend.DTOs
 
     public class CreateSessionDto
     {
+        [Required]
         public Guid ExerciseId { get; set; }
+
+        [Required]
         public string Title { get; set; } = null!;
+
+        [Required]
         public string RespondType { get; set; } = null!;
+
+        [Required]
         public string GameMode { get; set; } = null!;
+
+        [Required]
         public GameSetting GameSetting { get; set; } = null!;
     }
 

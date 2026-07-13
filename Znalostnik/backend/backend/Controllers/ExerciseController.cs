@@ -15,19 +15,13 @@ namespace backend.Controllers
     [Authorize]
     public class ExerciseController : ControllerBase
     {
-        private readonly JsonSchemaValidator _jsonSchemaValidator;
         private readonly IExerciseService _exerciseService;
         private readonly IUserService _userService;
 
-        public ExerciseController(
-            IExerciseService exerciseService,
-            IUserService userService,
-            JsonSchemaValidator jsonSchemaValidator
-        )
+        public ExerciseController(IExerciseService exerciseService, IUserService userService)
         {
             _exerciseService = exerciseService;
             _userService = userService;
-            _jsonSchemaValidator = jsonSchemaValidator;
         }
 
         /// <summary>
@@ -145,52 +139,6 @@ namespace backend.Controllers
         )
         {
             if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            bool isValid = true;
-
-            foreach (var activity in dto.Activities)
-            {
-                if (
-                    !_jsonSchemaValidator.Validate(
-                        "Activities",
-                        "activity",
-                        activity.Style.RootElement.GetRawText()
-                    )
-                )
-                {
-                    isValid = false;
-                    break;
-                }
-
-                if (
-                    !_jsonSchemaValidator.Validate(
-                        "Activities",
-                        activity.Type,
-                        activity.Content.RootElement.GetRawText()
-                    )
-                )
-                {
-                    isValid = false;
-                    break;
-                }
-
-                if (
-                    !_jsonSchemaValidator.Validate(
-                        "Solutions",
-                        activity.Type,
-                        activity.Solution.RootElement.GetRawText()
-                    )
-                )
-                {
-                    isValid = false;
-                    break;
-                }
-            }
-
-            if (!isValid)
             {
                 return BadRequest(ModelState);
             }

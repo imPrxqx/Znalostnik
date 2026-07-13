@@ -1,23 +1,24 @@
-﻿using System;
-using System.Reflection.Metadata;
-using backend.Data;
+﻿using backend.Data;
 using backend.DTOs;
 using backend.Models;
+using backend.Schemas;
 using backend.Utils;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol.Core.Types;
-using NuGet.Versioning;
 
 namespace backend.Services
 {
     public class ExerciseService : IExerciseService
     {
         private readonly ApplicationDbContext _context;
+        private readonly JsonSchemaValidator _jsonSchemaValidator;
 
-        public ExerciseService(ApplicationDbContext context)
+        public ExerciseService(
+            ApplicationDbContext context,
+            JsonSchemaValidator jsonSchemaValidator
+        )
         {
             _context = context;
+            _jsonSchemaValidator = jsonSchemaValidator;
         }
 
         public async Task<Result<ExerciseDto>> GetExerciseAsync(UserDto user, Guid exerciseId)
@@ -118,6 +119,52 @@ namespace backend.Services
             exercise.Title = dto.Title;
             exercise.UpdatedAt = DateTime.UtcNow;
             exercise.Activities.Clear();
+
+            bool isValid = true;
+
+            foreach (var activity in dto.Activities)
+            {
+                if (
+                    !_jsonSchemaValidator.Validate(
+                        "Activities",
+                        "activity",
+                        activity.Style.RootElement.GetRawText()
+                    )
+                )
+                {
+                    isValid = false;
+                    break;
+                }
+
+                if (
+                    !_jsonSchemaValidator.Validate(
+                        "Activities",
+                        activity.Type,
+                        activity.Content.RootElement.GetRawText()
+                    )
+                )
+                {
+                    isValid = false;
+                    break;
+                }
+
+                if (
+                    !_jsonSchemaValidator.Validate(
+                        "Solutions",
+                        activity.Type,
+                        activity.Solution.RootElement.GetRawText()
+                    )
+                )
+                {
+                    isValid = false;
+                    break;
+                }
+            }
+
+            if (!isValid)
+            {
+                return Result<ExerciseDto>.Failure(Errors.ExerciseNotValid);
+            }
 
             foreach (var activityDto in dto.Activities)
             {

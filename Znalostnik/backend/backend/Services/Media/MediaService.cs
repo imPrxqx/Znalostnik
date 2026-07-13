@@ -1,14 +1,8 @@
-﻿using System;
-using System.Reflection.Metadata;
-using backend.Data;
+﻿using backend.Data;
 using backend.DTOs;
 using backend.Models;
 using backend.Utils;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol.Core.Types;
-using NuGet.Versioning;
 
 namespace backend.Services
 {
@@ -80,6 +74,7 @@ namespace backend.Services
 
             var fullPath = Path.GetFullPath(media.Path);
 
+            // Remove also file when removing metadata
             if (File.Exists(fullPath))
             {
                 File.Delete(fullPath);
