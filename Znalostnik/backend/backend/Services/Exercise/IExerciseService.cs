@@ -9,7 +9,7 @@ namespace backend.Services
         Task<Result<ExerciseDto>> GetExerciseAsync(UserDto user, Guid exerciseId);
         Task<Result<ActivityDTO>> GetFirstExerciseActivityAsync(UserDto user, Guid exerciseId);
         Task<Result<ExerciseDto>> CreateExerciseAsync(UserDto user, CreateExerciseDto dto);
-        Task<Result<ExerciseDto>> UpdateExerciseAsync(
+        Task<Result> UpdateExerciseAsync(
             UserDto user,
             Guid exerciseId,
             UpdateExerciseDto dto
