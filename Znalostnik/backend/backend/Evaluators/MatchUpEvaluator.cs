@@ -4,11 +4,19 @@ using backend.Models;
 using Microsoft.CodeAnalysis;
 
 namespace backend.Evaluators
-{
+{    
+    /// <summary>
+    /// Evaluator for match up activity
+    /// </summary>
     public class MatchUpEvaluator : IAnswerEvaluator
     {
         public string ExerciseActivityType => "matchUp";
 
+        /// <summary>
+        /// Evaluates the submitted answer and calculate correct percentile and write it to answer
+        /// </summary>
+        /// <param name="activity">Activity with solution</param>
+        /// <param name="answer">Submitted answer</param>
         public void Evaluate(RuntimeActivity activity, RuntimeAnswer answer)
         {
             var solution = JsonSerializer.Deserialize<MatchUpSolution>(activity.Solution);
@@ -44,18 +52,27 @@ namespace backend.Evaluators
             answer.CorrectPercentage = percentage;
         }
 
+        /// <summary>
+        /// Structure the solution for match up
+        /// </summary>
         public class MatchUpSolution
         {
             [JsonPropertyName("correct")]
             public List<MatchUpPair> Correct { get; set; } = new List<MatchUpPair>();
         }
 
+        /// <summary>
+        /// Structure the answer for match up
+        /// </summary>
         public class MatchUpAnswer
         {
             [JsonPropertyName("selected")]
             public List<MatchUpPair> Selected { get; set; } = new List<MatchUpPair>();
         }
 
+        /// <summary>
+        /// Structure match up pair
+        /// </summary>
         public class MatchUpPair
         {
             [JsonPropertyName("leftId")]

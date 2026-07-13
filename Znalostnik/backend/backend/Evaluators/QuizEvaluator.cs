@@ -5,10 +5,18 @@ using Microsoft.CodeAnalysis;
 
 namespace backend.Evaluators
 {
+    /// <summary>
+    /// Evaluator for quiz activity
+    /// </summary>
     public class QuizEvaluator : IAnswerEvaluator
     {
         public string ExerciseActivityType => "quiz";
 
+        /// <summary>
+        /// Evaluates the submitted answer and calculate correct percentile and write it to answer
+        /// </summary>
+        /// <param name="activity">Activity with solution</param>
+        /// <param name="answer">Submitted answer</param>
         public void Evaluate(RuntimeActivity activity, RuntimeAnswer answer)
         {
             var solution = JsonSerializer.Deserialize<QuizSolution>(activity.Solution);
@@ -29,12 +37,19 @@ namespace backend.Evaluators
             answer.CorrectPercentage = percentage;
         }
 
+
+        /// <summary>
+        /// Structure the solution for quiz
+        /// </summary>
         public class QuizSolution
         {
             [JsonPropertyName("correct")]
             public List<string> Correct { get; set; } = new List<string>();
         }
 
+        /// <summary>
+        /// Structure the answer for quiz
+        /// </summary>
         public class QuizAnswer
         {
             [JsonPropertyName("selected")]
