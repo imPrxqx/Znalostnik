@@ -6,6 +6,9 @@ using backend.Utils;
 
 namespace backend.GameModes
 {
+    /// <summary>
+    /// Implements self study game mode where all particiapnts are answering in their own temp.
+    /// </summary>
     public class SelfStudy : IGameMode
     {
         public string GameModeType => "selfStudy";
@@ -17,6 +20,12 @@ namespace backend.GameModes
             _algorithms = algorithms;
         }
 
+        /// <summary>
+        /// Validates if session can be started.
+        /// </summary>
+        /// <param name="session">Runtime session</param>
+        /// <param name="participantIds">Participants list which will be participating in session</param>
+        /// <returns>Success if there are at least one participants. If not validation error</returns>
         public Result ValidateStart(RuntimeSession session, List<Guid> participantIds)
         {
             if (participantIds.Count == 0)
@@ -27,14 +36,19 @@ namespace backend.GameModes
             return Result.Success();
         }
 
+        /// <summary>
+        /// Starts game mode and creates initial activity assignemnts.
+        /// </summary>
+        /// <param name="session">Runtime session</param>
+        /// <param name="participantIds">Participants list which will be participating in session</param>
+        /// <returns>Initial activity assignments for participants</returns>
         public List<ActivityAssignment> Start(RuntimeSession session, List<Guid> participantIds)
         {
             var state = LoadState(session);
 
-            state.TimerRound = session.GameSetting.RoundTime;
+            // Init base state for game state in session
             state.SelectionAlgorithm = session.GameSetting.SelectionAlgorithm;
             state.Participants = new List<Guid>(participantIds);
-            state.AvailableActivities = new List<Guid>(session.ActivityIds);
             state.Scores = participantIds
                 .Select(p => new ParticipantSelfStudyScore
                 {
@@ -68,11 +82,12 @@ namespace backend.GameModes
 
             SaveState(session, state);
 
-            var newParticipants = new List<ActivityAssignment>();
+            // Creates for every participant activity assignment
+            var assignments = new List<ActivityAssignment>();
 
             foreach (var participant in state.ActivityInstances)
             {
-                newParticipants.Add(
+                assignments.Add(
                     new ActivityAssignment
                     {
                         ParticipantId = participant.ParticipantId,
@@ -81,9 +96,17 @@ namespace backend.GameModes
                 );
             }
 
-            return newParticipants;
+            return assignments;
         }
 
+        /// <summary>
+        /// Returns the current game state based on role (host or participant)
+        /// </summary>
+        /// <param name="session">Runtime session</param>
+        /// <param name="role">participant or host</param>
+        /// <param name="participantId">Participant id if participant role</param>
+        /// <returns>Game state</returns>
+        /// <exception cref="NotSupportedException">Throws when role is not correct or participant role is missing id</exception>
         public object GetGameState(RuntimeSession session, string role, Guid? participantId)
         {
             var state = LoadState(session);
@@ -124,6 +147,14 @@ namespace backend.GameModes
             return activityInstance.ActivityId;
         }
 
+        /// <summary>
+        /// Handles a participant answer and select new activity and updates game state.
+        /// </summary>
+        /// <param name="participantId">Participant id</param>
+        /// <param name="session">Runtime session</param>
+        /// <param name="correctPercentile">How much is answer correct</param>
+        /// <returns>No new activity assignemnts</returns>
+        /// <exception cref="InvalidOperationException">Throws when scoring method is not correctly defined -- should not happen</exception>
         public List<ActivityAssignment> OnAnswer(
             Guid participantId,
             RuntimeSession session,
@@ -132,6 +163,7 @@ namespace backend.GameModes
         {
             var state = LoadState(session);
 
+            // Add score for participant in leaderboard
             var score = state.Scores.FirstOrDefault(s => s.ParticipantId == participantId);
 
             if (score == null)
@@ -151,6 +183,7 @@ namespace backend.GameModes
                 throw new InvalidOperationException("Activity instance not found");
             }
 
+            // select new activity from adaptive algorithm and update new algorithm state
             instance.PreviousActivityId = instance.ActivityId;
 
             var participantState = state.ParticipantsState.First(p => p.Id == participantId);
@@ -163,6 +196,7 @@ namespace backend.GameModes
 
             var assignments = new List<ActivityAssignment>();
 
+            // Create new assignemnt for this new activity
             var newActivityAssignemnt = new ActivityAssignment
             {
                 ParticipantId = participantId,
@@ -173,22 +207,49 @@ namespace backend.GameModes
             return assignments;
         }
 
+        /// <summary>
+        /// Not used in this mode.
+        /// </summary>
+        /// <param name="session">Runtime session</param>
         public void End(RuntimeSession session) { }
 
+        /// <summary>
+        /// Not used in this mode.
+        /// </summary>
+        /// <param name="session">Runtime session</param>
+        /// <returns>No new activity assignments</returns>
         public List<ActivityAssignment> OnNextRoundStart(RuntimeSession session)
         {
             return new List<ActivityAssignment>();
         }
 
+        /// <summary>
+        /// Not used in this mode.
+        /// </summary>
+        /// <param name="session">Runtime session</param>
+        /// <returns>No new activity assignments</returns>
         public List<ActivityAssignment> OnPreviousRoundStart(RuntimeSession session)
         {
             return new List<ActivityAssignment>();
         }
 
+        /// <summary>
+        /// Not used in this mode.
+        /// </summary>
+        /// <param name="session"></param>
         public void OnRoundEnd(RuntimeSession session) { }
 
+        /// <summary>
+        /// Not used in this mode.
+        /// </summary>
+        /// <param name="session"></param>
         public void ProcessStateTransition(RuntimeSession session) { }
 
+        /// <summary>
+        /// Loads game state in session.
+        /// </summary>
+        /// <param name="session">Runtime session</param>
+        /// <returns>Game state</returns>
         private SelfStudyState LoadState(RuntimeSession session)
         {
             if (session.GameState == null)
@@ -206,12 +267,24 @@ namespace backend.GameModes
             return state;
         }
 
+        /// <summary>
+        /// Saves game state in session
+        /// </summary>
+        /// <param name="session">Runtime session</param>
+        /// <param name="state">Game state</param>
         private void SaveState(RuntimeSession session, SelfStudyState state)
         {
             var jsonString = JsonSerializer.Serialize(state);
             session.GameState = jsonString;
         }
 
+        /// <summary>
+        /// Returns for the current participant his activity
+        /// </summary>
+        /// <param name="session">Runtime session</param>
+        /// <param name="activityId">Activity id</param>
+        /// <returns>Participant current activity</returns>
+        /// <exception cref="InvalidOperationException">Throws when participant have not activity</exception>
         private RuntimeActivity GetActivity(RuntimeSession session, Guid activityId)
         {
             var activity = session.Activities.FirstOrDefault(a => a.Id == activityId);
@@ -226,6 +299,12 @@ namespace backend.GameModes
             return activity;
         }
 
+        /// <summary>
+        /// Returns game state for host in session.
+        /// </summary>
+        /// <param name="state">Game state</param>
+        /// <param name="session">Runtime session</param>
+        /// <returns>Game state</returns>
         private object GetHostState(SelfStudyState state, RuntimeSession session)
         {
             var leaderboard = state
@@ -246,6 +325,14 @@ namespace backend.GameModes
             return new { leaderboard };
         }
 
+        /// <summary>
+        /// Returns game state for participant in session.
+        /// </summary>
+        /// <param name="state">Game state</param>
+        /// <param name="session">Runtime session</param>
+        /// <param name="participantId">Participant id</param>
+        /// <returns>Game state</returns>
+        /// <exception cref="InvalidOperationException">Throws when game state is not right</exception>
         private object GetParticipantState(
             SelfStudyState state,
             RuntimeSession session,
@@ -284,6 +371,7 @@ namespace backend.GameModes
                 );
             }
 
+            // Find last answer to get feedback for participant
             var lastAnswer = session
                 .Answers.Where(a =>
                     a.OwnerId == participantId

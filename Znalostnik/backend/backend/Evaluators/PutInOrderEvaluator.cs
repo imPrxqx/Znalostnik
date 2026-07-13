@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using backend.Models;
 
 namespace backend.Evaluators
-{    
+{
     /// <summary>
     /// Evaluator for put in order activity
     /// </summary>

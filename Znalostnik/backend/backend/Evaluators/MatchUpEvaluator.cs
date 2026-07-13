@@ -4,7 +4,7 @@ using backend.Models;
 using Microsoft.CodeAnalysis;
 
 namespace backend.Evaluators
-{    
+{
     /// <summary>
     /// Evaluator for match up activity
     /// </summary>

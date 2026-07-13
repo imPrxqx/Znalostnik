@@ -1,12 +1,23 @@
-﻿using Newtonsoft.Json.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace backend.Utils
+﻿namespace backend.Utils
 {
+    /// <summary>
+    /// Represents the result of operation without value.
+    /// </summary>
     public record Result
     {
+        /// <summary>
+        /// Is operation success
+        /// </summary>
         public bool IsSuccess { get; }
+
+        /// <summary>
+        /// Is operation fail
+        /// </summary>
         public bool IsFailure => !IsSuccess;
+
+        /// <summary>
+        /// Error value when operation failed
+        /// </summary>
         public Error Error { get; }
 
         protected Result(bool isSuccess, Error error)
@@ -15,21 +26,37 @@ namespace backend.Utils
             Error = error;
         }
 
+        /// <summary>
+        /// Returns success result withou value.
+        /// </summary>
+        /// <returns></returns>
         public static Result Success()
         {
             return new Result(true, Errors.None);
         }
 
+        /// <summary>
+        /// Returns fail result with error.
+        /// </summary>
+        /// <param name="error"></param>
+        /// <returns></returns>
         public static Result Failure(Error error)
         {
             return new Result(false, error);
         }
     }
 
+    /// <summary>
+    /// Represents the result of operation with value.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public record Result<T> : Result
     {
         private T? _value;
 
+        /// <summary>
+        /// Value when operation success
+        /// </summary>
         public T Value
         {
             get
@@ -59,11 +86,21 @@ namespace backend.Utils
             _value = default;
         }
 
+        /// <summary>
+        /// Returns success result with value.
+        /// </summary>
+        /// <param name="value">Save value</param>
+        /// <returns>Result with save value</returns>
         public static Result<T> Success(T value)
         {
             return new Result<T>(value);
         }
 
+        /// <summary>
+        /// Returns fail result with value.
+        /// </summary>
+        /// <param name="error">Save error</param>
+        /// <returns>Result with error</returns>
         public static new Result<T> Failure(Error error)
         {
             return new Result<T>(error);

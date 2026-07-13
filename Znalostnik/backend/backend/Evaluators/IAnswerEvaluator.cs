@@ -12,6 +12,7 @@ namespace backend.Evaluators
         /// Activity type which is evaluator used for.
         /// </summary>
         string ExerciseActivityType { get; }
+
         /// <summary>
         /// Evaluates the submitted answer and updates answer with correct percentile.
         /// </summary>

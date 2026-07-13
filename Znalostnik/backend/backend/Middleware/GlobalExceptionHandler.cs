@@ -1,10 +1,11 @@
-﻿using System.Net;
-using System.Text.Json;
-using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Middleware
 {
+    /// <summary>
+    /// Global exception handler for catching exceptions and returning them.
+    /// </summary>
     public class GlobalExceptionHandler : IExceptionHandler
     {
         private readonly ILogger<GlobalExceptionHandler> _logger;
@@ -14,6 +15,13 @@ namespace backend.Middleware
             _logger = logger;
         }
 
+        /// <summary>
+        /// Handles exception and creates http response.
+        /// </summary>
+        /// <param name="httpContext">Current http context</param>
+        /// <param name="exception">Exception that occured</param>
+        /// <param name="cancellationToken">Cancelation token</param>
+        /// <returns>Is exception handled</returns>
         public async ValueTask<bool> TryHandleAsync(
             HttpContext httpContext,
             Exception exception,

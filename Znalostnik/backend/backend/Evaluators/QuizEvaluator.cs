@@ -37,7 +37,6 @@ namespace backend.Evaluators
             answer.CorrectPercentage = percentage;
         }
 
-
         /// <summary>
         /// Structure the solution for quiz
         /// </summary>

@@ -6,12 +6,19 @@ using backend.Utils;
 
 namespace backend.GameModes
 {
+    /// <summary>
+    /// Implements hot potato game mode where all particiapnts are competing each other and be last winner.
+    /// </summary>
     public class HotPotato : IGameMode
     {
         public string GameModeType => "hotPotato";
 
         private Random _random = new Random();
         private readonly ISelectionAlgorithmResolver _algorithms;
+
+        /// <summary>
+        /// How many should be active hot potation on each round based on count of alive participants
+        /// </summary>
         private readonly int potatoesPerParticipants = 5;
 
         public HotPotato(ISelectionAlgorithmResolver algorithms)
@@ -19,6 +26,12 @@ namespace backend.GameModes
             _algorithms = algorithms;
         }
 
+        /// <summary>
+        /// Validates if session can be started.
+        /// </summary>
+        /// <param name="session">Runtime session</param>
+        /// <param name="participantIds">Participants list which will be participating in session</param>
+        /// <returns>Success if there are at least two participants. If not validation error</returns>
         public Result ValidateStart(RuntimeSession session, List<Guid> participantIds)
         {
             if (participantIds.Count < 2)
@@ -29,10 +42,17 @@ namespace backend.GameModes
             return Result.Success();
         }
 
+        /// <summary>
+        /// Starts game mode and creates initial activity assignemnts.
+        /// </summary>
+        /// <param name="session">Runtime session</param>
+        /// <param name="participantIds">Participants list which will be participating in session</param>
+        /// <returns>Initial activity assignments for participants</returns>
         public List<ActivityAssignment> Start(RuntimeSession session, List<Guid> participantIds)
         {
             var state = LoadState(session);
 
+            // Init base state for game state in session
             state.TimerRound = session.GameSetting.RoundTime;
             state.SelectionAlgorithm = session.GameSetting.SelectionAlgorithm;
             state.Status = StatusPotato.GetReady;
@@ -48,6 +68,7 @@ namespace backend.GameModes
             var algorithm = _algorithms.Resolve(state.SelectionAlgorithm);
             var activities = session.Activities;
 
+            // Creates for every participant new potato which is not active
             foreach (var participantId in state.AliveParticipants)
             {
                 var participantState = state.ParticipantsState.First(p => p.Id == participantId);
@@ -58,6 +79,7 @@ namespace backend.GameModes
                 );
             }
 
+            // Take count of potatoes on new round and activated it
             var activeCount = Math.Max(1, state.AliveParticipants.Count / potatoesPerParticipants);
 
             var activePotatoes = state
@@ -76,6 +98,7 @@ namespace backend.GameModes
 
             SaveState(session, state);
 
+            // Creates for every participant with active hot potato activity assignment
             var assignments = new List<ActivityAssignment>();
 
             foreach (var participant in activePotatoes)
@@ -92,8 +115,20 @@ namespace backend.GameModes
             return assignments;
         }
 
+        /// <summary>
+        /// Not used in this mode.
+        /// </summary>
+        /// <param name="session">Runtime session</param>
         public void End(RuntimeSession session) { }
 
+        /// <summary>
+        /// Handles a participant answer and select new activity when incorrect or select random participant and activate his potato and updates game state.
+        /// </summary>
+        /// <param name="participantId">Participant id</param>
+        /// <param name="session">Runtime session</param>
+        /// <param name="correctPercentile">How much is answer correct</param>
+        /// <returns>New activity assignemnts</returns>
+        /// <exception cref="InvalidOperationException">Throws when game state is wrong -- should not happen</exception>
         public List<ActivityAssignment> OnAnswer(
             Guid participantId,
             RuntimeSession session,
@@ -123,6 +158,7 @@ namespace backend.GameModes
                 return new List<ActivityAssignment>();
             }
 
+            // Select adaptive algorithm, select new activity and update his algorithm state even if his answer is correct or not
             var algorithm = _algorithms.Resolve(state.SelectionAlgorithm);
             var participantState = state.ParticipantsState.First(p => p.Id == potato.ParticipantId);
             var currentActivity = session.Activities.First(a => a.Id == potato.ActivityId);
@@ -136,6 +172,7 @@ namespace backend.GameModes
 
             if (correctPercentile == 100)
             {
+                // Select random participant and activate his potato
                 var newParticipantId = SelectRandomParticipant(state, participantId);
                 activePotato = state.PotatoInstances.First(pi =>
                     pi.ParticipantId == newParticipantId
@@ -151,6 +188,7 @@ namespace backend.GameModes
 
             SaveState(session, state);
 
+            // Creates new activity assignment
             var assignments = new List<ActivityAssignment>();
 
             var newActivityAssignemnt = new ActivityAssignment
@@ -164,6 +202,11 @@ namespace backend.GameModes
             return assignments;
         }
 
+        /// <summary>
+        /// Handles a next round by selecting new hot potatoes based on alive participants and updates game state.
+        /// </summary>
+        /// <param name="session">Runtime session</param>
+        /// <returns>New activity assignemnts</returns>
         public List<ActivityAssignment> OnNextRoundStart(RuntimeSession session)
         {
             var state = LoadState(session);
@@ -178,6 +221,7 @@ namespace backend.GameModes
                 return new List<ActivityAssignment>();
             }
 
+            // Creates for every participant new potato which is not active
             var algorithm = _algorithms.Resolve(state.SelectionAlgorithm);
             var activities = session.Activities;
 
@@ -191,6 +235,7 @@ namespace backend.GameModes
                 );
             }
 
+            // Take count of potatoes on new round and activated it
             var activeCount = Math.Max(1, state.AliveParticipants.Count / potatoesPerParticipants);
 
             var activePotatoes = state
@@ -209,6 +254,8 @@ namespace backend.GameModes
 
             SaveState(session, state);
 
+            // Creates for every participant with active hot potato activity assignment
+
             var assignments = new List<ActivityAssignment>();
 
             foreach (var participant in activePotatoes)
@@ -225,11 +272,20 @@ namespace backend.GameModes
             return assignments;
         }
 
+        /// <summary>
+        /// Not used in this mode.
+        /// </summary>
+        /// <param name="session">Runtime session</param>
+        /// <returns>No new activity assignment</returns>
         public List<ActivityAssignment> OnPreviousRoundStart(RuntimeSession session)
         {
             return new List<ActivityAssignment>();
         }
 
+        /// <summary>
+        /// Handles a end round, explode all hot potatoes and shows results for participants and host.
+        /// </summary>
+        /// <param name="session">Runtime session</param>
         public void OnRoundEnd(RuntimeSession session)
         {
             var state = LoadState(session);
@@ -239,6 +295,7 @@ namespace backend.GameModes
                 return;
             }
 
+            // Explode all active hot potatoes and eliminates all participants who has active potato
             foreach (var potato in state.PotatoInstances)
             {
                 if (potato.IsActive)
@@ -247,6 +304,7 @@ namespace backend.GameModes
                 }
             }
 
+            // Clear all potatoes and when new round start, new potatoes are created
             state.PotatoInstances.Clear();
             state.TimerEnd = null;
             state.Status = StatusPotato.Results;
@@ -254,15 +312,21 @@ namespace backend.GameModes
             SaveState(session, state);
         }
 
+        /// <summary>
+        /// Handles timer end. If ended, change state and updates game state.
+        /// </summary>
+        /// <param name="session"></param>
         public void ProcessStateTransition(RuntimeSession session)
         {
             var state = LoadState(session);
 
+            // Did timer ended
             if (state.TimerEnd == null || state.TimerEnd > DateTime.UtcNow)
             {
                 return;
             }
 
+            // If timer ended, change based on state in game mode and apply new state and updates game state.
             switch (state.Status)
             {
                 case StatusPotato.GetReady:
@@ -284,6 +348,12 @@ namespace backend.GameModes
             }
         }
 
+        /// <summary>
+        /// Returns for the current participant current id activity
+        /// </summary>
+        /// <param name="participantId">Participant id</param>
+        /// <param name="session">Runtime session</param>
+        /// <returns>Activity id</returns>
         public Guid? GetParticipantActivityId(Guid participantId, RuntimeSession session)
         {
             var state = LoadState(session);
@@ -300,6 +370,14 @@ namespace backend.GameModes
             return potato.ActivityId;
         }
 
+        /// <summary>
+        /// Returns the current game state based on role (host or participant)
+        /// </summary>
+        /// <param name="session">Runtime session</param>
+        /// <param name="role">participant or host</param>
+        /// <param name="participantId">Participant id if participant role</param>
+        /// <returns>Game state</returns>
+        /// <exception cref="NotSupportedException">Throws when role is not correct or participant role is missing id</exception>
         public object GetGameState(RuntimeSession session, string role, Guid? participantId)
         {
             var state = LoadState(session);
@@ -322,6 +400,13 @@ namespace backend.GameModes
             throw new NotSupportedException($"Role '{role}' is not supported");
         }
 
+        /// <summary>
+        /// Returns a activity
+        /// </summary>
+        /// <param name="session">Runtime session</param>
+        /// <param name="activityId">Activity id</param>
+        /// <returns>Activity</returns>
+        /// <exception cref="InvalidOperationException">Throws when activity does not exists</exception>
         private RuntimeActivity GetActivity(RuntimeSession session, Guid activityId)
         {
             var activity = session.Activities.FirstOrDefault(a => a.Id == activityId);
@@ -336,6 +421,11 @@ namespace backend.GameModes
             return activity;
         }
 
+        /// <summary>
+        /// Loads game state in session.
+        /// </summary>
+        /// <param name="session">Runtime session</param>
+        /// <returns>Game state</returns>
         private HotPotatoState LoadState(RuntimeSession session)
         {
             if (session.GameState == null)
@@ -353,17 +443,30 @@ namespace backend.GameModes
             return state;
         }
 
+        /// <summary>
+        /// Saves game state in session.
+        /// </summary>
+        /// <param name="session">Runtime session</param>
+        /// <param name="state">Game state</param>
         private void SaveState(RuntimeSession session, HotPotatoState state)
         {
             var jsonString = JsonSerializer.Serialize(state);
             session.GameState = jsonString;
         }
 
+        /// <summary>
+        /// Returns a random participant from list alive participants
+        /// </summary>
+        /// <param name="state">Game state</param>
+        /// <param name="excludeParticipantId">Participant id</param>
+        /// <returns>Random particiapnt</returns>
+        /// <exception cref="InvalidOperationException">Throws when participant cant be selected -- should not happen</exception>
         private Guid SelectRandomParticipant(
             HotPotatoState state,
             Guid? excludeParticipantId = null
         )
         {
+            // Find all alive participants who has not activated potato
             var candidates = state
                 .AliveParticipants.Where(p =>
                     (excludeParticipantId == null || p != excludeParticipantId)
@@ -383,6 +486,13 @@ namespace backend.GameModes
             return candidates[_random.Next(candidates.Count)];
         }
 
+        /// <summary>
+        /// Returns game state for host in session.
+        /// </summary>
+        /// <param name="state">Game state</param>
+        /// <param name="session">Runtime session</param>
+        /// <returns>Game state</returns>
+        /// <exception cref="InvalidOperationException">Throws when game state is not right</exception>
         private object GetHostState(HotPotatoState state, RuntimeSession session)
         {
             if (state.Status == StatusPotato.GetReady)
@@ -428,6 +538,14 @@ namespace backend.GameModes
             throw new InvalidOperationException($"this should not have happenned ");
         }
 
+        /// <summary>
+        /// Returns game state for participant in session.
+        /// </summary>
+        /// <param name="state">Game state</param>
+        /// <param name="session">Runtime session</param>
+        /// <param name="participantId">Participant id</param>
+        /// <returns>Game state</returns>
+        /// <exception cref="InvalidOperationException">Throws when game state is not right</exception>
         private object GetParticipantState(
             HotPotatoState state,
             RuntimeSession session,
@@ -446,6 +564,7 @@ namespace backend.GameModes
                 };
             }
 
+            // Is participant last alive
             if (state.AliveParticipants.Count == 1)
             {
                 var isWinner = state.AliveParticipants.Any(p => p == participantId);
@@ -486,6 +605,7 @@ namespace backend.GameModes
             {
                 var potato = state.PotatoInstances.First(pi => pi.ParticipantId == participantId);
 
+                // Takes last answer and show feedback on this submitted answer
                 var lastAnswer = session
                     .Answers.Where(a =>
                         a.OwnerId == participantId
@@ -506,8 +626,10 @@ namespace backend.GameModes
                     };
                 }
 
+                // Is his potato activated
                 if (potato.IsActive)
                 {
+                    // Show him current activity and current answer
                     var currentAnswer = session
                         .Answers.Where(a =>
                             a.ActivityId == potato.ActivityId && a.OwnerId == potato.ParticipantId
@@ -536,6 +658,7 @@ namespace backend.GameModes
                 }
                 else
                 {
+                    // He is safe and waiting for his activated potato
                     return new
                     {
                         status = "idle",
