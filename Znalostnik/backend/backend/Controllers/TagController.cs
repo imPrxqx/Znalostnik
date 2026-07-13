@@ -1,15 +1,14 @@
 ﻿using backend.DTOs;
-using backend.Models;
-using backend.Schemas;
 using backend.Services;
-using backend.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using static Microsoft.CodeAnalysis.CSharp.SyntaxTokenParser;
 
 namespace backend.Controllers
 {
+    /// <summary>
+    /// Controller for managing global and exercise tags.
+    /// Require authentication of the user.
+    /// </summary>
     [ApiController]
     [Route("api/tags")]
     [Authorize]
@@ -24,6 +23,10 @@ namespace backend.Controllers
             _tagService = tagService;
         }
 
+        /// <summary>
+        /// Returns for the current user all global tags.
+        /// </summary>
+        /// <returns>Global tags</returns>
         [HttpGet]
         public async Task<IActionResult> GetTags()
         {
@@ -39,6 +42,11 @@ namespace backend.Controllers
             return Ok(exercises.Value);
         }
 
+        /// <summary>
+        /// Creates for the current user global tag.
+        /// </summary>
+        /// <param name="dto">Data for creating tag</param>
+        /// <returns>Created global tag</returns>
         [HttpPost]
         public async Task<IActionResult> CreateTag([FromBody] CreateTagDto dto)
         {
@@ -64,6 +72,11 @@ namespace backend.Controllers
             return Ok(result.Value);
         }
 
+        /// <summary>
+        /// Deletes for the current user global tag.
+        /// </summary>
+        /// <param name="tagId">Global tag id</param>
+        /// <returns>Delete operation result</returns>
         [HttpDelete("{tagId}")]
         public async Task<IActionResult> DeleteTag(Guid tagId)
         {
@@ -84,6 +97,11 @@ namespace backend.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Returns for the current user exercise tags for exercise.
+        /// </summary>
+        /// <param name="exerciseId">Exercise id</param>
+        /// <returns>Exercise tags</returns>
         [HttpGet("exercises/{exerciseId}")]
         public async Task<IActionResult> GetExerciseTags(Guid exerciseId)
         {
@@ -99,6 +117,12 @@ namespace backend.Controllers
             return Ok(exercises.Value);
         }
 
+        /// <summary>
+        /// Adds a global tag to exercise for the current user.
+        /// </summary>
+        /// <param name="tagId">Global tag id</param>
+        /// <param name="exerciseId">Exercise id</param>
+        /// <returns>Add operation result</returns>
         [HttpPost("{tagId}/exercises/{exerciseId}")]
         public async Task<IActionResult> AddExerciseTag(Guid tagId, Guid exerciseId)
         {
@@ -119,6 +143,12 @@ namespace backend.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Removes a global tag from exercise for the current user.
+        /// </summary>
+        /// <param name="tagId">Global tag id</param>
+        /// <param name="exerciseId">Exercise id</param>
+        /// <returns>Remove operation result</returns>
         [HttpDelete("{tagId}/exercises/{exerciseId}")]
         public async Task<IActionResult> RemoveExerciseTag(Guid tagId, Guid exerciseId)
         {

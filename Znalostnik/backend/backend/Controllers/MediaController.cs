@@ -1,15 +1,13 @@
-﻿using System.Security.Claims;
-using backend.DTOs;
-using backend.Models;
-using backend.Schemas;
-using backend.Services;
-using backend.Utils;
+﻿using backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using static Microsoft.CodeAnalysis.CSharp.SyntaxTokenParser;
 
 namespace backend.Controllers
 {
+    /// <summary>
+    /// Controller for managing multimedia content.
+    /// Require authentication of the user.
+    /// </summary>
     [ApiController]
     [Route("api/media")]
     [Authorize]
@@ -24,6 +22,10 @@ namespace backend.Controllers
             _mediaService = mediaService;
         }
 
+        /// <summary>
+        /// Returns for the current user all created multimedia content metadat.
+        /// </summary>
+        /// <returns>Medias metadata</returns>
         [HttpGet]
         public async Task<IActionResult> GetMediasMetadata()
         {
@@ -44,6 +46,11 @@ namespace backend.Controllers
             return Ok(result.Value);
         }
 
+        /// <summary>
+        /// Returns for the current user multimedia file from media metadata
+        /// </summary>
+        /// <param name="mediaId">Media id</param>
+        /// <returns>Media file</returns>
         [HttpGet("{mediaId}")]
         public async Task<IActionResult> GetMediaFile(Guid mediaId)
         {
@@ -83,6 +90,11 @@ namespace backend.Controllers
             );
         }
 
+        /// <summary>
+        /// Deletes an existing multimedia content for the current user.
+        /// </summary>
+        /// <param name="mediaId">Media id</param>
+        /// <returns>Delete operation result</returns>
         [HttpDelete("{mediaId}")]
         public async Task<IActionResult> DeleteMedia(Guid mediaId)
         {
@@ -103,6 +115,11 @@ namespace backend.Controllers
             return Ok(result.IsSuccess);
         }
 
+        /// <summary>
+        /// Creates multimedia content for the current user.
+        /// </summary>
+        /// <param name="file">Multimedia file</param>
+        /// <returns>Created media metadata</returns>
         [HttpPost]
         [RequestSizeLimit(10000000)]
         public async Task<IActionResult> CreateMediaFile(IFormFile file)

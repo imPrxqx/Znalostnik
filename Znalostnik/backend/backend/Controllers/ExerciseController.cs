@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
 {
+    /// <summary>
+    /// Controller for managing exercises.
+    /// Require authentication of the user.
+    /// </summary>
     [ApiController]
     [Route("api/exercises")]
     [Authorize]
@@ -26,6 +30,10 @@ namespace backend.Controllers
             _jsonSchemaValidator = jsonSchemaValidator;
         }
 
+        /// <summary>
+        /// Returns for the current user all created exercises.
+        /// </summary>
+        /// <returns>Exercises with exercise tags</returns>y
         [HttpGet]
         public async Task<IActionResult> GetExercises()
         {
@@ -41,6 +49,11 @@ namespace backend.Controllers
             return Ok(exercises.Value);
         }
 
+        /// <summary>
+        /// Returns for the current user selected exercise.
+        /// </summary>
+        /// <param name="exerciseId">Exercise id</param>
+        /// <returns>Exercise with activities, exercise tags</returns>
         [HttpGet("{exerciseId}")]
         public async Task<IActionResult> GetExercise(Guid exerciseId)
         {
@@ -61,6 +74,11 @@ namespace backend.Controllers
             return Ok(exercise.Value);
         }
 
+        /// <summary>
+        /// Returns for the current user selected exercise first available activity.
+        /// </summary>
+        /// <param name="exerciseId">Exercise id</param>
+        /// <returns>First available activity from selected exercise</returns>
         [HttpGet("{exerciseId}/activities/first")]
         public async Task<IActionResult> GetFirstExerciseActivity(Guid exerciseId)
         {
@@ -84,6 +102,11 @@ namespace backend.Controllers
             return Ok(exercise.Value);
         }
 
+        /// <summary>
+        /// Creates for the current user empty exercise.
+        /// </summary>
+        /// <param name="dto">Data for creating exercise</param>
+        /// <returns>Empty exercise</returns>
         [HttpPost]
         public async Task<IActionResult> CreateExercise([FromBody] CreateExerciseDto dto)
         {
@@ -109,6 +132,12 @@ namespace backend.Controllers
             return Ok(result.Value);
         }
 
+        /// <summary>
+        /// Updates an existing exercise with new data for the current user.
+        /// </summary>
+        /// <param name="exerciseId">Exercise id</param>
+        /// <param name="dto">Data for updating exercise</param>
+        /// <returns>Update operation result</returns>
         [HttpPut("{exerciseId}")]
         public async Task<IActionResult> UpdateExercise(
             Guid exerciseId,
@@ -183,6 +212,11 @@ namespace backend.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Deletes an existing exercise for the current user
+        /// </summary>
+        /// <param name="exerciseId"></param>
+        /// <returns>Delete operation result</returns>
         [HttpDelete("{exerciseId}")]
         public async Task<IActionResult> DeleteExercise(Guid exerciseId)
         {

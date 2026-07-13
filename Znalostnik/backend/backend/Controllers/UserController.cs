@@ -1,15 +1,14 @@
-﻿using System.Security.Claims;
-using backend.DTOs;
-using backend.Models;
+﻿using backend.DTOs;
 using backend.Services;
-using Humanizer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
 {
+    /// <summary>
+    /// Controller for managing users.
+    /// Require authentication of the user.
+    /// </summary>
     [ApiController]
     [Route("api/users")]
     [Authorize]
@@ -22,6 +21,10 @@ namespace backend.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        /// Creates a guest user for the current anonymous user.
+        /// </summary>
+        /// <returns>Guest user</returns>
         [HttpPost("guest")]
         [AllowAnonymous]
         public async Task<IActionResult> CreateGuest()
@@ -36,6 +39,11 @@ namespace backend.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Creates a forgot password request for the current anonymous user.
+        /// </summary>
+        /// <param name="dto">Data for requesting forgot password request</param>
+        /// <returns>Request operation result</returns>
         [HttpPost("forgotPasswordV2")]
         [AllowAnonymous]
         public async Task<IActionResult> ForgotPassword(UserForgotPasswordDto dto)
@@ -47,11 +55,15 @@ namespace backend.Controllers
 
             var request = HttpContext.Request;
             var baseUrl = $"{request.Scheme}://{request.Host}";
-
             var result = await _userService.ForgotPassword(dto, baseUrl);
+
             return Ok();
         }
 
+        /// <summary>
+        /// Returns for the current information about him.
+        /// </summary>
+        /// <returns>Information of the current user</returns>
         [HttpGet("me")]
         public async Task<IActionResult> GetUser()
         {
@@ -65,6 +77,10 @@ namespace backend.Controllers
             return Ok(user.Value);
         }
 
+        /// <summary>
+        /// Deletes for the current his user.
+        /// </summary>
+        /// <returns>Delete operation result</returns>
         [HttpDelete("me")]
         public async Task<IActionResult> DeleteUser()
         {
@@ -82,9 +98,14 @@ namespace backend.Controllers
                 return BadRequest();
             }
 
-            return Ok(user.Value);
+            return Ok();
         }
 
+        /// <summary>
+        /// Updates for the current a new password.
+        /// </summary>
+        /// <param name="dto">Data for changing current password</param>
+        /// <returns>Update operation result</returns>
         [HttpPost("me/updatePassword")]
         public async Task<IActionResult> UpdatePassword(UpdateUserPasswordDto dto)
         {
@@ -110,6 +131,10 @@ namespace backend.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Log out the current user.
+        /// </summary>
+        /// <returns>Log out operation result</returns>
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
