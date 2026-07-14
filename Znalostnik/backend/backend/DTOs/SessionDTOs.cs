@@ -9,9 +9,17 @@ namespace backend.DTOs
         public string Title { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
         public string AccessCode { get; set; } = string.Empty;
+
+        // Team or individual, maybe  can be added new types in future
         public string RespondType { get; set; } = string.Empty;
+
+        // Classic, Hot Potato, Self Study, can be added new more options
         public string GameMode { get; set; } = string.Empty;
+
+        // Options for game mode
         public GameSetting GameSetting { get; set; } = null!;
+
+        // Full Game state inside game mode
         public object GameState { get; set; } = JsonDocument.Parse("{}");
         public string Role { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
