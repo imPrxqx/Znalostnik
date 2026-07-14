@@ -9,7 +9,11 @@ namespace backend.DTOs
         public Guid Id { get; set; }
         public Guid SubmissionId { get; set; }
         public string Status { get; set; } = string.Empty;
+
+        // Submitted answer on activity
         public JsonDocument Submit { get; set; } = JsonDocument.Parse("{}");
+
+        // Correctnes on answe 0 - 100
         public int CorrectPercentage { get; set; } = 0;
         public int Version { get; set; } = 0;
         public DateTime CreatedAt { get; set; }

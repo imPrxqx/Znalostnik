@@ -15,6 +15,8 @@ namespace backend.DTOs
     {
         public string FileName { get; set; } = null!;
         public string ContentType { get; set; } = null!;
+
+        // Path to file content in file system
         public string Path { get; set; } = null!;
     }
 }

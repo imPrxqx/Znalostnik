@@ -1,5 +1,9 @@
 ﻿namespace backend.Models
 {
+    /// <summary>
+    /// Represents exercise tag on selected exercise
+    /// Used for filtering exercises
+    /// </summary>
     public class ExerciseTag
     {
         public Guid ExerciseId { get; set; }

@@ -497,7 +497,7 @@ namespace backend.GameModes
                 };
             }
 
-            throw new InvalidOperationException($"this should not have happenned ");
+            throw new InvalidOperationException($"Unknown game state");
         }
 
         /// <summary>
@@ -560,7 +560,7 @@ namespace backend.GameModes
                 };
             }
 
-            throw new InvalidOperationException($"this should not have happenned ");
+            throw new InvalidOperationException($"Unknown game state");
         }
     }
 }

@@ -1,5 +1,8 @@
 ﻿namespace backend.Models
 {
+    /// <summary>
+    /// Represents created team in session
+    /// </summary>
     public class Team
     {
         public Guid Id { get; set; } = Guid.NewGuid();
@@ -11,6 +14,9 @@
         public ICollection<TeamMember> TeamMembers { get; set; } = new List<TeamMember>();
     }
 
+    /// <summary>
+    /// Represents created team in runtime session
+    /// </summary>
     public class RuntimeTeam
     {
         public Guid Id { get; } = Guid.NewGuid();

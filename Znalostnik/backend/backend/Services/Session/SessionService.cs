@@ -97,6 +97,7 @@ namespace backend.Services
                 return Result<SessionDto>.Failure(Errors.ExerciseNotFound);
             }
 
+            // Check if game mode can be resolved
             IGameMode mode = _gameModes.Resolve(dto.GameMode);
 
             var activities = await _context
@@ -109,6 +110,7 @@ namespace backend.Services
                 return Result<SessionDto>.Failure(Errors.InvalidOperation);
             }
 
+            // Creates copies of activites from exercise
             var runtimeActivities = activities
                 .Select(a => new RuntimeActivity
                 {
@@ -121,6 +123,7 @@ namespace backend.Services
                 })
                 .ToList();
 
+            // Creates runtime session and add to runtime sesion store
             var session = new RuntimeSession
             {
                 ExerciseId = dto.ExerciseId,
@@ -148,6 +151,7 @@ namespace backend.Services
                 return Result<Guid>.Failure(Errors.SessionNotFound);
             }
 
+            // Host cannot be as participant
             if (session.CreatedByUserId == user.Id)
             {
                 return Result<Guid>.Failure(Errors.InvalidOperation);
@@ -155,6 +159,7 @@ namespace backend.Services
 
             var sessionUser = session.SessionUsers.FirstOrDefault(su => su.UserId == user.Id);
 
+            // Is user already joined, if yes return session id
             if (sessionUser != null)
             {
                 return Result<Guid>.Success(session.Id);
@@ -190,6 +195,7 @@ namespace backend.Services
                 return Result<AnswerDto>.Failure(Errors.ExerciseActivityNotFound);
             }
 
+            // Validates againts json schema, if answer is valid againts selected activity
             if (
                 !_jsonSchemaValidator.Validate(
                     "Answers",
@@ -235,6 +241,7 @@ namespace backend.Services
                 return Result<AnswerDto>.Failure(Errors.NotYourTurn);
             }
 
+            // Get current answer in game mode and updates current answer
             var answer = GetAnswerById(session, participantId.Value, activeActivityId.Value);
 
             if (answer == null)
@@ -274,6 +281,7 @@ namespace backend.Services
                 return Result<AnswerDto>.Failure(Errors.ExerciseActivityNotFound);
             }
 
+            // Validates againts json schema, if answer is valid againts selected activity
             if (
                 !_jsonSchemaValidator.Validate(
                     "Answers",
@@ -316,6 +324,7 @@ namespace backend.Services
                 return Result<AnswerDto>.Failure(Errors.NotYourTurn);
             }
 
+            // Get current answer in game mode and updates and confirm submitted answer
             var answer = GetAnswerById(session, participantId.Value, activeActivityId.Value);
 
             if (answer == null)
@@ -339,6 +348,7 @@ namespace backend.Services
                 return Result<AnswerDto>.Failure(Errors.ExerciseActivityNotFound);
             }
 
+            // For confirmed answer evaluate answer for game mode
             IAnswerEvaluator evaluator;
 
             try
@@ -378,6 +388,7 @@ namespace backend.Services
 
             IGameMode mode = _gameModes.Resolve(session.GameMode);
 
+            // Checks if in session has every participant joined team, without this session cannot be started
             if (session.RespondType == "team")
             {
                 var teamMemberIds = session.Teams.SelectMany(t => t.TeamMemberIds).ToList();
@@ -392,6 +403,7 @@ namespace backend.Services
 
             var participantIds = GetParticipantIdsAsync(session);
 
+            // Can be game mode started with current data
             var validation = mode.ValidateStart(session, participantIds);
 
             if (validation.IsFailure)
@@ -401,6 +413,7 @@ namespace backend.Services
 
             session.Status = "active";
 
+            // Gets activity assignments a for each assignemnts creates empty answer for updating submitted answer
             var activityAssignments = mode.Start(session, participantIds);
 
             InitializeAnswersAsync(session, activityAssignments);
@@ -428,8 +441,10 @@ namespace backend.Services
 
             IGameMode mode = _gameModes.Resolve(session.GameMode);
 
+            // Save final game state and save into database as archived session
             mode.End(session);
 
+            // Create archived exercise
             var snapShotExercise = new Exercise
             {
                 UserId = session.CreatedByUserId,
@@ -439,6 +454,7 @@ namespace backend.Services
 
             await _context.Exercises.AddAsync(snapShotExercise);
 
+            // Create for each used activity in runtime session and save to exercise
             foreach (var activity in session.Activities)
             {
                 var snapShopActivity = new Activity
@@ -454,7 +470,6 @@ namespace backend.Services
 
                 await _context.AddAsync(snapShopActivity);
             }
-
             var newSession = new Session
             {
                 Id = session.Id,
@@ -470,6 +485,7 @@ namespace backend.Services
 
             var submissionMap = new Dictionary<(string type, Guid ownerId), Submission>();
 
+            // Saves answer for session user or team by submission
             foreach (var sessionUser in session.SessionUsers)
             {
                 var newSessionUser = new SessionUser
@@ -493,6 +509,7 @@ namespace backend.Services
                 newSession.Submissions.Add(newSubmission);
             }
 
+            // Create archived team used for runtime session
             foreach (var team in session.Teams)
             {
                 var newTeam = new Team
@@ -525,6 +542,7 @@ namespace backend.Services
                 }
             }
 
+            // Create archived answer used for runtime session
             foreach (var answer in session.Answers)
             {
                 if (
@@ -550,6 +568,7 @@ namespace backend.Services
                 submission.Answers.Add(newAnswer);
             }
 
+            // Remove active session and save archived session to database
             await _context.Sessions.AddAsync(newSession);
             await _context.SaveChangesAsync();
             _runtimeSessionStore.DeleteSession(session.Id);
@@ -575,6 +594,7 @@ namespace backend.Services
 
             IGameMode mode = _gameModes.Resolve(session.GameMode);
 
+            // Get all new activity assignments and creates for each empty answer
             var activityAssignments = mode.OnNextRoundStart(session);
             InitializeAnswersAsync(session, activityAssignments);
             await _sessionHubContext
@@ -599,6 +619,7 @@ namespace backend.Services
 
             IGameMode mode = _gameModes.Resolve(session.GameMode);
 
+            // Get all new activity assignments and creates for each empty answer
             var activityAssignments = mode.OnPreviousRoundStart(session);
             InitializeAnswersAsync(session, activityAssignments);
 
@@ -618,7 +639,7 @@ namespace backend.Services
             }
 
             IGameMode mode = _gameModes.Resolve(session.GameMode);
-
+            // Change game state after timer end
             mode.ProcessStateTransition(session);
             await _sessionHubContext
                 .Clients.Group(session.Id.ToString())
@@ -1008,6 +1029,7 @@ namespace backend.Services
 
         public async Task<Result> DeleteSessionAsync(UserDto user, Guid sessionId)
         {
+            // Find active session
             var sessionInMemory = _runtimeSessionStore.GetSession(sessionId);
 
             if (sessionInMemory != null)
@@ -1027,6 +1049,7 @@ namespace backend.Services
                 }
             }
 
+            // Find finished session
             var sessionInDatabase = await _context.Sessions.FirstOrDefaultAsync(s =>
                 s.Id == sessionId
             );
@@ -1046,6 +1069,10 @@ namespace backend.Services
             return Result.Failure(Errors.SessionNotFound);
         }
 
+        /// <summary>
+        /// Generates unique code which can be used for runtime session
+        /// </summary>
+        /// <returns>Unique code for runtime session</returns>
         private async Task<string> GenerateAccessCodeAsync()
         {
             const string chars = "1234567890";
@@ -1066,6 +1093,13 @@ namespace backend.Services
             }
         }
 
+        /// <summary>
+        /// Returns runtime answer used in runtime session by team or individual.
+        /// </summary>
+        /// <param name="session">Session id</param>
+        /// <param name="ownerId">Owner id of team or individual</param>
+        /// <param name="activityId">Activity id</param>
+        /// <returns>Runtime answer</returns>
         private RuntimeAnswer? GetAnswerById(RuntimeSession session, Guid ownerId, Guid activityId)
         {
             return session
@@ -1074,6 +1108,12 @@ namespace backend.Services
                 .FirstOrDefault();
         }
 
+        /// <summary>
+        /// Returns for current session user participant id.
+        /// </summary>
+        /// <param name="session">Runtime session</param>
+        /// <param name="sessionUser">Runtime session user</param>
+        /// <returns>Participant id</returns>
         private Guid? GetParticipantIdAsync(RuntimeSession session, RuntimeSessionUser sessionUser)
         {
             var respondMode = session.RespondType.ToLower();
@@ -1098,6 +1138,11 @@ namespace backend.Services
             return null;
         }
 
+        /// <summary>
+        /// Returns all joined participant ids for current runtime session.
+        /// </summary>
+        /// <param name="session">Runtime session</param>
+        /// <returns>All joined participant ids</returns>
         private List<Guid> GetParticipantIdsAsync(RuntimeSession session)
         {
             var respondMode = session.RespondType.ToLower();
@@ -1115,6 +1160,11 @@ namespace backend.Services
             return new List<Guid>();
         }
 
+        /// <summary>
+        /// Initialize empty answer for each activity assignemnts and adds to runtime session.
+        /// </summary>
+        /// <param name="session">Runtime session</param>
+        /// <param name="assignments">Activity assignemnts</param>
         private void InitializeAnswersAsync(
             RuntimeSession session,
             List<ActivityAssignment> assignments

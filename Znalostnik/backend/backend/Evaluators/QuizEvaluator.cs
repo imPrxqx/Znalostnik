@@ -28,6 +28,13 @@ namespace backend.Evaluators
                 return;
             }
 
+            // If solution is empty and submit is also empty. It is considered as correct answer.
+            if (solution.Correct.Count == 0 && submit.Selected.Count == 0)
+            {
+                answer.CorrectPercentage = 100;
+                return;
+            }
+
             int correctCount = submit.Selected.Count(x => solution.Correct.Contains(x));
             int wrongCount = submit.Selected.Count(x => !solution.Correct.Contains(x));
 

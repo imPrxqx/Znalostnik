@@ -3,12 +3,18 @@ using Microsoft.AspNetCore.Identity;
 
 namespace backend.Models
 {
+    /// <summary>
+    /// Is user registered or guest
+    /// </summary>
     public enum UserType
     {
         Registered,
         Guest,
     }
 
+    /// <summary>
+    /// Represents user of the application.
+    /// </summary>
     public class User : IdentityUser
     {
         public UserType UserType { get; set; } = UserType.Registered;

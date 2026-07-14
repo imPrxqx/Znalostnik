@@ -2,6 +2,9 @@
 
 namespace backend.Models
 {
+    /// <summary>
+    /// Represents team member in team
+    /// </summary>
     public class TeamMember
     {
         public Guid TeamId { get; set; }

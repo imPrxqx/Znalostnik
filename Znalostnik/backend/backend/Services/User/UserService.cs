@@ -75,6 +75,7 @@ namespace backend.Services
             var code = await _userManager.GeneratePasswordResetTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
+            // HTML code for creating link for frontend application
             var resetLink =
                 $"{baseUrl}/authentication/reset-password?email={HtmlEncoder.Default.Encode(dto.Email)}&token={HtmlEncoder.Default.Encode(code)}";
 

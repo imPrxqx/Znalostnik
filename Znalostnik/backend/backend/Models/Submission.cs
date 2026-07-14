@@ -2,6 +2,9 @@
 
 namespace backend.Models
 {
+    /// <summary>
+    /// Represents collection of saved user or team all answers
+    /// </summary>
     public class Submission
     {
         public Guid Id { get; set; } = Guid.NewGuid();

@@ -1,5 +1,8 @@
 ﻿namespace backend.Models
 {
+    /// <summary>
+    /// Represents a session user in session
+    /// </summary>
     public class SessionUser
     {
         public Guid Id { get; set; } = Guid.NewGuid();
@@ -12,6 +15,9 @@
         public Submission Submission { get; set; } = null!;
     }
 
+    /// <summary>
+    /// Represents a session user joined in active session
+    /// </summary>
     public class RuntimeSessionUser
     {
         public Guid Id { get; } = Guid.NewGuid();

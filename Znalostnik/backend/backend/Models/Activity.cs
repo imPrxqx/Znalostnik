@@ -4,6 +4,10 @@ using backend.Models;
 
 namespace backend.Models
 {
+    /// <summary>
+    /// Represents a single activity within an exercise.
+    /// Used to saving typy activity with content, solution and styles
+    /// </summary>
     public class Activity
     {
         public Guid Id { get; set; } = Guid.NewGuid();
@@ -22,6 +26,10 @@ namespace backend.Models
         public Exercise Exercise { get; set; } = null!;
     }
 
+    /// <summary>
+    /// Represents a single activity within an exercise.
+    /// Used to saving type activity with content, solution and styles for runtime session in memory.
+    /// </summary>
     public class RuntimeActivity
     {
         public Guid Id { get; set; }

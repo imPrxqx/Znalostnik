@@ -7,6 +7,8 @@ namespace backend.DTOs
     public class ActivityDTO
     {
         public Guid Id { get; set; }
+
+        // Activity type
         public string Type { get; set; } = string.Empty;
         public int Order { get; set; }
         public JsonDocument Style { get; set; } = JsonDocument.Parse("{}");
@@ -16,9 +18,11 @@ namespace backend.DTOs
 
     public class CreateActivityDTO
     {
+        // Activity type
         [Required]
         public string Type { get; set; } = string.Empty;
 
+        // Order in exercise
         [Required]
         public int Order { get; set; }
 

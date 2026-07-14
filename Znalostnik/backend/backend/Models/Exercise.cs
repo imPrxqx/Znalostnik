@@ -4,12 +4,18 @@ using System.Text.Json;
 
 namespace backend.Models
 {
+    /// <summary>
+    /// Represents exercise with activities
+    /// Used for managing list of activites
+    /// </summary>
     public class Exercise
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Title { get; set; } = string.Empty;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        // Is exercise archived
         public bool IsSnapshot { get; set; }
         public string UserId { get; set; } = string.Empty;
         public User User { get; set; } = null!;

@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace backend.Models
 {
+    /// <summary>
+    /// Represents multimedia metadata for saving media content file.
+    /// </summary>
     public class Media
     {
         public Guid Id { get; set; } = Guid.NewGuid();

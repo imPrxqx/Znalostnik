@@ -8,6 +8,8 @@ namespace backend.DTOs
     {
         public string Id { get; set; } = string.Empty;
         public string? UserName { get; set; }
+
+        // Is user registered or guest
         public UserType UserType { get; set; }
     }
 

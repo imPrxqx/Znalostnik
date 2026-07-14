@@ -121,7 +121,7 @@ namespace backend.Services
         Task<Result<SessionDto>> CreateSessionAsync(UserDto user, CreateSessionDto dto);
 
         /// <summary>
-        /// Deletes for the user session.
+        /// Deletes for the user active session or finished session.
         /// </summary>
         /// <param name="user">User</param>
         /// <param name="sessionId">Session id</param>
