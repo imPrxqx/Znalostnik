@@ -5,6 +5,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { ExerciseActivity } from '@features/exercise-editor/components/exercise-activity/exercise-activity';
 import { SessionState } from '@features/session/services/session-state';
 import { Timer } from '@features/session/timer/timer';
+
+/**
+ * Displays host component for game mode classic and provides supported actions for this game mode
+ */
 @Component({
   selector: 'app-classic-host',
   imports: [MatIconModule, MatButtonModule, Timer, CommonModule, ExerciseActivity],
@@ -18,7 +22,15 @@ export class ClassicHost {
   sessionUsers = computed(() => this.state.sessionUsers());
   teams = computed(() => this.state.teams());
   status = computed(() => this.state.session()?.gameState.status);
-  leaderboard = computed(() => this.state.session()?.gameState.leaderboard);
+  leaderboard = computed(() => {
+    const leaderboard = this.state.session()?.gameState.leaderboard;
+
+    if (!leaderboard) {
+      return [];
+    }
+
+    return [...leaderboard].sort((a, b) => b.score - a.score);
+  });
   activity = computed(() => this.state.activity());
   activityIndex = computed(() => this.state.session()?.gameState.activityIndex + 1);
   totalActivities = computed(() => this.state.session()?.gameState.totalActivities);

@@ -6,6 +6,9 @@ import { NgComponentOutlet } from '@angular/common';
 import { Hub } from '../services/hub';
 import { RegistrySession } from '@shared/registry/registry-session';
 
+/**
+ * Displays dynamically participant component from current session game mode.
+ */
 @Component({
   selector: 'app-participant',
   imports: [MatProgressSpinnerModule, NgComponentOutlet],

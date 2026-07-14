@@ -16,6 +16,9 @@ export interface JoinTeamDialogData {
   teams: Team[];
 }
 
+/**
+ * Provides a dialog for joining team from list of teams.
+ */
 @Component({
   selector: 'app-join-team-dialog',
   imports: [

@@ -11,6 +11,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { ExerciseActivity } from '@features/exercise-editor/components/exercise-activity/exercise-activity';
 import { Activity } from '@shared/models/activity';
 
+/**
+ * Provides a dialog for fast viewing participant current activity
+ */
 @Component({
   selector: 'app-show-activity-dialog',
   imports: [

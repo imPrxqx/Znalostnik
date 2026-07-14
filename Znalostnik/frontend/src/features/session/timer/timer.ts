@@ -2,6 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, input, signal, OnInit, OnDestroy } from '@angular/core';
 import { interval } from 'rxjs';
 
+/**
+ * Displays timer countdown from based date time.
+ */
 @Component({
   selector: 'app-timer',
   imports: [CommonModule],

@@ -6,6 +6,9 @@ import { ExerciseActivity } from '@features/exercise-editor/components/exercise-
 import { SessionState } from '@features/session/services/session-state';
 import { Timer } from '@features/session/timer/timer';
 
+/**
+ * Displays participant component for game mode classic and provides submitting answers
+ */
 @Component({
   selector: 'app-classic-participant',
   imports: [CommonModule, MatButtonModule, MatIconModule, ExerciseActivity, Timer],

@@ -9,6 +9,9 @@ import { ShowActivityDialog } from '../../../show-activity-dialog/show-activity-
 import { MatDialog } from '@angular/material/dialog';
 import { Activity } from '@shared/models/activity';
 
+/**
+ * Displays host component for game mode hot potato and provides supported actions for this game mode
+ */
 @Component({
   selector: 'app-hot-potato-host',
   imports: [MatIconModule, MatButtonModule, Timer, CommonModule],
@@ -87,6 +90,9 @@ export class HotPotatoHost {
     }
   }
 
+  /**
+   * Opens dialog for showing participant current activity
+   */
   openParticipantDetail(potatoId: string): void {
     const json = this.potatoes().find(
       (p: { potatoId: string }) => p.potatoId === potatoId,

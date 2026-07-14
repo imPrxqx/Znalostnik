@@ -3,6 +3,9 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
 import { ActivityAnswer } from '@shared/models/activity-answer';
 
+/**
+ * Provides API methods for managing session state - teams, answers, users and actions.
+ */
 @Injectable({
   providedIn: 'root',
 })

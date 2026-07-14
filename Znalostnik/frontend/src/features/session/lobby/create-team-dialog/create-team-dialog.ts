@@ -11,6 +11,9 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
+/**
+ * Provides a dialog for creating team name.
+ */
 @Component({
   selector: 'app-create-team-dialog',
   imports: [

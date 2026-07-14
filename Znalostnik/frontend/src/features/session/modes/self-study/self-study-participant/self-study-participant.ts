@@ -9,6 +9,9 @@ import { Activity } from '@shared/models/activity';
 import { ActivityAnswer } from '@shared/models/activity-answer';
 import { ActivityFactory } from '@shared/factories/activity-factory';
 
+/**
+ * Displays participant component for game mode self study and provides submitting answers
+ */
 @Component({
   selector: 'app-self-study-participant',
   imports: [CommonModule, MatButtonModule, MatIconModule, ExerciseActivity],

@@ -13,6 +13,11 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Hub } from '../services/hub';
 
+/**
+ * Displays session lobby where participants can join,
+ * create teams and wait until the session starts.
+ * Host can view summary of all joined participants and can start session.
+ */
 @Component({
   selector: 'app-lobby',
   imports: [
@@ -60,6 +65,9 @@ export class Lobby implements OnInit {
     this.state.startSession(this.session()!.id);
   }
 
+  /**
+   * Opens a dialog for creating team, dialog then returns team name for creating team.
+   */
   openCreateTeamDialog(): void {
     const dialogRef = this.dialog.open(CreateTeamDialog, {
       width: '500px',
@@ -73,6 +81,9 @@ export class Lobby implements OnInit {
     });
   }
 
+  /**
+   * Opens a dialog for joining team, dialog then retuns of selected team to jon
+   */
   openJoinTeamDialog(): void {
     const dialogRef = this.dialog.open(JoinTeamDialog, {
       width: '500px',

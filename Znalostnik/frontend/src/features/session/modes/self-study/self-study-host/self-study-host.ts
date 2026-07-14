@@ -8,6 +8,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { RegistryActivity } from '@shared/registry/registry-activity';
 import { Activity } from '@shared/models/activity';
 
+/**
+ * Displays host component for game mode self study and provides supported actions for this game mode
+ */
 @Component({
   selector: 'app-self-study-host',
   imports: [MatIconModule, MatButtonModule, CommonModule],
@@ -99,6 +102,9 @@ export class SelfStudyHost {
     return '';
   }
 
+  /**
+   * Opens dialog for showing participant current activity
+   */
   openParticipantDetail(participantId: string): void {
     const json = this.leaderboard().find(
       (p: { participantId: string }) => p.participantId === participantId,

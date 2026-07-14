@@ -8,6 +8,10 @@ import { ActivityAnswer } from '@shared/models/activity-answer';
 import { ActivityFactory } from '@shared/factories/activity-factory';
 import { Session, SessionUser, Team } from '@shared/models/session';
 
+/**
+ * Manages state of current session.
+ * Handles session data loading, navigation and synchronization with backend.
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -69,6 +73,7 @@ export class SessionState {
           if (this.session()?.gameState.answer) {
             const sessionAnswer = this.session()?.gameState.answer;
 
+            // Is answer different, if yes then change it
             if (
               !this.answer() ||
               this.answer()?.id !== sessionAnswer?.id ||

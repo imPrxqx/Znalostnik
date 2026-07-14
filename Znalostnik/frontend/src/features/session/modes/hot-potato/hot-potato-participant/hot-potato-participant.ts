@@ -10,6 +10,9 @@ import { Activity } from '@shared/models/activity';
 import { ActivityAnswer } from '@shared/models/activity-answer';
 import { ActivityFactory } from '@shared/factories/activity-factory';
 
+/**
+ * Displays participant component for game mode hot potato and provides submitting answers
+ */
 @Component({
   selector: 'app-hot-potato-participant',
   imports: [CommonModule, MatButtonModule, MatIconModule, ExerciseActivity, Timer],

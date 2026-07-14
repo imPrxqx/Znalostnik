@@ -3,6 +3,10 @@ import * as signalR from '@microsoft/signalr';
 import { SessionState } from './session-state';
 import { environment } from '@environments/environment';
 
+/**
+ * Manages real-time communication with the backend using SignalR.
+ * Keeps the session state synchronized when changes occur.
+ */
 @Injectable({
   providedIn: 'root',
 })

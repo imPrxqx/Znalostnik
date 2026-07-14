@@ -8,6 +8,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SessionState } from '../services/session-state';
 
+/**
+ * Provides a form for joining on session.
+ */
 @Component({
   selector: 'app-join',
   imports: [
