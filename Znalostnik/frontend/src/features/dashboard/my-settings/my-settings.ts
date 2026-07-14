@@ -10,6 +10,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { Authentication } from '@core/services/authentication';
 import { UserPreferences } from '@core/services/user-preferences';
 
+/**
+ * Provides user updating user preferences, password change or account deletion
+ */
 @Component({
   selector: 'app-my-settings',
   imports: [

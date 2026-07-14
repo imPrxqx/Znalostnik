@@ -17,6 +17,10 @@ import {
 } from './filter-exercise-dialog/filter-exercise-dialog';
 import { TagsApi } from '../services/tags-api';
 
+/**
+ * Displays users created exercises and provides searching,
+ * filtering, sorting and exercise creation functionality.
+ */
 @Component({
   selector: 'app-my-exercises',
   imports: [
@@ -35,6 +39,8 @@ export class MyExercises implements AfterViewInit {
   manager = inject(ExercisesManager);
   exercises = computed(() => this.manager.exercises());
   tagsApi = inject(TagsApi);
+
+  // Current applied filter rules
   filter = signal<ExerciseFilter>({
     search: '',
     tagIds: [] as string[],
@@ -42,17 +48,20 @@ export class MyExercises implements AfterViewInit {
   });
   dialog = inject(MatDialog);
 
+  // Filtered exercises base on filter rules
   filteredExercises = computed(() => {
     const exercises = this.exercises();
     const filter = this.filter();
     const search = filter.search.toLowerCase().trim();
 
+    // Filter all exercise which have same value in searching title and match all selected tags
     let result = exercises.filter((e) => {
       const matchSearch = !search || e.title().toLowerCase().includes(search);
       const matchTags = filter.tagIds.every((tagId) => e.tags().some((tag) => tag.id === tagId));
       return matchSearch && matchTags;
     });
 
+    // Sort filtered exercises based on softing type
     if (filter.sortBy === 'newest') {
       result = result.sort(
         (a, b) => new Date(b.updatedAt()).getTime() - new Date(a.updatedAt()).getTime(),
@@ -72,10 +81,16 @@ export class MyExercises implements AfterViewInit {
     return result;
   });
 
+  /**
+   *  Loads from backend all users created exercises
+   */
   ngAfterViewInit() {
     this.manager.loadMyExercises();
   }
 
+  /**
+   * Opens dialog for creating exercise, dialog then returns title of exercise, which is used for creating empty exercise
+   */
   createExercise(): void {
     const dialogRef = this.dialog.open(CreateExerciseDialog, {
       width: '500px',
@@ -95,10 +110,13 @@ export class MyExercises implements AfterViewInit {
     }));
   }
 
+  /**
+   * Opens dialog for creating filter rule, dialog then returns filter rules which will be applied for filtering exercises
+   */
   filterExercise() {
     const dialogRef = this.dialog.open(FilterExerciseDialog, {
       width: '500px',
-      data: this.filter(),
+      data: this.filter(), // Use current filter rules
     });
 
     dialogRef.afterClosed().subscribe((result) => {

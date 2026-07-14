@@ -7,6 +7,9 @@ import { Activity } from '@shared/models/activity';
 import { Participant, SessionReport } from '@shared/models/session';
 import { ActivityFactory } from '@shared/factories/activity-factory';
 
+/**
+ * Manages loading session report data.
+ */
 @Injectable({
   providedIn: 'root',
 })

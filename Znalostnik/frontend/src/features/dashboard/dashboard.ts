@@ -11,6 +11,10 @@ import { RouterModule } from '@angular/router';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ExercisesManager } from './services/exercises-manager';
 
+/**
+ * Provides a dashboard component with multiple sections
+ * home, guide, my exercises, my sessions, my settings, my statistics
+ */
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.html',
@@ -39,18 +43,25 @@ export class Dashboard {
   }
 
   constructor() {
+    // Checks if screen is mobile when changing screen size
     this.breakPoint.observe(['(max-width: 1200px)']).subscribe((r) => {
       this.isMobile.set(r.matches);
       this.isOpened.set(!r.matches);
     });
   }
 
+  /**
+   * Closes sidenav menu when clicking on section in mobile version
+   */
   close() {
     if (this.isMobile()) {
       this.isOpened.set(false);
     }
   }
 
+  /**
+   * Toggles opened sidenav menu inside mobile version
+   */
   toggle() {
     this.isOpened.set(!this.isOpened());
   }

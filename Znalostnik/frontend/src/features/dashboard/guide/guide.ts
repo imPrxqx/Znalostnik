@@ -5,6 +5,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { RegistryActivity } from '@shared/registry/registry-activity';
 import { RegistrySession } from '@shared/registry/registry-session';
 
+/**
+ * Provides a information about application.
+ */
 @Component({
   selector: 'app-guide',
   imports: [MatIconModule, MatCardModule, MatExpansionModule],

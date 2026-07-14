@@ -10,6 +10,10 @@ import { SessionsManager } from '@features/dashboard/services/sessions-manager';
 import { Session } from '@shared/models/session';
 import { RegistrySession } from '@shared/registry/registry-session';
 
+/**
+ * Displays session summary and provides actions
+ * such as opening, viewing reports and deleting sessions.
+ */
 @Component({
   selector: 'app-session-card',
   imports: [

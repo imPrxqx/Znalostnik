@@ -23,6 +23,9 @@ export interface CreateSessionDataDialog {
   exerciseId: string;
 }
 
+/**
+ * Provides dialog for creating session and their parameters on selected exercise
+ */
 @Component({
   selector: 'app-create-session-dialog',
   imports: [

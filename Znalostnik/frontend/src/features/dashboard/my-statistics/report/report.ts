@@ -24,6 +24,10 @@ import { Activity } from '@shared/models/activity';
 import { ActivityAnswer } from '@shared/models/activity-answer';
 import { RegistryActivity } from '@shared/registry/registry-activity';
 
+/**
+ * Displays session aggregated statistics using charts and detailed
+ * performance analysis from raw data participants, activities, answers.
+ */
 @Component({
   selector: 'app-report',
   imports: [

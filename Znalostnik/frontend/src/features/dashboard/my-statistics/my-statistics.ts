@@ -7,6 +7,9 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Report } from '@features/dashboard/my-statistics/report/report';
 import { MatButtonModule } from '@angular/material/button';
 
+/**
+ * Displays all finished session owned by user and action for opening report of finished session
+ */
 @Component({
   selector: 'app-my-statistics',
   imports: [

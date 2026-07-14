@@ -6,6 +6,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 
+/**
+ * Displays users active sessions
+ */
 @Component({
   selector: 'app-my-sessions',
   imports: [SessionCard, MatToolbarModule, MatIconModule, MatButtonModule, RouterLink],

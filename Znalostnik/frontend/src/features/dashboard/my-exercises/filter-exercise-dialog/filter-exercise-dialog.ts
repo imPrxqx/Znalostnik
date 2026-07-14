@@ -24,6 +24,9 @@ export interface ExerciseFilter {
   sortBy: 'newest' | 'oldest' | 'title';
 }
 
+/**
+ * Provides dialog for creating filter rules for filtering exercises
+ */
 @Component({
   selector: 'app-filter-exercise-dialog',
   imports: [
@@ -59,6 +62,9 @@ export class FilterExerciseDialog {
     this.getTags();
   }
 
+  /**
+   * Loads all available tags for filtering
+   */
   getTags() {
     this.tagsApi.loadTags().subscribe((result) => {
       this.tags.set(result as Tag[]);

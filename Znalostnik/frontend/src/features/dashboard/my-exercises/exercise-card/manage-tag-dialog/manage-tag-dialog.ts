@@ -23,6 +23,9 @@ export interface ManageTagDataDialog {
   exerciseId: string;
 }
 
+/**
+ * Provides dialog for creating and maning tags for selected exercise
+ */
 @Component({
   selector: 'app-manage-tag-dialog',
   imports: [

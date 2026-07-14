@@ -6,6 +6,10 @@ import { ExerciseFactory } from '@shared/factories/exercise-factory';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Exercise, ExerciseConfiguration } from '@shared/models/exercise';
 
+/**
+ * Manages user exercises
+ * loads, creates, edits, deletes or saving exercises.
+ */
 @Injectable({
   providedIn: 'root',
 })

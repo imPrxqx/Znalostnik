@@ -3,6 +3,9 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
 import { GameSetting } from '@shared/models/session';
 
+/**
+ * Provides API methods for managing sessions.
+ */
 @Injectable({
   providedIn: 'root',
 })

@@ -19,6 +19,10 @@ import { SessionsManager } from '@features/dashboard/services/sessions-manager';
 import { Exercise } from '@shared/models/exercise';
 import { Tag } from '@shared/models/tag';
 
+/**
+ * Displays an exercise summary with related activity, tags,
+ * and actions such as editing, deleting and creating sessions.
+ */
 @Component({
   selector: 'app-exercise-card',
   imports: [
@@ -72,6 +76,9 @@ export class ExerciseCard implements OnInit {
     this.exercises.deleteExercise(this.exercise().id());
   }
 
+  /**
+   * Opens a dialog for creating new session, dialog then returns all selected parameters used for session and creates it
+   */
   openCreateSessionDialog() {
     const dialogRef = this.dialog.open(CreateSessionDialog, {
       width: '800px',
@@ -95,6 +102,9 @@ export class ExerciseCard implements OnInit {
     });
   }
 
+  /**
+   * Opens a dialog for managing exercises tags for selected exercise, dialog then apply new tags to selected exercise
+   */
   openTagsDialog() {
     const dialogRef = this.dialog.open(ManageTagDialog, {
       width: '800px',

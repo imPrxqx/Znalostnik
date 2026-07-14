@@ -4,6 +4,10 @@ import { Router } from '@angular/router';
 import { GameSetting, Session } from '@shared/models/session';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+/**
+ * Manages user sessions.
+ * creation, loading or deletion of sessions.
+ */
 @Injectable({
   providedIn: 'root',
 })
