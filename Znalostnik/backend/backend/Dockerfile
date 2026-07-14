@@ -1,5 +1,4 @@
-# Na https://aka.ms/customizecontainer se dozvíte, jak si přizpůsobit kontejner ladění a jak Visual Studio používá tento dokument Dockerfile k sestavení vašich imagí pro rychlejší ladění.
-
+# Převzato z: https://aka.ms/customizecontainer 
 # Tato fáze se používá při spuštění z VS v rychlém režimu (výchozí pro konfiguraci ladění).
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
 
