@@ -1,6 +1,9 @@
 import { ExerciseDocumentManager } from '@features/exercise-editor/services/exercise-document-manager';
 import { Command } from '@shared/interfaces/command.interface';
 
+/**
+ * Command for moving activity to different position in exercise.
+ */
 export class MoveCommand implements Command {
   private receiver: ExerciseDocumentManager;
   private backup: number;

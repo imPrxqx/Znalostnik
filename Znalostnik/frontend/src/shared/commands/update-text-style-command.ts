@@ -1,6 +1,9 @@
 import { Command } from '@shared/interfaces/command.interface';
 import { Text, TextStyle } from '@shared/models/blocks';
 
+/**
+ * Command for updating the style of a text block.
+ */
 export class UpdateTextStyleCommand implements Command {
   private receiver: Text;
   private backup: TextStyle;

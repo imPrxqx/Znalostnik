@@ -3,6 +3,9 @@ import { ExerciseActivityEdit } from '@features/exercise-editor/services/exercis
 import { Activity } from '@shared/models/activity';
 import { Command } from '@shared/interfaces/command.interface';
 
+/**
+ * Command for creating activity and selecting it for editing.
+ */
 export class CreateSelectActivityCommand implements Command {
   private receiver1: ExerciseDocumentManager;
   private receiver2: ExerciseActivityEdit;

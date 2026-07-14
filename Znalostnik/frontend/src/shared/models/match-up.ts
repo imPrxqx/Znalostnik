@@ -43,6 +43,9 @@ export interface PairItem {
   rightId: string;
 }
 
+/**
+ * Represents data structure of match up activity.
+ */
 export class MatchUpActivity extends Activity implements Element {
   type = signal<string>('matchUp');
   order = signal<number>(0);
@@ -166,6 +169,9 @@ export class MatchUpActivity extends Activity implements Element {
   }
 }
 
+/**
+ * Represents data structure of match up activity answer.
+ */
 export class MatchUpAnswer extends ActivityAnswer {
   createdAt = new Date().toLocaleString();
   submit: {
@@ -214,6 +220,9 @@ export class MatchUpAnswer extends ActivityAnswer {
   }
 }
 
+/**
+ * Represents data structure of match up activity solution.
+ */
 export class MatchUpSolution {
   correct: PairItem[] = [];
 

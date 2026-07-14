@@ -11,6 +11,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { QuizSolution } from '@shared/models/quiz';
 import { EditChoice } from '@shared/blocks/edit-choice/edit-choice';
 
+/**
+ * Command component for editing a quiz activity.
+ * Allows adding, removing, and selecting solution.
+ * All changes are executed through commands.
+ */
 @Component({
   selector: 'app-update-multi-choice-command-ui',
   imports: [MatButtonModule, MatIconModule, MatCheckboxModule, EditChoice],

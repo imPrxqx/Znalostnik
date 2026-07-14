@@ -74,6 +74,10 @@ export interface RespondTypeDefinition {
   longDescription: string;
 }
 
+/**
+ * Central registry containing definitions of available session modes,
+ * game settings and response types.
+ */
 export class RegistrySession {
   static readonly gameModes: readonly GameModeDefinition[] = [
     {

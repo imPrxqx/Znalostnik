@@ -5,6 +5,9 @@ import { Text } from '@shared/blocks/text/text';
 import { ActivityComponent, ActivityMode } from '@shared/models/activity';
 import { QuizAnswer, QuizActivity } from '@shared/models/quiz';
 
+/**
+ * Displays a quiz activity in three view mode and manages answer
+ */
 @Component({
   selector: 'app-quiz',
   imports: [CommonModule, Text, Choice],

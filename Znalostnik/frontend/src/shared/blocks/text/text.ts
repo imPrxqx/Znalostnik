@@ -11,6 +11,9 @@ import {
 import { FormsModule } from '@angular/forms';
 import { TextStyle } from '@shared/models/blocks';
 
+/**
+ * Displays text content and visual.
+ */
 @Component({
   selector: 'app-text',
   imports: [CommonModule, FormsModule],
@@ -40,6 +43,9 @@ export class Text implements AfterViewInit {
     });
   }
 
+  /**
+   * Dynamically caluclates from base font size new font size to fit container
+   */
   calculateFontSize() {
     const containerElement = this.container().nativeElement;
     const textElement = this.text().nativeElement;

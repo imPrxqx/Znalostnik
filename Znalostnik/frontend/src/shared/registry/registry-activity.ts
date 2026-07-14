@@ -32,6 +32,9 @@ export interface CommandUiDefinition {
   supports: (field: FieldContext) => boolean;
 }
 
+/**
+ * Central registry containing definitions of available activity types, User interface commands for editing content, solution activities
+ */
 export class RegistryActivity {
   static readonly activities: readonly ActivityDefinition[] = [
     {

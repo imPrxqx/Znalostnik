@@ -1,5 +1,8 @@
 import { Command } from '@shared/interfaces/command.interface';
 
+/**
+ * Command for combiding with multiple commands
+ */
 export class MacroCommand implements Command {
   private commands: Command[];
 

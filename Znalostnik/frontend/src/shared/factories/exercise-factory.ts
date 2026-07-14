@@ -1,6 +1,9 @@
 import { Exercise, ExerciseConfiguration } from '../models/exercise';
 import { ActivityFactory } from './activity-factory';
 
+/**
+ * Factory responsible for creating Exercise from JSON configuration.
+ */
 export class ExerciseFactory {
   static createFromJson(json: ExerciseConfiguration): Exercise {
     const exercise = new Exercise();

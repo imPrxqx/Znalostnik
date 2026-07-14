@@ -1,6 +1,9 @@
 import { Command, MergeableCommand } from '@shared/interfaces/command.interface';
 import { TextSolution } from '@shared/models/guess';
 
+/**
+ * Command for updating guess activity solution.
+ */
 export class UpdateTextSolutionCommand implements Command, MergeableCommand {
   private mergeCount = 1;
   private receiver: TextSolution;

@@ -10,6 +10,11 @@ import { MultiChoiceOption, ChoiceOption } from '@shared/models/blocks';
 import { PutInOrderSolution } from '@shared/models/put-in-order';
 import { EditChoice } from '@shared/blocks/edit-choice/edit-choice';
 
+/**
+ * Command component for editing put in order activity.
+ * Allows adding, removing, and reordering choice options.
+ * All changes are executed through commands.
+ */
 @Component({
   selector: 'app-update-put-in-order-command-ui',
   imports: [MatButtonModule, MatIconModule, EditChoice],

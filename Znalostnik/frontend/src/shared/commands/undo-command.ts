@@ -1,6 +1,9 @@
 import { CommandManager } from '@features/exercise-editor/services/command-manager';
 import { Command } from '@shared/interfaces/command.interface';
 
+/**
+ * Command for undoing the last executed command.
+ */
 export class UndoCommand implements Command {
   private receiver: CommandManager;
 

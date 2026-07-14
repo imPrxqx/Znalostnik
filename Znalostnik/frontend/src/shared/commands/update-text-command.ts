@@ -1,6 +1,9 @@
 import { Command, MergeableCommand } from '@shared/interfaces/command.interface';
 import { Text } from '@shared/models/blocks';
 
+/**
+ * Command for updating text block used in activites as assignment.
+ */
 export class UpdateTextCommand implements Command, MergeableCommand {
   private mergeCount = 1;
   private receiver: Text;

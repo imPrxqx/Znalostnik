@@ -2,6 +2,9 @@ import { Command } from '@shared/interfaces/command.interface';
 import { MultiChoiceOption, ChoiceOption } from '@shared/models/blocks';
 import { PutInOrderSolution } from '@shared/models/put-in-order';
 
+/**
+ * Command for removing a choice option from a put in order activity.
+ */
 export class RemoveChoicePutInOrderCommand implements Command {
   private receiver1: MultiChoiceOption;
   private receiver2: PutInOrderSolution;

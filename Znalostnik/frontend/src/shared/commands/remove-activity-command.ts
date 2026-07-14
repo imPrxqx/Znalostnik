@@ -2,6 +2,9 @@ import { ExerciseDocumentManager } from '@features/exercise-editor/services/exer
 import { Command } from '@shared/interfaces/command.interface';
 import { Activity } from '@shared/models/activity';
 
+/**
+ * Command for removing activity from exercise.
+ */
 export class RemoveActivityCommand implements Command {
   private receiver: ExerciseDocumentManager;
   private index: number;

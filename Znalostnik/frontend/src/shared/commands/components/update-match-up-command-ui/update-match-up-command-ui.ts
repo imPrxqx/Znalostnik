@@ -10,6 +10,11 @@ import { MultiChoiceOption } from '@shared/models/blocks';
 import { MatchUpSolution } from '@shared/models/match-up';
 import { EditChoice } from '@shared/blocks/edit-choice/edit-choice';
 
+/**
+ * Command component for editing a match up activity.
+ * Allows adding, removing, and reordering choice options.
+ * All changes are executed through commands.
+ */
 @Component({
   selector: 'app-update-match-up-command-ui',
   imports: [MatButtonModule, MatIconModule, EditChoice],

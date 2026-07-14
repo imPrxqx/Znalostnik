@@ -26,6 +26,9 @@ export interface GuessAnswerConfiguration {
   submissionId: string;
 }
 
+/**
+ * Represents data structure of guess activity.
+ */
 export class GuessActivity extends Activity implements Element {
   type = signal<string>('guess');
   order = signal<number>(0);
@@ -101,6 +104,9 @@ export class GuessActivity extends Activity implements Element {
   }
 }
 
+/**
+ * Represents data structure of guess activity answer.
+ */
 export class GuessAnswer extends ActivityAnswer {
   createdAt = new Date().toLocaleString();
   submit: {
@@ -151,6 +157,9 @@ export class GuessAnswer extends ActivityAnswer {
   }
 }
 
+/**
+ * Represents data structure of guess activity solution.
+ */
 export class TextSolution {
   correct: string = randomWord();
 

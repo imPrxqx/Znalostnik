@@ -14,6 +14,9 @@ import { MatInputModule } from '@angular/material/input';
 import { environment } from '@environments/environment';
 import { ChoiceStyle, Media } from '@shared/models/blocks';
 
+/**
+ * Displays choice option content, optional media, and visual.
+ */
 @Component({
   selector: 'app-choice',
   imports: [CommonModule, MatIconModule, MatFormFieldModule, CommonModule, MatInputModule],
@@ -51,6 +54,9 @@ export class Choice implements AfterViewInit {
     resizeObserver.observe(this.container().nativeElement);
   }
 
+  /**
+   * Dynamically caluclates image size for better fit container
+   */
   calculateMediaSize() {
     const width = this.container().nativeElement.clientWidth;
 
@@ -69,6 +75,9 @@ export class Choice implements AfterViewInit {
     this.mediaSize.set(mediaSize);
   }
 
+  /**
+   * Dynamically caluclates from base font size new font size to fit container
+   */
   calculateFontSize() {
     if (!this.text()) {
       return;

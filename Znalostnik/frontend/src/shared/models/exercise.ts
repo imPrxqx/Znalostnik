@@ -13,6 +13,10 @@ export interface ExerciseConfiguration {
   activities: ActivityConfiguration[];
 }
 
+/**
+ * Represents data structure of exercise.
+ * Manages state of exercise
+ */
 export class Exercise implements Element {
   id = signal<string>(uuidv4());
   title = signal<string>('');

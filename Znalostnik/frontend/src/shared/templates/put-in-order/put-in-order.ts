@@ -6,6 +6,9 @@ import { Text } from '@shared/blocks/text/text';
 import { Choice } from '@shared/blocks/choice/choice';
 import { ActivityComponent, ActivityMode } from '@shared/models/activity';
 
+/**
+ * Displays a put in order activity in three view mode and manages answer
+ */
 @Component({
   selector: 'app-put-in-order',
   imports: [CommonModule, CdkDropList, CdkDrag, Text, Choice],
@@ -18,6 +21,7 @@ export class PutInOrder implements OnInit, ActivityComponent {
   answer = model<PutInOrderAnswer>();
 
   ngOnInit() {
+    // Creates random answer based on content activity
     if (
       this.answer() &&
       this.answer()!.submit.selected.length === 0 &&

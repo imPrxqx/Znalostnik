@@ -5,6 +5,10 @@ import { Text } from '@shared/models/blocks';
 import { MatIconModule } from '@angular/material/icon';
 import { EditText } from '@shared/blocks/edit-text/edit-text';
 
+/**
+ * Command component for editing text block in activities.
+ * All changes are executed through commands.
+ */
 @Component({
   selector: 'app-update-text-command-ui',
   imports: [MatIconModule, EditText],

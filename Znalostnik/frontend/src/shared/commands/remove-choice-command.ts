@@ -1,6 +1,9 @@
 import { Command } from '@shared/interfaces/command.interface';
 import { ChoiceOption, MultiChoiceOption } from '@shared/models/blocks';
 
+/**
+ * Command for removing a choice option from a multiple choice block.
+ */
 export class RemoveChoiceCommand implements Command {
   private receiver: MultiChoiceOption;
   private backup: ChoiceOption;

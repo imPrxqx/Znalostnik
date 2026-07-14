@@ -1,6 +1,9 @@
 import { CommandManager } from '@features/exercise-editor/services/command-manager';
 import { Command } from '@shared/interfaces/command.interface';
 
+/**
+ * Command for redoing the last undone command.
+ */
 export class RedoCommand implements Command {
   private receiver: CommandManager;
 

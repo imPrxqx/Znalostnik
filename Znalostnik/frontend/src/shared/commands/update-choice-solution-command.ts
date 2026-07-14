@@ -1,6 +1,9 @@
 import { Command } from '@shared/interfaces/command.interface';
 import { QuizSolution } from '@shared/models/quiz';
 
+/**
+ * Command for updating quiz activity solution.
+ */
 export class UpdateChoiceSolutionCommand implements Command {
   private receiver: QuizSolution;
   private backup: string;

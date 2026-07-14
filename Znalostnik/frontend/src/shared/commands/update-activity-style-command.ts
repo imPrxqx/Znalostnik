@@ -1,6 +1,9 @@
 import { Command } from '@shared/interfaces/command.interface';
 import { Activity, ActivityStyle } from '@shared/models/activity';
 
+/**
+ * Command for updating the style of an activity.
+ */
 export class UpdateActivityStyleCommand implements Command {
   private receiver: Activity;
   private backup: ActivityStyle;

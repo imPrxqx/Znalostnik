@@ -1,6 +1,9 @@
 import { Command } from '@shared/interfaces/command.interface';
 import { MatchUpSolution } from '@shared/models/match-up';
 
+/**
+ * Command for changing the order of items in a match up activity solution.
+ */
 export class ReorderMatchUpCommand implements Command {
   private receiver: MatchUpSolution;
   private backupFrom: number;

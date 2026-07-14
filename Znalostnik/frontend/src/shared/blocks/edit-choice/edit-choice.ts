@@ -15,6 +15,11 @@ import { UpdateChoiceMediaCommand } from '@shared/commands/update-choice-media-c
 import { UpdateChoiceStyleCommand } from '@shared/commands/update-choice-style-command';
 import { ChoiceOption, ChoiceStyle } from '@shared/models/blocks';
 
+
+/**
+ * Component for editing a choice option.
+ * Block used for editing content, visual and media
+ */
 @Component({
   selector: 'app-edit-choice',
   imports: [
@@ -93,6 +98,9 @@ export class EditChoice {
     this.commandManager.execute(command);
   }
 
+  /**
+   * Opens a dialog for managing and selecting media for current option
+   */
   openMediaDialog() {
     const ref = this.dialog.open(PickMediaDialog, {
       width: '1000px',

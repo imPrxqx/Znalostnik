@@ -6,6 +6,9 @@ import { Text } from '@shared/blocks/text/text';
 import { ActivityComponent, ActivityMode } from '@shared/models/activity';
 import { GuessActivity, GuessAnswer } from '@shared/models/guess';
 
+/**
+ * Displays a guess activity in three view mode and manages answer
+ */
 @Component({
   selector: 'app-guess',
   imports: [CommonModule, FormsModule, Text, MatIconModule],

@@ -11,6 +11,10 @@ import { UpdateTextCommand } from '@shared/commands/update-text-command';
 import { UpdateTextStyleCommand } from '@shared/commands/update-text-style-command';
 import { Text, TextStyle } from '@shared/models/blocks';
 
+/**
+ * Component for editing a text.
+ * Block used for editing content and visual
+ */
 @Component({
   selector: 'app-edit-text',
   imports: [

@@ -20,12 +20,18 @@ export interface ActivityConfiguration {
   type: string;
 }
 
+/**
+ * Defines visual appearance of a activity.
+ */
 export class ActivityStyle {
   borderRadius = 8;
   borderColor = `hsl(${Math.floor(Math.random() * 360)}, 70%, 30%)`;
   backgroundColor = `hsl(${Math.floor(Math.random() * 360)}, 70%, 85%)`;
 }
 
+/**
+ * Represents data structure of activity.
+ */
 export abstract class Activity implements Element {
   id = signal(uuidv4());
   style = signal(new ActivityStyle());

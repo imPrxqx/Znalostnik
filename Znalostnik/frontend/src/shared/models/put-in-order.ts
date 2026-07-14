@@ -41,6 +41,9 @@ export interface PutInOrderAnswerConfiguration {
   submissionId: string;
 }
 
+/**
+ * Represents data structure of put in order activity.
+ */
 export class PutInOrderActivity extends Activity implements Element {
   type = signal<string>('putInOrder');
   order = signal<number>(0);
@@ -142,6 +145,9 @@ export class PutInOrderActivity extends Activity implements Element {
   }
 }
 
+/**
+ * Represents data structure of put in order answer.
+ */
 export class PutInOrderAnswer extends ActivityAnswer {
   createdAt = new Date().toLocaleString();
   submit: {
@@ -192,6 +198,9 @@ export class PutInOrderAnswer extends ActivityAnswer {
   }
 }
 
+/**
+ * Represents data structure of put in order solution.
+ */
 export class PutInOrderSolution {
   correct: string[] = [];
 

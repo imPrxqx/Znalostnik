@@ -1,3 +1,6 @@
+/**
+ * Represents data structure of activity answer.
+ */
 export abstract class ActivityAnswer {
   id = '';
   activityId = '';

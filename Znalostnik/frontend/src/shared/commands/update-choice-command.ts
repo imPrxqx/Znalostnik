@@ -1,6 +1,9 @@
 import { Command } from '@shared/interfaces/command.interface';
 import { ChoiceOption } from '@shared/models/blocks';
 
+/**
+ * Command for updating choice option block.
+ */
 export class UpdateChoiceCommand implements Command {
   private mergeCount = 1;
   private receiver: ChoiceOption;

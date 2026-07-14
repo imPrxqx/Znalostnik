@@ -3,6 +3,9 @@ import { ExerciseDocumentManager } from '@features/exercise-editor/services/exer
 import { Command } from '@shared/interfaces/command.interface';
 import { ExportJsonVisitor } from '@shared/exporters/json-export';
 
+/**
+ * Command for saving an exercise.
+ */
 export class SaveCommand implements Command {
   private receiver: ExerciseDocumentManager;
   private receiver2: ExercisesManager;

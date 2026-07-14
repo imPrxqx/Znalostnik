@@ -1,6 +1,9 @@
 import { Command } from '@shared/interfaces/command.interface';
 import { PutInOrderSolution } from '@shared/models/put-in-order';
 
+/**
+ * Command for changing the order of items in a put in order activity solution.
+ */
 export class ReorderChoiceCommand implements Command {
   private receiver: PutInOrderSolution;
   private backupFrom: number;

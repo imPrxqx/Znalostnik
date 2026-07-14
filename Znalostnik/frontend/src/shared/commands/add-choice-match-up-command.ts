@@ -2,6 +2,9 @@ import { Command } from '@shared/interfaces/command.interface';
 import { MultiChoiceOption, ChoiceOption } from '@shared/models/blocks';
 import { MatchUpSolution, PairItem } from '@shared/models/match-up';
 
+/**
+ * Command for creating new choce option into match up activity.
+ */
 export class AddChoiceMatchUpCommand implements Command {
   private receiver0: MultiChoiceOption;
   private receiver1: MultiChoiceOption;

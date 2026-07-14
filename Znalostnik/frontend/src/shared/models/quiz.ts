@@ -37,6 +37,9 @@ export interface QuizAnswerConfiguration {
   submissionId: string;
 }
 
+/**
+ * Represents data structure of quiz activity.
+ */
 export class QuizActivity extends Activity implements Element {
   type = signal<string>('quiz');
   order = signal<number>(0);
@@ -136,6 +139,9 @@ export class QuizActivity extends Activity implements Element {
   }
 }
 
+/**
+ * Represents data structure of quiz answer.
+ */
 export class QuizAnswer extends ActivityAnswer {
   createdAt = new Date().toLocaleString();
   submit: {
@@ -184,6 +190,9 @@ export class QuizAnswer extends ActivityAnswer {
   }
 }
 
+/**
+ * Represents data structure of quiz solution.
+ */
 export class QuizSolution {
   correct: string[] = [];
 

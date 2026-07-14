@@ -19,6 +19,10 @@ interface ExportedExercise {
   activities: Activity[];
 }
 
+/**
+ * Visitor pattern that converts exercise into JSON format.
+ * For each activity are defined how their json structure should looks like
+ */
 export class ExportJsonVisitor implements Visitor {
   private result: unknown = {};
 

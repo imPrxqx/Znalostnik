@@ -2,6 +2,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { randomQuestion, randomWord } from './activity';
 import { signal } from '@angular/core';
 
+/**
+ * Represents uploaded media attached to a choice option.
+ */
 export class Media {
   id = '';
   fileName = '';
@@ -15,6 +18,9 @@ export interface ChoiceOptionConfiguration {
   style: ChoiceStyle;
 }
 
+/**
+ * Defines visual appearance of a choice option.
+ */
 export class ChoiceStyle {
   fontFamily = 'Arial';
   fontSize = 32;
@@ -30,6 +36,9 @@ export interface TextConfiguration {
   style: TextStyle;
 }
 
+/**
+ * Defines visual appearance of a text block.
+ */
 export class TextStyle {
   fontFamily = 'Arial';
   fontSize = 64;
@@ -39,6 +48,10 @@ export class TextStyle {
   underline = false;
 }
 
+/**
+ * Represents a collection of multiple choice options.
+ * Used by activities where the user can select one or more choices.
+ */
 export class MultiChoiceOption {
   options: ChoiceOption[] = [
     new ChoiceOption(undefined),
@@ -66,6 +79,9 @@ export class MultiChoiceOption {
   }
 }
 
+/**
+ * Represents one selectable choice option block.
+ */
 export class ChoiceOption {
   id: string = uuidv4();
   text = signal<string>(randomWord());
@@ -142,6 +158,10 @@ export class ChoiceOption {
   }
 }
 
+/**
+ * Represents a text block used inside activities.
+ * Used as block for as assignemnt for activities
+ */
 export class Text {
   text = signal<string>(randomQuestion());
   style = signal<TextStyle>(new TextStyle());

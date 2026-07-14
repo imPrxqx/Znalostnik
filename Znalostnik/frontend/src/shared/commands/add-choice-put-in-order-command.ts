@@ -2,6 +2,9 @@ import { Command } from '@shared/interfaces/command.interface';
 import { MultiChoiceOption, ChoiceOption } from '@shared/models/blocks';
 import { PutInOrderSolution } from '@shared/models/put-in-order';
 
+/**
+ * Command for creating new choce option into put in order activity.
+ */
 export class AddChoicePutInOrderCommand implements Command {
   private receiver1: MultiChoiceOption;
   private receiver2: PutInOrderSolution;

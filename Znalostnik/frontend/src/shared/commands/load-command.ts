@@ -3,6 +3,9 @@ import { Command } from '@shared/interfaces/command.interface';
 import { Exercise, ExerciseConfiguration } from '@shared/models/exercise';
 import { ExerciseFactory } from '@shared/factories/exercise-factory';
 
+/**
+ * Command for loading exercise to edit.
+ */
 export class LoadCommand implements Command {
   private receiver: ExerciseDocumentManager;
   private backup: Exercise;

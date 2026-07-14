@@ -1,6 +1,9 @@
 import { RegistryActivity } from '@shared/registry/registry-activity';
 import { Activity } from '../models/activity';
 
+/**
+ * Factory responsible for creating Activity from JSON configuration.
+ */
 export class ActivityFactory {
   static createFromJson(json: unknown): Activity {
     const data = json as { type: string };

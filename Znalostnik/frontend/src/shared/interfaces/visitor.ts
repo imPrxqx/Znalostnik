@@ -8,6 +8,9 @@ export interface Element {
   accept(visitor: Visitor): void;
 }
 
+/**
+ * Used for exporting json document of full exercise
+ */
 export interface Visitor {
   visitQuiz(quizActivity: QuizActivity): void;
   visitGuess(guessActivity: GuessActivity): void;
