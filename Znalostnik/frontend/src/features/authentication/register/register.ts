@@ -9,6 +9,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Authentication } from '@core/services/authentication';
 
+/**
+ * Provides a form for registering user to application.
+ */
 @Component({
   selector: 'app-register',
   imports: [

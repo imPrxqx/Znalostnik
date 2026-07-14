@@ -3,6 +3,9 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 
+/**
+ * Provides a confimartion of requesting a password reset email.
+ */
 @Component({
   selector: 'app-forgot-password-email-sent',
   imports: [RouterModule, MatButtonModule, MatCardModule],

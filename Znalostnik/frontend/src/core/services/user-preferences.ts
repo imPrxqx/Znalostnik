@@ -5,6 +5,9 @@ export interface PreferenceData {
   theme: 'light' | 'dark';
 }
 
+/**
+ * Manages and saves user preferences such as language and theme settings.
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -18,11 +21,15 @@ export class UserPreferences {
   theme = computed(() => this.userPreferences().theme);
 
   constructor() {
+    // Initialize user preferences from storage and apply them to the application.
     this.loadLocal();
     this.applyLanguageRouting(this.userPreferences().language);
     this.applyTheme(this.userPreferences().theme);
   }
 
+  /**
+   * Updates new preferences to local storage.
+   */
   updatePreferences(newPreferences: PreferenceData) {
     const old = this.userPreferences();
 
@@ -43,12 +50,18 @@ export class UserPreferences {
     this.saveLocal();
   }
 
+  /**
+   * Apply new langueage in application.
+   */
   applyLanguage(language: 'cs' | 'en') {
     document.documentElement.setAttribute('language', language);
     const currentPath = window.location.pathname.split('/').slice(2).join('/');
     window.location.href = `/${language}/${currentPath}`;
   }
 
+  /**
+   * Apply new theme in application.
+   */
   applyTheme(theme: 'light' | 'dark') {
     const body = document.body;
     body.classList.remove('light-mode');
@@ -61,6 +74,9 @@ export class UserPreferences {
     }
   }
 
+  /**
+   * Apply correct url language loaded in preferences.
+   */
   applyLanguageRouting(language: 'cs' | 'en') {
     const pathParts = window.location.pathname.split('/').filter((x) => x !== '');
     const urlLanguage = pathParts[0];
@@ -77,10 +93,16 @@ export class UserPreferences {
     window.location.assign(`/${language}/${newPath}`);
   }
 
+  /**
+   * Returns user current preferences.
+   */
   getPreferences(): PreferenceData {
     return this.userPreferences();
   }
 
+  /**
+   * Loads user current preferences saved on local storage.
+   */
   loadLocal() {
     const preferences = localStorage.getItem('preferences');
 
@@ -92,6 +114,9 @@ export class UserPreferences {
     this.userPreferences.set(prefs);
   }
 
+  /**
+   * Saves user current preferences to local storage.
+   */
   saveLocal() {
     localStorage.setItem('preferences', JSON.stringify(this.userPreferences()));
   }

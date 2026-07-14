@@ -9,6 +9,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Authentication } from '@core/services/authentication';
 
+/**
+ * Provides a form for reseting password.
+ */
 @Component({
   selector: 'app-reset-password',
   imports: [
@@ -40,6 +43,9 @@ export class ResetPassword implements OnInit {
     confirmPassword: new FormControl('', [Validators.required]),
   });
 
+  /**
+   * Loads from url email and reset code and use it automatically for reseting password.
+   */
   ngOnInit() {
     this.email = this.routeActivated.snapshot.queryParamMap.get('email')!;
     this.resetCode = this.routeActivated.snapshot.queryParamMap.get('token')!;

@@ -7,6 +7,9 @@ import { MatInputModule } from '@angular/material/input';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Authentication } from '@core/services/authentication';
 
+/**
+ * Provides a form for requesting a password reset email.
+ */
 @Component({
   selector: 'app-forgot-password',
   imports: [

@@ -8,6 +8,9 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Authentication } from '@core/services/authentication';
 import { RouterLink } from '@angular/router';
 
+/**
+ * Provides a form for log in user into application.
+ */
 @Component({
   selector: 'app-login',
   imports: [
