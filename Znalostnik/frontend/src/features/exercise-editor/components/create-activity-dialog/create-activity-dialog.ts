@@ -11,6 +11,9 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { RegistryActivity } from '@shared/registry/registry-activity';
 
+/**
+ * Provides dialog for creating activity
+ */
 @Component({
   selector: 'app-create-activity-dialog',
   imports: [

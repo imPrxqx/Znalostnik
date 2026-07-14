@@ -6,6 +6,9 @@ import { SaveCommand } from '@shared/commands/save-command';
 import { ExerciseDocumentManager } from '../services/exercise-document-manager';
 import { ExercisesManager } from '@features/dashboard/services/exercises-manager';
 
+/**
+ * Provides for user short cuts for faster editing.
+ */
 @Directive({
   selector: '[appExerciseShortcuts]',
 })

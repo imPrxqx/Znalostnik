@@ -3,6 +3,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { ExerciseActivity } from '../exercise-activity/exercise-activity';
 import { Activity } from '@shared/models/activity';
 
+/**
+ * Displays smaller preview of activity
+ */
 @Component({
   selector: 'app-slide',
   imports: [ExerciseActivity, MatIconModule],

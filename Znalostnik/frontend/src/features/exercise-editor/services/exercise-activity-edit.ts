@@ -2,6 +2,10 @@ import { Injectable, inject, linkedSignal, computed } from '@angular/core';
 import { ExerciseDocumentManager } from './exercise-document-manager';
 import { Activity } from '@shared/models/activity';
 
+/**
+ * Manages the currently selected activity being edited.
+ * Keeps the selected activity synchronized with the exercise document.
+ */
 @Injectable({
   providedIn: 'root',
 })

@@ -34,6 +34,10 @@ import { ExerciseToolbar } from '../exercise-toolbar/exercise-toolbar';
 import { UpdateActivityStyleCommand } from '@shared/commands/update-activity-style-command';
 import { ExerciseConfiguration } from '@shared/models/exercise';
 
+/**
+ * Provides the main editor for creating and modifying exercises.
+ * Uses command pattern for reversible editing operations.
+ */
 @Component({
   selector: 'app-exercise-editor',
   imports: [
@@ -79,6 +83,9 @@ export class ExerciseEditor implements OnInit {
     this.exercisesManager.editExercise(exerciseId);
   }
 
+  /**
+   * Loads exercise from file
+   */
   import(event: Event) {
     const input = event.target as HTMLInputElement;
 
@@ -97,6 +104,9 @@ export class ExerciseEditor implements OnInit {
     reader.readAsText(file);
   }
 
+  /**
+   * Saves exercise as file
+   */
   export() {
     const visitor = new ExportJsonVisitor();
     visitor.visitExercise(this.document.exercise());
@@ -118,6 +128,9 @@ export class ExerciseEditor implements OnInit {
     this.commandManager.execute(command);
   }
 
+  /**
+   * Saves exercise to backend
+   */
   save() {
     const command = new SaveCommand(
       this.document,
@@ -185,6 +198,9 @@ export class ExerciseEditor implements OnInit {
     this.commandManager.execute(command);
   }
 
+  /**
+   * Opens dialog for selecting activity type and create new activity
+   */
   openActivityDialog() {
     const dialogRef = this.dialog.open(CreateActivityDialog, {
       width: '600px',

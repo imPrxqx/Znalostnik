@@ -3,6 +3,11 @@ import { Exercise } from '@shared/models/exercise';
 import { RegistryActivity } from '@shared/registry/registry-activity';
 import { Activity } from '@shared/models/activity';
 import { v4 as uuidv4 } from 'uuid';
+
+/**
+ * Manages the current exercise document during editing.
+ * Provides operations for creating, modifying and accessing activities.
+ */
 @Injectable({
   providedIn: 'root',
 })

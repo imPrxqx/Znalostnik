@@ -2,6 +2,10 @@ import { inject, Injectable } from '@angular/core';
 import { CommandHistory } from './command-history';
 import { Command, MergeableCommand } from '@shared/interfaces/command.interface';
 
+/**
+ * Manages command execution and provides undo/redo functionality.
+ * And support merging consecutive compatible commands.
+ */
 @Injectable({
   providedIn: 'root',
 })

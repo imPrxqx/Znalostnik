@@ -2,6 +2,10 @@ import { Component, ViewContainerRef, inject, input, OnChanges } from '@angular/
 import { RegistryActivity } from '@shared/registry/registry-activity';
 import { Activity } from '@shared/models/activity';
 
+/**
+ * Dynamically displays editing commands based on
+ * the fields supported by the selected activity.
+ */
 @Component({
   selector: 'app-exercise-toolbar',
   imports: [],

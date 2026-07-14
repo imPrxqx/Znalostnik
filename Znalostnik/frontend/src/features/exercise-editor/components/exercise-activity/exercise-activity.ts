@@ -4,6 +4,9 @@ import { RegistryActivity } from '@shared/registry/registry-activity';
 import { Activity } from '@shared/models/activity';
 import { ActivityAnswer } from '@shared/models/activity-answer';
 
+/**
+ * Dynamically displays activity from input on its registered type and creates component activity
+ */
 @Component({
   selector: 'app-exercise-activity',
   imports: [CommonModule],
