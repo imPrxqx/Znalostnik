@@ -7,7 +7,6 @@ import { UpdateTextSolutionCommand } from '@shared/commands/update-text-solution
 import { FieldContext } from '@shared/interfaces/field-context';
 import { TextSolution } from '@shared/models/guess';
 
-
 /**
  * Component for editing the solution of guess activity.
  * All changes are executed through commands.

@@ -15,7 +15,6 @@ import { environment } from '@environments/environment';
 import { Media } from '@shared/models/blocks';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-
 /**
  * Provides a dialog for selecting and managing media files.
  * Allows users to browse, upload, delete and select media

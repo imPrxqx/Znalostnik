@@ -32,8 +32,10 @@ services:
       dockerfile: ./backend/Dockerfile
     restart: unless-stopped
     environment:
-      - EMAIL=${GOOGLE_EMAIL}
-      - EMAIL_PASSWORD=${GOOGLE_EMAIL_APP_PASS}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_EMAIL=${SMTP_EMAIL}
+      - SMTP_EMAIL_PASS=${SMTP_EMAIL_PASS}
       - DATABASE_SERVER=${DATABASE_SERVER}
       - DATABASE_NAME=${DATABASE_NAME}
       - DATABASE_USER=${DATABASE_USER}

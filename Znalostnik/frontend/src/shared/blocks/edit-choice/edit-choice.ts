@@ -15,7 +15,6 @@ import { UpdateChoiceMediaCommand } from '@shared/commands/update-choice-media-c
 import { UpdateChoiceStyleCommand } from '@shared/commands/update-choice-style-command';
 import { ChoiceOption, ChoiceStyle } from '@shared/models/blocks';
 
-
 /**
  * Component for editing a choice option.
  * Block used for editing content, visual and media

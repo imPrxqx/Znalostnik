@@ -25,10 +25,12 @@ namespace backend.Services.EmailSender
         /// <returns>Task send operation</returns>
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            var emailFrom = _configuration["EMAIL"]!;
-            var emailPassword = _configuration["EMAIL_PASSWORD"]!;
+            var smtpHost = _configuration["SMTP_HOST"]!;
+            var smtpPort = int.Parse(_configuration["SMTP_PORT"]!);
+            var emailFrom = _configuration["SMTP_EMAIL"]!;
+            var emailPassword = _configuration["SMTP_EMAIL_PASS"]!;
 
-            using var client = new SmtpClient("smtp.gmail.com", 587)
+            using var client = new SmtpClient(smtpHost, smtpPort)
             {
                 Credentials = new NetworkCredential(emailFrom, emailPassword),
                 EnableSsl = true,
