@@ -51,10 +51,12 @@
   </div>
   } @if (status() === 'results') {
   <div class="activity">
-    @if(activity() !== undefined) {
+    @if(activity() !== undefined) { @if(answer()!.status === "Submitted") {
     <app-exercise-activity [(answer)]="answer" [activity]="activity()!" [mode]="'feedback'">
     </app-exercise-activity>
-    }
+    } @else {
+    <app-exercise-activity [activity]="activity()!" [mode]="'feedback'"> </app-exercise-activity>
+    } }
   </div>
   }
 </div>
