@@ -91,19 +91,6 @@ namespace backend
                 builder
                     .Services.AddDataProtection()
                     .PersistKeysToFileSystem(new DirectoryInfo("keys"));
-
-                //string X509CertificatePassword = Environment.GetEnvironmentVariable(
-                //    "X509_CERTIFICATE_2_PASSWORD"
-                //)!;
-                //builder
-                //    .Services.AddDataProtection()
-                //    .PersistKeysToFileSystem(new DirectoryInfo("/app/keys"))
-                //    .ProtectKeysWithCertificate(
-                //        new X509Certificate2(
-                //            "/certificates/certificate.pfx",
-                //            X509CertificatePassword
-                //        )
-                //    );
             }
 
             // Logger
