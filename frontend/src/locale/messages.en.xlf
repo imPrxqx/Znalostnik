@@ -330,7 +330,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="3925966668815481967" datatype="html">
-        <source>Insert quizzes, fill-in-the-blank tasks, sequencing tasks, or matching tasks.</source>
+        <source>Insert quizzes, guess, put in order, or match up.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/features/dashboard/guide/guide.html</context>
           <context context-type="linenumber">43,44</context>
@@ -514,7 +514,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="5100434300162511876" datatype="html">
-        <source> At a certain point in the session, an activity (e.g., a quiz, a fill-in-the-blank task, or a matching task) will appear for you to complete. </source>
+        <source> At a certain point in the session, an activity (e.g., a quiz, guess or match up) will appear for you to complete. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/features/dashboard/guide/guide.html</context>
           <context context-type="linenumber">169,170</context>
@@ -1005,7 +1005,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="697321038880610392" datatype="html">
-        <source>Connection Code</source>
+        <source>Access Code</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/features/dashboard/my-sessions/session-card/session-card.html</context>
           <context context-type="linenumber">38,39</context>
@@ -2568,7 +2568,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="activity.guess.name" datatype="html">
-        <source>Fill-in-the-blank task</source>
+        <source>Guess</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/shared/registry/registry-activity.ts</context>
           <context context-type="linenumber">56</context>
@@ -2589,7 +2589,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="activity.matchUp.name" datatype="html">
-        <source>Matching task</source>
+        <source>Match up</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/shared/registry/registry-activity.ts</context>
           <context context-type="linenumber">66</context>
@@ -2610,7 +2610,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="activity.putInOrder.name" datatype="html">
-        <source>Sequencing task</source>
+        <source>Put in order</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/shared/registry/registry-activity.ts</context>
           <context context-type="linenumber">76</context>
