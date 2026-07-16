@@ -92,92 +92,95 @@ namespace backend.Tests
                 Order = 0,
 
                 Style = JsonDocument.Parse(
-                    @"
-{
-    ""borderRadius"": 8,
-    ""borderColor"": ""hsl(169, 70%, 30%)"",
-    ""backgroundColor"": ""hsl(82, 70%, 85%)""
-}"
+                    """
+                    {
+                        "borderRadius": 8,
+                        "borderColor": "hsl(169, 70%, 30%)",
+                        "backgroundColor": "hsl(82, 70%, 85%)"
+                    }
+                    """
                 ),
 
                 Content = JsonDocument.Parse(
-                    @"
-{
-    ""text"": ""Kolika barvami lze obarvit každý planární graf?"",
-    ""style"": {
-        ""fontFamily"": ""Arial"",
-        ""fontSize"": 80,
-        ""color"": ""#000000"",
-        ""bold"": true,
-        ""italic"": false,
-        ""underline"": false
-    },
-    ""options"": [
-        {
-            ""id"": ""549c00f7-becd-4fd8-a778-9ea7132ece64"",
-            ""text"": ""3 barvami"",
-            ""style"": {
-                ""fontFamily"": ""Arial"",
-                ""fontSize"": 64,
-                ""color"": ""#000000"",
-                ""bold"": false,
-                ""italic"": false,
-                ""underline"": false,
-                ""backgroundColor"": ""hsl(67, 70%, 85%)""
-            }
-        },
-        {
-            ""id"": ""50dd1024-3165-47f1-8694-baa186e62fd3"",
-            ""text"": ""4 barvami"",
-            ""style"": {
-                ""fontFamily"": ""Arial"",
-                ""fontSize"": 64,
-                ""color"": ""#000000"",
-                ""bold"": false,
-                ""italic"": false,
-                ""underline"": false,
-                ""backgroundColor"": ""hsl(104, 70%, 85%)""
-            }
-        },
-        {
-            ""id"": ""daf9e2a4-7883-48df-9b14-403f76c910cb"",
-            ""text"": ""5 barvami"",
-            ""style"": {
-                ""fontFamily"": ""Arial"",
-                ""fontSize"": 64,
-                ""color"": ""#000000"",
-                ""bold"": false,
-                ""italic"": false,
-                ""underline"": false,
-                ""backgroundColor"": ""hsl(139, 70%, 85%)""
-            }
-        },
-        {
-            ""id"": ""8ea74437-026c-4d11-a20a-8d95dd638393"",
-            ""text"": ""6 barvami"",
-            ""style"": {
-                ""fontFamily"": ""Arial"",
-                ""fontSize"": 64,
-                ""color"": ""#000000"",
-                ""bold"": false,
-                ""italic"": false,
-                ""underline"": false,
-                ""backgroundColor"": ""hsl(270, 70%, 85%)""
-            }
-        }
-    ]
-}"
+                    """
+                    {
+                        "text": "Kolika barvami lze obarvit každý planární graf?",
+                        "style": {
+                            "fontFamily": "Arial",
+                            "fontSize": 80,
+                            "color": "#000000",
+                            "bold": true,
+                            "italic": false,
+                            "underline": false
+                        },
+                        "options": [
+                            {
+                                "id": "549c00f7-becd-4fd8-a778-9ea7132ece64",
+                                "text": "3 barvami",
+                                "style": {
+                                    "fontFamily": "Arial",
+                                    "fontSize": 64,
+                                    "color": "#000000",
+                                    "bold": false,
+                                    "italic": false,
+                                    "underline": false,
+                                    "backgroundColor": "hsl(67, 70%, 85%)"
+                                }
+                            },
+                            {
+                                "id": "50dd1024-3165-47f1-8694-baa186e62fd3",
+                                "text": "4 barvami",
+                                "style": {
+                                    "fontFamily": "Arial",
+                                    "fontSize": 64,
+                                    "color": "#000000",
+                                    "bold": false,
+                                    "italic": false,
+                                    "underline": false,
+                                    "backgroundColor": "hsl(104, 70%, 85%)"
+                                }
+                            },
+                            {
+                                "id": "daf9e2a4-7883-48df-9b14-403f76c910cb",
+                                "text": "5 barvami",
+                                "style": {
+                                    "fontFamily": "Arial",
+                                    "fontSize": 64,
+                                    "color": "#000000",
+                                    "bold": false,
+                                    "italic": false,
+                                    "underline": false,
+                                    "backgroundColor": "hsl(139, 70%, 85%)"
+                                }
+                            },
+                            {
+                                "id": "8ea74437-026c-4d11-a20a-8d95dd638393",
+                                "text": "6 barvami",
+                                "style": {
+                                    "fontFamily": "Arial",
+                                    "fontSize": 64,
+                                    "color": "#000000",
+                                    "bold": false,
+                                    "italic": false,
+                                    "underline": false,
+                                    "backgroundColor": "hsl(270, 70%, 85%)"
+                                }
+                            }
+                        ]
+                    }
+                    """
                 ),
 
                 Solution = JsonDocument.Parse(
-                    @"
-{
-    ""correct"": [
-        ""50dd1024-3165-47f1-8694-baa186e62fd3"",
-        ""daf9e2a4-7883-48df-9b14-403f76c910cb"",
-        ""8ea74437-026c-4d11-a20a-8d95dd638393""
-    ]
-}"
+                    """
+                    {
+                        "correct": [
+                            "50dd1024-3165-47f1-8694-baa186e62fd3",
+                            "daf9e2a4-7883-48df-9b14-403f76c910cb",
+                            "8ea74437-026c-4d11-a20a-8d95dd638393"
+                        ]
+                    }
+                    """
                 ),
             };
             // Act

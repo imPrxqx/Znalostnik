@@ -376,16 +376,16 @@ namespace backend.Tests
 
             var sessionUser = new CreateSessionUserDto()
             {
-                AccessCode = "RANDOM_CANNOT_BE_CREATED",
+                AccessCode = "RANDOM_CANNOT_BE_JOINED",
                 UserName = "TestUser",
             };
 
             // Act
 
-            var started = await sessionService.JoinSessionAsync(anotherUserDto, sessionUser);
+            var joined = await sessionService.JoinSessionAsync(anotherUserDto, sessionUser);
 
             // Assert
-            Assert.True(started.IsFailure);
+            Assert.True(joined.IsFailure);
         }
 
         [Fact]
