@@ -2923,6 +2923,21 @@
           <context context-type="linenumber">32,33</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2140537831432289999" datatype="html">
+        <source>Save</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/session/modes/classic/classic-participant/classic-participant.html</context>
+          <context context-type="linenumber">49,50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/session/modes/hot-potato/hot-potato-participant/hot-potato-participant.html</context>
+          <context context-type="linenumber">83,84</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/features/session/modes/self-study/self-study-participant/self-study-participant.html</context>
+          <context context-type="linenumber">37,38</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>
