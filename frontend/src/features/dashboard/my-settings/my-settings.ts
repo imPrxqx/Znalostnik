@@ -41,6 +41,7 @@ export class MySettings implements OnInit {
     currentPassword: new FormControl('', [Validators.required]),
     newPassword: new FormControl('', [
       Validators.required,
+      Validators.minLength(6),
       Validators.pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/),
     ]),
     confirmNewPassword: new FormControl('', [Validators.required]),

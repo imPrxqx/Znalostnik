@@ -3,6 +3,7 @@ import { inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export enum UserType {
   Registered,
@@ -26,6 +27,7 @@ export class Authentication {
   user = signal<User | null>(null);
   http = inject(HttpClient);
   router = inject(Router);
+  snackBar = inject(MatSnackBar);
 
   /**
    * Registers a new user account and redirects to the login page.
@@ -56,6 +58,11 @@ export class Authentication {
         },
         error: () => {
           this.user.set(null);
+          this.snackBar.open(
+            $localize`:@@session.login:Neplatné přihlašovácí údaje`,
+            $localize`:@@close:Zavřít`,
+            { duration: 3000 },
+          );
         },
       });
   }

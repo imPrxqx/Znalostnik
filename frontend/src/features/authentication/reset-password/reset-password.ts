@@ -38,6 +38,7 @@ export class ResetPassword implements OnInit {
   resetForm = new FormGroup({
     newPassword: new FormControl('', [
       Validators.required,
+      Validators.minLength(6),
       Validators.pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/),
     ]),
     confirmPassword: new FormControl('', [Validators.required]),
