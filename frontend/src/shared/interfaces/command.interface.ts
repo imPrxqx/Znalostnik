@@ -9,13 +9,6 @@ export interface Command {
 }
 
 /**
- * Represents a user interface command for user to executing commands
- */
-export interface CommandUi {
-  supports(field: FieldContext): boolean;
-}
-
-/**
  * Represents mergeable command
  */
 export interface MergeableCommand {
