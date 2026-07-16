@@ -79,12 +79,14 @@ export class SessionState {
               this.answer()?.id !== sessionAnswer?.id ||
               this.answer()?.version !== sessionAnswer?.version
             ) {
-              const answer = RegistryActivity.createAnswer(
-                this.session()?.gameState.activity.type,
-                sessionAnswer,
-              );
+              if (this.answer()?.status === 'Submitted') {
+                const answer = RegistryActivity.createAnswer(
+                  this.session()?.gameState.activity.type,
+                  sessionAnswer,
+                );
 
-              this.answer.set(answer);
+                this.answer.set(answer);
+              }
             }
           }
 
